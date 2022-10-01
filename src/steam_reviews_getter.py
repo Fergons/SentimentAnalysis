@@ -35,7 +35,7 @@ def save_json(filename,data):
         json.dump(data, fopen)
 
 
-def download_json(appid,language):
+def download_json(appid, language):
     params = {"language":"czech",
               "cursor":"*",
               "num_per_page": 100,
