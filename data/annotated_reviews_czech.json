@@ -450,5 +450,202 @@
         "polarity": "positive"
       }
     ]
+  },
+  {
+    "reviewId": 17,
+    "text": "Většina hádanek je krátkých s očividným řešením.",
+    "aspectTerms": [
+      {
+        "term": "Většina hádanek",
+        "polarity": "negative",
+        "from": 0,
+        "to": 0
+      },
+      {
+        "term": "řešením",
+        "polarity": "negative",
+        "from": 0,
+        "to": 0
+      }
+    ],
+    "aspectCategories": [
+      {
+        "category": "level design",
+        "polarity": "negative"
+      }
+    ]
+  },
+  {
+    "reviewId": 18,
+    "text": "Příběhová logika je ale bohužel kvůli hře vykloubena tolikrát, že se vám chce křičet \"PROČ???\".",
+    "aspectTerms": [
+      {
+        "term": "Příběhová logika",
+        "polarity": "negative",
+        "from": 0,
+        "to": 0
+      }
+    ],
+    "aspectCategories": [
+      {
+        "category": "story",
+        "polarity": "negative"
+      }
+    ]
+  },
+  {
+    "reviewId": 19,
+    "text": "Najviac mi asi chybal kvetnatejsi pribeh, animacie, cutsceny.",
+    "aspectTerms": [
+      {
+        "term": "pribeh",
+        "polarity": "negative",
+        "from": 0,
+        "to": 0
+      },
+      {
+        "term": "animacie",
+        "polarity": "negative",
+        "from": 0,
+        "to": 0
+      },
+      {
+        "term": "cutsceny",
+        "polarity": "negative",
+        "from": 0,
+        "to": 0
+      }
+    ],
+    "aspectCategories": [
+      {
+        "category": "story",
+        "polarity": "negative"
+      }
+    ]
+  },
+  {
+    "reviewId": 20,
+    "text": "Místnosti jsou víceméně stále stejné, občas jen jinak nasvícené.",
+    "aspectTerms": [
+      {
+        "term": "Místnosti",
+        "polarity": "negative",
+        "from": 0,
+        "to": 0
+      }
+    ],
+    "aspectCategories": [
+      {
+        "category": "game environment",
+        "polarity": "negative"
+      }
+    ]
+  },
+  {
+    "reviewId": 21,
+    "text": "Grafika je hezká a příběh se zajímavě vyvíjel, ale nestačilo mi to na to, abych hru hrál dál.",
+    "aspectTerms": [
+      {
+        "term": "Grafika",
+        "polarity": "positive",
+        "from": 0,
+        "to": 0
+      },
+      {
+        "term": "příběh",
+        "polarity": "positive",
+        "from": 0,
+        "to": 0
+      }
+    ],
+    "aspectCategories": [
+      {
+        "category": "overall",
+        "polarity": "conflict"
+      }
+    ]
+  },
+  {
+    "reviewId": 22,
+    "text": " Snad každý puzzle kromě pár volitelných rozlousknete okamžitě, aniž byste museli použít mozek.",
+    "aspectTerms": [
+      {
+        "term": "puzzle",
+        "polarity": "negative",
+        "from": 0,
+        "to": 0
+      }
+    ],
+    "aspectCategories": [
+      {
+        "category": "level design",
+        "polarity": "negative"
+      }
+    ]
+  },
+  {
+    "reviewId": 23,
+    "text": "Příběh je ale fádní, celkem nezajímavý a totálně předvídatelný.",
+    "aspectTerms": [
+      {
+        "term": "Příběh",
+        "polarity": "negative",
+        "from": 0,
+        "to": 0
+      }
+    ],
+    "aspectCategories": [
+      {
+        "category": "story",
+        "polarity": "negative"
+      }
+    ]
+  },
+  {
+    "reviewId": 24,
+    "text": "hra je zábavná i když je docela starší tak je to pro mě pořád srdcovka  :)",
+    "aspectTerms": [
+      {
+        "term": "hra",
+        "polarity": "p",
+        "from": 0,
+        "to": 0
+      }
+    ],
+    "aspectCategories": [
+      {
+        "category": "overall",
+        "polarity": "positive"
+      }
+    ]
+  },
+  {
+    "reviewId": 25,
+    "text": "Po vizuální stránce neurazí a hudba také nijak netahá za uši, ale to prostě nestačí.",
+    "aspectTerms": [
+      {
+        "term": "vizuální stránce",
+        "polarity": "neutral",
+        "from": 0,
+        "to": 0
+      },
+      {
+        "term": "hudba",
+        "polarity": "neutral",
+        "from": 0,
+        "to": 0
+      }
+    ],
+    "aspectCategories": [
+      {
+        "category": "visuals",
+        "polarity": "neutral",
+      },
+      {
+        "category": "sounds",
+        "polarity": "neutral",
+      }
+    ]
   }
+
 ]
