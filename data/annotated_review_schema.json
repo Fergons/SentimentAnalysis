@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "reviewId": {
+      "type": "integer"
+    },
+    "text": {
+      "type": "string"
+    },
+    "aspectTerms": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "term": {
+              "type": "string"
+            },
+            "polarity": {
+              "type": "string"
+            },
+            "from": {
+              "type": "integer"
+            },
+            "to": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "term",
+            "polarity",
+            "from",
+            "to"
+          ]
+        }
+      ]
+    },
+    "aspectCategories": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "category": {
+              "type": "string"
+            },
+            "polarity": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "category",
+            "polarity"
+          ]
+        }
+      ]
+    }
+  },
+  "required": [
+    "reviewId",
+    "text",
+    "aspectTerms",
+    "aspectCategories"
+  ]
+}

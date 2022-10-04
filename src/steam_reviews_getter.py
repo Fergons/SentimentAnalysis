@@ -24,7 +24,7 @@ class ReviewSource(Enum):
 
 def review_filter(reviews):
     filtered_reviews = set(reviews)
-    filtered_reviews = filter(lambda x: len(x) > 50,filtered_reviews)
+    filtered_reviews = filter(lambda x: len(x) > 1, filtered_reviews)
     return list(filtered_reviews)
 
 
@@ -35,29 +35,29 @@ def save_json(filename,data):
         json.dump(data, fopen)
 
 
-def download_json(appid, language):
-    params = {"language":"czech",
+def download_json(appid, language="czech", day_range=100000):
+    params = {"language": language,
               "cursor":"*",
               "num_per_page": 100,
-              "day_range": 1000}
+              "day_range": day_range}
     used_cursors = []
 
     reviews = []
     filename = f"../data/appid_{appid}_{language}.json"
-    with open(filename, "w") as fopen:
+    with open(filename, "w", encoding="utf-8") as fopen:
         while True:
-            response = re.get("", params=params)
+            response = re.get(f"https://store.steampowered.com/appreviews/{appid}?json=1", params=params)
             response_json = response.json()
             used_cursors.append(params["cursor"])
-            reviews += [review.get("review", "") for review in response_json.get("reviews", {}) if review.get("voted_up")]
-            params["cursor"]= response_json.get("cursor")
+            reviews += [review.get("review", "").encode("utf-8").decode("utf-8") for review in response_json.get("reviews", {})] # if review.get("voted_up")]
+            params["cursor"] = response_json.get("cursor")
             if params["cursor"] in used_cursors:
                 break
             if(len(reviews) >= 10000):
                 break
             print(f"Got {len(reviews)} reviews.\r")
 
-        json.dump(review_filter(reviews), fopen)
+        json.dump(review_filter(reviews), fopen, ensure_ascii=False)
 
 
 def process_json(appid, language):
@@ -122,6 +122,9 @@ async def get_steam_reviews_for_app_id(session=None, app_id=None, *args, **kwarg
     params = {
         "json":1
     }
+    # add parameters to api request
+    params.update(kwargs)
+
     async with session.get(url=url) as response:
         if response.status == 200:
             response_json = await response.json()
@@ -337,7 +340,7 @@ class ReviewsGetter:
 
 
     @classmethod
-    def get_base_review_url_by_source(source):
+    def get_base_review_url_by_source(cls, source):
         if ReviewSource.STEAM:
             return "https://store.steampowered.com/appreviews/{}?json=1"
         elif ReviewSource.GAMESPOT:
@@ -349,26 +352,27 @@ class ReviewsGetter:
 
 
 async def main():
-    async with aiohttp.ClientSession() as session:
-        db = DatabaseHandler()
-        getter = GamesInfoGetter(session=session)
-        getter.load_config()
-        apps_list = await getter.get_steam_app_ids(session)
-        games_info = await getter.get_steam_games_info(530, 730, *map(lambda x: x["appid"], sample(apps_list, 1000)))
-        if apps_list is not None:
-            print(f"Number of apps retrieved: {len(apps_list)}.")
-        else:
-            print("No apps retrieved.")
-        if games_info is None:
-            print("No info retrieved")
-        else:
-            for info in games_info:
-                if info is not None:
-                    inserted = await db.update_game(**info)
-                    if inserted:
-                        getter.steam_blacklist_app_ids.update([info["steam_app_id"]])
-            print(games_info)
-        getter.save_config()
+    download_json(appid="620", language="czech", day_range=20000)
+    # async with aiohttp.ClientSession() as session:
+    #     db = DatabaseHandler()
+    #     getter = GamesInfoGetter(session=session)
+    #     getter.load_config()
+    #     apps_list = await getter.get_steam_app_ids(session)
+    #     games_info = await getter.get_steam_games_info(530, 730, *map(lambda x: x["appid"], sample(apps_list, 1000)))
+    #     if apps_list is not None:
+    #         print(f"Number of apps retrieved: {len(apps_list)}.")
+    #     else:
+    #         print("No apps retrieved.")
+    #     if games_info is None:
+    #         print("No info retrieved")
+    #     else:
+    #         for info in games_info:
+    #             if info is not None:
+    #                 inserted = await db.update_game(**info)
+    #                 if inserted:
+    #                     getter.steam_blacklist_app_ids.update([info["steam_app_id"]])
+    #         print(games_info)
+    #     getter.save_config()
 
 
 if __name__ == "__main__":

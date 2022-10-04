@@ -1,0 +1,454 @@
+[
+  {
+    "reviewId": 0,
+    "text": "Jediny co bych ji vytkl je časté načítání úrovní.",
+    "aspectTerms": [
+      {
+        "term": "načítání úrovní",
+        "polarity": "negative",
+        "from":0,
+        "to":0
+      }
+    ],
+    "aspectCategories": [
+      {
+        "category": "gameplay",
+        "polarity": "positive"
+      }
+    ]
+  },
+  {
+    "reviewId": 1,
+    "text": "Druhý díl ze série portal. Bavilo mě to ještě víc než první díl a nově přidanej multiplayer tomu dal jinej rozměr kterej z toho udělal ještě zajímavější hru.",
+    "aspectTerms": [
+      {
+        "term": "první díl",
+        "polarity": "p",
+        "from": 0,
+        "to": 0
+      },
+      {
+        "term": "multiplayer",
+        "polarity": "p",
+        "from": 0,
+        "to": 0
+      }
+    ],
+    "aspectCategories": [
+      {
+        "category": "multiplayer",
+        "polarity": "positive"
+      }
+    ]
+  },
+  {
+    "reviewId": 2,
+    "text": "Výborná hra, srandy u ní je hlavně když hrajete multiplayer, takže doporučuji koupit jen když máte nějakého zmrduse, který by hrál s vámi.",
+    "aspectTerms": [
+      {
+        "term": "multiplayer",
+        "polarity": "p",
+        "from": 0,
+        "to": 0
+      }
+    ],
+    "aspectCategories": [
+      {
+        "category": "multiplayer",
+        "polarity": "positive"
+      }
+    ]
+  },
+  {
+    "reviewId": 3,
+    "text": "hra je zábavná i když je docela starší tak je to pro mě pořád srdcovka",
+    "aspectTerms": [
+      {
+        "term": "hra",
+        "polarity": "p",
+        "from": 0,
+        "to": 0
+      }
+    ],
+    "aspectCategories": [
+      {
+        "category": "overall",
+        "polarity": "positive"
+      }
+    ]
+  },
+  {
+    "reviewId": 4,
+    "text": "Logická hra se silným a výborným příběhem, kde jsou hádanky založeny na jednoduchém a snadno pochopitelném principu. game design na své maximální úrovni v praxi (a pohybu).",
+    "aspectTerms": [
+      {
+        "term": "příběhem",
+        "polarity": "p",
+        "from": 0,
+        "to": 0
+      },
+      {
+        "term": "game design",
+        "polarity": "p",
+        "from": 0,
+        "to": 0
+      },
+      {
+        "term": "principu",
+        "polarity": "p",
+        "from": 0,
+        "to": 0
+      }
+    ],
+    "aspectCategories": [
+      {
+        "category": "game design",
+        "polarity": "positive"
+      },
+      {
+        "category": "story",
+        "polarity": "positive"
+      }
+    ]
+  },
+  {
+    "reviewId": 5,
+    "text": "Pěkná hra - velmi snadná pro 9ti leté kluky, líbí se jim on-line režim a plnění úkolů. Žádná krev a násilí, prostě vyhovuje.",
+    "aspectTerms": [
+      {
+        "term": "hra",
+        "polarity": "p",
+        "from": 0,
+        "to": 0
+      },
+      {
+        "term": "on-line režim",
+        "polarity": "p",
+        "from": 0,
+        "to": 0
+      },
+      {
+        "term": "úkolů",
+        "polarity": "p",
+        "from": 0,
+        "to": 0
+      },
+      {
+        "term": "Žádná krev a násilí",
+        "polarity": "p",
+        "from": 0,
+        "to": 0
+      }
+    ],
+    "aspectCategories": [
+      {
+        "category": "overall",
+        "polarity": "positive"
+      },
+      {
+        "category": "violence",
+        "polarity": "positive"
+      }
+    ]
+  },
+  {
+    "reviewId": 6,
+    "text": "Dokáže zaujmout jak singleplayer, tak i multiplayer a hra má i svůj příběh, který vypráví trochu popletený robot, ale tím se vtipnost násobí.",
+    "aspectTerms": [
+      {
+        "term": "singleplayer",
+        "polarity": "p",
+        "from": 0,
+        "to": 0
+      },
+      {
+        "term": "multiplayer",
+        "polarity": "p",
+        "from": 0,
+        "to": 0
+      },
+      {
+        "term": "vtipnost",
+        "polarity": "p",
+        "from": 0,
+        "to": 0
+      }
+    ],
+    "aspectCategories": [
+      {
+        "category": "overall",
+        "polarity": "positive"
+      }
+    ]
+  },
+  {
+    "reviewId": 7,
+    "text": "Tato hra má super příběh, některé levely jsou lehké a některé dají zabrat, kooperace tuto hru dělá ještě mnohem lepší.",
+    "aspectTerms": [
+      {
+        "term": "příběh",
+        "polarity": "p",
+        "from": 0,
+        "to": 0
+      },
+      {
+        "term": "levely",
+        "polarity": "c",
+        "from": 0,
+        "to": 0
+      },
+      {
+        "term": "kooperace",
+        "polarity": "p",
+        "from": 0,
+        "to": 0
+      }
+    ],
+    "aspectCategories": [
+      {
+        "category": "overall",
+        "polarity": "positive"
+      }
+    ]
+  },
+  {
+    "reviewId": 8,
+    "text": "Já osobně jsem si oblíbil Glados i Wheatleho.",
+    "aspectTerms": [
+      {
+        "term": "Glados",
+        "polarity": "p",
+        "from": 0,
+        "to": 0
+      },
+      {
+        "term": "Wheatleho",
+        "polarity": "p",
+        "from": 0,
+        "to": 0
+      }
+    ],
+    "aspectCategories": [
+      {
+        "category": "story",
+        "polarity": "positive"
+      }
+    ]
+  },
+  {
+    "reviewId": 9,
+    "text": "Super hra good grafika a cena",
+    "aspectTerms": [
+      {
+        "term": "hra",
+        "polarity": "p",
+        "from": 0,
+        "to": 0
+      },
+      {
+        "term": "grafika",
+        "polarity": "p",
+        "from": 0,
+        "to": 0
+      },
+      {
+        "term": "cena",
+        "polarity": "p",
+        "from": 0,
+        "to": 0
+      }
+    ],
+    "aspectCategories": [
+      {
+        "category": "overall",
+        "polarity": "positive"
+      },
+      {
+        "category": "visuals",
+        "polarity": "positive"
+      }
+    ]
+  },
+  {
+    "reviewId": 10,
+    "text": "Skvělý příběh a super vtipy k tomu.",
+    "aspectTerms": [
+      {
+        "term": "příběh",
+        "polarity": "p",
+        "from": 0,
+        "to": 0
+      }
+    ],
+    "aspectCategories": [
+    ]
+  },
+  {
+    "reviewId": 11,
+    "text": "Originální koncept a propracovaná grafika i příběh.",
+    "aspectTerms": [
+      {
+        "term": "grafika",
+        "polarity": "p",
+        "from": 0,
+        "to": 0
+      },
+       {
+        "term": "příběh",
+        "polarity": "p",
+        "from": 0,
+        "to": 0
+      },
+      {
+        "term": "koncept",
+        "polarity": "p",
+        "from": 0,
+        "to": 0
+      }
+    ],
+    "aspectCategories": [
+      {
+        "category": "story",
+        "polarity": "positive"
+      },
+      {
+        "category": "visuals",
+        "polarity": "positive"
+      }
+    ]
+  },
+  {
+    "reviewId": 12,
+    "text": "Vynikající příběh, který navazuje na jedničku, skvělé postavy s luxusním dabingem, dobrá grafika a super hratelnost s vyváženou obtížností.",
+    "aspectTerms": [
+      {
+        "term": "příběh",
+        "polarity": "positive",
+        "from": 0,
+        "to": 0
+      },
+      {
+        "term": "postavy",
+        "polarity": "positive",
+        "from": 0,
+        "to": 0
+      },
+      {
+        "term": "grafika",
+        "polarity": "positive",
+        "from": 0,
+        "to": 0
+      },
+      {
+        "term": "dabingem",
+        "polarity": "positive",
+        "from": 0,
+        "to": 0
+      },
+      {
+        "term": "hratelnost",
+        "polarity": "positive",
+        "from": 0,
+        "to": 0
+      },
+      {
+        "term": "obtížností",
+        "polarity": "positive",
+        "from": 0,
+        "to": 0
+      }
+    ],
+    "aspectCategories": [
+      {
+        "category": "gameplay",
+        "polarity": "positive"
+      },
+      {
+        "category": "visuals",
+        "polarity": "positive"
+      },
+      {
+        "category": "story",
+        "polarity": "positive"
+      }
+    ]
+  },
+  {
+    "reviewId": 13,
+    "text": "Prostredie je nudné, neoriginálne a postava droida ma tiež nevtiahla. ",
+    "aspectTerms": [
+      {
+        "term": "Prostredie",
+        "polarity": "negative",
+        "from": 0,
+        "to": 0
+      },
+      {
+        "term": "postava droida",
+        "polarity": "negative",
+        "from": 0,
+        "to": 0
+      }
+    ],
+    "aspectCategories": [
+      {
+        "category": "story",
+        "polarity": "negative"
+      }
+    ]
+  },
+  {
+    "reviewId": 14,
+    "text": "Většina pazlů je taky dost triviální.",
+    "aspectTerms": [
+      {
+        "term": "pazlů",
+        "polarity": "negative",
+        "from": 0,
+        "to": 0
+      }
+    ],
+    "aspectCategories": [
+      {
+        "category": "level design",
+        "polarity": "negative"
+      }
+    ]
+  },
+  {
+    "reviewId": 15,
+    "text": "Příběh je nádherný, dojemný a trošku smutný.",
+    "aspectTerms": [
+      {
+        "term": "Příběh",
+        "polarity": "p",
+        "from": 0,
+        "to": 0
+      }
+    ],
+    "aspectCategories": [
+      {
+        "category": "story",
+        "polarity": "positive"
+      }
+    ]
+  },
+  {
+    "reviewId": 16,
+    "text": "Skvělá logická hříčka, která zabere jen pár hodin, ale je neuvěřitelně zábavná a originální záležitost...",
+    "aspectTerms": [
+      {
+        "term": "logická hříčka",
+        "polarity": "positive",
+        "from": 0,
+        "to": 0
+      }
+    ],
+    "aspectCategories": [
+      {
+        "category": "overall",
+        "polarity": "positive"
+      }
+    ]
+  }
+]
