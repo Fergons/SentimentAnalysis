@@ -1,2502 +1,2432 @@
 {
-  "category": ["puzzle","adventure","story","coop"],
-  "reviews": [
+  "dataset": [
     {
-      "reviewId": 0,
-      "text": "Jediny co bych ji vytkl je časté načítání úrovní.",
-      "aspectTerms": [
-        {
-          "term": "načítání úrovní",
-          "polarity": "negative",
-          "from": 33,
-          "to": 48
-        }
+      "category": [
+        "puzzle",
+        "adventure",
+        "story",
+        "coop"
       ],
-      "aspectCategories": [
+      "reviews": [
         {
-          "category": "gameplay",
-          "polarity": "positive"
+          "reviewId": 0,
+          "text": "Jediny co bych ji vytkl je časté načítání úrovní.",
+          "aspectTerms": [
+            {
+              "term": "načítání úrovní",
+              "polarity": "negative",
+              "from": 33,
+              "to": 48
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "gameplay",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 1,
+          "text": "Bavilo mě to ještě víc než první díl a nově přidanej multiplayer tomu dal jinej rozměr kterej z toho udělal ještě zajímavější hru.",
+          "aspectTerms": [
+            {
+              "term": "multiplayer",
+              "polarity": "p",
+              "from": 53,
+              "to": 64
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "game mode",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 2,
+          "text": "Srandy u ní je hlavně když hrajete multiplayer.",
+          "aspectTerms": [
+            {
+              "term": "multiplayer",
+              "polarity": "positive",
+              "from": 35,
+              "to": 46
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "game mode",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 3,
+          "text": "hra je zábavná i když je docela starší tak je to pro mě pořád srdcovka",
+          "aspectTerms": [
+          ],
+          "aspectCategories": [
+            {
+              "category": "overall",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 4,
+          "text": "Logická hra se silným a výborným příběhem, kde jsou hádanky založeny na jednoduchém a snadno pochopitelném principu.",
+          "aspectTerms": [
+            {
+              "term": "příběhem",
+              "polarity": "p",
+              "from": 33,
+              "to": 41
+            },
+            {
+              "term": "hádanky",
+              "polarity": "p",
+              "from": 52,
+              "to": 59
+            },
+            {
+              "term": "principu",
+              "polarity": "positive",
+              "from": 107,
+              "to": 115
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "game design",
+              "polarity": "positive"
+            },
+            {
+              "category": "story",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 5,
+          "text": "Pěkná hra - velmi snadná pro 9ti leté kluky, líbí se jim on-line režim a plnění úkolů. Žádná krev a násilí, prostě vyhovuje.",
+          "aspectTerms": [
+            {
+              "term": "on-line režim",
+              "polarity": "p",
+              "from": 57,
+              "to": 70
+            },
+            {
+              "term": "úkolů",
+              "polarity": "p",
+              "from": 80,
+              "to": 85
+            },
+            {
+              "term": "Žádná krev a násilí",
+              "polarity": "p",
+              "from": 87,
+              "to": 106
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "game mode",
+              "polarity": "positive"
+            },
+            {
+              "category": "overall",
+              "polarity": "positive"
+            },
+            {
+              "category": "violence",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 6,
+          "text": "Dokáže zaujmout jak singleplayer, tak i multiplayer a hra má i svůj příběh, který vypráví trochu popletený robot, ale tím se vtipnost násobí.",
+          "aspectTerms": [
+            {
+              "term": "singleplayer",
+              "polarity": "p",
+              "from": 20,
+              "to": 32
+            },
+            {
+              "term": "multiplayer",
+              "polarity": "p",
+              "from": 40,
+              "to": 51
+            },
+            {
+              "term": "vtipnost",
+              "polarity": "p",
+              "from": 125,
+              "to": 133
+            },
+            {
+              "term": "příběh",
+              "polarity": "positive",
+              "from": 68,
+              "to": 74
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "overall",
+              "polarity": "positive"
+            },
+            {
+              "category": "game mode",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 7,
+          "text": "Tato hra má super příběh, některé levely jsou lehké a některé dají zabrat, kooperace tuto hru dělá ještě mnohem lepší.",
+          "aspectTerms": [
+            {
+              "term": "příběh",
+              "polarity": "p",
+              "from": 18,
+              "to": 24
+            },
+            {
+              "term": "levely",
+              "polarity": "neutral",
+              "from": 34,
+              "to": 40
+            },
+            {
+              "term": "kooperace",
+              "polarity": "p",
+              "from": 75,
+              "to": 84
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "overall",
+              "polarity": "positive"
+            },
+            {
+              "category": "game mode",
+              "polarity": "positive"
+            },
+            {
+              "category": "level design",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 8,
+          "text": "Já osobně jsem si oblíbil Glados i Wheatleho.",
+          "aspectTerms": [
+            {
+              "term": "Glados",
+              "polarity": "p",
+              "from": 26,
+              "to": 32
+            },
+            {
+              "term": "Wheatleho",
+              "polarity": "p",
+              "from": 35,
+              "to": 44
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "story",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 9,
+          "text": "Super hra good grafika a cena",
+          "aspectTerms": [
+            {
+              "term": "grafika",
+              "polarity": "p",
+              "from": 15,
+              "to": 22
+            },
+            {
+              "term": "cena",
+              "polarity": "p",
+              "from": 25,
+              "to": 29
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "overall",
+              "polarity": "positive"
+            },
+            {
+              "category": "visuals",
+              "polarity": "positive"
+            },
+            {
+              "category": "price",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 10,
+          "text": "Skvělý příběh a super vtipy k tomu.",
+          "aspectTerms": [
+            {
+              "term": "příběh",
+              "polarity": "p",
+              "from": 7,
+              "to": 13
+            },
+            {
+              "term": "vtipy",
+              "polarity": "positive",
+              "from": 22,
+              "to": 27
+            }
+          ],
+          "aspectCategories": [
+          ]
+        },
+        {
+          "reviewId": 11,
+          "text": "Originální koncept a propracovaná grafika i příběh.",
+          "aspectTerms": [
+            {
+              "term": "grafika",
+              "polarity": "p",
+              "from": 34,
+              "to": 41
+            },
+            {
+              "term": "příběh",
+              "polarity": "p",
+              "from": 44,
+              "to": 50
+            },
+            {
+              "term": "koncept",
+              "polarity": "p",
+              "from": 11,
+              "to": 18
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "story",
+              "polarity": "positive"
+            },
+            {
+              "category": "visuals",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 12,
+          "text": "Vynikající příběh, který navazuje na jedničku, skvělé postavy s luxusním dabingem, dobrá grafika a super hratelnost s vyváženou obtížností.",
+          "aspectTerms": [
+            {
+              "term": "příběh",
+              "polarity": "positive",
+              "from": 11,
+              "to": 17
+            },
+            {
+              "term": "postavy",
+              "polarity": "positive",
+              "from": 54,
+              "to": 61
+            },
+            {
+              "term": "grafika",
+              "polarity": "positive",
+              "from": 89,
+              "to": 96
+            },
+            {
+              "term": "dabingem",
+              "polarity": "positive",
+              "from": 73,
+              "to": 81
+            },
+            {
+              "term": "hratelnost",
+              "polarity": "positive",
+              "from": 105,
+              "to": 115
+            },
+            {
+              "term": "obtížností",
+              "polarity": "positive",
+              "from": 128,
+              "to": 138
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "gameplay",
+              "polarity": "positive"
+            },
+            {
+              "category": "visuals",
+              "polarity": "positive"
+            },
+            {
+              "category": "story",
+              "polarity": "positive"
+            },
+            {
+              "category": "languages",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 13,
+          "text": "Prostredie je nudné, neoriginálne a postava droida ma tiež nevtiahla. ",
+          "aspectTerms": [
+            {
+              "term": "Prostredie",
+              "polarity": "negative",
+              "from": 0,
+              "to": 10
+            },
+            {
+              "term": "postava droida",
+              "polarity": "negative",
+              "from": 36,
+              "to": 50
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "story",
+              "polarity": "negative"
+            },
+            {
+              "category": "game environment",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 14,
+          "text": "Většina pazlů je taky dost triviální.",
+          "aspectTerms": [
+            {
+              "term": "pazlů",
+              "polarity": "negative",
+              "from": 8,
+              "to": 13
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "level design",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 15,
+          "text": "Příběh je nádherný, dojemný a trošku smutný.",
+          "aspectTerms": [
+            {
+              "term": "Příběh",
+              "polarity": "p",
+              "from": 0,
+              "to": 6
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "story",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 16,
+          "text": "Skvělá logická hříčka, je neuvěřitelně zábavná a originální záležitost.",
+          "aspectTerms": [
+          ],
+          "aspectCategories": [
+            {
+              "category": "overall",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 17,
+          "text": "Většina hádanek je krátkých s očividným řešením.",
+          "aspectTerms": [
+            {
+              "term": "Většina hádanek",
+              "polarity": "negative",
+              "from": 0,
+              "to": 15
+            },
+            {
+              "term": "řešením",
+              "polarity": "negative",
+              "from": 40,
+              "to": 47
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "level design",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 18,
+          "text": "Příběhová logika je ale bohužel kvůli hře vykloubena tolikrát, že se vám chce křičet \"PROČ???\".",
+          "aspectTerms": [
+            {
+              "term": "Příběhová logika",
+              "polarity": "negative",
+              "from": 0,
+              "to": 16
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "story",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 19,
+          "text": "Najviac mi asi chybal kvetnatejsi pribeh, animacie, cutsceny.",
+          "aspectTerms": [
+            {
+              "term": "pribeh",
+              "polarity": "negative",
+              "from": 34,
+              "to": 40
+            },
+            {
+              "term": "animacie",
+              "polarity": "negative",
+              "from": 42,
+              "to": 50
+            },
+            {
+              "term": "cutsceny",
+              "polarity": "negative",
+              "from": 52,
+              "to": 60
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "story",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 20,
+          "text": "Místnosti jsou víceméně stále stejné, občas jen jinak nasvícené.",
+          "aspectTerms": [
+            {
+              "term": "Místnosti",
+              "polarity": "negative",
+              "from": 0,
+              "to": 9
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "game environment",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 21,
+          "text": "Grafika je hezká a příběh se zajímavě vyvíjel, ale nestačilo mi to na to, abych hru hrál dál.",
+          "aspectTerms": [
+            {
+              "term": "Grafika",
+              "polarity": "positive",
+              "from": 0,
+              "to": 7
+            },
+            {
+              "term": "příběh",
+              "polarity": "positive",
+              "from": 19,
+              "to": 25
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "overall",
+              "polarity": "conflict"
+            }
+          ]
+        },
+        {
+          "reviewId": 22,
+          "text": " Snad každý puzzle kromě pár volitelných rozlousknete okamžitě, aniž byste museli použít mozek.",
+          "aspectTerms": [
+            {
+              "term": "puzzle",
+              "polarity": "negative",
+              "from": 11,
+              "to": 17
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "level design",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 23,
+          "text": "Příběh je ale fádní, celkem nezajímavý a totálně předvídatelný.",
+          "aspectTerms": [
+            {
+              "term": "Příběh",
+              "polarity": "negative",
+              "from": 0,
+              "to": 6
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "story",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 24,
+          "text": "Tato hra je určtě super protože to rozjede i slabší počítač a není zas tak drahá.",
+          "aspectTerms": [
+            {
+              "term": "slabší počítač",
+              "polarity": "positive",
+              "from": 45,
+              "to": 59
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "overall",
+              "polarity": "positive"
+            },
+            {
+              "category": "price",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 25,
+          "text": "Po vizuální stránce neurazí a hudba také nijak netahá za uši, ale to prostě nestačí.",
+          "aspectTerms": [
+            {
+              "term": "vizuální stránce",
+              "polarity": "neutral",
+              "from": 3,
+              "to": 19
+            },
+            {
+              "term": "hudba",
+              "polarity": "neutral",
+              "from": 30,
+              "to": 35
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "visuals",
+              "polarity": "neutral"
+            },
+            {
+              "category": "sounds",
+              "polarity": "neutral"
+            }
+          ]
+        },
+        {
+          "reviewId": 26,
+          "text": "Hra má dobrý příběh.",
+          "aspectTerms": [
+            {
+              "term": "příběh",
+              "polarity": "positive",
+              "from": 13,
+              "to": 19
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "story",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 27,
+          "text": "Nehrál jsem sice coop protože neznám nikoho kdo by jsi ho se mnou zahrát ale podle recenzí věřím že je taky dobrý.",
+          "aspectTerms": [
+            {
+              "term": "coop",
+              "polarity": "neutral",
+              "from": 17,
+              "to": 21
+            },
+            {
+              "term": "recenzí",
+              "polarity": "positive",
+              "from": 83,
+              "to": 90
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "game mode",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 28,
+          "text": "Ve slevách za 2 eura je úžasná koupě.",
+          "aspectTerms": [
+            {
+              "term": "koupě",
+              "polarity": "positive",
+              "from": 31,
+              "to": 36
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "price",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 29,
+          "text": "Sice jsou nějaké mise obtížnější, ale to vůbec nevadí od toho jsou tam 2 hráči.",
+          "aspectTerms": [
+            {
+              "term": "mise",
+              "polarity": "conflict",
+              "from": 17,
+              "to": 21
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "level design",
+              "polarity": "neutral"
+            }
+          ]
+        },
+        {
+          "reviewId": 30,
+          "text": "game design na své maximální úrovni v praxi (a pohybu).",
+          "aspectTerms": [
+            {
+              "term": "game design",
+              "polarity": "positive",
+              "from": 0,
+              "to": 11
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "game design",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 31,
+          "text": "Velmi dobrá hra, Grafické, Gameplayové a i trošku příběhové velmi dobré zpracování a CO-OP jako třešnička na dortu",
+          "aspectTerms": [
+            {
+              "term": "zpracování",
+              "polarity": "positive",
+              "from": 72,
+              "to": 82
+            },
+            {
+              "term": "CO-OP",
+              "polarity": "positive",
+              "from": 85,
+              "to": 90
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "overall",
+              "polarity": "positive"
+            },
+            {
+              "category": "game mode",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 32,
+          "text": "Skvělá puzzle hra s famózním příběhem, velmi zábavným co-op režimem a skvělím humorem.",
+          "aspectTerms": [
+            {
+              "term": "příběhem",
+              "polarity": "positive",
+              "from": 29,
+              "to": 37
+            },
+            {
+              "term": "co-op režimem",
+              "polarity": "positive",
+              "from": 54,
+              "to": 67
+            },
+            {
+              "term": "humorem",
+              "polarity": "positive",
+              "from": 78,
+              "to": 85
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "story",
+              "polarity": "positive"
+            },
+            {
+              "category": "overall",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 33,
+          "text": "Tato hra je určtě super protože to rozjede i slabší počítač a není zas tak drahá.",
+          "aspectTerms": [
+          ],
+          "aspectCategories": [
+            {
+              "category": "system requirements",
+              "polarity": "positive"
+            },
+            {
+              "category": "price",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 34,
+          "text": "úžasně otestuje vaši logiku a pro lidi jako já má i české titulky.",
+          "aspectTerms": [
+            {
+              "term": "logiku",
+              "polarity": "positive",
+              "from": 21,
+              "to": 27
+            },
+            {
+              "term": "titulky",
+              "polarity": "positive",
+              "from": 52,
+              "to": 65
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "game design",
+              "polarity": "positive"
+            },
+            {
+              "category": "languages",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 35,
+          "text": "Méně náročná na PC.",
+          "aspectTerms": [
+          ],
+          "aspectCategories": [
+            {
+              "category": "system requirements",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 36,
+          "text": "Singleplayer je zajímavý, v co-opu je velká sranda s kamarádem, grafika na svoji dobu pěkná",
+          "aspectTerms": [
+            {
+              "term": "Singleplayer",
+              "polarity": "positive",
+              "from": 0,
+              "to": 12
+            },
+            {
+              "term": "co-opu",
+              "polarity": "positive",
+              "from": 28,
+              "to": 34
+            },
+            {
+              "term": "grafika",
+              "polarity": "positive",
+              "from": 64,
+              "to": 71
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "game mode",
+              "polarity": "positive"
+            },
+            {
+              "category": "visuals",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 37,
+          "text": "Hra nabízí skvělý coop a komunitní mapy, které určitě stojí za vyzkoušení",
+          "aspectTerms": [
+            {
+              "term": "coop",
+              "polarity": "positive",
+              "from": 18,
+              "to": 22
+            },
+            {
+              "term": "komunitní mapy",
+              "polarity": "positive",
+              "from": 25,
+              "to": 39
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "game mode",
+              "polarity": "positive"
+            },
+            {
+              "category": "level design",
+              "polarity": "positive"
+            },
+            {
+              "category": "community",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 38,
+          "text": "I přes krátkou herní dobu a němou hrdinku jsem si hru užil dosytosti.",
+          "aspectTerms": [
+            {
+              "term": "herní dobu",
+              "polarity": "negative",
+              "from": 15,
+              "to": 25
+            },
+            {
+              "term": "hrdinku",
+              "polarity": "negative",
+              "from": 42,
+              "to": 49
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "overall",
+              "polarity": "positive"
+            },
+            {
+              "category": "gameplay length",
+              "polarity": "negative"
+            },
+            {
+              "category": "story",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 39,
+          "text": "Příběh je originální.",
+          "aspectTerms": [
+            {
+              "term": "Příběh",
+              "polarity": "positive",
+              "from": 0,
+              "to": 6
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "story",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 40,
+          "text": "úžasné prostředí",
+          "aspectTerms": [
+            {
+              "term": "prostředí",
+              "polarity": "positive",
+              "from": 7,
+              "to": 16
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "game environment",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 41,
+          "text": "Hádanky jsou dobře udělané.",
+          "aspectTerms": [
+            {
+              "term": "hádanky",
+              "polarity": "positive",
+              "from": 0,
+              "to": 7
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "level design",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 42,
+          "text": "I přes němou hrdinku jsem si hru užil dosytosti.",
+          "aspectTerms": [
+            {
+              "term": "hrdinku",
+              "polarity": "negative",
+              "from": 13,
+              "to": 20
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "overall",
+              "polarity": "positive"
+            },
+            {
+              "category": "story",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 43,
+          "text": "Příběhový režim je úžasné dílo plné zábavy",
+          "aspectTerms": [
+            {
+              "term": "Příběhový režim",
+              "polarity": "positive",
+              "from": 0,
+              "to": 15
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "game mode",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 44,
+          "text": "Hře bych zvládl vytknout málo obsahu.",
+          "aspectTerms": [
+            {
+              "term": "obsahu",
+              "polarity": "negative",
+              "from": 30,
+              "to": 36
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "gameplay",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 45,
+          "text": "Hru je možné dohrát ve velice krátkém intervalu, to ovšem vynahrazuje cena hry.",
+          "aspectTerms": [
+            {
+              "term": "cena",
+              "polarity": "positive",
+              "from": 70,
+              "to": 74
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "price",
+              "polarity": "positive"
+            },
+            {
+              "category": "game length",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 46,
+          "text": "Hra přichází hned se třemi zcela novými mechanismy, které zábavnost hraní jen podpoří",
+          "aspectTerms": [
+            {
+              "term": "mechanismy",
+              "polarity": "neutral",
+              "from": 40,
+              "to": 50
+            },
+            {
+              "term": "hraní",
+              "polarity": "positive",
+              "from": 68,
+              "to": 73
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "gameplay",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 47,
+          "text": "perfektně graficky ztvárněné úrovně a nápaditý příběh plný zvratů",
+          "aspectTerms": [
+            {
+              "term": "úrovně",
+              "polarity": "positive",
+              "from": 29,
+              "to": 35
+            },
+            {
+              "term": "příběh",
+              "polarity": "positive",
+              "from": 47,
+              "to": 53
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "level design",
+              "polarity": "positive"
+            },
+            {
+              "category": "story",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 48,
+          "text": "hra nemá češtinu",
+          "aspectTerms": [
+            {
+              "term": "češtinu",
+              "polarity": "negative",
+              "from": 9,
+              "to": 16
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "language",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 49,
+          "text": "Hra se mi zdála dost krátká.",
+          "aspectTerms": [
+          ],
+          "aspectCategories": [
+            {
+              "category": "game length",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 50,
+          "text": "né moc hezká grafika a málo levelů",
+          "aspectTerms": [
+            {
+              "term": "grafika",
+              "polarity": "negative",
+              "from": 13,
+              "to": 20
+            },
+            {
+              "term": "levelů",
+              "polarity": "negative",
+              "from": 28,
+              "to": 34
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "visuals",
+              "polarity": "negative"
+            },
+            {
+              "category": "level design",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 51,
+          "text": "Je až moc krátka.",
+          "aspectTerms": [
+          ],
+          "aspectCategories": [
+            {
+              "category": "game length",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 52,
+          "text": "úrovně jsou docela jednoduché",
+          "aspectTerms": [
+            {
+              "term": "úrovně",
+              "polarity": "negative",
+              "from": 0,
+              "to": 6
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "level design",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 53,
+          "text": "Osobne je to pre mňa velmi nudná hra s primitívnymi úlohami",
+          "aspectTerms": [
+            {
+              "term": "úlohami",
+              "polarity": "negative",
+              "from": 52,
+              "to": 59
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "level design",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 54,
+          "text": "Jediný zápor je snad jenom krátká kampaň.",
+          "aspectTerms": [
+            {
+              "term": "kampaň",
+              "polarity": "negative",
+              "from": 34,
+              "to": 40
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "game length",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 55,
+          "text": "Hra nabízí relaxační zážitek s pravidelně dávkovanými puzzly, pěknou grafikou a příjemnou podkresovou hudbou",
+          "aspectTerms": [
+            {
+              "term": "puzzly",
+              "polarity": "neutral",
+              "from": 54,
+              "to": 60
+            },
+            {
+              "term": "grafikou",
+              "polarity": "positive",
+              "from": 69,
+              "to": 77
+            },
+            {
+              "term": "podkresovou hudbou",
+              "polarity": "positive",
+              "from": 90,
+              "to": 108
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "level design",
+              "polarity": "neutral"
+            },
+            {
+              "category": "visuals",
+              "polarity": "positive"
+            },
+            {
+              "category": "music",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 56,
+          "text": "Grafika je velmi líbivá",
+          "aspectTerms": [
+            {
+              "term": "Grafika",
+              "polarity": "positve",
+              "from": 0,
+              "to": 7
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "visuals",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 57,
+          "text": "hodně hru kazí ovládání a některé nesmyslně řešené puzzly",
+          "aspectTerms": [
+            {
+              "term": "ovládání",
+              "polarity": "negative",
+              "from": 15,
+              "to": 23
+            },
+            {
+              "term": "puzzly",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "gameplay",
+              "polarity": "negative"
+            },
+            {
+              "category": "level design",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 58,
+          "text": "Je to příšerně lineární, žádná svoboda",
+          "aspectTerms": [
+          ],
+          "aspectCategories": [
+            {
+              "category": "gameplay",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 59,
+          "text": "Hra pro mě byla jen pětihodinovým chozením po nudném (často tmavém) a nepřehledném prostředí.",
+          "aspectTerms": [
+            {
+              "term": "prostředí",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "game environment",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 60,
+          "text": "Dizajn světa je nic moc, často nevíte co máte dělat",
+          "aspectTerms": [
+            {
+              "term": "Dizajn světa",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "level design",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 61,
+          "text": "omrzí z důvodu nedostatku gameplaye",
+          "aspectTerms": [
+            {
+              "term": "gameplaye",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "game length",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 62,
+          "text": "je krátká dohrál jsem ji za 7h",
+          "aspectTerms": [
+          ],
+          "aspectCategories": [
+            {
+              "category": "game length",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 63,
+          "text": "Hra v singleplayer je velice dobrá ale CO-OP se nedá hrát kvůli častým lagům\n",
+          "aspectTerms": [
+            {
+              "term": "singleplayer",
+              "polarity": "positive",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "CO-OP",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "lagům",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "game mode",
+              "polarity": "conflict"
+            }
+          ]
+        },
+        {
+          "reviewId": 64,
+          "text": "vývoj postav je nulový",
+          "aspectTerms": [
+            {
+              "term": "vývoj postav",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "story",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 65,
+          "text": "někdy je kontrola příšerná",
+          "aspectTerms": [
+            {
+              "term": "kontrola",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "controls",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 66,
+          "text": "nelogický ovládání v některých minihrách",
+          "aspectTerms": [
+            {
+              "term": "ovládání",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "controls",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 67,
+          "text": "nezvyšuje se náročnost",
+          "aspectTerms": [
+            {
+              "term": "náročnost",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "level design",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 68,
+          "text": "puzzle jsou dost jednoduchý",
+          "aspectTerms": [
+            {
+              "term": "puzzle",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "level design",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 69,
+          "text": "Když si člověk zvykne na stupidní ovládání, tak jde v podstatě jen o skákačku.",
+          "aspectTerms": [
+            {
+              "term": "ovládání",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "skákačku",
+              "polarity": "neutral",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "controls",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 70,
+          "text": "tragické ovládání (hráno na klávesnici)",
+          "aspectTerms": [
+            {
+              "term": "ovládání",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "controls",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 71,
+          "text": "3D prostředí se statickou kamerou, je prostě kravina",
+          "aspectTerms": [
+            {
+              "term": "prostředí",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "kamerou",
+              "polarity": "neutral",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "game environment",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 72,
+          "text": "nemožnost vlastního ukládání a špatné checkpointy",
+          "aspectTerms": [
+            {
+              "term": "ukládání",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "checkpointy",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "game save",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 73,
+          "text": "postavy které Vás honí/snaží se vás chytit, nemají žádné animace při chytání",
+          "aspectTerms": [
+            {
+              "term": "postavy",
+              "polarity": "neutral",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "animace",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "animations",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 74,
+          "text": "uhnutí je nemožné",
+          "aspectTerms": [
+            {
+              "term": "uhnutí",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "controls",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 75,
+          "text": "nulový příběh, kde postavy nemluví",
+          "aspectTerms": [
+            {
+              "term": "příběh",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "postavy",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "story",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 76,
+          "text": "Tato hra nemá absolutně žádný příběh.",
+          "aspectTerms": [
+            {
+              "term": "příběh",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "story",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 77,
+          "text": "Za 20€ velmi krátká hra.",
+          "aspectTerms": [
+          ],
+          "aspectCategories": [
+            {
+              "category": "game length",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 78,
+          "text": "dá se dorát za 1.5 hodiny ale kvůli těm bugům je to tak na 4 hodiny",
+          "aspectTerms": [
+            {
+              "term": "bugům",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "gameplay",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 79,
+          "text": "Příběh je docela suchý, dá se říci, že vlastně ani nevíte za čím běžíte.",
+          "aspectTerms": [
+            {
+              "term": "Příběh",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "story",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 80,
+          "text": "Krásné prostředí se zvrhlo v generické",
+          "aspectTerms": [
+            {
+              "term": "prostředí",
+              "polarity": "conflict",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "game environment",
+              "polarity": "conflict"
+            }
+          ]
+        },
+        {
+          "reviewId": 81,
+          "text": "Nevím, co mě vytáčí víc, absence nějaké výuky ovládání a ovládání samo o sobě, nebo styl hádanek typu \"nejdřív 6x umři\".",
+          "aspectTerms": [
+            {
+              "term": "výuky",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "ovládání",
+              "polarity": "",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "styl hádanek",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "tutorial",
+              "polarity": "negative"
+            },
+            {
+              "category": "controls",
+              "polarity": "negative"
+            },
+            {
+              "category": "level design",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 82,
+          "text": "Hra nieje tak moc kvalitná aby stála 10€",
+          "aspectTerms": [
+          ],
+          "aspectCategories": [
+            {
+              "category": "overall",
+              "polarity": "negative"
+            },
+            {
+              "category": "price",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 83,
+          "text": "Hra má slabou grafiku.",
+          "aspectTerms": [
+            {
+              "term": "grafiku",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "visuals",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 84,
+          "text": "Hra má fádny pribeh.",
+          "aspectTerms": [
+            {
+              "term": "pribeh",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "story",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 85,
+          "text": "Cena je veľmi vysoká.",
+          "aspectTerms": [
+            {
+              "term": "Cena",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "price",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 86,
+          "text": "minimální hratelnost, která omrzí už po pár minutách.",
+          "aspectTerms": [
+            {
+              "term": "hratelnost",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "gamepaly",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 87,
+          "text": "za 7 euro je to katastrofa",
+          "aspectTerms": [
+          ],
+          "aspectCategories": [
+            {
+              "category": "price",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 88,
+          "text": "nefunguje mi vůbec kurzor",
+          "aspectTerms": [
+            {
+              "term": "kurzor",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "controls",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 89,
+          "text": "Hlavolamy a ich riešenie prostredníctvom gravitačných síl sa stáva postupne stereotypným a nudným.",
+          "aspectTerms": [
+            {
+              "term": "Hlavolamy",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "level design",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 90,
+          "text": "Príjemnou stránkou hry je jej dizajn a hudba.",
+          "aspectTerms": [
+            {
+              "term": "dizajn",
+              "polarity": "positive",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "hudba",
+              "polarity": "positive",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "visuals",
+              "polarity": "positive"
+            },
+            {
+              "category": "music",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 91,
+          "text": "Pozadia úrovní sú pekné, len škoda, že statické.",
+          "aspectTerms": [
+            {
+              "term": "Pozadia úrovní",
+              "polarity": "conflict",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "visuals",
+              "polarity": "conflict"
+            }
+          ]
+        },
+        {
+          "reviewId": 92,
+          "text": "Není tam žádný příběh ani nic zajímavého.",
+          "aspectTerms": [
+            {
+              "term": "příběh",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "story",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 93,
+          "text": "Od poloviny hry se brutálně zvýší obtížnost.",
+          "aspectTerms": [
+            {
+              "term": "obtížnost",
+              "polarity": "neutral",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "game difficulty",
+              "polarity": "neutral"
+            }
+          ]
+        },
+        {
+          "reviewId": 94,
+          "text": "vše kazí opravdu příšerné ovládání a kamera",
+          "aspectTerms": [
+            {
+              "term": "ovládání",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "kamera",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "controls",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 95,
+          "text": "odporná kamera",
+          "aspectTerms": [
+            {
+              "term": "kamera",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "controls",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 96,
+          "text": "Ovládání podle mě zbytečně překomplikovali.",
+          "aspectTerms": [
+            {
+              "term": "Ovládání",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "controls",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 97,
+          "text": "Na gamepadu asi to bude OK ale klávesnice a myš není úplně ideální.",
+          "aspectTerms": [
+            {
+              "term": "gamepadu",
+              "polarity": "positive",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "klávesnice",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "myš",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "controls",
+              "polarity": "conflict"
+            }
+          ]
+        },
+        {
+          "reviewId": 98,
+          "text": "Hodně textur je v nízkém rozlišení a když se člověk přiblíží více než by měl, tak vypadají odporně.",
+          "aspectTerms": [
+            {
+              "term": "textur",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "visuals",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 99,
+          "text": "Hudba je ako predtym skvela a potesili aj niektore zvukove efekty",
+          "aspectTerms": [
+            {
+              "term": "Hudba",
+              "polarity": "positive",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "zvukove efekty",
+              "polarity": "positive",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "sounds",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 100,
+          "text": "prijemna farebna nalada a screenshot generator",
+          "aspectTerms": [
+            {
+              "term": "farebna nalada",
+              "polarity": "positive",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "screenshot generator",
+              "polarity": "positive",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "game environment",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 101,
+          "text": "Nemali tam davat 3D prostredie, len to dogabalo gameplay a celkovy zazitok z hry.",
+          "aspectTerms": [
+            {
+              "term": "3D prostredie",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "gameplay",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "game environment",
+              "polarity": "negative"
+            },
+            {
+              "category": "gameplay",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 102,
+          "text": "Nádherný rozprávkový svet a príbeh troch hrdinov.",
+          "aspectTerms": [
+            {
+              "term": "svet",
+              "polarity": "positive",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "príbeh",
+              "polarity": "positive",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "game environment",
+              "polarity": "positive"
+            },
+            {
+              "category": "story",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 103,
+          "text": "nefungujúce 3D prostredíe a OTRASNA kamera",
+          "aspectTerms": [
+            {
+              "term": "3D prostredíe",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "kamera",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "game environment",
+              "polarity": "positive"
+            },
+            {
+              "category": "controls",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 104,
+          "text": "Ovládání je podivné - těžko se poznává kde postava stojí nebo jakým směrem se pohybuje.",
+          "aspectTerms": [
+            {
+              "term": "Ovládání",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "postava",
+              "polarity": "neutral",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "controls",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 105,
+          "text": "Po grafické stránce ani po hudební stránce není co vytknout, ale ovládání to bohužel kazí.",
+          "aspectTerms": [
+            {
+              "term": "grafické stránce",
+              "polarity": "positive",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "hudební stránce",
+              "polarity": "positive",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "ovládání",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "visuals",
+              "polarity": "positive"
+            },
+            {
+              "category": "music",
+              "polarity": "positive"
+            },
+            {
+              "category": "controls",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 106,
+          "text": "3D stylizace hře nesluší",
+          "aspectTerms": [
+            {
+              "term": "3D stylizace",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "game environment",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 107,
+          "text": "3D ovladanie s takymto pohladom pre mna uplne zle.",
+          "aspectTerms": [
+            {
+              "term": "3D ovladanie",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "controls",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 108,
+          "text": "Netřeba hovořit o tom, že Trine 3 se po audio-vizuální stránce opravdu povedl. ",
+          "aspectTerms": [
+            {
+              "term": "audio-vizuální stránce",
+              "polarity": "positive",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "visuals",
+              "polarity": "positive"
+            }
+          ]
         }
       ]
-    },
-    {
-      "reviewId": 1,
-      "text": "Bavilo mě to ještě víc než první díl a nově přidanej multiplayer tomu dal jinej rozměr kterej z toho udělal ještě zajímavější hru.",
-      "aspectTerms": [
-        {
-          "term": "multiplayer",
-          "polarity": "p",
-          "from": 53,
-          "to": 64
-        }
-      ],
-      "aspectCategories": [
-        {
-          "category": "game mode",
-          "polarity": "positive"
-        }
-      ]
-    },
-    {
-      "reviewId": 2,
-      "text": "Srandy u ní je hlavně když hrajete multiplayer.",
-      "aspectTerms": [
-        {
-          "term": "multiplayer",
-          "polarity": "positive",
-          "from": 35,
-          "to": 46
-        }
-      ],
-      "aspectCategories": [
-        {
-          "category": "game mode",
-          "polarity": "positive"
-        }
-      ]
-    },
-    {
-      "reviewId": 3,
-      "text": "hra je zábavná i když je docela starší tak je to pro mě pořád srdcovka",
-      "aspectTerms": [
-      ],
-      "aspectCategories": [
-        {
-          "category": "overall",
-          "polarity": "positive"
-        }
-      ]
-    },
-    {
-      "reviewId": 4,
-      "text": "Logická hra se silným a výborným příběhem, kde jsou hádanky založeny na jednoduchém a snadno pochopitelném principu.",
-      "aspectTerms": [
-        {
-          "term": "příběhem",
-          "polarity": "p",
-          "from": 33,
-          "to": 41
-        },
-        {
-          "term": "hádanky",
-          "polarity": "p",
-          "from": 52,
-          "to": 59
-        },
-        {
-          "term":"principu",
-          "polarity":"positive",
-          "from":107,
-          "to":115
-        }
-      ],
-      "aspectCategories": [
-        {
-          "category": "game design",
-          "polarity": "positive"
-        },
-        {
-          "category": "story",
-          "polarity": "positive"
-        }
-      ]
-    },
-    {
-      "reviewId": 5,
-      "text": "Pěkná hra - velmi snadná pro 9ti leté kluky, líbí se jim on-line režim a plnění úkolů. Žádná krev a násilí, prostě vyhovuje.",
-      "aspectTerms": [
-        {
-          "term": "on-line režim",
-          "polarity": "p",
-          "from": 57,
-          "to": 70
-        },
-        {
-          "term": "úkolů",
-          "polarity": "p",
-          "from": 80,
-          "to": 85
-        },
-        {
-          "term": "Žádná krev a násilí",
-          "polarity": "p",
-          "from": 87,
-          "to": 106
-        }
-      ],
-      "aspectCategories": [
-        {
-          "category":"game mode",
-          "polarity":"positive"
-        },
-        {
-          "category": "overall",
-          "polarity": "positive"
-        },
-        {
-          "category": "violence",
-          "polarity": "positive"
-        }
-      ]
-    },
-    {
-      "reviewId": 6,
-      "text": "Dokáže zaujmout jak singleplayer, tak i multiplayer a hra má i svůj příběh, který vypráví trochu popletený robot, ale tím se vtipnost násobí.",
-      "aspectTerms": [
-        {
-          "term": "singleplayer",
-          "polarity": "p",
-          "from": 20,
-          "to": 32
-        },
-        {
-          "term": "multiplayer",
-          "polarity": "p",
-          "from": 40,
-          "to": 51
-        },
-        {
-          "term": "vtipnost",
-          "polarity": "p",
-          "from": 125,
-          "to": 133
-        },
-        {
-          "term":"příběh",
-          "polarity":"positive",
-          "from":68,
-          "to":74
-        }
-      ],
-      "aspectCategories": [
-        {
-          "category": "overall",
-          "polarity": "positive"
-        },
-        {
-          "category":"game mode",
-          "polarity":"positive"
-        }
-      ]
-    },
-    {
-      "reviewId": 7,
-      "text": "Tato hra má super příběh, některé levely jsou lehké a některé dají zabrat, kooperace tuto hru dělá ještě mnohem lepší.",
-      "aspectTerms": [
-        {
-          "term": "příběh",
-          "polarity": "p",
-          "from": 18,
-          "to": 24
-        },
-        {
-          "term": "levely",
-          "polarity": "neutral",
-          "from": 34,
-          "to": 40
-        },
-        {
-          "term": "kooperace",
-          "polarity": "p",
-          "from": 75,
-          "to": 84
-        }
-      ],
-      "aspectCategories": [
-        {
-          "category": "overall",
-          "polarity": "positive"
-        },
-        {
-          "category":"game mode",
-          "polarity":"positive"
-        },
-        {
-          "category":"level design",
-          "polarity":"positive"
-        }
-      ]
-    },
-    {
-      "reviewId": 8,
-      "text": "Já osobně jsem si oblíbil Glados i Wheatleho.",
-      "aspectTerms": [
-        {
-          "term": "Glados",
-          "polarity": "p",
-          "from": 26,
-          "to": 32
-        },
-        {
-          "term": "Wheatleho",
-          "polarity": "p",
-          "from": 35,
-          "to": 44
-        }
-      ],
-      "aspectCategories": [
-        {
-          "category": "story",
-          "polarity": "positive"
-        }
-      ]
-    },
-    {
-      "reviewId": 9,
-      "text": "Super hra good grafika a cena",
-      "aspectTerms": [
-        {
-          "term": "grafika",
-          "polarity": "p",
-          "from": 15,
-          "to": 22
-        },
-        {
-          "term": "cena",
-          "polarity": "p",
-          "from": 25,
-          "to": 29
-        }
-      ],
-      "aspectCategories": [
-        {
-          "category": "overall",
-          "polarity": "positive"
-        },
-        {
-          "category": "visuals",
-          "polarity": "positive"
-        },
-        {
-          "category":"price",
-          "polarity":"positive"
-        }
-      ]
-    },
-    {
-      "reviewId": 10,
-      "text": "Skvělý příběh a super vtipy k tomu.",
-      "aspectTerms": [
-        {
-          "term": "příběh",
-          "polarity": "p",
-          "from": 7,
-          "to": 13
-        },
-        {
-          "term":"vtipy",
-          "polarity":"positive",
-          "from":22,
-          "to":27
-        }
-      ],
-      "aspectCategories": [
-      ]
-    },
-    {
-      "reviewId": 11,
-      "text": "Originální koncept a propracovaná grafika i příběh.",
-      "aspectTerms": [
-        {
-          "term": "grafika",
-          "polarity": "p",
-          "from": 34,
-          "to": 41
-        },
-        {
-          "term": "příběh",
-          "polarity": "p",
-          "from": 44,
-          "to": 50
-        },
-        {
-          "term": "koncept",
-          "polarity": "p",
-          "from": 11,
-          "to": 18
-        }
-      ],
-      "aspectCategories": [
-        {
-          "category": "story",
-          "polarity": "positive"
-        },
-        {
-          "category": "visuals",
-          "polarity": "positive"
-        }
-      ]
-    },
-    {
-      "reviewId": 12,
-      "text": "Vynikající příběh, který navazuje na jedničku, skvělé postavy s luxusním dabingem, dobrá grafika a super hratelnost s vyváženou obtížností.",
-      "aspectTerms": [
-        {
-          "term": "příběh",
-          "polarity": "positive",
-          "from": 11,
-          "to": 17
-        },
-        {
-          "term": "postavy",
-          "polarity": "positive",
-          "from": 54,
-          "to": 61
-        },
-        {
-          "term": "grafika",
-          "polarity": "positive",
-          "from": 89,
-          "to": 96
-        },
-        {
-          "term": "dabingem",
-          "polarity": "positive",
-          "from": 73,
-          "to": 81
-        },
-        {
-          "term": "hratelnost",
-          "polarity": "positive",
-          "from": 105,
-          "to": 115
-        },
-        {
-          "term": "obtížností",
-          "polarity": "positive",
-          "from": 128,
-          "to": 138
-        }
-      ],
-      "aspectCategories": [
-        {
-          "category": "gameplay",
-          "polarity": "positive"
-        },
-        {
-          "category": "visuals",
-          "polarity": "positive"
-        },
-        {
-          "category": "story",
-          "polarity": "positive"
-        },
-        {
-          "category": "languages",
-          "polarity": "positive"
-        }
-      ]
-    },
-    {
-      "reviewId": 13,
-      "text": "Prostredie je nudné, neoriginálne a postava droida ma tiež nevtiahla. ",
-      "aspectTerms": [
-        {
-          "term": "Prostredie",
-          "polarity": "negative",
-          "from": 0,
-          "to": 10
-        },
-        {
-          "term": "postava droida",
-          "polarity": "negative",
-          "from": 36,
-          "to": 50
-        }
-      ],
-      "aspectCategories": [
-        {
-          "category": "story",
-          "polarity": "negative"
-        },
-        {
-          "category":"game environment",
-          "polarity":"negative"
-        }
-
-      ]
-    },
-    {
-      "reviewId": 14,
-      "text": "Většina pazlů je taky dost triviální.",
-      "aspectTerms": [
-        {
-          "term": "pazlů",
-          "polarity": "negative",
-          "from": 8,
-          "to": 13
-        }
-      ],
-      "aspectCategories": [
-        {
-          "category": "level design",
-          "polarity": "negative"
-        }
-      ]
-    },
-    {
-      "reviewId": 15,
-      "text": "Příběh je nádherný, dojemný a trošku smutný.",
-      "aspectTerms": [
-        {
-          "term": "Příběh",
-          "polarity": "p",
-          "from": 0,
-          "to": 6
-        }
-      ],
-      "aspectCategories": [
-        {
-          "category": "story",
-          "polarity": "positive"
-        }
-      ]
-    },
-    {
-      "reviewId": 16,
-      "text": "Skvělá logická hříčka, je neuvěřitelně zábavná a originální záležitost.",
-      "aspectTerms": [
-      ],
-      "aspectCategories": [
-        {
-          "category": "overall",
-          "polarity": "positive"
-        }
-      ]
-    },
-    {
-      "reviewId": 17,
-      "text": "Většina hádanek je krátkých s očividným řešením.",
-      "aspectTerms": [
-        {
-          "term": "Většina hádanek",
-          "polarity": "negative",
-          "from": 0,
-          "to": 15
-        },
-        {
-          "term": "řešením",
-          "polarity": "negative",
-          "from": 40,
-          "to": 47
-        }
-      ],
-      "aspectCategories": [
-        {
-          "category": "level design",
-          "polarity": "negative"
-        }
-      ]
-    },
-    {
-      "reviewId": 18,
-      "text": "Příběhová logika je ale bohužel kvůli hře vykloubena tolikrát, že se vám chce křičet \"PROČ???\".",
-      "aspectTerms": [
-        {
-          "term": "Příběhová logika",
-          "polarity": "negative",
-          "from": 0,
-          "to": 16
-        }
-      ],
-      "aspectCategories": [
-        {
-          "category": "story",
-          "polarity": "negative"
-        }
-      ]
-    },
-    {
-      "reviewId": 19,
-      "text": "Najviac mi asi chybal kvetnatejsi pribeh, animacie, cutsceny.",
-      "aspectTerms": [
-        {
-          "term": "pribeh",
-          "polarity": "negative",
-          "from": 34,
-          "to": 40
-        },
-        {
-          "term": "animacie",
-          "polarity": "negative",
-          "from": 42,
-          "to": 50
-        },
-        {
-          "term": "cutsceny",
-          "polarity": "negative",
-          "from": 52,
-          "to": 60
-        }
-      ],
-      "aspectCategories": [
-        {
-          "category": "story",
-          "polarity": "negative"
-        }
-      ]
-    },
-    {
-      "reviewId": 20,
-      "text": "Místnosti jsou víceméně stále stejné, občas jen jinak nasvícené.",
-      "aspectTerms": [
-        {
-          "term": "Místnosti",
-          "polarity": "negative",
-          "from": 0,
-          "to": 9
-        }
-      ],
-      "aspectCategories": [
-        {
-          "category": "game environment",
-          "polarity": "negative"
-        }
-      ]
-    },
-    {
-      "reviewId": 21,
-      "text": "Grafika je hezká a příběh se zajímavě vyvíjel, ale nestačilo mi to na to, abych hru hrál dál.",
-      "aspectTerms": [
-        {
-          "term": "Grafika",
-          "polarity": "positive",
-          "from": 0,
-          "to": 7
-        },
-        {
-          "term": "příběh",
-          "polarity": "positive",
-          "from": 19,
-          "to": 25
-        }
-      ],
-      "aspectCategories": [
-        {
-          "category": "overall",
-          "polarity": "conflict"
-        }
-      ]
-    },
-    {
-      "reviewId": 22,
-      "text": " Snad každý puzzle kromě pár volitelných rozlousknete okamžitě, aniž byste museli použít mozek.",
-      "aspectTerms": [
-        {
-          "term": "puzzle",
-          "polarity": "negative",
-          "from": 11,
-          "to": 17
-        }
-      ],
-      "aspectCategories": [
-        {
-          "category": "level design",
-          "polarity": "negative"
-        }
-      ]
-    },
-    {
-      "reviewId": 23,
-      "text": "Příběh je ale fádní, celkem nezajímavý a totálně předvídatelný.",
-      "aspectTerms": [
-        {
-          "term": "Příběh",
-          "polarity": "negative",
-          "from": 0,
-          "to": 6
-        }
-      ],
-      "aspectCategories": [
-        {
-          "category": "story",
-          "polarity": "negative"
-        }
-      ]
-    },
-    {
-      "reviewId":24,
-       "text":"Tato hra je určtě super protože to rozjede i slabší počítač a není zas tak drahá.",
-       "aspectTerms":[
-         {
-           "term": "slabší počítač",
-           "polarity": "positive",
-           "from": 45,
-           "to": 59
-         }
-       ],
-       "aspectCategories":[
-         {
-           "category":"overall",
-           "polarity":"positive"
-         },
-         {
-           "category":"price",
-           "polarity":"positive"
-         }
-       ]
-    },
-    {
-      "reviewId": 25,
-      "text": "Po vizuální stránce neurazí a hudba také nijak netahá za uši, ale to prostě nestačí.",
-      "aspectTerms": [
-        {
-          "term": "vizuální stránce",
-          "polarity": "neutral",
-          "from": 3,
-          "to": 19
-        },
-        {
-          "term": "hudba",
-          "polarity": "neutral",
-          "from": 30,
-          "to": 35
-        }
-      ],
-      "aspectCategories": [
-        {
-          "category": "visuals",
-          "polarity": "neutral"
-        },
-        {
-          "category": "sounds",
-          "polarity": "neutral"
-        }
-      ]
-    },
-    {
-      "reviewId": 26,
-      "text": "Hra má dobrý příběh.",
-      "aspectTerms": [
-        {
-          "term": "příběh",
-          "polarity": "positive",
-          "from": 13,
-          "to": 19
-        }
-      ],
-      "aspectCategories": [
-        {
-          "category": "story",
-          "polarity": "positive"
-        }
-      ]
-    },
-    {
-      "reviewId": 27,
-      "text": "Nehrál jsem sice coop protože neznám nikoho kdo by jsi ho se mnou zahrát ale podle recenzí věřím že je taky dobrý.",
-      "aspectTerms": [
-        {
-          "term": "coop",
-          "polarity": "neutral",
-          "from": 17,
-          "to": 21
-        },
-        {
-          "term": "recenzí",
-          "polarity": "positive",
-          "from": 83,
-          "to": 90
-        }
-      ],
-      "aspectCategories": [
-        {
-          "category": "game mode",
-          "polarity": "positive"
-        }
-      ]
-    },
-    {
-      "reviewId": 28,
-      "text": "Ve slevách za 2 eura je úžasná koupě.",
-      "aspectTerms": [
-        {
-          "term": "koupě",
-          "polarity": "positive",
-          "from": 31,
-          "to": 36
-        }
-      ],
-      "aspectCategories": [
-        {
-          "category": "price",
-          "polarity": "positive"
-        }
-      ]
-    },
-    {
-        "reviewId":29,
-         "text":"Sice jsou nějaké mise obtížnější, ale to vůbec nevadí od toho jsou tam 2 hráči.",
-         "aspectTerms":[
-           {
-             "term":"mise",
-             "polarity":"conflict",
-             "from":17,
-             "to":21
-           }
-         ],
-         "aspectCategories":[
-           {
-             "category":"level design",
-             "polarity":"neutral"
-           }
-         ]
-    },
-    {
-      "reviewId":30,
-       "text":"game design na své maximální úrovni v praxi (a pohybu).",
-       "aspectTerms":[
-         {
-           "term":"game design",
-           "polarity":"positive",
-           "from":0,
-           "to":11
-         }
-       ],
-       "aspectCategories":[
-         {
-           "category":"game design",
-           "polarity":"positive"
-         }
-       ]
-    },
-    {
-      "reviewId":31,
-       "text":"Velmi dobrá hra, Grafické, Gameplayové a i trošku příběhové velmi dobré zpracování a CO-OP jako třešnička na dortu",
-       "aspectTerms":[
-         {
-           "term":"zpracování",
-           "polarity":"positive",
-           "from":72,
-           "to":82
-         },
-         {
-           "term":"CO-OP",
-           "polarity":"positive",
-           "from":85,
-           "to":90
-         }
-       ],
-       "aspectCategories":[
-         {
-           "category":"overall",
-           "polarity":"positive"
-         },
-         {
-           "category":"game mode",
-           "polarity":"positive"
-         }
-       ]
-    },
-    {
-      "reviewId":32,
-       "text":"Skvělá puzzle hra s famózním příběhem, velmi zábavným co-op režimem a skvělím humorem.",
-       "aspectTerms":[
-         {
-           "term":"příběhem",
-           "polarity":"positive",
-           "from":29,
-           "to":37
-         },
-         {
-           "term":"co-op režimem",
-           "polarity":"positive",
-           "from":54,
-           "to":67
-         },
-         {
-           "term":"humorem",
-           "polarity":"positive",
-           "from":78,
-           "to":85
-         }
-       ],
-       "aspectCategories":[
-         {
-           "category":"story",
-           "polarity":"positive"
-         },
-         {
-           "category":"overall",
-           "polarity":"positive"
-         }
-       ]
-    },
-    {
-      "reviewId":33,
-       "text":"Tato hra je určtě super protože to rozjede i slabší počítač a není zas tak drahá.",
-       "aspectTerms":[
-       ],
-       "aspectCategories":[
-         {
-           "category":"system requirements",
-           "polarity":"positive"
-         },
-         {
-           "category":"price",
-           "polarity":"positive"
-         }
-       ]
-    },
-    {
-      "reviewId":34,
-       "text":"úžasně otestuje vaši logiku a pro lidi jako já má i české titulky.",
-       "aspectTerms":[
-         {
-           "term":"logiku",
-           "polarity":"positive",
-           "from":21,
-           "to":27
-         },
-         {
-           "term":"titulky",
-           "polarity":"positive",
-           "from":52,
-           "to":65
-         }
-       ],
-       "aspectCategories":[
-         {
-           "category":"game design",
-           "polarity":"positive"
-         },
-         {
-           "category":"languages",
-           "polarity":"positive"
-         }
-       ]
-    },
-    {
-      "reviewId":35,
-       "text":"Méně náročná na PC.",
-       "aspectTerms":[
-       ],
-       "aspectCategories":[
-         {
-           "category":"system requirements",
-           "polarity":"positive"
-         }
-       ]
-    },
-    {
-      "reviewId":36,
-       "text":"Singleplayer je zajímavý, v co-opu je velká sranda s kamarádem, grafika na svoji dobu pěkná",
-       "aspectTerms":[
-         {
-           "term":"Singleplayer",
-           "polarity":"positive",
-           "from":0,
-           "to":12
-         },
-         {
-           "term":"co-opu",
-           "polarity":"positive",
-           "from":28,
-           "to":34
-         },
-         {
-           "term":"grafika",
-           "polarity":"positive",
-           "from":64,
-           "to":71
-         }
-       ],
-       "aspectCategories":[
-         {
-           "category":"game mode",
-           "polarity":"positive"
-         },
-         {
-           "category":"visuals",
-           "polarity":"positive"
-         }
-       ]
-    },
-    {
-      "reviewId":37,
-       "text":"Hra nabízí skvělý coop a komunitní mapy, které určitě stojí za vyzkoušení",
-       "aspectTerms":[
-         {
-           "term":"coop",
-           "polarity":"positive",
-           "from":18,
-           "to":22
-         },
-         {
-           "term":"komunitní mapy",
-           "polarity":"positive",
-           "from":25,
-           "to":39
-         }
-       ],
-       "aspectCategories":[
-         {
-           "category":"game mode",
-           "polarity":"positive"
-         },
-         {
-           "category":"level design",
-           "polarity":"positive"
-         },
-         {
-           "category":"community",
-           "polarity":"positive"
-         }
-       ]
-    },
-    {
-      "reviewId":38,
-       "text":"I přes krátkou herní dobu a němou hrdinku jsem si hru užil dosytosti.",
-       "aspectTerms":[
-         {
-           "term":"herní dobu",
-           "polarity":"negative",
-           "from":15,
-           "to":25
-         },
-         {
-           "term":"hrdinku",
-           "polarity":"negative",
-           "from":42,
-           "to":49
-         }
-       ],
-       "aspectCategories":[
-         {
-           "category":"overall",
-           "polarity":"positive"
-         },
-         {
-           "category":"gameplay length",
-           "polarity":"negative"
-         },
-
-         {
-           "category":"story",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":39,
-       "text":"Příběh je originální.",
-       "aspectTerms":[
-         {
-           "term":"Příběh",
-           "polarity":"positive",
-           "from":0,
-           "to":6
-         }
-       ],
-       "aspectCategories":[
-         {
-           "category":"story",
-           "polarity":"positive"
-         }
-       ]
-    },
-    {
-      "reviewId":40,
-       "text":"úžasné prostředí",
-       "aspectTerms":[
-         {
-           "term":"prostředí",
-           "polarity":"positive",
-           "from":7,
-           "to":16
-         }
-       ],
-       "aspectCategories":[
-          {
-           "category":"game environment",
-           "polarity":"positive"
-         }
-       ]
-    },
-    {
-      "reviewId":41,
-       "text":"Hádanky jsou dobře udělané.",
-       "aspectTerms":[
-         {
-           "term":"hádanky",
-           "polarity":"positive",
-           "from":0,
-           "to":7
-         }
-       ],
-       "aspectCategories":[
-          {
-           "category":"level design",
-           "polarity":"positive"
-         }
-       ]
-    },
-    {
-      "reviewId":42,
-       "text":"I přes němou hrdinku jsem si hru užil dosytosti.",
-       "aspectTerms":[
-         {
-           "term":"hrdinku",
-           "polarity":"negative",
-           "from":13,
-           "to":20
-         }
-       ],
-       "aspectCategories":[
-         {
-           "category":"overall",
-           "polarity":"positive"
-         },
-         {
-           "category":"story",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":43,
-       "text":"Příběhový režim je úžasné dílo plné zábavy",
-       "aspectTerms":[
-         {
-           "term":"Příběhový režim",
-           "polarity":"positive",
-           "from":0,
-           "to":15
-         }
-       ],
-       "aspectCategories":[
-         {
-           "category":"game mode",
-           "polarity":"positive"
-         }
-       ]
-    },
-    {
-      "reviewId":44,
-       "text":"Hře bych zvládl vytknout málo obsahu.",
-       "aspectTerms":[
-         {
-           "term":"obsahu",
-           "polarity":"negative",
-           "from":30,
-           "to":36
-         }
-       ],
-       "aspectCategories":[
-         {
-           "category":"gameplay",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":45,
-       "text":"Hru je možné dohrát ve velice krátkém intervalu, to ovšem vynahrazuje cena hry.",
-       "aspectTerms":[
-         {
-           "term":"cena",
-           "polarity":"positive",
-           "from":70,
-           "to":74
-         }
-       ],
-       "aspectCategories":[
-         {
-           "category":"price",
-           "polarity":"positive"
-         },
-         {
-           "category":"game length",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":46,
-       "text":"Hra přichází hned se třemi zcela novými mechanismy, které zábavnost hraní jen podpoří",
-       "aspectTerms":[
-         {
-           "term":"mechanismy",
-           "polarity":"neutral",
-           "from":40,
-           "to":50
-         },
-         {
-           "term":"hraní",
-           "polarity":"positive",
-           "from":68,
-           "to":73
-         }
-       ],
-       "aspectCategories":[
-         {
-           "category":"gameplay",
-           "polarity":"positive"
-         }
-       ]
-    },
-    {
-      "reviewId":47,
-       "text":"perfektně graficky ztvárněné úrovně a nápaditý příběh plný zvratů",
-       "aspectTerms":[
-         {
-           "term":"úrovně",
-           "polarity":"positive",
-           "from":29,
-           "to":35
-         },
-         {
-           "term":"příběh",
-           "polarity":"positive",
-           "from":47,
-           "to":53
-         }
-       ],
-       "aspectCategories": [
-         {
-           "category":"level design",
-           "polarity":"positive"
-         },
-         {
-           "category":"story",
-           "polarity":"positive"
-         }
-       ]
-    },
-    {
-      "reviewId":48,
-       "text":"hra nemá češtinu",
-       "aspectTerms":[
-         {
-           "term":"češtinu",
-           "polarity":"negative",
-           "from":9,
-           "to":16
-         }
-
-       ],
-       "aspectCategories":[
-         {
-           "category":"language",
-           "polarity":"negative"
-         }
-
-       ]
-    },
-    {
-      "reviewId":49,
-       "text":"Hra se mi zdála dost krátká.",
-       "aspectTerms":[
-       ],
-       "aspectCategories":[
-         {
-           "category":"game length",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":50,
-       "text":"né moc hezká grafika a málo levelů",
-       "aspectTerms":[
-         {
-           "term":"grafika",
-           "polarity":"negative",
-           "from":13,
-           "to":20
-         },
-         {
-           "term":"levelů",
-           "polarity":"negative",
-           "from":28,
-           "to":34
-         }
-         
-       ],
-       "aspectCategories":[
-         {
-           "category":"visuals",
-           "polarity":"negative"
-         },
-         {
-           "category":"level design",
-           "polarity":"negative"
-         }
-         
-       ]
-    },
-    {
-      "reviewId":51,
-       "text":"Je až moc krátka.",
-       "aspectTerms":[
-         
-       ],
-       "aspectCategories":[
-         {
-           "category":"game length",
-           "polarity":"negative"
-         }
-         
-       ]
-    },
-    {
-      "reviewId":52,
-       "text":"úrovně jsou docela jednoduché",
-       "aspectTerms":[
-         {
-           "term":"úrovně",
-           "polarity":"negative",
-           "from":0,
-           "to":6
-         }
-
-       ],
-       "aspectCategories":[
-         {
-           "category":"level design",
-           "polarity":"negative"
-         }
-
-       ]
-    },
-    {
-      "reviewId":53,
-       "text":"Osobne je to pre mňa velmi nudná hra s primitívnymi úlohami",
-       "aspectTerms":[
-         {
-           "term":"úlohami",
-           "polarity":"negative",
-           "from":52,
-           "to":59
-         }
-       ],
-       "aspectCategories":[
-         {
-           "category":"level design",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":54,
-       "text":"Jediný zápor je snad jenom krátká kampaň.",
-       "aspectTerms":[
-         {
-           "term":"kampaň",
-           "polarity":"negative",
-           "from":34,
-           "to":40
-         }
-
-       ],
-      "aspectCategories":[
-          {
-           "category":"game length",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":55,
-       "text":"Hra nabízí relaxační zážitek s pravidelně dávkovanými puzzly, pěknou grafikou a příjemnou podkresovou hudbou",
-       "aspectTerms":[
-         {
-           "term":"puzzly",
-           "polarity":"neutral",
-           "from":54,
-           "to":60
-         },
-         {
-           "term":"grafikou",
-           "polarity":"positive",
-           "from":69,
-           "to":77
-         },
-         {
-           "term":"podkresovou hudbou",
-           "polarity":"positive",
-           "from":90,
-           "to":108
-         }
-
-       ],
-       "aspectCategories":[
-         {
-           "category":"level design",
-           "polarity":"neutral"
-         },
-         {
-           "category":"visuals",
-           "polarity":"positive"
-         },
-         {
-           "category": "music",
-           "polarity": "positive"
-         }
-       ]
-    },
-    {
-      "reviewId":56,
-       "text":"Grafika je velmi líbivá",
-       "aspectTerms":[
-         {
-           "term":"Grafika",
-           "polarity":"positve",
-           "from":0,
-           "to":7
-         }
-         
-       ],
-       "aspectCategories":[
-         {
-           "category":"visuals",
-           "polarity":"positive"
-         }
-       ]
-    },
-    {
-      "reviewId":57,
-       "text":"hodně hru kazí ovládání a některé nesmyslně řešené puzzly",
-       "aspectTerms":[
-         {
-           "term":"ovládání",
-           "polarity":"negative",
-           "from":15,
-           "to":23
-         },
-         {
-           "term":"puzzly",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-         
-       ],
-       "aspectCategories":[
-         {
-           "category":"gameplay",
-           "polarity":"negative"
-         },
-         {
-           "category":"level design",
-           "polarity":"negative"
-         }
-         
-       ]
-    },
-    {
-      "reviewId":58,
-       "text":"Je to příšerně lineární, žádná svoboda",
-       "aspectTerms":[
-
-       ],
-       "aspectCategories":[
-         {
-           "category":"gameplay",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":59,
-       "text":"Hra pro mě byla jen pětihodinovým chozením po nudném (často tmavém) a nepřehledném prostředí.",
-       "aspectTerms":[
-         {
-           "term":"prostředí",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-
-       ],
-       "aspectCategories":[
-         {
-           "category":"game environment",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":60,
-       "text":"Dizajn světa je nic moc, často nevíte co máte dělat",
-       "aspectTerms":[
-         {
-           "term":"Dizajn světa",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-         
-       ],
-       "aspectCategories":[
-         {
-           "category":"level design",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":61,
-       "text":"omrzí z důvodu nedostatku gameplaye",
-       "aspectTerms":[
-         {
-           "term":"gameplaye",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-       ],
-       "aspectCategories":[
-         {
-           "category":"game length",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":62,
-       "text":"je krátká dohrál jsem ji za 7h",
-       "aspectTerms":[
-       ],
-       "aspectCategories":[
-         {
-           "category":"game length",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":63,
-       "text":"Hra v singleplayer je velice dobrá ale CO-OP se nedá hrát kvůli častým lagům\n",
-       "aspectTerms":[
-         {
-           "term":"singleplayer",
-           "polarity":"positive",
-           "from":0,
-           "to":0
-         },
-         {
-           "term":"CO-OP",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         },
-         {
-           "term":"lagům",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-
-       ],
-       "aspectCategories":[
-         {
-           "category":"game mode",
-           "polarity":"conflict"
-         }
-       ]
-    },
-    {
-      "reviewId":64,
-       "text":"vývoj postav je nulový",
-       "aspectTerms":[
-         {
-           "term":"vývoj postav",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-         
-       ],
-       "aspectCategories":[
-         {
-           "category":"story",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":65,
-       "text":"někdy je kontrola příšerná",
-       "aspectTerms":[
-         {
-           "term":"kontrola",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-         
-       ],
-       "aspectCategories":[
-         {
-           "category":"controls",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":66,
-       "text":"nelogický ovládání v některých minihrách",
-       "aspectTerms":[
-         {
-           "term":"ovládání",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-         
-       ],
-       "aspectCategories":[
-         {
-           "category":"controls",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":67,
-       "text":"nezvyšuje se náročnost",
-       "aspectTerms":[
-         {
-           "term":"náročnost",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-         
-       ],
-       "aspectCategories":[
-         {
-           "category":"level design",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":68,
-       "text":"puzzle jsou dost jednoduchý",
-       "aspectTerms":[
-         {
-           "term":"puzzle",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-         
-       ],
-       "aspectCategories":[
-         {
-           "category":"level design",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":69,
-       "text":"Když si člověk zvykne na stupidní ovládání, tak jde v podstatě jen o skákačku.",
-       "aspectTerms":[
-         {
-           "term":"ovládání",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         },
-         {
-           "term":"skákačku",
-           "polarity":"neutral",
-           "from":0,
-           "to":0
-         }
-         
-       ],
-       "aspectCategories":[
-         {
-           "category":"controls",
-           "polarity":"negative"
-         }
-         
-       ]
-    },
-    {
-      "reviewId":70,
-       "text":"tragické ovládání (hráno na klávesnici)",
-       "aspectTerms":[
-         {
-           "term":"ovládání",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-
-       ],
-       "aspectCategories":[
-         {
-           "category":"controls",
-           "polarity":"negative"
-         }
-
-       ]
-    },
-    {
-      "reviewId":71,
-       "text":"3D prostředí se statickou kamerou, je prostě kravina",
-       "aspectTerms":[
-         {
-           "term":"prostředí",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         },
-         {
-           "term":"kamerou",
-           "polarity":"neutral",
-           "from":0,
-           "to":0
-         }
-
-       ],
-       "aspectCategories":[
-         {
-           "category":"game environment",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":72,
-       "text":"nemožnost vlastního ukládání a špatné checkpointy",
-       "aspectTerms":[
-         {
-           "term":"ukládání",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         },
-         {
-           "term":"checkpointy",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-
-       ],
-       "aspectCategories":[
-         {
-           "category":"game save",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":73,
-       "text":"postavy které Vás honí/snaží se vás chytit, nemají žádné animace při chytání",
-       "aspectTerms":[
-         {
-           "term":"postavy",
-           "polarity":"neutral",
-           "from":0,
-           "to":0
-         },
-         {
-           "term":"animace",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-       ],
-       "aspectCategories":[
-         {
-           "category":"animations",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":74,
-       "text":"uhnutí je nemožné",
-       "aspectTerms":[ 
-         {
-           "term":"uhnutí",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-       ],
-       "aspectCategories":[
-         {
-           "category":"controls",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":75,
-       "text":"nulový příběh, kde postavy nemluví",
-       "aspectTerms":[
-         {
-           "term":"příběh",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         },
-         {
-           "term":"postavy",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-         
-       ],
-       "aspectCategories":[
-         {
-           "category":"story",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":76,
-       "text":"Tato hra nemá absolutně žádný příběh.",
-       "aspectTerms":[
-         {
-           "term":"příběh",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-       ],
-       "aspectCategories":[
-         {
-           "category":"story",
-           "polarity":"negative"
-         }
-         
-       ]
-    },
-    {
-      "reviewId":77,
-       "text":"Za 20€ velmi krátká hra.",
-       "aspectTerms":[
-         
-       ],
-       "aspectCategories":[
-         {
-           "category":"game length",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":78,
-       "text":"dá se dorát za 1.5 hodiny ale kvůli těm bugům je to tak na 4 hodiny",
-       "aspectTerms":[
-         {
-           "term":"bugům",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-       ],
-       "aspectCategories":[
-         {
-           "category":"gameplay",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":79,
-       "text":"Příběh je docela suchý, dá se říci, že vlastně ani nevíte za čím běžíte.",
-       "aspectTerms":[
-         {
-           "term":"Příběh",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-         
-       ],
-       "aspectCategories":[
-         {
-           "category":"story",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":80,
-       "text":"Krásné prostředí se zvrhlo v generické",
-       "aspectTerms":[
-         {
-           "term":"prostředí",
-           "polarity":"conflict",
-           "from":0,
-           "to":0
-         }
-         
-       ],
-       "aspectCategories":[
-         {
-           "category":"game environment",
-           "polarity":"conflict"
-         }
-         
-       ]
-    },
-    {
-      "reviewId":81,
-       "text":"Nevím, co mě vytáčí víc, absence nějaké výuky ovládání a ovládání samo o sobě, nebo styl hádanek typu \"nejdřív 6x umři\".",
-       "aspectTerms":[
-         {
-           "term":"výuky",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         },
-         {
-           "term":"ovládání",
-           "polarity":"",
-           "from":0,
-           "to":0
-         },
-         {
-           "term":"styl hádanek",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-         
-       ],
-       "aspectCategories":[
-         {
-           "category":"tutorial",
-           "polarity":"negative"
-         },
-         {
-           "category":"controls",
-           "polarity":"negative"
-         },
-         {
-           "category":"level design",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":82,
-       "text":"Hra nieje tak moc kvalitná aby stála 10€",
-       "aspectTerms":[
-       ],
-       "aspectCategories":[
-         {
-           "category":"overall",
-           "polarity":"negative"
-         },
-         {
-           "category":"price",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":83,
-       "text":"Hra má slabou grafiku.",
-       "aspectTerms":[
-         {
-           "term":"grafiku",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-
-       ],
-       "aspectCategories":[
-         {
-           "category":"visuals",
-           "polarity":"negative"
-         }
-
-       ]
-    },
-    {
-      "reviewId":84,
-       "text":"Hra má fádny pribeh.",
-       "aspectTerms":[
-         {
-           "term":"pribeh",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-       ],
-       "aspectCategories":[
-         {
-           "category":"story",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":85,
-       "text":"Cena je veľmi vysoká.",
-       "aspectTerms":[
-         {
-           "term":"Cena",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-         
-       ],
-       "aspectCategories":[
-         {
-           "category":"price",
-           "polarity":"negative"
-         }
-         
-       ]
-    },
-    {
-      "reviewId":86,
-       "text":"minimální hratelnost, která omrzí už po pár minutách.",
-       "aspectTerms":[
-         {
-           "term":"hratelnost",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-         
-       ],
-       "aspectCategories":[
-         {
-           "category":"gamepaly",
-           "polarity":"negative"
-         }
-         
-       ]
-    },
-    {
-      "reviewId":87,
-       "text":"za 7 euro je to katastrofa",
-       "aspectTerms":[
-         
-       ],
-       "aspectCategories":[
-         {
-           "category":"price",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":88,
-       "text":"nefunguje mi vůbec kurzor",
-       "aspectTerms":[
-         {
-           "term":"kurzor",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-         
-       ],
-       "aspectCategories":[
-         {
-           "category":"controls",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":89,
-       "text":"Hlavolamy a ich riešenie prostredníctvom gravitačných síl sa stáva postupne stereotypným a nudným.",
-       "aspectTerms":[
-         {
-           "term":"Hlavolamy",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-         
-       ],
-       "aspectCategories":[
-         {
-           "category":"level design",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":90,
-       "text":"Príjemnou stránkou hry je jej dizajn a hudba.",
-       "aspectTerms":[
-         {
-           "term":"dizajn",
-           "polarity":"positive",
-           "from":0,
-           "to":0
-         },
-         {
-           "term":"hudba",
-           "polarity":"positive",
-           "from":0,
-           "to":0
-         }
-
-       ],
-       "aspectCategories":[
-         {
-           "category":"visuals",
-           "polarity":"positive"
-         },
-         {
-           "category":"music",
-           "polarity":"positive"
-         }
-       ]
-    },
-    {
-      "reviewId":91,
-       "text":"Pozadia úrovní sú pekné, len škoda, že statické.",
-       "aspectTerms":[
-         {
-           "term":"Pozadia úrovní",
-           "polarity":"conflict",
-           "from":0,
-           "to":0
-         }
-
-       ],
-       "aspectCategories":[
-         {
-           "category":"visuals",
-           "polarity":"conflict"
-         }
-       ]
-    },
-    {
-      "reviewId":92,
-       "text":"Není tam žádný příběh ani nic zajímavého.",
-       "aspectTerms":[
-         {
-           "term":"příběh",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-         
-       ],
-       "aspectCategories":[
-         {
-           "category":"story",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":93 ,
-       "text":"Od poloviny hry se brutálně zvýší obtížnost.",
-       "aspectTerms":[
-         {
-           "term":"obtížnost",
-           "polarity":"neutral",
-           "from":0,
-           "to":0
-         }
-         
-       ],
-       "aspectCategories":[
-         {
-           "category":"game difficulty",
-           "polarity":"neutral"
-         }
-         
-       ]
-    },
-    {
-      "reviewId":94,
-       "text":"vše kazí opravdu příšerné ovládání a kamera",
-       "aspectTerms":[
-         {
-           "term":"ovládání",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         },
-         {
-           "term":"kamera",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-         
-       ],
-       "aspectCategories":[
-         {
-           "category":"controls",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":95,
-       "text":"odporná kamera",
-       "aspectTerms":[
-         {
-           "term":"kamera",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-       ],
-       "aspectCategories":[
-         {
-           "category":"controls",
-           "polarity":"negative"
-         }
-         
-       ]
-    },
-    {
-      "reviewId":96,
-       "text":"Ovládání podle mě zbytečně překomplikovali.",
-       "aspectTerms":[
-         {
-           "term":"Ovládání",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-       ],
-       "aspectCategories":[
-         {
-           "category":"controls",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":97,
-       "text":"Na gamepadu asi to bude OK ale klávesnice a myš není úplně ideální.",
-       "aspectTerms":[
-         {
-           "term":"gamepadu",
-           "polarity":"positive",
-           "from":0,
-           "to":0
-         },
-         {
-           "term":"klávesnice",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         },
-         {
-           "term":"myš",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-       ],
-       "aspectCategories":[
-         {
-           "category":"controls",
-           "polarity":"conflict"
-         }
-       ]
-    },
-    {
-      "reviewId":98,
-       "text":"Hodně textur je v nízkém rozlišení a když se člověk přiblíží více než by měl, tak vypadají odporně.",
-       "aspectTerms":[
-         {
-           "term":"textur",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-         
-       ],
-       "aspectCategories":[
-         {
-           "category":"visuals",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":99,
-       "text":"Hudba je ako predtym skvela a potesili aj niektore zvukove efekty",
-       "aspectTerms":[
-         {
-           "term":"Hudba",
-           "polarity":"positive",
-           "from":0,
-           "to":0
-         },
-         {
-           "term":"zvukove efekty",
-           "polarity":"positive",
-           "from":0,
-           "to":0
-         }
-       ],
-       "aspectCategories":[
-         {
-           "category":"sounds",
-           "polarity":"positive"
-         }
-       ]
-    },
-    {
-      "reviewId":100,
-       "text":"prijemna farebna nalada a screenshot generator",
-       "aspectTerms":[
-         {
-           "term":"farebna nalada",
-           "polarity":"positive",
-           "from":0,
-           "to":0
-         },
-         {
-           "term":"screenshot generator",
-           "polarity":"positive",
-           "from":0,
-           "to":0
-         }
-       ],
-       "aspectCategories":[
-         {
-           "category":"game environment",
-           "polarity":"positive"
-         }
-       ]
-    },
-    {
-      "reviewId":101,
-       "text":"Nemali tam davat 3D prostredie, len to dogabalo gameplay a celkovy zazitok z hry.",
-       "aspectTerms":[
-         {
-           "term":"3D prostredie",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         },
-         {
-           "term":"gameplay",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-
-       ],
-       "aspectCategories":[
-         {
-           "category":"game environment",
-           "polarity":"negative"
-         },
-         {
-           "category":"gameplay",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":102,
-       "text":"Nádherný rozprávkový svet a príbeh troch hrdinov.",
-       "aspectTerms":[
-         {
-           "term":"svet",
-           "polarity":"positive",
-           "from":0,
-           "to":0
-         },
-         {
-           "term":"príbeh",
-           "polarity":"positive",
-           "from":0,
-           "to":0
-         }
-
-       ],
-       "aspectCategories":[
-         {
-           "category":"game environment",
-           "polarity":"positive"
-         },
-         {
-           "category":"story",
-           "polarity":"positive"
-         }
-       ]
-    },
-    {
-      "reviewId":103,
-       "text":"nefungujúce 3D prostredíe a OTRASNA kamera",
-       "aspectTerms":[
-         {
-           "term":"3D prostredíe",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         },
-         {
-           "term":"kamera",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-       ],
-       "aspectCategories":[
-          {
-           "category":"game environment",
-           "polarity":"positive"
-         },
-         {
-           "category":"controls",
-           "polarity":"positive"
-         }
-       ]
-    },
-    {
-      "reviewId":104,
-       "text":"Ovládání je podivné - těžko se poznává kde postava stojí nebo jakým směrem se pohybuje.",
-       "aspectTerms":[
-         {
-           "term":"Ovládání",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         },
-         {
-           "term":"postava",
-           "polarity":"neutral",
-           "from":0,
-           "to":0
-         }
-       ],
-       "aspectCategories":[
-         {
-           "category":"controls",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":105,
-       "text":"Po grafické stránce ani po hudební stránce není co vytknout, ale ovládání to bohužel kazí.",
-       "aspectTerms":[
-         {
-           "term":"grafické stránce",
-           "polarity":"positive",
-           "from":0,
-           "to":0
-         },
-         {
-           "term":"hudební stránce",
-           "polarity":"positive",
-           "from":0,
-           "to":0
-         },
-         {
-           "term":"ovládání",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-         
-       ],
-       "aspectCategories":[
-         {
-           "category":"visuals",
-           "polarity":"positive"
-         },
-         {
-           "category":"music",
-           "polarity":"positive"
-         },
-         {
-           "category":"controls",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":106,
-       "text":"3D stylizace hře nesluší",
-       "aspectTerms":[
-         {
-           "term":"3D stylizace",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-         
-       ],
-       "aspectCategories":[
-         {
-           "category":"game environment",
-           "polarity":"negative"
-         }
-         
-       ]
-    },
-    {
-      "reviewId":107,
-       "text":"3D ovladanie s takymto pohladom pre mna uplne zle.",
-       "aspectTerms":[
-         {
-           "term":"3D ovladanie",
-           "polarity":"negative",
-           "from":0,
-           "to":0
-         }
-       ],
-       "aspectCategories":[
-         {
-           "category":"controls",
-           "polarity":"negative"
-         }
-       ]
-    },
-    {
-      "reviewId":108,
-       "text":"Netřeba hovořit o tom, že Trine 3 se po audio-vizuální stránce opravdu povedl. ",
-       "aspectTerms":[
-         {
-           "term":"audio-vizuální stránce",
-           "polarity":"positive",
-           "from":0,
-           "to":0
-         }
-         
-       ],
-       "aspectCategories":[
-         {
-           "category":"visuals",
-           "polarity":"positive"
-         }
-         
-       ]
-    },
-    {
-      "reviewId":109,
-       "text":"",
-       "aspectTerms":[
-         
-       ],
-       "aspectCategories":[
-         
-       ]
     }
-    
-    
-    
-
-
-
-
-
   ]
 }
