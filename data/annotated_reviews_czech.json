@@ -2427,6 +2427,372 @@
           ]
         }
       ]
+    },
+    {
+      "category": [
+        "FPS",
+        "multiplayer",
+        "coop",
+        "action"
+      ],
+      "reviews": [
+        {
+          "reviewId": 0,
+          "text": "skvělá hra! doporučuji všem milovníkům stříleček zahrát!",
+          "aspectTerms": [
+          ],
+          "aspectCategories": [
+            {
+              "category": "overall",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 1,
+          "text": "krásné mapy které jsou vážně propracovaně a plno agentů s unikátními vlastnostmi",
+          "aspectTerms": [
+            {
+              "term": "mapy",
+              "polarity": "positive",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "agentů",
+              "polarity": "neutral",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "vlastnostmi",
+              "polarity": "neutral",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "level design",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 2,
+          "text": "Je to o nervy ale asi nejlepší RANK systém a jen tak se neomrzí, furt něco nového...",
+          "aspectTerms": [
+            {
+              "term": "RANK systém",
+              "polarity": "positive",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "multiplayer",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 3,
+          "text": "Parádně spracovaná hra kvalita,efekty,zvuky.",
+          "aspectTerms": [
+            {
+              "term": "efekty",
+              "polarity": "positive",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "zvuky",
+              "polarity": "positive",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "visuals",
+              "polarity": "positive"
+            },
+            {
+              "category": "sounds",
+              "polarity": "positive"
+            },
+            {
+              "category": "overall",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 4,
+          "text": "Minus je že je tam spoustu rusáku a toxic komunita a hlavně hackeři.",
+          "aspectTerms": [
+            {
+              "term": "rusáku",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "komunita",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "hackeři",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+          ]
+        },
+        {
+          "reviewId": 5,
+          "text": "Hra má neskutečně propracovaný systém destrukce, agenti jsou neskutečně zajímavou součástí hry a člověk si může hrát klidně jednoho agenta.",
+          "aspectTerms": [
+            {
+              "term": "systém destrukce",
+              "polarity": "positive",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "agenti",
+              "polarity": "positive",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "agenta",
+              "polarity": "neutral",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "level design",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 6,
+          "text": "o hru se ubisoft moc dobře stará a myslím si že hra je pořád dobrá i po 6 letech od vydání.",
+          "aspectTerms": [
+            {
+              "term": "ubisoft",
+              "polarity": "neutral",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "developers",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 7,
+          "text": "komunita je viac toxik než v CS:GO a to už je čo povedať!",
+          "aspectTerms": [
+            {
+              "term": "komunita",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "CS:GO",
+              "polarity": "neutral",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "community",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 8,
+          "text": "veľmi dobra hra až na par bugou ale inač mam rad tuto hru",
+          "aspectTerms": [
+            {
+              "term": "bugou",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "overall",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 9,
+          "text": "Velmi mě baví, ale mohla by mít víc herních módů",
+          "aspectTerms": [
+            {
+              "term": "herních módů",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "game mode",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 10,
+          "text": "Hra má opravdu mnoho operátorů, kteří mají originální ability a díky tomu zde vzniká nespočet kombinací a možností, jak poskládat team.",
+          "aspectTerms": [
+            {
+              "term": "operátorů",
+              "polarity": "positive",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "team",
+              "polarity": "neutral",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "level design",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 11,
+          "text": "Pěkná grafika a detaily hře nechybí",
+          "aspectTerms": [
+            {
+              "term": "grafika",
+              "polarity": "positive",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "detaily",
+              "polarity": "positive",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "visuals",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 12,
+          "text": "Tuto hru hraje dost hráčů, takže v lobby (klidně i ve 4 ráno) nebudete na hru čekat 5-10 minut.",
+          "aspectTerms": [
+          ],
+          "aspectCategories": [
+            {
+              "category": "community",
+              "polarity": "positive"
+            }
+          ]
+        },
+        {
+          "reviewId": 13,
+          "text": "hitboxy opravdu potřebujou fix",
+          "aspectTerms": [
+            {
+              "term": "hitboxy",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "gameplay",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 14,
+          "text": "I když si v obecném nastavení vypnete mapy, které hrát nechcete, tak je v hodnoceném režimu mít budete.",
+          "aspectTerms": [
+            {
+              "term": "mapy",
+              "polarity": "neutral",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "hodnoceném režimu",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "level design",
+              "polarity": "neutral"
+            },
+            {
+              "category": "multiplayer",
+              "polarity": "negative"
+            }
+          ]
+        },
+        {
+          "reviewId": 15,
+          "text": "Má slabé servery, ne jednou se mi stalo, že mi ping skákal z obvyklých 9ti na 1500 a hra byla tudíž absolutně nehratelná",
+          "aspectTerms": [
+            {
+              "term": "ping skákal",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            },
+            {
+              "term": "servery",
+              "polarity": "negative",
+              "from": 0,
+              "to": 0
+            }
+          ],
+          "aspectCategories": [
+            {
+              "category": "multiplayer",
+              "polarity": "negative"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

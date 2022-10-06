@@ -35,9 +35,10 @@ def save_json(filename,data):
         json.dump(data, fopen)
 
 
-def download_json(appid, language="czech", day_range=100000):
+def download_json(appid, language="czech", day_range=10000):
     params = {"language": language,
-              "cursor":"*",
+              "filter": "recent",
+
               "num_per_page": 100,
               "day_range": day_range}
     used_cursors = []
@@ -48,13 +49,19 @@ def download_json(appid, language="czech", day_range=100000):
         while True:
             response = re.get(f"https://store.steampowered.com/appreviews/{appid}?json=1", params=params)
             response_json = response.json()
-            used_cursors.append(params["cursor"])
+            query_summary = response_json.get("query_summary")
+            print(f"Reponse summary: {query_summary}")
             reviews += [review.get("review", "").encode("utf-8").decode("utf-8") for review in response_json.get("reviews", {})] # if review.get("voted_up")]
             params["cursor"] = response_json.get("cursor")
+
             if params["cursor"] in used_cursors:
                 break
-            if(len(reviews) >= 10000):
+            else:
+                used_cursors.append(params["cursor"])
+
+            if len(reviews) >= 10000:
                 break
+
             print(f"Got {len(reviews)} reviews.\r")
 
         json.dump(review_filter(reviews), fopen, ensure_ascii=False)
@@ -352,7 +359,7 @@ class ReviewsGetter:
 
 
 async def main():
-    download_json(appid="620", language="czech", day_range=20000)
+    download_json(appid="359550", language="czech", day_range=20000)
     # async with aiohttp.ClientSession() as session:
     #     db = DatabaseHandler()
     #     getter = GamesInfoGetter(session=session)
