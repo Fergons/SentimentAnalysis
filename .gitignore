@@ -10,3 +10,4 @@
 /src/flagged/
 /data/private
 /data/google_sheets_connector.py
+/data/private/preprocessed_data.zip
