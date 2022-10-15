@@ -4521,7 +4521,7 @@
            "text":"ve hře máte spoustu možností jak jí hrát a máte tady pěkné skiny a spoustu obsahu",
            "aspectTerms":[
              {
-               "term":"spoustu možností jak jí hrát",
+               "term":"možností jak jí hrát",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -4533,7 +4533,7 @@
                "to":0
              },
              {
-               "term":"spoustu obsahu",
+               "term":"obsahu",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -5085,7 +5085,7 @@
            "text":"mnoho operátorů a destrukce všeho na mapě (teda skoro)",
            "aspectTerms":[
              {
-               "term":"mnoho operátorů",
+               "term":"operátorů",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -5441,7 +5441,7 @@
            "text":"Je tam spousta hratelných postav které mají nějaké schopnosti.",
            "aspectTerms":[
              {
-               "term":"spousta hratelných postav",
+               "term":"hratelných postav",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -5607,19 +5607,19 @@
            "text":"Poměrně velký arsenál zbraní, spousty vybavení (drony, barikády, brnění, atd...) a spoustu operátorů, kteří stále přibývají.",
            "aspectTerms":[
              {
-               "term":"velký arsenál zbraní",
+               "term":"arsenál zbraní",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"spoustu operátorů",
+               "term":"operátorů",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"spousty vybavení",
+               "term":"vybavení",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -6350,7 +6350,7 @@
            "text":"Mnoho agentů, které si hraním odemykáte za herní měnu.",
            "aspectTerms":[
              {
-               "term":"Mnoho agentů",
+               "term":"agentů",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -6374,7 +6374,7 @@
                "to":0
              },
              {
-               "term":"mnoho stylů pohybu",
+               "term":"stylů pohybu",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -6479,6 +6479,994 @@
              {
                "category":"gameplay",
                "polarity":"positive"
+             }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"Jde vidět že se o to vývojáři starají",
+           "aspectTerms":[
+             {
+               "term":"vývojáři",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
+           ],
+           "aspectCategories":[
+             {
+               "category":"developers",
+               "polarity":"p"
+             }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"Výborná hra a updaty jsou jen a jen lepší.",
+           "aspectTerms":[
+             {
+               "term":"updaty",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
+           ],
+           "aspectCategories":[
+             {
+               "category":"updates",
+               "polarity":"positive"
+             },
+             {
+               "category":"overall",
+               "polarity":"positive"
+             }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"Velmi zábavná hra s dobrou grafikou i ovládáním za mě doporučuji.",
+           "aspectTerms":[
+             {
+               "term":"grafikou",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"ovládáním",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
+           ],
+           "aspectCategories":[
+             {
+               "category":"overall",
+               "polarity":"positive"
+             },
+             {
+               "category":"visuals",
+               "polarity":"p"
+             },
+             {
+               "category":"controls",
+               "polarity":"p"
+             }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"Hra má dost nedostatků jedna z ních je třeba nesmrtelnej nepřítel a i když do něj dáte jeden celej zásobník tak nepadne vubec nepadne na kolena.",
+           "aspectTerms":[
+             
+           ],
+           "aspectCategories":[
+             {
+               "category":"overall",
+               "polarity":"negative"
+             },
+             {
+               "category":"gameplay",
+               "polarity":"negative"
+             }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"co se týče komunity tak to je horší protože se tu najde hodně toxic hráčů což je většina",
+           "aspectTerms":[
+             {
+               "term":"komunity",
+               "polarity":"n",
+               "from":0,
+               "to":0
+             }
+           ],
+           "aspectCategories":[
+             {
+               "category":"community",
+               "polarity":"negative"
+             }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"servery fungují dobře údržba serverů se většinou píše na před",
+           "aspectTerms":[
+             {
+               "term":"servery",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"údržba serverů",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
+           ],
+           "aspectCategories":[
+             {
+               "category":"servers",
+               "polarity":"p"
+             }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"Poslední dobou mi připadá že se o technickou stránku hry začali starat jenom mi připadá že by to chtělo udělat něco z tou optimalizací.",
+           "aspectTerms":[
+             {
+               "term":"technickou stránku hry",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"optimalizací",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             }
+           ],
+           "aspectCategories":[
+             {
+               "category":"performance",
+               "polarity":"negative"
+             }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"Jeto super skvěle propracovaná hra někdy se někde najdou bugy ale ty vás nějak neomezují ani nezvýhodňuji takže zamě super hra",
+           "aspectTerms":[
+             {
+               "term":"bugy",
+               "polarity":"neutral",
+               "from":0,
+               "to":0
+             }
+           ],
+           "aspectCategories":[
+             {
+               "category":"overall",
+               "polarity":"positive"
+             },
+             {
+               "category":"bugs",
+               "polarity":"neutral"
+             }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"Nemám jí co vytknout za ty peníze to je hra dobrá za mě rozhodně doporučuji",
+           "aspectTerms":[
+             {
+               "term":"peníze",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
+           ],
+           "aspectCategories":[
+             {
+               "category":"price",
+               "polarity":"positive"
+             }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"Hru můžete hrát jak osamotě tak s přáteli samozřejmě s přáteli je zábavnější ale když jí hrajete sami tak se taky zabavíte.",
+           "aspectTerms":[
+             
+           ],
+           "aspectCategories":[
+             {
+               "category":"game mode",
+               "polarity":"p"
+             }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"V podstatě to je dobrá hra tak trochu hardcore, sice mikrotransakce v placené hře zamrzí ale propracování destrukce zdí je perfektní",
+           "aspectTerms":[
+             {
+               "term":"mikrotransakce",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"destrukce zdí",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
+             
+           ],
+           "aspectCategories":[
+             {
+               "category":"overall",
+               "polarity":"positive"
+             },
+             {
+               "category":"microtransactions",
+               "polarity":"negative"
+             }
+             
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"Velmi doporučuji až na pár věci tak je to bombová hra.",
+           "aspectTerms":[
+             
+           ],
+           "aspectCategories":[
+             {
+               "category":"overall",
+               "polarity":"positive"
+             }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"moc pěkně propracovaná hra",
+           "aspectTerms":[
+             
+           ],
+           "aspectCategories":[
+             {
+               "category":"overall",
+               "polarity":"positive"
+             }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"Tato hra v standart edici je k ceně a výkonu velmi dobrá ale po 200h trochu omrzí, ale díky častým velkým updatum ubisoftu hra stale zaujímá.",
+           "aspectTerms":[
+             {
+               "term":"ceně",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"updatum ubisoftu",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
+           ],
+           "aspectCategories":[
+             {
+               "category":"overall",
+               "polarity":"positive"
+             },
+             {
+               "category":"price",
+               "polarity":"positive"
+             },
+             {
+               "category":"content",
+               "polarity":"positive"
+             }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"Jelikož je hra od ubisoftu často budete svědky nejrůznějších bugů.",
+           "aspectTerms":[
+             {
+               "term":"bugů",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"ubisoftu",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             }
+           ],
+           "aspectCategories":[
+             {
+               "category":"bugs",
+               "polarity":"negative"
+             },
+             {
+               "category":"developers",
+               "polarity":"negative"
+             }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"Pokud někdo hledá hru, která není jen o zběsilém běhání, ale je o taktice, mluvení a znalosti map a agentů, tak tohle je hra pro něj.",
+           "aspectTerms":[
+             {
+               "term":"zběsilém běhání",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"taktice",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"mluvení",
+               "polarity":"p",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"znalosti map a agentů",
+               "polarity":"p",
+               "from":0,
+               "to":0
+             }
+           ],
+           "aspectCategories":[
+             {
+               "category":"gameplay",
+               "polarity":"positive"
+             }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"8/10 a to kvůli špatnému matchmakingu, kolikrát i dlouhému vyhledávání hry, a hlavně kvůli věčném problémům Ubi s tím, aby se na sebe mohli hráči připojit",
+           "aspectTerms":[
+             {
+               "term":"matchmakingu",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"vyhledávání hry",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             }
+           ],
+           "aspectCategories":[
+             {
+               "category":"matchmaking",
+               "polarity":"negative"
+             }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"Super hra, vyladěný engine hra jede na low pc 150 FPS super hra nenaročná a zábavná",
+           "aspectTerms":[
+             {
+               "term":"hra",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"engine",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"pc",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"FPS",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
+           ],
+           "aspectCategories":[
+             {
+               "category":"overall",
+               "polarity":"positive"
+             },
+             {
+               "category":"performance",
+               "polarity":"positive"
+             }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"",
+           "aspectTerms":[
+             
+           ],
+           "aspectCategories":[
+             
+           ]
+        },
+        {
+          "reviewId":206,
+           "text":"dobrá hra spoustu agentů každý má jiné specialní věci doporučuji",
+           "aspectTerms":[
+             {
+               "term":"hra",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"agentů",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"specialní věci",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
+           ],
+           "aspectCategories":[
+             {
+               "category":"overall",
+               "polarity":"p"
+             },
+             {
+               "term":"content",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "category":"character design",
+               "polarity":"positive"
+             }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"je to sranda hrát ve full tým ale občas naštve",
+           "aspectTerms":[
+             {
+               "term":"full tým",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
+           ],
+           "aspectCategories":[
+             {
+               "category":"gameplay",
+               "polarity":"positive"
+             }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"Team developerov je tak isto šlahnutí ako developeri fortnajtu lebo jediné čo pridavaju do hry su \"Skiny\" a neopravuju bugi",
+           "aspectTerms":[
+             {
+               "term":"Team developerov",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"bugi",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"developeri fortnajtu",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             }
+           ],
+           "aspectCategories":[
+             {
+               "category":"developers",
+               "polarity":"negative"
+             },
+             {
+               "category":"bugs",
+               "polarity":"negative"
+             },
+             {
+               "category":"comparison",
+               "polarity":"negative"
+             }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"Tato hra je velmi kvalitní, ale je tam hodně smurfu a neumí to vyhledat hru aby byli leveli vyrovnané.",
+           "aspectTerms":[
+             {
+               "term":"hra",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"smurfu",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             }
+           ],
+           "aspectCategories":[
+             {
+               "category":"overall",
+               "polarity":"positive"
+             },
+             {
+               "category":"community",
+               "polarity":"negative"
+             },
+             {
+               "category":"matchmaking",
+               "polarity":"negative"
+             }
+             
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"super realne akce proste vsechno doporucuji s radosti a usmevem",
+           "aspectTerms":[
+             {
+               "term":"realne akce",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
+           ],
+           "aspectCategories":[
+             {
+               "category":"overall",
+               "polarity":"positive"
+             },
+             {
+               "category":"gameplay",
+               "polarity":"positive"
+             }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"Velmi dobrá hra z hladiska zpracovanosti gameplaya a taktiež fyziky a grafiky.",
+           "aspectTerms":[
+             {
+               "term":"hra",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"gameplaya",
+               "polarity":"p",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"fyziky",
+               "polarity":"p",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"grafiky",
+               "polarity":"p",
+               "from":0,
+               "to":0
+             }
+             
+           ],
+           "aspectCategories":[
+             {
+               "category":"overall",
+               "polarity":"positive"
+             },
+             {
+               "category":"gameplay",
+               "polarity":"p"
+             },
+             {
+               "category":"visuals",
+               "polarity":"p"
+             }
+             
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"Operátori sú jedineční ale ak si kúpite iba základnú verziu tak musíte try hardiť s rekrútom a to nieje veľmi dobré a preto doporučujem kúpiť deluxe a vyššiu edíciu.",
+           "aspectTerms":[
+             {
+               "term":"Operátori",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"základnú verziu",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"deluxe a vyššiu edíciu",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
+           ],
+           "aspectCategories":[
+             {
+               "category":"character design",
+               "polarity":"positive"
+             }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"BEST HRA odporucam mega sranda mega dobre mapy atd len postihnuty teammati",
+           "aspectTerms":[
+             {
+               "term":"HRA",
+               "polarity":"p",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"mapy",
+               "polarity":"p",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"teammati",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             }
+           ],
+           "aspectCategories":[
+             {
+               "category":"overall",
+               "polarity":"positive"
+             },
+             {
+               "category":"level design",
+               "polarity":"positive"
+             },
+             {
+               "category":"community",
+               "polarity":"negative"
+             }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"Po několika posledních aktualizací hra začala ztrácet svoji krásu, prostě a jednoduše to vývojáři posrali.",
+           "aspectTerms":[
+             {
+               "term":"aktualizací",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"hra",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"vývojáři",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             }
+           ],
+           "aspectCategories":[
+             {
+               "category":"overall",
+               "polarity":"negative"
+             },
+             {
+               "category":"updates",
+               "polarity":"negative"
+             },
+             {
+               "category":"developers",
+               "polarity":"negative"
+             }
+           ]
+        },
+        {
+          "reviewId":215,
+           "text":"grafika top ovladatelnost pekna a vse v pohode",
+           "aspectTerms":[
+             {
+               "term":"grafika",
+               "polarity":"p",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"ovladatelnost",
+               "polarity":"p",
+               "from":0,
+               "to":0
+             }
+           ],
+           "aspectCategories":[
+             {
+               "category":"visuals",
+               "polarity":"positive"
+             },
+             {
+               "term":"gameplay",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "category":"overall",
+               "polarity":"positive"
+             }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"vetšne to padá, pořád nějaký bug, a toxic komunita BULLSHIT!",
+           "aspectTerms":[
+             {
+               "term":"bug",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"komunita",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             }
+           ],
+           "aspectCategories":[
+             {
+               "category":"performance",
+               "polarity":"negative"
+             },
+             {
+               "category":"community",
+               "polarity":"negative"
+             },
+             {
+               "category":"bugs",
+               "polarity":"negative"
+             }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"super akční záživná hra",
+           "aspectTerms":[
+             {
+               "term":"hra",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
+           ],
+           "aspectCategories":[
+             {
+               "category":"overall",
+               "polarity":"positive"
+             }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"Rainbow6siege bude vždy best i přes to že je podporována ubisoftem.",
+           "aspectTerms":[
+             {
+               "term":"Rainbow6siege",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"ubisoftem",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             }
+           ],
+           "aspectCategories":[
+             {
+               "category":"developers",
+               "polarity":"negative"
+             },
+             {
+               "category":"overall",
+               "polarity":"positive"
+             }
+
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"Když to vyšlo měla tato hra potenciál, ale díky ubshitu hra je pořád ve \"sračkách\", problémy s připojením, špatný hitbox, atd... a nesnaží se to opravit.",
+           "aspectTerms":[
+             {
+               "term":"hra",
+               "polarity":"neutral",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"ubshitu",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"hitbox",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"problémy s připojením",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             }
+           ],
+           "aspectCategories":[
+             {
+               "category":"overall",
+               "polarity":"negative"
+             },
+             {
+               "category":"developers",
+               "polarity":"negative"
+             },
+             {
+               "category":"gameplay",
+               "polarity":"negative"
+             }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"Hra je skvěle hratelná, jen ubisoft servery občas nefungují.",
+           "aspectTerms":[
+             {
+               "term":"Hra",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"ubisoft servery",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             }
+           ],
+           "aspectCategories":[
+             {
+               "category":"overall",
+               "polarity":"positive"
+             },
+             {
+               "category":"servers",
+               "polarity":"negative"
+             }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"Hra má celkem dobrou komunitu, lepší než CS:GO.",
+           "aspectTerms":[
+             {
+               "term":"Hra",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"komunitu",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"CS:GO",
+               "polarity":"neutral",
+               "from":0,
+               "to":0
+             }
+           ],
+           "aspectCategories":[
+             {
+               "category":"overall",
+               "polarity":"positive"
+             },
+             {
+               "category":"community",
+               "polarity":"positive"
+             },
+             {
+               "category":"comparison",
+               "polarity":"positive"
+             }
+           ]
+        },
+        {
+          "reviewId":222,
+           "text":"Takže hru doporučuji koupit i když se u toho budete občas nervová když jsou rozbité hitboxy.",
+           "aspectTerms":[
+             {
+               "term":"hru",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"hitboxy",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             }
+           ],
+           "aspectCategories":[
+             {
+               "category":"overall",
+               "polarity":"positive"
+             },
+             {
+               "category":"hitbox",
+               "polarity":"negative"
              }
            ]
         }

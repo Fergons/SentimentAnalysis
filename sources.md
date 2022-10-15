@@ -10,4 +10,7 @@ RoBERTa: https://huggingface.co/docs/transformers/model_doc/roberta
 https://www.gamespot.com/api/reviews/?api_key=6de884275863bdd5ebfb7ac3460a427f17724888
 https://www.gamespot.com/api/reviews/?api_key=6de884275863bdd5ebfb7ac3460a427f17724888&sort=publish_date:desc
 
-vyhodnotenie -> porovnanie s 
+Czech Universal Dependencies (https://universaldependencies.org/): 
+https://github.com/Alibaba-NLP/ACE/blob/main/flair/datasets.py#L3692
+
+Seznem small Electra model: https://github.com/seznam/small-e-czech
