@@ -14,3 +14,9 @@ Czech Universal Dependencies (https://universaldependencies.org/):
 https://github.com/Alibaba-NLP/ACE/blob/main/flair/datasets.py#L3692
 
 Seznem small Electra model: https://github.com/seznam/small-e-czech
+
+https://stackoverflow.com/questions/63979544/using-trained-bert-model-and-data-preprocessing
+
+Does syntax matter? A strong baseline for 
+Aspect-based Sentiment Analysis with RoBERT: https://arxiv.org/pdf/2104.04986.pdf \
+(code: https://github.com/yhcc/BARTABSA)
