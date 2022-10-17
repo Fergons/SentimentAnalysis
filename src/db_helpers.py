@@ -2,10 +2,7 @@ import psycopg
 import asyncio
 import logging
 
-from typing import Any, Union
-from psycopg import AsyncConnection
-
-from keys import POSTGRES_USER,POSTGRES_PASSWORD
+from data.private.keys import POSTGRES_USER,POSTGRES_PASSWORD
 
 
 class DatabaseHandler:

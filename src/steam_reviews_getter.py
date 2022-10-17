@@ -1,18 +1,12 @@
-import time
-
 import requests as re
-import aiohttp
 import json
 from enum import Enum
-from keys import GAMESPOT_API_KEY
+from data.private.keys import GAMESPOT_API_KEY
 from lxml import etree
-from db_helpers import DatabaseHandler
 import asyncio
 import logging
 from functools import partial
-import datetime
 from dateutil import parser as date_parser
-from random import sample
 
 
 class ReviewSource(Enum):
