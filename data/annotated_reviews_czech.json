@@ -15,15 +15,12 @@
             {
               "term": "načítání úrovní",
               "polarity": "negative",
+              "category": "gameplay",
               "from": 33,
               "to": 48
             }
           ],
           "aspectCategories": [
-            {
-              "category": "gameplay",
-              "polarity": "positive"
-            }
           ]
         },
         {
@@ -32,16 +29,14 @@
           "aspectTerms": [
             {
               "term": "multiplayer",
-              "polarity": "p",
+              "category": "game mode",
+              "polarity": "positive",
               "from": 53,
               "to": 64
             }
           ],
           "aspectCategories": [
-            {
-              "category": "game mode",
-              "polarity": "positive"
-            }
+
           ]
         },
         {
@@ -51,6 +46,7 @@
             {
               "term": "multiplayer",
               "polarity": "positive",
+              "category": "game mode",
               "from": 35,
               "to": 46
             }
@@ -66,6 +62,13 @@
           "reviewId": 3,
           "text": "hra je zábavná i když je docela starší tak je to pro mě pořád srdcovka",
           "aspectTerms": [
+            {
+              "term": "hra",
+              "polarity": "positive",
+              "category": "overall",
+              "from": 0,
+              "to": 0
+            }
           ],
           "aspectCategories": [
             {
@@ -80,32 +83,20 @@
           "aspectTerms": [
             {
               "term": "příběhem",
-              "polarity": "p",
+              "category": "story",
+              "polarity": "positive",
               "from": 33,
               "to": 41
             },
             {
               "term": "hádanky",
-              "polarity": "p",
+              "category": "level design",
+              "polarity": "positive",
               "from": 52,
               "to": 59
-            },
-            {
-              "term": "principu",
-              "polarity": "positive",
-              "from": 107,
-              "to": 115
             }
           ],
           "aspectCategories": [
-            {
-              "category": "game design",
-              "polarity": "positive"
-            },
-            {
-              "category": "story",
-              "polarity": "positive"
-            }
           ]
         },
         {
@@ -114,36 +105,27 @@
           "aspectTerms": [
             {
               "term": "on-line režim",
-              "polarity": "p",
+              "category": "multiplayer",
+              "polarity": "positive",
               "from": 57,
               "to": 70
             },
             {
-              "term": "úkolů",
-              "polarity": "p",
+              "term": "plnění úkolů",
+              "category": "level design",
+              "polarity": "positive",
               "from": 80,
               "to": 85
             },
             {
               "term": "Žádná krev a násilí",
-              "polarity": "p",
+              "polarity": "positive",
+              "category": "violence",
               "from": 87,
               "to": 106
             }
           ],
           "aspectCategories": [
-            {
-              "category": "game mode",
-              "polarity": "positive"
-            },
-            {
-              "category": "overall",
-              "polarity": "positive"
-            },
-            {
-              "category": "violence",
-              "polarity": "positive"
-            }
           ]
         },
         {
@@ -152,38 +134,34 @@
           "aspectTerms": [
             {
               "term": "singleplayer",
-              "polarity": "p",
+              "category": "game mode",
+              "polarity": "positive",
               "from": 20,
               "to": 32
             },
             {
               "term": "multiplayer",
-              "polarity": "p",
+              "polarity": "positive",
+              "category": "game mode",
               "from": 40,
               "to": 51
             },
             {
               "term": "vtipnost",
-              "polarity": "p",
+              "polarity": "positive",
+              "category": "story",
               "from": 125,
               "to": 133
             },
             {
               "term": "příběh",
               "polarity": "positive",
+              "category": "story",
               "from": 68,
               "to": 74
             }
           ],
           "aspectCategories": [
-            {
-              "category": "overall",
-              "polarity": "positive"
-            },
-            {
-              "category": "game mode",
-              "polarity": "positive"
-            }
           ]
         },
         {
@@ -192,19 +170,22 @@
           "aspectTerms": [
             {
               "term": "příběh",
-              "polarity": "p",
+              "polarity": "positive",
+              "category": "story",
               "from": 18,
               "to": 24
             },
             {
               "term": "levely",
               "polarity": "neutral",
+              "category":"level design",
               "from": 34,
               "to": 40
             },
             {
               "term": "kooperace",
-              "polarity": "p",
+              "polarity": "positive",
+              "category": "game mode",
               "from": 75,
               "to": 84
             }
@@ -230,13 +211,15 @@
           "aspectTerms": [
             {
               "term": "Glados",
-              "polarity": "p",
+              "polarity": "positive",
+              "category":"character design",
               "from": 26,
               "to": 32
             },
             {
               "term": "Wheatleho",
-              "polarity": "p",
+              "polarity": "positive",
+              "category":"character design",
               "from": 35,
               "to": 44
             }
@@ -254,13 +237,15 @@
           "aspectTerms": [
             {
               "term": "grafika",
-              "polarity": "p",
+              "polarity": "positive",
+              "category":"visuals",
               "from": 15,
               "to": 22
             },
             {
               "term": "cena",
-              "polarity": "p",
+              "polarity": "positive",
+              "category":"price",
               "from": 25,
               "to": 29
             }
@@ -286,12 +271,14 @@
           "aspectTerms": [
             {
               "term": "příběh",
-              "polarity": "p",
+              "polarity": "positive",
+              "category": "story",
               "from": 7,
               "to": 13
             },
             {
               "term": "vtipy",
+              "category": "story",
               "polarity": "positive",
               "from": 22,
               "to": 27
@@ -306,21 +293,17 @@
           "aspectTerms": [
             {
               "term": "grafika",
-              "polarity": "p",
+              "polarity": "positive",
+              "category":"visuals",
               "from": 34,
               "to": 41
             },
             {
               "term": "příběh",
-              "polarity": "p",
+              "polarity": "positive",
+              "category": "story",
               "from": 44,
               "to": 50
-            },
-            {
-              "term": "koncept",
-              "polarity": "p",
-              "from": 11,
-              "to": 18
             }
           ],
           "aspectCategories": [
@@ -341,35 +324,41 @@
             {
               "term": "příběh",
               "polarity": "positive",
+              "category": "story",
               "from": 11,
               "to": 17
             },
             {
               "term": "postavy",
               "polarity": "positive",
+              "category":"character design",
               "from": 54,
               "to": 61
             },
             {
               "term": "grafika",
               "polarity": "positive",
+              "category":"visuals",
               "from": 89,
               "to": 96
             },
             {
               "term": "dabingem",
+              "category":"languages",
               "polarity": "positive",
               "from": 73,
               "to": 81
             },
             {
               "term": "hratelnost",
+              "category":"gameplay",
               "polarity": "positive",
               "from": 105,
               "to": 115
             },
             {
               "term": "obtížností",
+              "category":"difficulty",
               "polarity": "positive",
               "from": 128,
               "to": 138
@@ -401,12 +390,14 @@
             {
               "term": "Prostredie",
               "polarity": "negative",
+              "category":"game environment",
               "from": 0,
               "to": 10
             },
             {
               "term": "postava droida",
               "polarity": "negative",
+              "category":"character design",
               "from": 36,
               "to": 50
             }
@@ -429,6 +420,8 @@
             {
               "term": "pazlů",
               "polarity": "negative",
+              "category":"level design",
+
               "from": 8,
               "to": 13
             }
@@ -446,7 +439,8 @@
           "aspectTerms": [
             {
               "term": "Příběh",
-              "polarity": "p",
+              "polarity": "positive",
+              "category": "story",
               "from": 0,
               "to": 6
             }
@@ -462,6 +456,13 @@
           "reviewId": 16,
           "text": "Skvělá logická hříčka, je neuvěřitelně zábavná a originální záležitost.",
           "aspectTerms": [
+            {
+              "term":"",
+              "category":"overall",
+              "polarity":"positive",
+              "from":0,
+              "to":0
+            }
           ],
           "aspectCategories": [
             {
@@ -475,14 +476,18 @@
           "text": "Většina hádanek je krátkých s očividným řešením.",
           "aspectTerms": [
             {
-              "term": "Většina hádanek",
+              "term": "hádanek",
               "polarity": "negative",
+              "category":"level design",
+
               "from": 0,
               "to": 15
             },
             {
               "term": "řešením",
               "polarity": "negative",
+              "category":"level design",
+
               "from": 40,
               "to": 47
             }
@@ -501,6 +506,7 @@
             {
               "term": "Příběhová logika",
               "polarity": "negative",
+              "category": "story",
               "from": 0,
               "to": 16
             }
@@ -519,17 +525,20 @@
             {
               "term": "pribeh",
               "polarity": "negative",
+              "category": "story",
               "from": 34,
               "to": 40
             },
             {
               "term": "animacie",
+              "category":"visuals",
               "polarity": "negative",
               "from": 42,
               "to": 50
             },
             {
               "term": "cutsceny",
+              "category":"visuals",
               "polarity": "negative",
               "from": 52,
               "to": 60
@@ -549,6 +558,7 @@
             {
               "term": "Místnosti",
               "polarity": "negative",
+              "category":"game environment",
               "from": 0,
               "to": 9
             }
@@ -567,11 +577,12 @@
             {
               "term": "Grafika",
               "polarity": "positive",
+              "category":"visuals",
               "from": 0,
               "to": 7
             },
             {
-              "term": "příběh",
+              "term": "příběh","category": "story",
               "polarity": "positive",
               "from": 19,
               "to": 25
@@ -589,7 +600,8 @@
           "text": " Snad každý puzzle kromě pár volitelných rozlousknete okamžitě, aniž byste museli použít mozek.",
           "aspectTerms": [
             {
-              "term": "puzzle",
+              "term": "puzzle","category":"level design",
+
               "polarity": "negative",
               "from": 11,
               "to": 17
@@ -607,7 +619,7 @@
           "text": "Příběh je ale fádní, celkem nezajímavý a totálně předvídatelný.",
           "aspectTerms": [
             {
-              "term": "Příběh",
+              "term": "Příběh","category": "story",
               "polarity": "negative",
               "from": 0,
               "to": 6
@@ -625,7 +637,7 @@
           "text": "Tato hra je určtě super protože to rozjede i slabší počítač a není zas tak drahá.",
           "aspectTerms": [
             {
-              "term": "slabší počítač",
+              "term": "slabší počítač","category":"performance",
               "polarity": "positive",
               "from": 45,
               "to": 59
@@ -648,12 +660,12 @@
           "aspectTerms": [
             {
               "term": "vizuální stránce",
-              "polarity": "neutral",
+              "polarity": "neutral","category":"visuals",
               "from": 3,
               "to": 19
             },
             {
-              "term": "hudba",
+              "term": "hudba","category":"sounds",
               "polarity": "neutral",
               "from": 30,
               "to": 35
@@ -675,7 +687,7 @@
           "text": "Hra má dobrý příběh.",
           "aspectTerms": [
             {
-              "term": "příběh",
+              "term": "příběh","category": "story",
               "polarity": "positive",
               "from": 13,
               "to": 19
@@ -694,12 +706,14 @@
           "aspectTerms": [
             {
               "term": "coop",
+              "category":"game mode",
               "polarity": "neutral",
               "from": 17,
               "to": 21
             },
             {
               "term": "recenzí",
+              "category":"reviews",
               "polarity": "positive",
               "from": 83,
               "to": 90
@@ -717,7 +731,7 @@
           "text": "Ve slevách za 2 eura je úžasná koupě.",
           "aspectTerms": [
             {
-              "term": "koupě",
+              "term": "koupě","category":"price",
               "polarity": "positive",
               "from": 31,
               "to": 36
@@ -735,7 +749,8 @@
           "text": "Sice jsou nějaké mise obtížnější, ale to vůbec nevadí od toho jsou tam 2 hráči.",
           "aspectTerms": [
             {
-              "term": "mise",
+              "term": "mise","category":"level design",
+
               "polarity": "conflict",
               "from": 17,
               "to": 21
@@ -753,7 +768,7 @@
           "text": "game design na své maximální úrovni v praxi (a pohybu).",
           "aspectTerms": [
             {
-              "term": "game design",
+              "term": "game design","category": "game design",
               "polarity": "positive",
               "from": 0,
               "to": 11
@@ -771,13 +786,13 @@
           "text": "Velmi dobrá hra, Grafické, Gameplayové a i trošku příběhové velmi dobré zpracování a CO-OP jako třešnička na dortu",
           "aspectTerms": [
             {
-              "term": "zpracování",
+              "term": "zpracování","category": "game design",
               "polarity": "positive",
               "from": 72,
               "to": 82
             },
             {
-              "term": "CO-OP",
+              "term": "CO-OP","category": "game mode",
               "polarity": "positive",
               "from": 85,
               "to": 90
@@ -799,19 +814,19 @@
           "text": "Skvělá puzzle hra s famózním příběhem, velmi zábavným co-op režimem a skvělím humorem.",
           "aspectTerms": [
             {
-              "term": "příběhem",
+              "term": "příběhem","category": "story",
               "polarity": "positive",
               "from": 29,
               "to": 37
             },
             {
-              "term": "co-op režimem",
+              "term": "co-op režimem","category": "game mode",
               "polarity": "positive",
               "from": 54,
               "to": 67
             },
             {
-              "term": "humorem",
+              "term": "humorem", "category": "story",
               "polarity": "positive",
               "from": 78,
               "to": 85
@@ -832,6 +847,13 @@
           "reviewId": 33,
           "text": "Tato hra je určtě super protože to rozjede i slabší počítač a není zas tak drahá.",
           "aspectTerms": [
+            {
+              "term":"",
+              "category":"overall",
+              "polarity":"positive",
+              "from":0,
+              "to":0
+            }
           ],
           "aspectCategories": [
             {
@@ -849,23 +871,14 @@
           "text": "úžasně otestuje vaši logiku a pro lidi jako já má i české titulky.",
           "aspectTerms": [
             {
-              "term": "logiku",
-              "polarity": "positive",
-              "from": 21,
-              "to": 27
-            },
-            {
               "term": "titulky",
+              "category":"languages",
               "polarity": "positive",
               "from": 52,
               "to": 65
             }
           ],
           "aspectCategories": [
-            {
-              "category": "game design",
-              "polarity": "positive"
-            },
             {
               "category": "languages",
               "polarity": "positive"
@@ -876,6 +889,13 @@
           "reviewId": 35,
           "text": "Méně náročná na PC.",
           "aspectTerms": [
+            {
+              "term":"",
+              "category":"performance",
+              "polarity":"positive",
+              "from":0,
+              "to":0
+            }
           ],
           "aspectCategories": [
             {
@@ -890,18 +910,21 @@
           "aspectTerms": [
             {
               "term": "Singleplayer",
+              "category": "game mode",
               "polarity": "positive",
               "from": 0,
               "to": 12
             },
             {
               "term": "co-opu",
+              "category": "game mode",
               "polarity": "positive",
               "from": 28,
               "to": 34
             },
             {
               "term": "grafika",
+              "category":"visuals",
               "polarity": "positive",
               "from": 64,
               "to": 71
@@ -923,13 +946,14 @@
           "text": "Hra nabízí skvělý coop a komunitní mapy, které určitě stojí za vyzkoušení",
           "aspectTerms": [
             {
-              "term": "coop",
+              "term": "coop","category": "game mode",
               "polarity": "positive",
               "from": 18,
               "to": 22
             },
             {
               "term": "komunitní mapy",
+              "category":"content",
               "polarity": "positive",
               "from": 25,
               "to": 39
@@ -956,12 +980,13 @@
           "aspectTerms": [
             {
               "term": "herní dobu",
+              "category":"gameplay",
               "polarity": "negative",
               "from": 15,
               "to": 25
             },
             {
-              "term": "hrdinku",
+              "term": "hrdinku","category":"character design",
               "polarity": "negative",
               "from": 42,
               "to": 49
@@ -988,6 +1013,7 @@
           "aspectTerms": [
             {
               "term": "Příběh",
+              "category": "story",
               "polarity": "positive",
               "from": 0,
               "to": 6
@@ -1006,6 +1032,7 @@
           "aspectTerms": [
             {
               "term": "prostředí",
+              "category":"game environment",
               "polarity": "positive",
               "from": 7,
               "to": 16
@@ -1024,6 +1051,7 @@
           "aspectTerms": [
             {
               "term": "hádanky",
+              "category":"level design",
               "polarity": "positive",
               "from": 0,
               "to": 7
@@ -1041,7 +1069,7 @@
           "text": "I přes němou hrdinku jsem si hru užil dosytosti.",
           "aspectTerms": [
             {
-              "term": "hrdinku",
+              "term": "hrdinku","category":"character design",
               "polarity": "negative",
               "from": 13,
               "to": 20
@@ -1063,7 +1091,7 @@
           "text": "Příběhový režim je úžasné dílo plné zábavy",
           "aspectTerms": [
             {
-              "term": "Příběhový režim",
+              "term": "Příběhový režim","category": "story",
               "polarity": "positive",
               "from": 0,
               "to": 15
@@ -1082,6 +1110,7 @@
           "aspectTerms": [
             {
               "term": "obsahu",
+              "category":"content",
               "polarity": "negative",
               "from": 30,
               "to": 36
@@ -1100,6 +1129,7 @@
           "aspectTerms": [
             {
               "term": "cena",
+              "category":"price",
               "polarity": "positive",
               "from": 70,
               "to": 74
@@ -1122,12 +1152,14 @@
           "aspectTerms": [
             {
               "term": "mechanismy",
+              "category":"controls",
               "polarity": "neutral",
               "from": 40,
               "to": 50
             },
             {
               "term": "hraní",
+              "category":"gameplay",
               "polarity": "positive",
               "from": 68,
               "to": 73
@@ -1146,12 +1178,14 @@
           "aspectTerms": [
             {
               "term": "graficky ztvárněné úrovně",
+              "category":"visuals",
               "polarity": "positive",
               "from": 29,
               "to": 35
             },
             {
               "term": "příběh",
+              "category": "story",
               "polarity": "positive",
               "from": 47,
               "to": 53
@@ -1174,6 +1208,7 @@
           "aspectTerms": [
             {
               "term": "češtinu",
+              "category":"languages",
               "polarity": "negative",
               "from": 9,
               "to": 16
@@ -1190,6 +1225,13 @@
           "reviewId": 49,
           "text": "Hra se mi zdála dost krátká.",
           "aspectTerms": [
+            {
+              "term":"",
+              "category":"gameplay",
+              "polarity":"negative",
+              "from":0,
+              "to":0
+            }
           ],
           "aspectCategories": [
             {
@@ -1204,12 +1246,14 @@
           "aspectTerms": [
             {
               "term": "grafika",
+              "category":"visuals",
               "polarity": "negative",
               "from": 13,
               "to": 20
             },
             {
               "term": "levelů",
+              "category":"level design",
               "polarity": "negative",
               "from": 28,
               "to": 34
@@ -1230,6 +1274,13 @@
           "reviewId": 51,
           "text": "Je až moc krátka.",
           "aspectTerms": [
+            {
+              "term":"",
+              "category":"gameplay",
+              "polarity":"negative",
+              "from":0,
+              "to":0
+            }
           ],
           "aspectCategories": [
             {
@@ -1244,6 +1295,8 @@
           "aspectTerms": [
             {
               "term": "úrovně",
+              "category":"level design",
+
               "polarity": "negative",
               "from": 0,
               "to": 6
@@ -1262,9 +1315,17 @@
           "aspectTerms": [
             {
               "term": "úlohami",
+              "category":"level design",
               "polarity": "negative",
               "from": 52,
               "to": 59
+            },
+            {
+              "term":"hra",
+              "category":"overall",
+              "polarity":"negative",
+              "from":0,
+              "to":0
             }
           ],
           "aspectCategories": [
@@ -1280,6 +1341,7 @@
           "aspectTerms": [
             {
               "term": "kampaň",
+              "category": "game mode",
               "polarity": "negative",
               "from": 34,
               "to": 40
@@ -1298,18 +1360,22 @@
           "aspectTerms": [
             {
               "term": "puzzly",
+              "category":"level design",
+
               "polarity": "neutral",
               "from": 54,
               "to": 60
             },
             {
               "term": "grafikou",
+              "category":"visuals",
               "polarity": "positive",
               "from": 69,
               "to": 77
             },
             {
               "term": "podkresovou hudbou",
+              "category":"sounds",
               "polarity": "positive",
               "from": 90,
               "to": 108
@@ -1336,7 +1402,8 @@
           "aspectTerms": [
             {
               "term": "Grafika",
-              "polarity": "positve",
+              "category":"visuals",
+              "polarity": "positive",
               "from": 0,
               "to": 7
             }
@@ -1354,12 +1421,14 @@
           "aspectTerms": [
             {
               "term": "ovládání",
+              "category":"controls",
               "polarity": "negative",
               "from": 15,
               "to": 23
             },
             {
-              "term": "puzzly",
+              "term": "puzzly","category":"level design",
+
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -1380,6 +1449,13 @@
           "reviewId": 58,
           "text": "Je to příšerně lineární, žádná svoboda",
           "aspectTerms": [
+            {
+              "term":"",
+              "category":"overall",
+              "polarity":"negative",
+              "from":0,
+              "to":0
+            }
           ],
           "aspectCategories": [
             {
@@ -1394,6 +1470,7 @@
           "aspectTerms": [
             {
               "term": "prostředí",
+              "category":"game environment",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -1411,7 +1488,7 @@
           "text": "Dizajn světa je nic moc, často nevíte co máte dělat",
           "aspectTerms": [
             {
-              "term": "Dizajn světa",
+              "term": "Dizajn světa","category":"game environment",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -1430,6 +1507,7 @@
           "aspectTerms": [
             {
               "term": "gameplaye",
+              "category":"gameplay",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -1446,10 +1524,17 @@
           "reviewId": 62,
           "text": "je krátká dohrál jsem ji za 7h",
           "aspectTerms": [
+            {
+              "term":"",
+              "category":"gameplay",
+              "polarity":"negative",
+              "from":0,
+              "to":0
+            }
           ],
           "aspectCategories": [
             {
-              "category": "game length",
+              "category":"gameplay",
               "polarity": "negative"
             }
           ]
@@ -1460,18 +1545,21 @@
           "aspectTerms": [
             {
               "term": "singleplayer",
+              "category": "game mode",
               "polarity": "positive",
               "from": 0,
               "to": 0
             },
             {
               "term": "CO-OP",
+              "category": "game mode",
               "polarity": "negative",
               "from": 0,
               "to": 0
             },
             {
               "term": "lagům",
+              "category":"multiplayer",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -1489,7 +1577,7 @@
           "text": "vývoj postav je nulový",
           "aspectTerms": [
             {
-              "term": "vývoj postav",
+              "term": "vývoj postav","category": "story",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -1507,7 +1595,7 @@
           "text": "někdy je kontrola příšerná",
           "aspectTerms": [
             {
-              "term": "kontrola",
+              "term": "kontrola","category":"controls",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -1525,7 +1613,7 @@
           "text": "nelogický ovládání v některých minihrách",
           "aspectTerms": [
             {
-              "term": "ovládání",
+              "term": "ovládání","category":"controls",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -1543,7 +1631,7 @@
           "text": "nezvyšuje se náročnost",
           "aspectTerms": [
             {
-              "term": "náročnost",
+              "term": "náročnost","category":"difficulty",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -1561,7 +1649,8 @@
           "text": "puzzle jsou dost jednoduchý",
           "aspectTerms": [
             {
-              "term": "puzzle",
+              "term": "puzzle","category":"level design",
+
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -1579,14 +1668,8 @@
           "text": "Když si člověk zvykne na stupidní ovládání, tak jde v podstatě jen o skákačku.",
           "aspectTerms": [
             {
-              "term": "ovládání",
+              "term": "ovládání","category":"controls",
               "polarity": "negative",
-              "from": 0,
-              "to": 0
-            },
-            {
-              "term": "skákačku",
-              "polarity": "neutral",
               "from": 0,
               "to": 0
             }
@@ -1603,7 +1686,7 @@
           "text": "tragické ovládání (hráno na klávesnici)",
           "aspectTerms": [
             {
-              "term": "ovládání",
+              "term": "ovládání","category":"controls",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -1621,13 +1704,13 @@
           "text": "3D prostředí se statickou kamerou, je prostě kravina",
           "aspectTerms": [
             {
-              "term": "prostředí",
+              "term": "prostředí","category":"game environment",
               "polarity": "negative",
               "from": 0,
               "to": 0
             },
             {
-              "term": "kamerou",
+              "term": "kamerou","category":"controls",
               "polarity": "neutral",
               "from": 0,
               "to": 0
@@ -1646,12 +1729,14 @@
           "aspectTerms": [
             {
               "term": "ukládání",
+              "category":"saves",
               "polarity": "negative",
               "from": 0,
               "to": 0
             },
             {
               "term": "checkpointy",
+              "category":"saves",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -1670,12 +1755,14 @@
           "aspectTerms": [
             {
               "term": "postavy",
-              "polarity": "neutral",
+              "category":"character design",
+              "polarity": "negative",
               "from": 0,
               "to": 0
             },
             {
               "term": "animace",
+              "category":"visuals",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -1694,6 +1781,7 @@
           "aspectTerms": [
             {
               "term": "uhnutí",
+              "category":"controls",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -1712,12 +1800,14 @@
           "aspectTerms": [
             {
               "term": "příběh",
+              "category": "story",
               "polarity": "negative",
               "from": 0,
               "to": 0
             },
             {
               "term": "postavy",
+              "category":"character design",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -1736,6 +1826,7 @@
           "aspectTerms": [
             {
               "term": "příběh",
+              "category": "story",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -1752,6 +1843,13 @@
           "reviewId": 77,
           "text": "Za 20€ velmi krátká hra.",
           "aspectTerms": [
+            {
+              "term":"",
+              "polarity":"negative",
+              "category":"content",
+              "from":0,
+              "to":0
+            }
           ],
           "aspectCategories": [
             {
@@ -1766,6 +1864,7 @@
           "aspectTerms": [
             {
               "term": "bugům",
+              "category":"gameplay",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -1784,6 +1883,7 @@
           "aspectTerms": [
             {
               "term": "Příběh",
+              "category": "story",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -1803,6 +1903,7 @@
             {
               "term": "prostředí",
               "polarity": "conflict",
+              "category":"game environment",
               "from": 0,
               "to": 0
             }
@@ -1819,19 +1920,22 @@
           "text": "Nevím, co mě vytáčí víc, absence nějaké výuky ovládání a ovládání samo o sobě, nebo styl hádanek typu \"nejdřív 6x umři\".",
           "aspectTerms": [
             {
-              "term": "výuky",
+              "term": "výuky ovládání",
+              "category":"tutorial",
               "polarity": "negative",
               "from": 0,
               "to": 0
             },
             {
               "term": "ovládání",
-              "polarity": "",
-              "from": 0,
-              "to": 0
+              "category":"controls",
+              "polarity": "negative",
+              "from": 57,
+              "to": 65
             },
             {
               "term": "styl hádanek",
+              "category":"level design",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -1856,12 +1960,15 @@
           "reviewId": 82,
           "text": "Hra nieje tak moc kvalitná aby stála 10€",
           "aspectTerms": [
+            {
+              "term":"",
+              "category":"price",
+              "polarity":"negative",
+              "from":0,
+              "to":0
+            }
           ],
           "aspectCategories": [
-            {
-              "category": "overall",
-              "polarity": "negative"
-            },
             {
               "category": "price",
               "polarity": "negative"
@@ -1874,6 +1981,7 @@
           "aspectTerms": [
             {
               "term": "grafiku",
+              "category":"visuals",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -1892,6 +2000,7 @@
           "aspectTerms": [
             {
               "term": "pribeh",
+              "category": "story",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -1910,6 +2019,7 @@
           "aspectTerms": [
             {
               "term": "Cena",
+              "category":"price",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -1928,6 +2038,7 @@
           "aspectTerms": [
             {
               "term": "hratelnost",
+              "category":"gameplay",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -1944,6 +2055,12 @@
           "reviewId": 87,
           "text": "za 7 euro je to katastrofa",
           "aspectTerms": [
+            {
+              "term":"","category":"price",
+              "polarity":"negative",
+              "from":0,
+              "to":0
+            }
           ],
           "aspectCategories": [
             {
@@ -1958,6 +2075,7 @@
           "aspectTerms": [
             {
               "term": "kurzor",
+              "category":"controls",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -1976,6 +2094,8 @@
           "aspectTerms": [
             {
               "term": "Hlavolamy",
+              "category":"level design",
+
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -1994,12 +2114,14 @@
           "aspectTerms": [
             {
               "term": "dizajn",
+              "category":"visuals",
               "polarity": "positive",
               "from": 0,
               "to": 0
             },
             {
               "term": "hudba",
+              "category":"sounds",
               "polarity": "positive",
               "from": 0,
               "to": 0
@@ -2022,6 +2144,7 @@
           "aspectTerms": [
             {
               "term": "Pozadia úrovní",
+              "category":"visuals",
               "polarity": "conflict",
               "from": 0,
               "to": 0
@@ -2040,6 +2163,7 @@
           "aspectTerms": [
             {
               "term": "příběh",
+              "category": "story",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -2058,6 +2182,7 @@
           "aspectTerms": [
             {
               "term": "obtížnost",
+              "category":"difficulty",
               "polarity": "neutral",
               "from": 0,
               "to": 0
@@ -2075,13 +2200,13 @@
           "text": "vše kazí opravdu příšerné ovládání a kamera",
           "aspectTerms": [
             {
-              "term": "ovládání",
+              "term": "ovládání","category":"controls",
               "polarity": "negative",
               "from": 0,
               "to": 0
             },
             {
-              "term": "kamera",
+              "term": "kamera","category":"controls",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -2096,7 +2221,7 @@
         },
         {
           "reviewId": 95,
-          "text": "odporná kamera",
+          "text": "odporná kamera","category":"controls",
           "aspectTerms": [
             {
               "term": "kamera",
@@ -2117,7 +2242,7 @@
           "text": "Ovládání podle mě zbytečně překomplikovali.",
           "aspectTerms": [
             {
-              "term": "Ovládání",
+              "term": "Ovládání","category":"controls",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -2135,19 +2260,19 @@
           "text": "Na gamepadu asi to bude OK ale klávesnice a myš není úplně ideální.",
           "aspectTerms": [
             {
-              "term": "gamepadu",
+              "term": "gamepadu","category":"controls",
               "polarity": "positive",
               "from": 0,
               "to": 0
             },
             {
-              "term": "klávesnice",
+              "term": "klávesnice","category":"controls",
               "polarity": "negative",
               "from": 0,
               "to": 0
             },
             {
-              "term": "myš",
+              "term": "myš","category":"controls",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -2165,7 +2290,7 @@
           "text": "Hodně textur je v nízkém rozlišení a když se člověk přiblíží více než by měl, tak vypadají odporně.",
           "aspectTerms": [
             {
-              "term": "textur",
+              "term": "textur","category":"visuals",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -2183,13 +2308,13 @@
           "text": "Hudba je ako predtym skvela a potesili aj niektore zvukove efekty",
           "aspectTerms": [
             {
-              "term": "Hudba",
+              "term": "Hudba","category":"sounds",
               "polarity": "positive",
               "from": 0,
               "to": 0
             },
             {
-              "term": "zvukove efekty",
+              "term": "zvukove efekty","category":"sounds",
               "polarity": "positive",
               "from": 0,
               "to": 0
@@ -2207,13 +2332,13 @@
           "text": "prijemna farebna nalada a screenshot generator",
           "aspectTerms": [
             {
-              "term": "farebna nalada",
+              "term": "farebna nalada","category":"visuals",
               "polarity": "positive",
               "from": 0,
               "to": 0
             },
             {
-              "term": "screenshot generator",
+              "term": "screenshot generator","category":"visuals",
               "polarity": "positive",
               "from": 0,
               "to": 0
@@ -2231,13 +2356,13 @@
           "text": "Nemali tam davat 3D prostredie, len to dogabalo gameplay a celkovy zazitok z hry.",
           "aspectTerms": [
             {
-              "term": "3D prostredie",
+              "term": "3D prostredie","category":"game environment",
               "polarity": "negative",
               "from": 0,
               "to": 0
             },
             {
-              "term": "gameplay",
+              "term": "gameplay","category":"gameplay",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -2259,13 +2384,13 @@
           "text": "Nádherný rozprávkový svet a príbeh troch hrdinov.",
           "aspectTerms": [
             {
-              "term": "svet",
+              "term": "svet","category":"game environment",
               "polarity": "positive",
               "from": 0,
               "to": 0
             },
             {
-              "term": "príbeh",
+              "term": "príbeh","category": "story",
               "polarity": "positive",
               "from": 0,
               "to": 0
@@ -2287,13 +2412,13 @@
           "text": "nefungujúce 3D prostredíe a OTRASNA kamera",
           "aspectTerms": [
             {
-              "term": "3D prostredíe",
+              "term": "3D prostredíe","category":"game environment",
               "polarity": "negative",
               "from": 0,
               "to": 0
             },
             {
-              "term": "kamera",
+              "term": "kamera","category":"controls",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -2315,13 +2440,13 @@
           "text": "Ovládání je podivné - těžko se poznává kde postava stojí nebo jakým směrem se pohybuje.",
           "aspectTerms": [
             {
-              "term": "Ovládání",
+              "term": "Ovládání","category":"controls",
               "polarity": "negative",
               "from": 0,
               "to": 0
             },
             {
-              "term": "postava",
+              "term": "postava","category":"character design",
               "polarity": "neutral",
               "from": 0,
               "to": 0
@@ -2339,19 +2464,19 @@
           "text": "Po grafické stránce ani po hudební stránce není co vytknout, ale ovládání to bohužel kazí.",
           "aspectTerms": [
             {
-              "term": "grafické stránce",
+              "term": "grafické stránce","category":"visuals",
               "polarity": "positive",
               "from": 0,
               "to": 0
             },
             {
-              "term": "hudební stránce",
+              "term": "hudební stránce","category":"sounds",
               "polarity": "positive",
               "from": 0,
               "to": 0
             },
             {
-              "term": "ovládání",
+              "term": "ovládání","category":"controls",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -2377,7 +2502,7 @@
           "text": "3D stylizace hře nesluší",
           "aspectTerms": [
             {
-              "term": "3D stylizace",
+              "term": "3D stylizace","category":"visuals",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -2385,7 +2510,7 @@
           ],
           "aspectCategories": [
             {
-              "category": "game environment",
+              "category":"visuals",
               "polarity": "negative"
             }
           ]
@@ -2396,6 +2521,7 @@
           "aspectTerms": [
             {
               "term": "3D ovladanie",
+              "category":"controls",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -2414,6 +2540,7 @@
           "aspectTerms": [
             {
               "term": "audio-vizuální stránce",
+              "category":"visuals",
               "polarity": "positive",
               "from": 0,
               "to": 0
@@ -2440,6 +2567,13 @@
           "reviewId": 0,
           "text": "skvělá hra! doporučuji všem milovníkům stříleček zahrát!",
           "aspectTerms": [
+            {
+              "term":"hra",
+              "category":"overall",
+              "polarity":"positive",
+              "from":0,
+              "to":0
+            }
           ],
           "aspectCategories": [
             {
@@ -2453,19 +2587,20 @@
           "text": "krásné mapy které jsou vážně propracovaně a plno agentů s unikátními vlastnostmi",
           "aspectTerms": [
             {
-              "term": "mapy",
+              "term": "mapy","category":"level design",
+
               "polarity": "positive",
               "from": 0,
               "to": 0
             },
             {
-              "term": "agentů",
+              "term": "agentů","category":"character design",
               "polarity": "neutral",
               "from": 0,
               "to": 0
             },
             {
-              "term": "vlastnostmi",
+              "term": "vlastnostmi","category":"character design",
               "polarity": "neutral",
               "from": 0,
               "to": 0
@@ -2484,6 +2619,7 @@
           "aspectTerms": [
             {
               "term": "RANK systém",
+              "category":"multiplayer",
               "polarity": "positive",
               "from": 0,
               "to": 0
@@ -2501,13 +2637,29 @@
           "text": "Parádně spracovaná hra kvalita,efekty,zvuky.",
           "aspectTerms": [
             {
+              "term":"hra",
+              "polarity":"positive",
+              "category":"overall",
+              "from":0,
+              "to":0
+            },
+            {
+              "term":"kvalita",
+              "category":"quality",
+              "polarity":"positive",
+              "from":0,
+              "to":0
+            },
+            {
               "term": "efekty",
+              "category":"visuals",
               "polarity": "positive",
               "from": 0,
               "to": 0
             },
             {
               "term": "zvuky",
+              "category":"sounds",
               "polarity": "positive",
               "from": 0,
               "to": 0
@@ -2534,18 +2686,21 @@
           "aspectTerms": [
             {
               "term": "rusáku",
+              "category":"community",
               "polarity": "negative",
               "from": 0,
               "to": 0
             },
             {
               "term": "komunita",
+              "category":"community",
               "polarity": "negative",
               "from": 0,
               "to": 0
             },
             {
               "term": "hackeři",
+              "category":"community",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -2561,17 +2716,20 @@
             {
               "term": "systém destrukce",
               "polarity": "positive",
+              "category":"level design",
+
               "from": 0,
               "to": 0
             },
             {
               "term": "agenti",
+              "category":"character design",
               "polarity": "positive",
               "from": 0,
               "to": 0
             },
             {
-              "term": "agenta",
+              "term": "agenta","category":"character design",
               "polarity": "neutral",
               "from": 0,
               "to": 0
@@ -2590,6 +2748,7 @@
           "aspectTerms": [
             {
               "term": "ubisoft",
+              "category":"developers",
               "polarity": "neutral",
               "from": 0,
               "to": 0
@@ -2608,12 +2767,14 @@
           "aspectTerms": [
             {
               "term": "komunita",
+              "category":"community",
               "polarity": "negative",
               "from": 0,
               "to": 0
             },
             {
               "term": "CS:GO",
+              "category":"comparison",
               "polarity": "neutral",
               "from": 0,
               "to": 0
@@ -2632,6 +2793,7 @@
           "aspectTerms": [
             {
               "term": "bugou",
+              "category":"gameplay",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -2650,6 +2812,7 @@
           "aspectTerms": [
             {
               "term": "herních módů",
+              "category": "game mode",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -2667,13 +2830,14 @@
           "text": "Hra má opravdu mnoho operátorů, kteří mají originální ability a díky tomu zde vzniká nespočet kombinací a možností, jak poskládat team.",
           "aspectTerms": [
             {
-              "term": "operátorů",
+              "term": "operátorů","category":"character design",
               "polarity": "positive",
               "from": 0,
               "to": 0
             },
             {
               "term": "team",
+              "category":"gameplay",
               "polarity": "neutral",
               "from": 0,
               "to": 0
@@ -2692,12 +2856,14 @@
           "aspectTerms": [
             {
               "term": "grafika",
+              "category":"visuals",
               "polarity": "positive",
               "from": 0,
               "to": 0
             },
             {
               "term": "detaily",
+              "category":"visuals",
               "polarity": "positive",
               "from": 0,
               "to": 0
@@ -2714,6 +2880,13 @@
           "reviewId": 12,
           "text": "Tuto hru hraje dost hráčů, takže v lobby (klidně i ve 4 ráno) nebudete na hru čekat 5-10 minut.",
           "aspectTerms": [
+            {
+              "term":"",
+              "category":"community",
+              "polarity":"positive",
+              "from":0,
+              "to":0
+            }
           ],
           "aspectCategories": [
             {
@@ -2728,6 +2901,7 @@
           "aspectTerms": [
             {
               "term": "hitboxy",
+              "category":"gameplay",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -2746,12 +2920,15 @@
           "aspectTerms": [
             {
               "term": "mapy",
+              "category":"level design",
+
               "polarity": "neutral",
               "from": 0,
               "to": 0
             },
             {
               "term": "hodnoceném režimu",
+              "category":"multiplayer",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -2774,12 +2951,14 @@
           "aspectTerms": [
             {
               "term": "ping",
+              "category":"multiplayer",
               "polarity": "negative",
               "from": 0,
               "to": 0
             },
             {
               "term": "servery",
+              "category":"multiplayer",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -2798,6 +2977,7 @@
            "aspectTerms":[
              {
                "term":"obsah",
+               "category":"content",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -2814,7 +2994,13 @@
           "reviewId":17,
            "text":"I po takové době od vydání hra vypadá dobře.",
            "aspectTerms":[
-             
+             {
+               "term":"",
+               "category":"visuals",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
            ],
            "aspectCategories":[
              {
@@ -2827,7 +3013,13 @@
           "reviewId":18,
            "text":"I po takové době od vydání se hraje ještě líp.",
            "aspectTerms":[
-             
+             {
+               "term": "",
+               "category": "gameplay",
+               "polarity": "positive",
+               "from": 0,
+               "to": 0
+             }
            ],
            "aspectCategories":[
              {
@@ -2842,6 +3034,7 @@
            "text":"Hru je dobré hrát s přáteli aby jste nedostávali blbce do týmu ty lidi jsou buď blbý nebo brutálně ukecaný.",
            "aspectTerms":[
              {
+               "category":"gameplay",
                "term":"týmu",
                "polarity":"neutral",
                "from":0,
@@ -2860,7 +3053,12 @@
           "reviewId":20,
            "text":"Jinak hra je výborně optimalizována.",
            "aspectTerms":[
-             
+             {
+               "term":"","category":"performance",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
            ],
            "aspectCategories":[
              {
@@ -2874,7 +3072,7 @@
            "text":"samozřejmě jsou tam bugy jako v každé hře.",
            "aspectTerms":[
              {
-               "term":"bugy",
+               "term":"bugy","category":"gameplay",
                "polarity":"neutral",
                "from":0,
                "to":0
@@ -2894,19 +3092,19 @@
            "text":"výborná co-op střílečka s rozsáhlou destrukcí a DLC zdarma",
            "aspectTerms":[
              {
-               "term":"destrukcí",
+               "term":"destrukcí","category":"game environment",
                "polarity":"neutral",
                "from":0,
                "to":0
              },
              {
-               "term":"co-op střílečka",
+               "term":"co-op střílečka", "category": "game mode",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"DLC",
+               "term":"DLC", "category":"content",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -2921,7 +3119,7 @@
            "text":"jediné mínus za recyklování operátorů",
            "aspectTerms":[
              {
-               "term":"operátorů",
+               "term":"operátorů","category":"character design",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -2937,10 +3135,10 @@
         },
         {
           "reviewId":0,
-           "text":"Jedna z nejlepších taktických střileček na trhu alespoň pro mě.",
+           "text":"Jedna z nejlepších taktických střileček na trhu alespoň pro mě co se hratelnosti týče.",
            "aspectTerms":[
              {
-               "term":"taktických střileček",
+               "term":"hratelnosti","category":"gameplay",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -2955,19 +3153,19 @@
            "text":"za mě mohu doporučit grafika i hratelnost na solidní urovni a dost úprav zbraní",
            "aspectTerms":[
              {
-               "term":"grafika",
+               "term":"grafika","category":"visuals",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"hratelnost",
+               "term":"hratelnost","category":"gameplay",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"zbraní",
+               "term":"zbraní","category":"gun play",
                "polarity":"neutral",
                "from":0,
                "to":0
@@ -2994,7 +3192,7 @@
            "text":"Když máte dobrý tým který komunikuje je to zábava na hodně hodin :)",
            "aspectTerms":[
              {
-               "term":"tým",
+               "term":"tým","category":"gameplay",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -3012,19 +3210,13 @@
            "text":"Myslím že jedna z nejlepších FPS stříleček s dobrou hratelností a svižným tempem.",
            "aspectTerms":[
              {
-               "term":"FPS stříleček",
+               "term":"hratelností","category":"gameplay",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"hratelností",
-               "polarity":"positive",
-               "from":0,
-               "to":0
-             },
-             {
-               "term":"tempem",
+               "term":"tempem","category":"gameplay",
                "polarity":"neutral",
                "from":0,
                "to":0
@@ -3039,13 +3231,15 @@
            "text":"Hra je zaměřená na týmovou spolupráci které se pravděpodobně s dobrým týmem dočkáte.",
            "aspectTerms":[
              {
+               "category":"gameplay",
                "term":"týmovou spolupráci",
                "polarity":"neutral",
                "from":0,
                "to":0
              },
+
              {
-               "term":"týmem",
+               "term":"týmem","category":"gameplay",
                "polarity":"neutral",
                "from":0,
                "to":0
@@ -3064,19 +3258,20 @@
            "text":"Hra se navíc neustále mění díky novým operátorům s novými schopnostmi, reworkům map.",
            "aspectTerms":[
              {
-               "term":"operátorům",
+               "term":"operátorům","category":"character design",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"schopnostmi",
+               "term":"schopnostmi","category":"character design",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"reworkům map",
+               "term":"reworkům map","category":"level design",
+
                "polarity":"positive",
                "from":0,
                "to":0
@@ -3100,13 +3295,13 @@
            "text":"Samozřejmě má své chyby v podobě někdy blbnoucých serverů či hitboxů ale na 95% hra funguje jak má.",
            "aspectTerms":[
              {
-               "term":"serverů",
+               "term":"serverů","category":"multiplayer",
                "polarity":"negative",
                "from":0,
                "to":0
              },
              {
-               "term":"hitboxů",
+               "term":"hitboxů","category":"gameplay",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -3125,6 +3320,7 @@
            "aspectTerms":[
              {
                "term":"dějovou linku",
+               "category": "story",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -3143,13 +3339,13 @@
            "text":"Nádhernou grafiku, ale pro někoho repetetivní  gamplay.",
            "aspectTerms":[
              {
-               "term":"gamplay",
+               "term":"gamplay","category":"gameplay",
                "polarity":"negative",
                "from":0,
                "to":0
              },
              {
-               "term":"grafiku",
+               "term":"grafiku","category":"visuals",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -3172,19 +3368,19 @@
            "text":"Dobrá ale nedotažená hra, chtělo by to doladit pár detailů jako třeba že kůlky létají z optiky a ne z hlavně",
            "aspectTerms":[
              {
-               "term":"kůlky",
+               "term":"kůlky","category":"gun play",
                "polarity":"negative",
                "from":0,
                "to":0
              },
              {
-               "term":"optiky",
+               "term":"optiky","category":"gun play",
                "polarity":"negative",
                "from":0,
                "to":0
              },
              {
-               "term":"hlavně",
+               "term":"hlavně","category":"gun play",
                "polarity":"neutral",
                "from":0,
                "to":0
@@ -3202,6 +3398,13 @@
           "reviewId":0,
            "text":"Takže, na to, že hra stojí 69 euro, tak je to celkem sračka.",
            "aspectTerms":[
+             {
+               "term":"",
+               "category":"price",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             }
            ],
            "aspectCategories":[
              {
@@ -3217,18 +3420,21 @@
            "aspectTerms":[
              {
                "term":"Cheateři",
+               "category":"community",
                "polarity":"negative",
                "from":0,
                "to":0
              },
              {
                "term":"postavy",
+               "category":"character design",
                "polarity":"negative",
                "from":0,
                "to":0
              },
              {
                "term":"hitboxy",
+               "category":"gameplay",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -3250,6 +3456,13 @@
           "reviewId":0,
            "text":"Za ty peníze, bez slevy nic moc.",
            "aspectTerms":[
+             {
+               "term":"",
+               "category":"price",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             }
            ],
            "aspectCategories":[
              {
@@ -3264,12 +3477,14 @@
            "aspectTerms":[
              {
                "term":"optimalizaci",
+               "category":"performance",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
                "term":"mapy",
+               "category":"level design",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -3293,6 +3508,7 @@
            "aspectTerms":[
              {
                "term":"fpska",
+               "category":"performance",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -3311,13 +3527,13 @@
            "text":"mám dobré zkušenosti s komunitou hry a hratelnost je taky super",
            "aspectTerms":[
              {
-               "term":"komunitou",
+               "term":"komunitou","category":"community",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"hratelnost",
+               "term":"hratelnost","category":"gameplay",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -3340,7 +3556,7 @@
            "text":"Super hra, která má určitě svoje chyby ale hratelnost je super.",
            "aspectTerms":[
              {
-               "term":"hratelnost",
+               "term":"hratelnost","category":"gameplay",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -3359,7 +3575,7 @@
            "text":"Pokud máte rádi 5v5 kompetitivní akci, tak jí můžu jen doporučit.",
            "aspectTerms":[
              {
-               "term":"5v5 kompetitivní akci",
+               "term":"5v5 kompetitivní akci","category": "game mode",
                "polarity":"neutral",
                "from":0,
                "to":0
@@ -3376,7 +3592,7 @@
           "reviewId":0,
            "text":"hra je hodně o kooperaci týmu.",
            "aspectTerms":[
-             {
+             {"category":"gameplay",
                "term":"kooperaci týmu",
                "polarity":"neutral",
                "from":0,
@@ -3395,7 +3611,7 @@
            "text":"Množsvo nových operatorov za tie roky tu pribudlo",
            "aspectTerms":[
              {
-               "term":"operatorov",
+               "term":"operatorov","category":"character design",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -3413,13 +3629,13 @@
            "text":"velký výběr agentů a stále nové agenty přidávají ",
            "aspectTerms":[
              {
-               "term":"agentů",
+               "term":"agentů","category":"character design",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"agenty",
+               "term":"agenty","category":"character design",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -3437,13 +3653,7 @@
            "text":"je to trochu pay to win protože lepší agenti stojí víc jak 20K věhlasů(měna v hře) a nebo 1200 r6 points",
            "aspectTerms":[
              {
-               "term":"pay to win",
-               "polarity":"negative",
-               "from":0,
-               "to":0
-             },
-             {
-               "term":"agenti",
+               "term":"agenti","category":"character design",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -3461,7 +3671,7 @@
            "text":"velmy super hra maá dobrou grafiku a je temněř realistycká",
            "aspectTerms":[
              {
-               "term":"grafiku",
+               "term":"grafiku","category":"visuals",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -3479,14 +3689,9 @@
            "text":"Zábavná dynamická akce dvou týmů po pěti lidech.",
            "aspectTerms":[
              {
-               "term":"akce",
+               "term":"akce dvou týmů po pěti lidech",
+               "category":"gameplay",
                "polarity":"positive",
-               "from":0,
-               "to":0
-             },
-             {
-               "term":"týmů po pěti lidech",
-               "polarity":"neutral",
                "from":0,
                "to":0
              }
@@ -3504,12 +3709,14 @@
            "aspectTerms":[
              {
                "term":"proměnlivostí prostředí",
+               "category":"game environment",
+
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"funkce postav",
+               "term":"funkce postav","category":"character design",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -3532,7 +3739,7 @@
            "text":"Jen ten loading na low-gaming pc je docela dlouhý !!!",
            "aspectTerms":[
              {
-               "term":"loading na low-gaming pc",
+               "term":"loading na low-gaming pc","category":"performance",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -3550,13 +3757,14 @@
            "text":"updaty které vám zalagují hru nebo dokonce nepůjde takže musíte čekat na opravný patch",
            "aspectTerms":[
              {
-               "term":"updaty",
+               "term":"updaty","category":"updates",
                "polarity":"negative",
                "from":0,
                "to":0
              },
              {
                "term":"opravný patch",
+               "category":"updates",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -3574,7 +3782,7 @@
            "text":"málo herních modů",
            "aspectTerms":[
              {
-               "term":"herních modů",
+               "term":"herních modů","category": "game mode",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -3592,6 +3800,7 @@
            "text":"Skvělá komunita komunikativních spoluhráčů!",
            "aspectTerms":[
              {
+               "category":"community",
                "term":"komunita komunikativních spoluhráčů",
                "polarity":"positive",
                "from":0,
@@ -3612,6 +3821,7 @@
            "aspectTerms":[
              {
                "term":"cheatery",
+               "category":"community",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -3628,7 +3838,12 @@
           "reviewId":0,
            "text":"Za nějakých 10 euro ve slevě nemá konkurenci",
            "aspectTerms":[
-                
+                {
+                  "term":"","category":"price",
+                  "polarity":"positive",
+                  "from":0,
+                  "to":0
+                }
            ],
            "aspectCategories":[
              {
@@ -3642,7 +3857,7 @@
            "text":"Velice špatný matchmaking, jsem level 105 (silver V) a v týmu mám levely 80-90",
            "aspectTerms":[
              {
-               "term":"matchmaking",
+               "term":"matchmaking","category":"multiplayer",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -3661,7 +3876,7 @@
            "text":"Hlavní je že na té hře stále pracují,opravují chyby,vydávají updaity atd.",
            "aspectTerms":[
              {
-               "term":"updaity",
+               "term":"updaity","category":"updates",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -3679,13 +3894,13 @@
            "text":"Dobrá hra, super anticheat a žadní hekři",
            "aspectTerms":[
              {
-               "term":"anticheat",
+               "term":"anticheat","category":"anticheat",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"hekři",
+               "term":"hekři","category":"community",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -3704,7 +3919,7 @@
            "text":"Nekupovat, matchmaking je úplně špatnej ",
            "aspectTerms":[
              {
-               "term":"matchmaking",
+               "term":"matchmaking","category":"multiplayer",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -3713,8 +3928,8 @@
            ],
            "aspectCategories":[
              {
-               "category":"negative",
-               "polarity":""
+               "category":"multiplayer",
+               "polarity":"negative"
              }
            ]
         },
@@ -3724,6 +3939,7 @@
            "aspectTerms":[
              {
                "term":"classy",
+               "category":"character design",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -3740,7 +3956,12 @@
           "reviewId":60,
            "text":"Hra je graficky dobře zpracovaná,",
            "aspectTerms":[
-             
+             {
+               "term":"","category":"visuals",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
            ],
            "aspectCategories":[
              {
@@ -3754,13 +3975,13 @@
            "text":"zvuky zbraní jsou působiví, zvuky přebíjení totéž",
            "aspectTerms":[
              {
-               "term":"zvuky zbraní",
+               "term":"zvuky zbraní","category":"sounds",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"zvuky přebíjení",
+               "term":"zvuky přebíjení","category":"sounds",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -3779,7 +4000,8 @@
            "aspectTerms":[
              {
                "term":"ničitelné prostředí",
-               "polarity":"positive",
+               "polarity":"positive","category":"game environment",
+
                "from":0,
                "to":0
              }
@@ -3796,7 +4018,7 @@
            "text":"Fyzika v týhle hře je absolutní brutus!",
            "aspectTerms":[
              {
-               "term":"Fyzika",
+               "term":"Fyzika","category":"game environment",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -3814,19 +4036,22 @@
            "text":"Nejlepši hra, kde maš hrat koperačně s teamem, hlidat pozice, branit bombu nebo člověka.",
            "aspectTerms":[
              {
-               "term":"hrat koperačně s teamem",
+               "term":"teamem",
+               "category":"gameplay",
                "polarity":"neutral",
                "from":0,
                "to":0
              },
              {
                "term":"hlidat pozice",
+               "category": "gameplay",
                "polarity":"neutral",
                "from":0,
                "to":0
              },
              {
                "term":"branit bombu nebo člověka",
+               "category":"gameplay",
                "polarity":"neutral",
                "from":0,
                "to":0
@@ -3842,14 +4067,30 @@
         },
         {
           "reviewId":0,
-           "text":"strašně dobře optimalizovaná \ntřeba mě to rozjede na full (grafiku) a to mám 1060",
+           "text":"strašně dobře optimalizovaná, třeba mě to rozjede na full (grafiku) a to mám 1060",
            "aspectTerms":[
-
+             {
+               "term":"",
+               "category":"performance",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"grafiku",
+               "polarity":"neutral","category":"visuals",
+               "from":0,
+               "to":0
+             }
            ],
            "aspectCategories":[
              {
                "category":"performance",
                "polarity":"positive"
+             },
+             {
+               "category":"visuals",
+               "polarity":"neutral"
              }
            ]
         },
@@ -3857,6 +4098,12 @@
           "reviewId":0,
            "text":"musíte to hrát s kámošem pak teprve začíná ta pravá sranda",
            "aspectTerms":[
+             {
+               "term":"","category":"multiplayer",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
            ],
            "aspectCategories":[
              {
@@ -3870,7 +4117,7 @@
            "text":"Mám z toho jenom nervy většinou nefungují servery",
            "aspectTerms":[
              {
-               "term":"servery",
+               "term":"servery","category":"multiplayer",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -3888,7 +4135,7 @@
            "text":"občas se vyskytne problém se servery",
            "aspectTerms":[
              {
-               "term":"servery",
+               "term":"servery","category":"multiplayer",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -3906,7 +4153,7 @@
            "text":"matchmaking trvá déle než je normální",
            "aspectTerms":[
              {
-               "term":"matchmaking",
+               "term":"matchmaking","category":"multiplayer",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -3928,7 +4175,7 @@
            "text":"Na grafiku si nemůžu stěžovat",
            "aspectTerms":[
              {
-               "term":"grafiku",
+               "term":"grafiku","category":"visuals",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -3945,6 +4192,13 @@
           "reviewId":0,
            "text":"můj notebook nemá problém a hra běží úžasně",
            "aspectTerms":[
+             {
+               "term":"",
+               "category":"performance",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
 
            ],
            "aspectCategories":[
@@ -3959,13 +4213,13 @@
            "text":"Super hra, hodně skill ale za tu cenu je to fakt pecka.",
            "aspectTerms":[
              {
-               "term":"cenu",
+               "term":"cenu","category":"price",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"skill",
+               "term":"skill","category":"difficulty",
                "polarity":"neutral",
                "from":0,
                "to":0
@@ -3986,6 +4240,12 @@
           "reviewId":0,
            "text":"Odporúčam každému utiahne to aj na slabšom počítači s 2GB+ grafiky.",
            "aspectTerms":[
+             {
+               "term":"","category":"performance",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
 
            ],
            "aspectCategories":[
@@ -4000,7 +4260,8 @@
            "text":"Výborná hra, hlavně to destruktivní prostředí.",
            "aspectTerms":[
              {
-               "term":"destruktivní prostředí.",
+               "term":"destruktivní prostředí.","category":"game environment",
+
                "polarity":"positive",
                "from":0,
                "to":0
@@ -4019,6 +4280,7 @@
            "aspectTerms":[
              {
                "term":"slevě",
+               "category":"price",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -4036,7 +4298,7 @@
            "text":"je možnost hrát za operátory všeho druhu",
            "aspectTerms":[
              {
-               "term":"operátory všeho druhu",
+               "term":"operátory všeho druhu","category":"character design",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -4058,7 +4320,7 @@
            "text":"pořádná nálož skinů a kosmetických doplňků které vám 100% zlepší pohled na hru",
            "aspectTerms":[
              {
-               "term":"nálož skinů a kosmetických doplňků",
+               "term":"nálož skinů a kosmetických doplňků","category":"content",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -4074,7 +4336,16 @@
         {
           "reviewId":0,
            "text":"Jediné co mi zde trochu vadí je že poprvé zapnete hru s úrovní 1 a může vám to přiřadit do zápasu někoho s úrovní 80.",
-           "aspectCategories":[
+          "aspectTerms": [
+            {
+              "term":"zápasu",
+              "category":"multiplayer",
+              "polarity":"positive",
+              "from":0,
+              "to":0
+            }
+          ],
+          "aspectCategories":[
              {
                "category":"matchmaking",
                "polarity":"negative"
@@ -4086,13 +4357,13 @@
            "text":"za mě super hra se skvělou komunitou a grafikou",
            "aspectTerms":[
              {
-               "term":"komunitou",
+               "term":"komunitou","category":"community",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"grafikou",
+               "term":"grafikou","category":"visuals",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -4116,7 +4387,8 @@
            "aspectTerms":[
              {
                "term":"slabším pc",
-               "polarity":"negative",
+               "category":"performance",
+               "polarity":"positive",
                "from":0,
                "to":0
              }
@@ -4132,6 +4404,12 @@
           "reviewId":0,
            "text":"Hra je velmi dobře hratelná",
            "aspectTerms":[
+             {
+               "term":"","category":"gameplay",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
            ],
            "aspectCategories":[
              {
@@ -4144,6 +4422,12 @@
           "reviewId":0,
            "text":"občas se dlouho načítá hra",
            "aspectTerms":[
+             {
+               "term":"","category":"performance",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             }
 
            ],
            "aspectCategories":[
@@ -4159,7 +4443,8 @@
            "text":" mapy nejsou vůbec zajímáve (ty nové)",
            "aspectTerms":[
              {
-               "term":"mapy",
+               "term":"mapy","category":"level design",
+
                "polarity":"negative",
                "from":0,
                "to":0
@@ -4178,7 +4463,8 @@
            "text":"některé místnosti jsou copy paste",
            "aspectTerms":[
              {
-               "term":"místnosti",
+               "term":"místnosti","category":"level design",
+
                "polarity":"negative",
                "from":0,
                "to":0
@@ -4214,11 +4500,18 @@
            "text":"Hra trpí ohromným množstvím glitchů, které ubisoft vůbec neřeší.",
            "aspectTerms":[
              {
-               "term":"množstvím glitchů",
+               "term":"množstvím glitchů","category":"gameplay",
                "polarity":"negative",
                "from":0,
                "to":0
+             },
+             {
+               "term":"ubisoft",
+               "polarity":"neutral","category":"developers",
+               "from":0,
+               "to":0
              }
+
            ],
            "aspectCategories":[
              {
@@ -4232,7 +4525,7 @@
            "text":"Vydávají nové agenty ,kteří jsou naprosto bez nápadu.",
            "aspectTerms":[
              {
-               "term":"agenty",
+               "term":"agenty","category":"character design",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -4251,13 +4544,13 @@
            "text":"Je to celkem realistická hra s výbornou grafikou a skvělá hratelnost.",
            "aspectTerms":[
              {
-               "term":"grafikou",
+               "term":"grafikou","category":"visuals",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"hratelnost",
+               "term":"hratelnost","category":"gameplay",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -4280,6 +4573,7 @@
            "aspectTerms":[
              {
                "term":"kvalitu textur a fyziky",
+               "category":"visuals",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -4301,6 +4595,13 @@
           "reviewId":0,
            "text":"Pičovina, koupil jsem to, dal tři hry a už tu boring sračku nezapnu.",
            "aspectTerms":[
+             {
+               "term":"","category":"overall",
+
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             }
 
            ],
            "aspectCategories":[
@@ -4316,12 +4617,14 @@
            "aspectTerms":[
              {
                "term":"Hackery",
+               "category":"community",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
                "term":"csgo",
+               "category":"comparison",
                "polarity":"neutral",
                "from":0,
                "to":0
@@ -4344,8 +4647,14 @@
            "text":"Hra má docela dobrou grafiku občas se stane že hra se někomu hodně seká",
            "aspectTerms":[
              {
-               "term":"grafiku",
+               "term":"grafiku","category":"visuals",
                "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"","category":"performance",
+               "polarity":"negative",
                "from":0,
                "to":0
              }
@@ -4366,24 +4675,23 @@
            "text":"Můžete improvizovat, multiplayer je velice dobře propracován, grafika úžasná.",
            "aspectTerms":[
              {
-               "term":"improvizovat",
+               "term":"multiplayer","category": "game mode",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"grafika","category":"visuals",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"","category":"gameplay",
                "polarity":"neutral",
                "from":0,
                "to":0
-             },
-             {
-               "term":"multiplayer",
-               "polarity":"positive",
-               "from":0,
-               "to":0
-             },
-             {
-               "term":"grafika",
-               "polarity":"positive",
-               "from":0,
-               "to":0
              }
-
            ],
            "aspectCategories":[
              {
@@ -4406,7 +4714,13 @@
            "text":"Dobrá hra, kým sa vďaka podivnému matchmakingu nedostanete na level na ktorý nemáte.",
            "aspectTerms":[
              {
-               "term":"matchmakingu",
+               "term":"","category":"overall",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"matchmakingu","category":"multiplayer",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -4428,13 +4742,13 @@
            "text":"hra je vyrovnaná, celkem fajn komunita a zadny operator neni useless ",
            "aspectTerms":[
              {
-               "term":"komunita",
-               "polarity":"",
+               "term":"komunita","category":"community",
+               "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"operator",
+               "term":"operator","category":"character design",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -4457,7 +4771,13 @@
            "text":"Celkem v pohodě hra, ale ubisoft servery stojí za hovno",
            "aspectTerms":[
              {
-               "term":"ubisoft servery",
+               "term":"","category":"overall",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"ubisoft servery", "category":"multiplayer",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -4479,6 +4799,12 @@
           "reviewId":0,
            "text":"Skvělá hra, za tu cenu se vyplatí",
            "aspectTerms":[
+             {
+               "term":"","category":"overall",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
              {
                "term":"cenu",
                "polarity":"positive",
@@ -4502,7 +4828,7 @@
            "text":"celkem fajn gunplay",
            "aspectTerms":[
              {
-               "term":"gunplay",
+               "term":"gunplay","category":"gun play",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -4522,18 +4848,19 @@
            "aspectTerms":[
              {
                "term":"možností jak jí hrát",
+               "category":"gameplay",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"skiny",
+               "term":"skiny","category":"content",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"obsahu",
+               "term":"obsahu","category":"content",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -4556,7 +4883,7 @@
            "text":"Jenom mě trošku vadí komunita",
            "aspectTerms":[
              {
-               "term":"komunita",
+               "term":"komunita","category":"community",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -4575,13 +4902,19 @@
            "text":"Super hra , postavy a různý ability",
            "aspectTerms":[
              {
-               "term":"postavy",
+               "term":"","category":"overall",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"ability",
+               "term":"postavy","category":"character design",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"ability","category":"character design",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -4601,16 +4934,17 @@
         },
         {
           "reviewId":0,
-           "text":"velký výběr operátorů, realističnost, ",
+           "text":"hodně map, velký výběr operátorů, realističnost",
            "aspectTerms":[
              {
-               "term":"hodně map",
+               "term":"map","category":"level design",
+
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"velký výběr operátorů",
+               "term":"výběr operátorů","category":"character design",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -4631,6 +4965,12 @@
           "reviewId":0,
            "text":"Dobré ale moc zbytečně drahé",
            "aspectTerms":[
+             {
+               "term":"","category":"price",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
            ],
            "aspectCategories":[
              {
@@ -4644,19 +4984,19 @@
            "text":"Každý agent má svůj příběh stejnak jako každá sezona (operace).",
            "aspectTerms":[
              {
-               "term":"agent",
+               "term":"agent","category":"character design",
                "polarity":"neutral",
                "from":0,
                "to":0
              },
              {
-               "term":"příběh",
+               "term":"příběh","category": "story",
                "polarity":"neutral",
                "from":0,
                "to":0
              },
              {
-               "term":"sezona",
+               "term":"sezona","category":"updates",
                "polarity":"neutral",
                "from":0,
                "to":0
@@ -4678,7 +5018,7 @@
            "text":"Nehraju to dlouho, ale s bugy jsem zatím žádný problém neměl.",
            "aspectTerms":[
              {
-               "term":"bugy",
+               "term":"bugy","category":"gameplay",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -4696,7 +5036,13 @@
            "text":"občas nějaký bag ale já to přehlížím protože je to výborná hra",
            "aspectTerms":[
              {
-               "term":"bag",
+               "term":"","category":"overall",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"bag","category":"gameplay",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -4719,7 +5065,14 @@
            "text":"Hra je vinikajúca, akurát je stále dosť cheterov!",
            "aspectTerms":[
              {
-               "term":"dosť cheterov",
+               "term":"","category":"overall",
+
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"dosť cheterov","category":"community",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -4746,7 +5099,7 @@
            "text":"V první řadě je naprosto nutné si v nastavení vypnout voice chat.",
            "aspectTerms":[
              {
-               "term":"voice chat",
+               "term":"voice chat","category":"community",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -4764,7 +5117,7 @@
            "text":"vypnout chat a hned se hra promění v něco úplně jiného",
            "aspectTerms":[
              {
-               "term":"chat",
+               "term":"chat","category":"community",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -4782,6 +5135,12 @@
           "reviewId":0,
            "text":"dobře hratelná týmova akce.",
            "aspectTerms":[
+             {
+               "term":"","category":"gameplay",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
            ],
            "aspectCategories":[
              {
@@ -4794,7 +5153,12 @@
           "reviewId":0,
            "text":"hezky vypadající týmova akce",
            "aspectTerms":[
-
+                {
+                  "term":"","category":"visuals",
+                  "polarity":"positive",
+                  "from":0,
+                  "to":0
+                }
            ],
            "aspectCategories":[
              {
@@ -4807,7 +5171,12 @@
           "reviewId":0,
            "text":"kvalitně ozvučená týmova akce",
            "aspectTerms":[
-
+              {
+                "term":"","category":"sounds",
+                "polarity":"positive",
+                "from":0,
+                "to":0
+              }
            ],
            "aspectCategories":[
              {
@@ -4822,13 +5191,13 @@
            "text":"čo sa tyka grafiky hra je úžasná a to iste aj hranie",
            "aspectTerms":[
              {
-               "term":"grafiky",
+               "term":"grafiky","category":"visuals",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"hranie",
+               "term":"hranie","category":"gameplay",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -4850,7 +5219,7 @@
            "text":"velky vyber agentu jak obranych tak utocnych",
            "aspectTerms":[
              {
-               "term":"vyber agentu ",
+               "term":"vyber agentu ", "category":"character design",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -4868,7 +5237,7 @@
            "text":"Hra záleží hodně na sluch",
            "aspectTerms":[
              {
-               "term":"sluch",
+               "term":"sluch","category":"sounds",
                "polarity":"neutral",
                "from":0,
                "to":0
@@ -4885,6 +5254,12 @@
           "reviewId":0,
            "text":"Hra je hodně realistická.",
            "aspectTerms":[
+             {
+               "term":"","category":"gameplay",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
            ],
            "aspectCategories":[
              {
@@ -4898,13 +5273,13 @@
        "text":"Strašně se mi líbí různé speciální schpnosti operátorů a destruktivní prostředí.",
        "aspectTerms":[
          {
-           "term":"speciální schpnosti operátorů",
+           "term":"speciální schpnosti operátorů","category":"character design",
            "polarity":"positive",
            "from":0,
            "to":0
          },
          {
-           "term":"destruktivní prostředí",
+           "term":"destruktivní prostředí","category":"game environment",
            "polarity":"positive",
            "from":0,
            "to":0
@@ -4926,7 +5301,7 @@
            "text":"hitboxi jsou tu o dost lepší než ve většině hrách",
            "aspectTerms":[
              {
-               "term":"hitboxi",
+               "term":"hitboxi","category":"gameplay",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -4942,19 +5317,19 @@
            "text":"Pořád se vývojáři věnují bugům a glitchům",
            "aspectTerms":[
              {
-               "term":"vývojáři",
+               "term":"vývojáři","category":"developers",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"bugům",
+               "term":"bugům","category":"gameplay",
                "polarity":"neutral",
                "from":0,
                "to":0
              },
              {
-               "term":"glitchům",
+               "term":"glitchům","category":"gameplay",
                "polarity":"neutral",
                "from":0,
                "to":0
@@ -4978,13 +5353,13 @@
            "text":"Hodně dělají updaty ve kterých jsou pokaždé nový operátoři.",
            "aspectTerms":[
              {
-               "term":"updaty",
+               "term":"updaty","category":"updates",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"operátoři",
+               "term":"operátoři","category":"character design",
                "polarity":"neutral",
                "from":0,
                "to":0
@@ -5002,19 +5377,19 @@
            "text":"vadí mi ta komunita ale je dobré že tato hra není jako CS:GO že tu mají lepší anticheat a je tady více možností",
            "aspectTerms":[
              {
-               "term":"komunita",
+               "term":"komunita","category":"community",
                "polarity":"negative",
                "from":0,
                "to":0
              },
              {
-               "term":"CS:GO ",
+               "term":"CS:GO","category":"comparison",
                "polarity":"negative",
                "from":0,
                "to":0
              },
              {
-               "term":"anticheat",
+               "term":"anticheat", "category":"anticheat",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -5041,13 +5416,13 @@
            "text":"Hackerů tu moc není, toxické komunity taky moc ne.",
            "aspectTerms":[
              {
-               "term":"Hackerů",
+               "term":"Hackerů","category":"community",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"toxické komunity",
+               "term":"toxické komunity","category":"community",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -5066,7 +5441,7 @@
            "text":"Dosť má ta to hra baví a som rád že bývaju nejaké tie updati.",
            "aspectTerms":[
              {
-               "term":"updati",
+               "term":"updati","category":"updates",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -5085,13 +5460,13 @@
            "text":"mnoho operátorů a destrukce všeho na mapě (teda skoro)",
            "aspectTerms":[
              {
-               "term":"operátorů",
+               "term":"operátorů","category":"character design",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"destrukce všeho na mapě",
+               "term":"destrukce všeho na mapě","category":"game environment",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -5113,7 +5488,7 @@
            "text":"Je to prostě skvělá hra, kterou vývojáři neustále vylepšují a starají se o ni.",
            "aspectTerms":[
              {
-               "term":"vývojáři",
+               "term":"vývojáři","category":"developers",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -5136,31 +5511,31 @@
            "text":"Máte výběr z několika 5v5 multiplayer módů - Newcomer (pro nováčky), Quick match (pro příležitostné hráče), Unranked a Ranked ",
            "aspectTerms":[
              {
-               "term":"5v5 multiplayer módů",
+               "term":"5v5 multiplayer módů","category":"game mode",
                "polarity":"neutral",
                "from":0,
                "to":0
              },
              {
-               "term":"Newcomer",
+               "term":"Newcomer", "category":"game mode",
                "polarity":"neutral",
                "from":0,
                "to":0
              },
              {
-               "term":"Quick match",
+               "term":"Quick match", "category": "game mode",
                "polarity":"neutral",
                "from":0,
                "to":0
              },
              {
-               "term":"Unranked",
+               "term":"Unranked", "category": "game mode",
                "polarity":"neutral",
                "from":0,
                "to":0
              },
              {
-               "term":"Ranked",
+               "term":"Ranked", "category": "game mode",
                "polarity":"neutral",
                "from":0,
                "to":0
@@ -5179,7 +5554,7 @@
            "text":"je skoda že všechno musí být online.",
            "aspectTerms":[
              {
-               "term":"online",
+               "term":"online", "category":"multiplayer",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -5197,7 +5572,7 @@
            "text":"bodováne zápasy nejsou vůbec doladěné musí se opravit",
            "aspectTerms":[
              {
-               "term":"bodováne zápasy",
+               "term":"bodováne zápasy", "category": "game mode",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -5215,19 +5590,21 @@
            "text":"hra je velice dobrá nabízí několik map kde se cíl mise mění a navíc se mění schopnosti hráču",
            "aspectTerms":[
              {
-               "term":"map",
+               "term":"map", "category":"level design",
+
                "polarity":"neutral",
                "from":0,
                "to":0
              },
              {
-               "term":"cíl mise",
+               "term":"cíl mise", "category":"level design",
+
                "polarity":"neutral",
                "from":0,
                "to":0
              },
              {
-               "term":"schopnosti hráču",
+               "term":"schopnosti hráču", "category":"character design",
                "polarity":"neutral",
                "from":0,
                "to":0
@@ -5255,7 +5632,7 @@
            "text":"každý 1-2 měsice update s mapou a dvěmi operátory",
            "aspectTerms":[
              {
-               "term":"update s mapou a dvěmi operátory",
+               "term":"update s mapou a dvěmi operátory", "category":"updates",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -5273,7 +5650,7 @@
            "text":"často mě to vyhazuje ze zápasu za připojení",
            "aspectTerms":[
              {
-               "term":"připojení",
+               "term":"připojení", "category":"multiplayer",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -5291,7 +5668,14 @@
            "text":"vyborna hra len obcas su tam hackeri ale inak ok",
            "aspectTerms":[
              {
-               "term":"hackeri",
+               "term":"","category":"overall",
+
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"hackeri", "category":"community",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -5313,13 +5697,13 @@
            "text":"Hra je propracovaná, je to takové reálnější CS:GO, každou chvilku vychází update.",
            "aspectTerms":[
              {
-               "term":"reálnější CS:GO",
+               "term":"CS:GO", "category":"comparison",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"update",
+               "term":"update", "category":"updates",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -5341,7 +5725,13 @@
            "text":"Skvělá taktická hra o aimu",
            "aspectTerms":[
              {
-               "term":"aimu",
+               "term":"", "category":"overall",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"aimu","category":"gameplay",
                "polarity":"neutral",
                "from":0,
                "to":0
@@ -5363,8 +5753,8 @@
            "text":"Dobrá hra lepší než Cs:go",
            "aspectTerms":[
              {
-               "term":"Cs:go",
-               "polarity":"negative",
+               "term":"Cs:go","category":"comparison",
+               "polarity":"positive",
                "from":0,
                "to":0
              }
@@ -5380,6 +5770,12 @@
           "reviewId":136,
            "text":"Velmi dobrá strategická hra s velikými možmostmi",
            "aspectTerms":[
+             {
+               "term":"","category":"overall",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
 
            ],
            "aspectCategories":[
@@ -5398,7 +5794,7 @@
            "text":"trochu mě mrzí že agenti se musí kupovat.",
            "aspectTerms":[
              {
-               "term":"agenti",
+               "term":"agenti","category":"character design",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -5416,13 +5812,13 @@
        "text":"Dobrá hra akorát mně celkem štve že tam jsou toxic lidi a cheateři",
        "aspectTerms":[
          {
-           "term":"toxic lidi",
+           "term":"toxic lidi","category":"community",
            "polarity":"negative",
            "from":0,
            "to":0
          },
          {
-           "term":"cheateři",
+           "term":"cheateři","category":"community",
            "polarity":"negative",
            "from":0,
            "to":0
@@ -5441,13 +5837,13 @@
            "text":"Je tam spousta hratelných postav které mají nějaké schopnosti.",
            "aspectTerms":[
              {
-               "term":"hratelných postav",
+               "term":"hratelných postav","category":"character design",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"schopnosti",
+               "term":"schopnosti","category":"character design",
                "polarity":"neutral",
                "from":0,
                "to":0
@@ -5470,7 +5866,7 @@
            "text":"Ale comunita je ta nejhorší kterou jsem zatim videl",
            "aspectTerms":[
              {
-               "term":"comunita",
+               "term":"comunita","category":"community",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -5489,7 +5885,7 @@
            "text":"jsou tam tak toxicti hraci ze to neni mozne",
            "aspectTerms":[
              {
-               "term":"toxicti hraci",
+               "term":"toxicti hraci","category":"community",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -5508,7 +5904,7 @@
            "text":"Kvalitní a časté updaty jsou taky TOP",
            "aspectTerms":[
              {
-               "term":"updaty",
+               "term":"updaty","category":"updates",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -5526,7 +5922,7 @@
            "text":"hra má fakt dobrý grafický zpracování",
            "aspectTerms":[
              {
-               "term":"grafický zpracování",
+               "term":"grafický zpracování","category":"visuals",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -5544,13 +5940,13 @@
            "text":"grafika trochu nic moc ale jinak updaty super",
            "aspectTerms":[
              {
-               "term":"grafika",
+               "term":"grafika","category":"visuals",
                "polarity":"negative",
                "from":0,
                "to":0
              },
              {
-               "term":"updaty",
+               "term":"updaty","category":"updates",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -5573,19 +5969,19 @@
            "text":"ve hře objevuje pár bugů či glitchů a hitboxy nejsou taky zrovna nejlepší ale i přesto dávam hře 9/10",
            "aspectTerms":[
              {
-               "term":"bugů",
+               "term":"bugů","category":"gameplay",
                "polarity":"negative",
                "from":0,
                "to":0
              },
              {
-               "term":"glitchů",
+               "term":"glitchů","category":"gameplay",
                "polarity":"negative",
                "from":0,
                "to":0
              },
              {
-               "term":"hitboxy",
+               "term":"hitboxy","category":"gameplay",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -5607,19 +6003,19 @@
            "text":"Poměrně velký arsenál zbraní, spousty vybavení (drony, barikády, brnění, atd...) a spoustu operátorů, kteří stále přibývají.",
            "aspectTerms":[
              {
-               "term":"arsenál zbraní",
+               "term":"arsenál zbraní","category":"gun play",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"operátorů",
+               "term":"operátorů","category":"character design",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"vybavení",
+               "term":"vybavení","category":"gun play",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -5637,13 +6033,13 @@
            "text":"Dobře udělané herní režimy a kompetetivní mod.",
            "aspectTerms":[
              {
-               "term":"herní režimy",
+               "term":"herní režimy","category": "game mode",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"kompetetivní mod",
+               "term":"kompetetivní mod","category": "game mode",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -5661,7 +6057,7 @@
            "text":"Postavy se pohybujou jako by měli nasráno v gatích",
            "aspectTerms":[
              {
-               "term":"Postavy",
+               "term":"Postavy", "category":"character design",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -5683,13 +6079,13 @@
            "text":"anticheat asi funguje ješte jsem nepotkal hackery",
            "aspectTerms":[
              {
-               "term":"anticheat",
+               "term":"anticheat", "category":"anticheat",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"hackery",
+               "term":"hackery", "category":"community",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -5707,7 +6103,7 @@
            "text":"po 300 hodinách ve hře jsem potkal více toxic hráčů než v kterékoliv hře co jsem kdy hrál",
            "aspectTerms":[
              {
-               "term":"toxic hráčů",
+               "term":"toxic hráčů", "category":"community",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -5729,7 +6125,13 @@
            "text":"Je to podobné jako CS:GO jenom v menším prstoru",
            "aspectTerms":[
              {
-               "term":"CS:GO",
+               "term":"CS:GO","category":"comparison",
+               "polarity":"neutral",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"prstoru","category":"game environment",
                "polarity":"neutral",
                "from":0,
                "to":0
@@ -5746,6 +6148,12 @@
           "reviewId":0,
            "text":"Hra je také na to jak je skvělá poměrně levná 25€ to na tuto hru je velice levné",
            "aspectTerms":[
+             {
+               "term":"","category":"price",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
            ],
            "aspectCategories":[
              {
@@ -5760,7 +6168,7 @@
            "text":"Ubisoft servery HROZNÉ než vás to napojí na servery které jsou přístupné tak to trvá i několik minut",
            "aspectTerms":[
              {
-               "term":"Ubisoft servery",
+               "term":"Ubisoft servery","category":"multiplayer",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -5778,13 +6186,13 @@
            "text":"V každý hře máš aspoň jednoho cheatera, griefra",
            "aspectTerms":[
              {
-               "term":"cheatera",
+               "term":"cheatera","category":"community",
                "polarity":"negative",
                "from":0,
                "to":0
              },
              {
-               "term":"griefra",
+               "term":"griefra","category":"community",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -5806,7 +6214,7 @@
            "text":"Toxic komunita, ale zbytek je nice.",
            "aspectTerms":[
              {
-               "term":"Toxic komunita",
+               "term":"Toxic komunita","category":"community",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -5829,7 +6237,7 @@
            "text":" matchmaking není perfektní, ale když nehrajete ranked, je to celkem snesitelné",
            "aspectTerms":[
              {
-               "term":"matchmaking",
+               "term":"matchmaking","category":"multiplayer",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -5844,9 +6252,32 @@
         },
         {
           "reviewId":157,
-           "text":"",
+           "text":"je to bullshit! vetšne to padá, pořád nějaký bug, a toxic komunita BULLSHIT!",
            "aspectTerms":[
-             
+             {
+               "term":"","category":"overall",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"","category":"performance",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"bug","category":"gameplay",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"toxic komunita","category":"community",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             }
            ],
            "aspectCategories":[
              
@@ -5857,7 +6288,7 @@
            "text":"Hra je velice dobře optimalizovaná, takže FPS tam určitě jsou.",
            "aspectTerms":[
              {
-               "term":"FPS",
+               "term":"","category":"performance",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -5875,7 +6306,7 @@
            "text":"Cheateři tam nejsou, takže se není jak bát.",
            "aspectTerms":[
              {
-               "term":"Cheateři",
+               "term":"Cheateři","category":"community",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -5893,19 +6324,19 @@
            "text":"Něco jako CS:GO jenomže v širším rozhraní a lepší grafikou",
            "aspectTerms":[
              {
-               "term":"grafikou",
+               "term":"grafikou","category":"visuals",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"CS:GO",
+               "term":"CS:GO","category":"comparison",
                "polarity":"neutral",
                "from":0,
                "to":0
              },
              {
-               "term":"rozhraní",
+               "term":"rozhraní","category":"gameplay",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -5932,7 +6363,7 @@
            "text":"tuto hru můžu opravdu doporučit s přáteli vám nabídne hromadu hodin šílené zábavy",
            "aspectTerms":[
              {
-               "term":"hromadu hodin šílené zábavy",
+               "term":"hromadu hodin šílené zábavy","category":"gameplay",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -5950,7 +6381,7 @@
            "text":"Mám nahráno cca 450 hodin a je to úžasná hra s propracovanou mechanikou",
            "aspectTerms":[
              {
-               "term":"mechanikou",
+               "term":"mechanikou","category":"controls",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -5968,7 +6399,7 @@
            "text":"dobrá hra a je i na starší počítače doporučuji",
            "aspectTerms":[
              {
-               "term":"starší počítače",
+               "term":"starší počítače","category":"performance",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -5991,7 +6422,7 @@
            "text":"Hra sama o sobě dobrá ale SERVERY JSOU PROBLÉÉM (a to velký)",
            "aspectTerms":[
              {
-               "term":"SERVERY",
+               "term":"SERVERY","category":"multiplayer",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -6013,13 +6444,13 @@
            "text":"Hra je plná bugov, glitchov",
            "aspectTerms":[
              {
-               "term":"bugov",
+               "term":"bugov","category":"gameplay",
                "polarity":"negative",
                "from":0,
                "to":0
              },
              {
-               "term":"glitchov",
+               "term":"glitchov","category":"gameplay",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -6037,13 +6468,13 @@
            "text":"tato hra má pěknou grafiku, velké množství agentů, skinů, přívěsků, a tak dále",
            "aspectTerms":[
              {
-               "term":"grafiku",
+               "term":"grafiku","category":"visuals",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"množství agentů, skinů, přívěsků",
+               "term":"množství agentů, skinů, přívěsků","category":"content",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -6065,7 +6496,7 @@
            "text":"stve me jak moc stoji ti operatori",
            "aspectTerms":[
              {
-               "term":"operatori",
+               "term":"operatori","category":"character design",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -6083,13 +6514,13 @@
            "text":"Líbí se mi gameplay, a celkově dobrá komunita, hrající tuto hru.",
            "aspectTerms":[
              {
-               "term":"gameplay",
+               "term":"gameplay","category":"gameplay",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"komunita",
+               "term":"komunita","category":"community",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -6111,7 +6542,7 @@
            "text":"za mně je chování a úprava zbraní top",
            "aspectTerms":[
              {
-               "term":"chování a úprava zbraní",
+               "term":"chování a úprava zbraní","category":"gun play",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -6130,13 +6561,13 @@
            "text":"velmi povedená hra, se skvělou grafikou a herními mechanikami",
            "aspectTerms":[
              {
-               "term":"grafikou",
+               "term":"grafikou","category":"visuals",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"herními mechanikami",
+               "term":"herními mechanikami","category":"controls",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -6158,7 +6589,7 @@
            "text":"velký počet postav za které můžete hrát",
            "aspectTerms":[
              {
-               "term":"počet postav",
+               "term":"počet postav","category":"content",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -6176,13 +6607,13 @@
            "text":"každá postava má svou unikátní schopnost a vybavení",
            "aspectTerms":[
              {
-               "term":"postava",
+               "term":"postava","category":"character design",
                "polarity":"neutral",
                "from":0,
                "to":0
              },
              {
-               "term":"unikátní schopnost a vybavení",
+               "term":"unikátní schopnost a vybavení","category":"character design",
                "polarity":"neutral",
                "from":0,
                "to":0
@@ -6202,7 +6633,8 @@
            "text":"velmi propracované mapy do detailu",
            "aspectTerms":[
              {
-               "term":"mapy",
+               "term":"mapy","category":"level design",
+
                "polarity":"positive",
                "from":0,
                "to":0
@@ -6220,19 +6652,20 @@
            "text":"pravidelné updaty s novou operací která přidá (většinou) novou mapu a 2 nové operátory",
            "aspectTerms":[
              {
-               "term":"pravidelné updaty",
+               "term":"pravidelné updaty", "category":"updates",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"mapu",
+               "term":"mapu","category":"level design",
+
                "polarity":"neutral",
                "from":0,
                "to":0
              },
              {
-               "term":"operátory",
+               "term":"operátory","category":"character design",
                "polarity":"neutral",
                "from":0,
                "to":0
@@ -6250,14 +6683,14 @@
            "text":"dobrá optimalizace takže to rozjedete nějak srozumitelně i na salámovém počítači",
            "aspectTerms":[
              {
-               "term":"optimalizace",
+               "term":"optimalizace","category":"performance",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"salámovém počítači",
-               "polarity":"negative",
+               "term":"salámovém počítači","category":"performance",
+               "polarity":"positive",
                "from":0,
                "to":0
              }
@@ -6275,26 +6708,26 @@
            "text":"Hodně operátorů, hodně hráčů, hodně map a dobrá grafika.",
            "aspectTerms":[
              {
-               "term":"operátorů",
+               "term":"operátorů", "category":"character design",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"hráčů",
+               "term":"hráčů", "category":"community",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"map",
+               "term":"map", "category":"level design",
+
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"grafika",
-               "polarity":"positive",
+               "term":"grafika", "category":"visuals",
                "from":0,
                "to":0
              }
@@ -6318,7 +6751,12 @@
           "reviewId":0,
            "text":"za 15e to je snad povinnost mít v knihovně.",
            "aspectTerms":[
-             
+             {
+               "term":"", "category":"price",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
            ],
            "aspectCategories":[
              {
@@ -6332,7 +6770,7 @@
            "text":"Grafika té hry je docela na nic",
            "aspectTerms":[
              {
-               "term":"Grafika",
+               "term":"Grafika", "category":"visuals",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -6350,7 +6788,7 @@
            "text":"Mnoho agentů, které si hraním odemykáte za herní měnu.",
            "aspectTerms":[
              {
-               "term":"agentů",
+               "term":"agentů", "category":"character design",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -6368,13 +6806,13 @@
            "text":"Skvělá herní mechanika, která umožňuje mnoho stylů pohybu",
            "aspectTerms":[
              {
-               "term":"herní mechanika",
+               "term":"herní mechanika", "category":"controls",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"stylů pohybu",
+               "term":"stylů pohybu", "category":"controls",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -6389,9 +6827,14 @@
         },
         {
           "reviewId":0,
-           "text":"",
+           "text":"Vývojáři na ní i po 3 letech stále pracují což je u Ubisoftu překvapující.",
            "aspectTerms":[
-             
+             {
+               "term":"Vývojáři","category":"developers",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
            ],
            "aspectCategories":[
              
@@ -6402,7 +6845,7 @@
            "text":"Agenti jsou pro nováčky hodně drazí.",
            "aspectTerms":[
              {
-               "term":"Agenti",
+               "term":"Agenti","category":"character design",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -6420,8 +6863,8 @@
            "text":"Potřebujete vysoko kvalitní počítač abyste tuto hru vubec rozjeli",
            "aspectTerms":[
              {
-               "term":"vysoko kvalitní počítač",
-               "polarity":"neutral",
+               "term":"vysoko kvalitní počítač","category":"performance",
+               "polarity":"negative",
                "from":0,
                "to":0
              }
@@ -6439,8 +6882,8 @@
            "text":"Potřebujete vysoko kvalitní notebook abyste tuto hru vubec rozjeli",
            "aspectTerms":[
              {
-               "term":"vysoko kvalitní notebook",
-               "polarity":"neutral",
+               "term":"vysoko kvalitní notebook", "category":"performance",
+               "polarity":"negative",
                "from":0,
                "to":0
              }
@@ -6456,6 +6899,12 @@
           "reviewId":0,
            "text":"Kvalitní a dobře propracovaná hra.",
            "aspectTerms":[
+             {
+               "term":"","category":"overall",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
            ],
            "aspectCategories":[
              {
@@ -6469,7 +6918,7 @@
            "text":"Nejlepší hra pro týmovou spolupráci.",
            "aspectTerms":[
              {
-               "term":"týmovou spolupráci",
+               "term":"týmovou spolupráci", "category": "game mode",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -6487,7 +6936,7 @@
            "text":"Jde vidět že se o to vývojáři starají",
            "aspectTerms":[
              {
-               "term":"vývojáři",
+               "term":"vývojáři", "category":"developers",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -6496,7 +6945,7 @@
            "aspectCategories":[
              {
                "category":"developers",
-               "polarity":"p"
+               "polarity":"positive"
              }
            ]
         },
@@ -6505,7 +6954,7 @@
            "text":"Výborná hra a updaty jsou jen a jen lepší.",
            "aspectTerms":[
              {
-               "term":"updaty",
+               "term":"updaty","category":"updates",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -6527,13 +6976,13 @@
            "text":"Velmi zábavná hra s dobrou grafikou i ovládáním za mě doporučuji.",
            "aspectTerms":[
              {
-               "term":"grafikou",
+               "term":"grafikou","category":"visuals",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"ovládáním",
+               "term":"ovládáním","category":"controls",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -6546,11 +6995,11 @@
              },
              {
                "category":"visuals",
-               "polarity":"p"
+               "polarity":"positive"
              },
              {
                "category":"controls",
-               "polarity":"p"
+               "polarity":"positive"
              }
            ]
         },
@@ -6558,13 +7007,14 @@
           "reviewId":0,
            "text":"Hra má dost nedostatků jedna z ních je třeba nesmrtelnej nepřítel a i když do něj dáte jeden celej zásobník tak nepadne vubec nepadne na kolena.",
            "aspectTerms":[
-             
+             {
+               "term":"","category":"gameplay",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
            ],
            "aspectCategories":[
-             {
-               "category":"overall",
-               "polarity":"negative"
-             },
              {
                "category":"gameplay",
                "polarity":"negative"
@@ -6576,8 +7026,14 @@
            "text":"co se týče komunity tak to je horší protože se tu najde hodně toxic hráčů což je většina",
            "aspectTerms":[
              {
-               "term":"komunity",
-               "polarity":"n",
+               "term":"toxic hráčů","category":"community",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"komunity","category":"community",
+               "polarity":"negative",
                "from":0,
                "to":0
              }
@@ -6594,13 +7050,13 @@
            "text":"servery fungují dobře údržba serverů se většinou píše na před",
            "aspectTerms":[
              {
-               "term":"servery",
+               "term":"servery","category":"multiplayer",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"údržba serverů",
+               "term":"údržba serverů","category":"multiplayer",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -6609,7 +7065,7 @@
            "aspectCategories":[
              {
                "category":"servers",
-               "polarity":"p"
+               "polarity":"positive"
              }
            ]
         },
@@ -6618,13 +7074,13 @@
            "text":"Poslední dobou mi připadá že se o technickou stránku hry začali starat jenom mi připadá že by to chtělo udělat něco z tou optimalizací.",
            "aspectTerms":[
              {
-               "term":"technickou stránku hry",
+               "term":"technickou stránku hry","category":"performance",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"optimalizací",
+               "term":"optimalizací","category":"performance",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -6642,7 +7098,7 @@
            "text":"Jeto super skvěle propracovaná hra někdy se někde najdou bugy ale ty vás nějak neomezují ani nezvýhodňuji takže zamě super hra",
            "aspectTerms":[
              {
-               "term":"bugy",
+               "term":"bugy","category":"gameplay",
                "polarity":"neutral",
                "from":0,
                "to":0
@@ -6664,7 +7120,7 @@
            "text":"Nemám jí co vytknout za ty peníze to je hra dobrá za mě rozhodně doporučuji",
            "aspectTerms":[
              {
-               "term":"peníze",
+               "term":"peníze","category":"price",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -6681,12 +7137,18 @@
           "reviewId":0,
            "text":"Hru můžete hrát jak osamotě tak s přáteli samozřejmě s přáteli je zábavnější ale když jí hrajete sami tak se taky zabavíte.",
            "aspectTerms":[
+             {
+               "term":"","category": "game mode",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
              
            ],
            "aspectCategories":[
              {
                "category":"game mode",
-               "polarity":"p"
+               "polarity":"positive"
              }
            ]
         },
@@ -6695,13 +7157,19 @@
            "text":"V podstatě to je dobrá hra tak trochu hardcore, sice mikrotransakce v placené hře zamrzí ale propracování destrukce zdí je perfektní",
            "aspectTerms":[
              {
-               "term":"mikrotransakce",
+               "term":"","category":"overall",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"mikrotransakce", "category":"content",
                "polarity":"negative",
                "from":0,
                "to":0
              },
              {
-               "term":"destrukce zdí",
+               "term":"destrukce zdí", "category":"game environment",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -6714,17 +7182,22 @@
                "polarity":"positive"
              },
              {
-               "category":"microtransactions",
+               "category":"content",
                "polarity":"negative"
              }
-             
+
            ]
         },
         {
           "reviewId":0,
            "text":"Velmi doporučuji až na pár věci tak je to bombová hra.",
            "aspectTerms":[
-             
+             {
+               "term":"","category":"overall",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
            ],
            "aspectCategories":[
              {
@@ -6737,7 +7210,12 @@
           "reviewId":0,
            "text":"moc pěkně propracovaná hra",
            "aspectTerms":[
-             
+             {
+               "term":"","category":"overall",
+               "polarity":"positive",
+               "from":0,
+               "to":0
+             }
            ],
            "aspectCategories":[
              {
@@ -6751,13 +7229,13 @@
            "text":"Tato hra v standart edici je k ceně a výkonu velmi dobrá ale po 200h trochu omrzí, ale díky častým velkým updatum ubisoftu hra stale zaujímá.",
            "aspectTerms":[
              {
-               "term":"ceně",
+               "term":"ceně","category":"price",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"updatum ubisoftu",
+               "term":"updatum ubisoftu","category":"updates",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -6783,13 +7261,13 @@
            "text":"Jelikož je hra od ubisoftu často budete svědky nejrůznějších bugů.",
            "aspectTerms":[
              {
-               "term":"bugů",
+               "term":"bugů","category":"gameplay",
                "polarity":"negative",
                "from":0,
                "to":0
              },
              {
-               "term":"ubisoftu",
+               "term":"ubisoftu","category":"developers",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -6811,26 +7289,26 @@
            "text":"Pokud někdo hledá hru, která není jen o zběsilém běhání, ale je o taktice, mluvení a znalosti map a agentů, tak tohle je hra pro něj.",
            "aspectTerms":[
              {
-               "term":"zběsilém běhání",
-               "polarity":"negative",
+               "term":"běhání","category":"gameplay",
+               "polarity":"neutral",
                "from":0,
                "to":0
              },
              {
-               "term":"taktice",
+               "term":"taktice","category":"gameplay",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"mluvení",
-               "polarity":"p",
+               "term":"mluvení","category":"gameplay",
+               "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"znalosti map a agentů",
-               "polarity":"p",
+               "term":"znalosti map a agentů","category":"gameplay",
+               "polarity":"positive",
                "from":0,
                "to":0
              }
@@ -6847,13 +7325,13 @@
            "text":"8/10 a to kvůli špatnému matchmakingu, kolikrát i dlouhému vyhledávání hry, a hlavně kvůli věčném problémům Ubi s tím, aby se na sebe mohli hráči připojit",
            "aspectTerms":[
              {
-               "term":"matchmakingu",
+               "term":"matchmakingu","category":"multiplayer",
                "polarity":"negative",
                "from":0,
                "to":0
              },
              {
-               "term":"vyhledávání hry",
+               "term":"vyhledávání hry","category":"multiplayer",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -6871,25 +7349,19 @@
            "text":"Super hra, vyladěný engine hra jede na low pc 150 FPS super hra nenaročná a zábavná",
            "aspectTerms":[
              {
-               "term":"hra",
+               "term":"hra", "category":"overall",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"engine",
+               "term":"engine", "category":"performance",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"pc",
-               "polarity":"negative",
-               "from":0,
-               "to":0
-             },
-             {
-               "term":"FPS",
+               "term":"low pc", "category":"performance",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -6908,8 +7380,32 @@
         },
         {
           "reviewId":0,
-           "text":"",
-           "aspectTerms":[
+           "text":"supr grafika, realistyka, fyzika a mnoho dalšieho doporučujem 9/10 1 zla komunita hráčov",
+          "aspectTerms":[
+            {
+              "term":"grafika","category":"visuals",
+              "polarity":"positive",
+              "from":0,
+              "to":0
+            },
+            {
+              "term":"realistyka","category":"gameplay",
+              "polarity":"positive",
+              "from":0,
+              "to":0
+            },
+            {
+              "term":"fyzika", "category":"game environment",
+              "polarity":"positive",
+              "from":0,
+              "to":0
+            },
+            {
+              "term":"komunita hráčov","category":"community",
+              "polarity":"negative",
+              "from":0,
+              "to":0
+            }
              
            ],
            "aspectCategories":[
@@ -6921,19 +7417,19 @@
            "text":"dobrá hra spoustu agentů každý má jiné specialní věci doporučuji",
            "aspectTerms":[
              {
-               "term":"hra",
+               "term":"hra", "category":"overall",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"agentů",
+               "term":"agentů", "category":"character design",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"specialní věci",
+               "term":"specialní věci", "category":"character design",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -6942,7 +7438,7 @@
            "aspectCategories":[
              {
                "category":"overall",
-               "polarity":"p"
+               "polarity":"positive"
              },
              {
                "term":"content",
@@ -6961,7 +7457,7 @@
            "text":"je to sranda hrát ve full tým ale občas naštve",
            "aspectTerms":[
              {
-               "term":"full tým",
+               "term":"full tým", "category":"gameplay",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -6979,19 +7475,19 @@
            "text":"Team developerov je tak isto šlahnutí ako developeri fortnajtu lebo jediné čo pridavaju do hry su \"Skiny\" a neopravuju bugi",
            "aspectTerms":[
              {
-               "term":"Team developerov",
+               "term":"Team developerov","category":"developers",
                "polarity":"negative",
                "from":0,
                "to":0
              },
              {
-               "term":"bugi",
+               "term":"bugi","category":"gameplay",
                "polarity":"negative",
                "from":0,
                "to":0
              },
              {
-               "term":"developeri fortnajtu",
+               "term":"developeri fortnajtu","category":"developers",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -7017,13 +7513,13 @@
            "text":"Tato hra je velmi kvalitní, ale je tam hodně smurfu a neumí to vyhledat hru aby byli leveli vyrovnané.",
            "aspectTerms":[
              {
-               "term":"hra",
+               "term":"hra","category":"overall",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"smurfu",
+               "term":"smurfu","category":"community",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -7050,7 +7546,7 @@
            "text":"super realne akce proste vsechno doporucuji s radosti a usmevem",
            "aspectTerms":[
              {
-               "term":"realne akce",
+               "term":"","category":"overall",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -7072,26 +7568,26 @@
            "text":"Velmi dobrá hra z hladiska zpracovanosti gameplaya a taktiež fyziky a grafiky.",
            "aspectTerms":[
              {
-               "term":"hra",
+               "term":"hra","category":"overall",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"gameplaya",
-               "polarity":"p",
+               "term":"gameplaya","category":"gameplay",
+               "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"fyziky",
-               "polarity":"p",
+               "term":"fyziky","category":"game environment",
+               "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"grafiky",
-               "polarity":"p",
+               "term":"grafiky","category":"visuals",
+               "polarity":"positive",
                "from":0,
                "to":0
              }
@@ -7104,11 +7600,11 @@
              },
              {
                "category":"gameplay",
-               "polarity":"p"
+               "polarity":"positive"
              },
              {
                "category":"visuals",
-               "polarity":"p"
+               "polarity":"positive"
              }
              
            ]
@@ -7118,19 +7614,19 @@
            "text":"Operátori sú jedineční ale ak si kúpite iba základnú verziu tak musíte try hardiť s rekrútom a to nieje veľmi dobré a preto doporučujem kúpiť deluxe a vyššiu edíciu.",
            "aspectTerms":[
              {
-               "term":"Operátori",
+               "term":"Operátori","category":"character design",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"základnú verziu",
+               "term":"základnú verziu", "category": "content",
                "polarity":"negative",
                "from":0,
                "to":0
              },
              {
-               "term":"deluxe a vyššiu edíciu",
+               "term":"deluxe a vyššiu edíciu","category":"content",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -7148,19 +7644,20 @@
            "text":"BEST HRA odporucam mega sranda mega dobre mapy atd len postihnuty teammati",
            "aspectTerms":[
              {
-               "term":"HRA",
-               "polarity":"p",
+               "term":"HRA","category":"overall",
+               "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"mapy",
-               "polarity":"p",
+               "term":"mapy","category":"level design",
+
+               "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"teammati",
+               "term":"teammati","category":"community",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -7192,13 +7689,13 @@
                "to":0
              },
              {
-               "term":"hra",
+               "term":"hra","category":"overall",
                "polarity":"negative",
                "from":0,
                "to":0
              },
              {
-               "term":"vývojáři",
+               "term":"vývojáři","category":"developers",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -7224,14 +7721,14 @@
            "text":"grafika top ovladatelnost pekna a vse v pohode",
            "aspectTerms":[
              {
-               "term":"grafika",
-               "polarity":"p",
+               "term":"grafika","category":"visuals",
+               "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"ovladatelnost",
-               "polarity":"p",
+               "term":"ovladatelnost","category":"controls",
+               "polarity":"positive",
                "from":0,
                "to":0
              }
@@ -7258,13 +7755,13 @@
            "text":"vetšne to padá, pořád nějaký bug, a toxic komunita BULLSHIT!",
            "aspectTerms":[
              {
-               "term":"bug",
+               "term":"bug","category":"gameplay",
                "polarity":"negative",
                "from":0,
                "to":0
              },
              {
-               "term":"komunita",
+               "term":"komunita","category":"community",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -7290,7 +7787,7 @@
            "text":"super akční záživná hra",
            "aspectTerms":[
              {
-               "term":"hra",
+               "term":"hra", "category":"overall",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -7308,13 +7805,13 @@
            "text":"Rainbow6siege bude vždy best i přes to že je podporována ubisoftem.",
            "aspectTerms":[
              {
-               "term":"Rainbow6siege",
+               "term":"Rainbow6siege","category":"overall",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"ubisoftem",
+               "term":"ubisoftem","category":"developers",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -7337,25 +7834,25 @@
            "text":"Když to vyšlo měla tato hra potenciál, ale díky ubshitu hra je pořád ve \"sračkách\", problémy s připojením, špatný hitbox, atd... a nesnaží se to opravit.",
            "aspectTerms":[
              {
-               "term":"hra",
-               "polarity":"neutral",
-               "from":0,
-               "to":0
-             },
-             {
-               "term":"ubshitu",
+               "term":"hra","category":"overall",
                "polarity":"negative",
                "from":0,
                "to":0
              },
              {
-               "term":"hitbox",
+               "term":"ubshitu", "category":"developers",
                "polarity":"negative",
                "from":0,
                "to":0
              },
              {
-               "term":"problémy s připojením",
+               "term":"hitbox","category":"gameplay",
+               "polarity":"negative",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"problémy s připojením", "category":"multiplayer",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -7381,13 +7878,13 @@
            "text":"Hra je skvěle hratelná, jen ubisoft servery občas nefungují.",
            "aspectTerms":[
              {
-               "term":"Hra",
+               "term":"Hra", "category":"overall",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"ubisoft servery",
+               "term":"ubisoft servery", "category":"multiplayer",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -7409,29 +7906,19 @@
            "text":"Hra má celkem dobrou komunitu, lepší než CS:GO.",
            "aspectTerms":[
              {
-               "term":"Hra",
+               "term":"komunitu", "category":"community",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"komunitu",
-               "polarity":"positive",
-               "from":0,
-               "to":0
-             },
-             {
-               "term":"CS:GO",
+               "term":"CS:GO", "category":"comparison",
                "polarity":"neutral",
                "from":0,
                "to":0
              }
            ],
            "aspectCategories":[
-             {
-               "category":"overall",
-               "polarity":"positive"
-             },
              {
                "category":"community",
                "polarity":"positive"
@@ -7447,13 +7934,13 @@
            "text":"Takže hru doporučuji koupit i když se u toho budete občas nervová když jsou rozbité hitboxy.",
            "aspectTerms":[
              {
-               "term":"hru",
+               "term":"hru","category":"overall",
                "polarity":"positive",
                "from":0,
                "to":0
              },
              {
-               "term":"hitboxy",
+               "term":"hitboxy", "category":"gameplay",
                "polarity":"negative",
                "from":0,
                "to":0
