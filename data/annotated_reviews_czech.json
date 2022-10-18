@@ -63,7 +63,7 @@
           "text": "hra je zábavná i když je docela starší tak je to pro mě pořád srdcovka",
           "aspectTerms": [
             {
-              "term": "hra",
+              "term": "",
               "polarity": "positive",
               "category": "overall",
               "from": 0,
@@ -118,11 +118,18 @@
               "to": 85
             },
             {
-              "term": "Žádná krev a násilí",
+              "term": "krev",
               "polarity": "positive",
               "category": "violence",
               "from": 87,
               "to": 106
+            },
+            {
+              "term":"násilí",
+              "polarity":"positive",
+              "category":"violence",
+              "from":0,
+              "to":0
             }
           ],
           "aspectCategories": [
@@ -597,7 +604,7 @@
         },
         {
           "reviewId": 22,
-          "text": " Snad každý puzzle kromě pár volitelných rozlousknete okamžitě, aniž byste museli použít mozek.",
+          "text": "Snad každý puzzle kromě pár volitelných rozlousknete okamžitě, aniž byste museli použít mozek.",
           "aspectTerms": [
             {
               "term": "puzzle","category":"level design",
@@ -1321,7 +1328,7 @@
               "to": 59
             },
             {
-              "term":"hra",
+              "term":"",
               "category":"overall",
               "polarity":"negative",
               "from":0,
@@ -2568,7 +2575,7 @@
           "text": "skvělá hra! doporučuji všem milovníkům stříleček zahrát!",
           "aspectTerms": [
             {
-              "term":"hra",
+              "term":"",
               "category":"overall",
               "polarity":"positive",
               "from":0,
@@ -2637,7 +2644,7 @@
           "text": "Parádně spracovaná hra kvalita,efekty,zvuky.",
           "aspectTerms": [
             {
-              "term":"hra",
+              "term":"",
               "polarity":"positive",
               "category":"overall",
               "from":0,
@@ -3336,7 +3343,7 @@
         },
         {
           "reviewId":0,
-           "text":"Nádhernou grafiku, ale pro někoho repetetivní  gamplay.",
+           "text":"Nádhernou grafiku, ale pro někoho repetetivní gamplay.",
            "aspectTerms":[
              {
                "term":"gamplay","category":"gameplay",
@@ -3705,7 +3712,7 @@
         },
         {
           "reviewId":0,
-           "text":" Libi se mi proměnlivostí prostředí a důrazem na rozdílné funkce postav.",
+           "text":"Libi se mi proměnlivostí prostředí a důrazem na rozdílné funkce postav.",
            "aspectTerms":[
              {
                "term":"proměnlivostí prostředí",
@@ -4440,7 +4447,7 @@
         },
         {
           "reviewId":0,
-           "text":" mapy nejsou vůbec zajímáve (ty nové)",
+           "text":"mapy nejsou vůbec zajímáve (ty nové)",
            "aspectTerms":[
              {
                "term":"mapy","category":"level design",
@@ -6234,7 +6241,7 @@
         },
         {
           "reviewId":0,
-           "text":" matchmaking není perfektní, ale když nehrajete ranked, je to celkem snesitelné",
+           "text":"matchmaking není perfektní, ale když nehrajete ranked, je to celkem snesitelné",
            "aspectTerms":[
              {
                "term":"matchmaking","category":"multiplayer",
@@ -7349,7 +7356,7 @@
            "text":"Super hra, vyladěný engine hra jede na low pc 150 FPS super hra nenaročná a zábavná",
            "aspectTerms":[
              {
-               "term":"hra", "category":"overall",
+               "term":"", "category":"overall",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -7417,7 +7424,7 @@
            "text":"dobrá hra spoustu agentů každý má jiné specialní věci doporučuji",
            "aspectTerms":[
              {
-               "term":"hra", "category":"overall",
+               "term":"", "category":"overall",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -7513,7 +7520,7 @@
            "text":"Tato hra je velmi kvalitní, ale je tam hodně smurfu a neumí to vyhledat hru aby byli leveli vyrovnané.",
            "aspectTerms":[
              {
-               "term":"hra","category":"overall",
+               "term":"","category":"overall",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -7568,7 +7575,7 @@
            "text":"Velmi dobrá hra z hladiska zpracovanosti gameplaya a taktiež fyziky a grafiky.",
            "aspectTerms":[
              {
-               "term":"hra","category":"overall",
+               "term":"","category":"overall",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -7644,7 +7651,7 @@
            "text":"BEST HRA odporucam mega sranda mega dobre mapy atd len postihnuty teammati",
            "aspectTerms":[
              {
-               "term":"HRA","category":"overall",
+               "term":"","category":"overall",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -7689,7 +7696,7 @@
                "to":0
              },
              {
-               "term":"hra","category":"overall",
+               "term":"","category":"overall",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -7787,7 +7794,7 @@
            "text":"super akční záživná hra",
            "aspectTerms":[
              {
-               "term":"hra", "category":"overall",
+               "term":"", "category":"overall",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -7834,7 +7841,7 @@
            "text":"Když to vyšlo měla tato hra potenciál, ale díky ubshitu hra je pořád ve \"sračkách\", problémy s připojením, špatný hitbox, atd... a nesnaží se to opravit.",
            "aspectTerms":[
              {
-               "term":"hra","category":"overall",
+               "term":"","category":"overall",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -7878,7 +7885,7 @@
            "text":"Hra je skvěle hratelná, jen ubisoft servery občas nefungují.",
            "aspectTerms":[
              {
-               "term":"Hra", "category":"overall",
+               "term":"", "category":"overall",
                "polarity":"positive",
                "from":0,
                "to":0

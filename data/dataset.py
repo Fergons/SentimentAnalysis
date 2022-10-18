@@ -1,14 +1,15 @@
 import json
 import re
-from transformers import AutoTokenizer
 from nltk import tokenize
 import pandas as pd
+import sys
+import argparse
 
 
 # sentences = tokenize.sent_tokenize("I po takové době od vydání hra vypadá dobře, hraje se ještě líp a to hlavní, dostává stále nový obsah. Tuto hru mohu velice doporučit pro hráče, kteří hledají taktičtější Counter-Strike.", language="czech")
 
 
-# tokenizer = AutoTokenizer.from_pretrained("ufal/robeczech-base")
+
 
 
 def fill_in_missing_data(data):
@@ -40,10 +41,6 @@ def fill_in_missing_data(data):
                         else:
                             term["from"] = span[0]
                             term["to"] = span[1]
-
-    with open("annotated_reviews_czech_filled.json", "w", encoding="utf_8") as fopen:
-        json.dump(data, fopen, ensure_ascii=False)
-
     return data
 
 
@@ -56,15 +53,9 @@ def clean_text(texts):
     pass
 
 
-def data_to_dataset(texts, include_dummy_tags=False):
-    # tokenizer = tokenize.TweetTokenizer()
-    return [tokenize.word_tokenize(text) for text in texts]
-    # return [tokenizer.tokenize(text) for text in texts]
-
-
-def data_to_df(data):
+def dataset_to_df(dataset):
     """
-    Transforms annotated data from json format to dataframe.
+    Transforms annotated dataset from json format to dataframe.
     ...
     "dataset": [
     {
@@ -94,10 +85,10 @@ def data_to_df(data):
      ...
     }
     ...
-    :param data: dict data in json format
+    :param dataset: dict data in json format
     :return: pandas.DataFrame dataframe representing data
     """
-    data_new = {idx: dict_of_reviews["reviews"] for idx, dict_of_reviews in enumerate(data["dataset"])}
+    data_new = {idx: dict_of_reviews["reviews"] for idx, dict_of_reviews in enumerate(dataset["dataset"])}
     data_restructured = {(i, review["reviewId"], term_id): term
          for i in data_new.keys()  # for each list of reviews
          for review in data_new[i]  # for each review in the list of reviews
@@ -109,27 +100,122 @@ def data_to_df(data):
     return df
 
 
+def dataset_to_conll(dataset):
+    """
+            columns
+    token(word)     aspect_label(ast)
+    ---------------------------------
+    Neuvěřitelně    O(char)
+    chytlavá        0
+    hratelnost      B-A
+            ...
+            ...
+    herní           B-A
+    mechanika       I-A
+
+    :param dataset: dataset in json format see dataset_to_df
+    :return: converts dataset to conll format dataset
+    """
+    reviews = get_all_reviews_from_dataset(dataset)
+    label_tags = {0: "O", 1: "B-A", 2: "I-A"}
+
+    conll_dataset = []
+    for review in reviews:
+        text = review["text"]
+        if review["text"] != "":
+            words = tokenize.word_tokenize(review["text"], language="czech")
+            terms = review["aspectTerms"]
+            labels = ["O"]*len(words)
+            for term in terms:
+                term_words = term["term"].split(" ")
+                num_term_words = len(term_words)
+                term_head = term_words[0]
+
+                for word_pos, word in enumerate(words):
+                    if word == term_head:
+                        labels[word_pos] = "B-A"
+                        for i in range(num_term_words-1):
+                            labels[word_pos+i+1] = "I-A"
+
+            conll_dataset.append((words, labels))
+
+    return conll_dataset
+
+
+def load_json_data(file):
+    try:
+        with open(file, "r", encoding="utf-8") as fopen:
+            data = json.load(fopen)
+    except (FileNotFoundError, ValueError) as err:
+        print(f"Failed to load data.")
+        raise
+    else:
+        return data
+
+
+def save_json_data(file, data):
+    try:
+        with open(file, "w", encoding="utf-8") as fopen:
+            json.dump(fopen, data)
+    except (FileNotFoundError, ValueError) as err:
+        print(f"Failed to save data.")
+        raise
+    else:
+        print(f"Data saved to {file}")
+
+
+def save_conll_data(file, dataset):
+    try:
+        with open(file, "w", encoding="utf-8") as fopen:
+            for words, labels in dataset:
+                for word, label in zip(words,labels):
+                    fopen.writelines(f"{word} {label}\n")
+                fopen.write("\n")
+    except (FileNotFoundError, ValueError) as err:
+        print(f"Failed to save data.")
+        raise
+    else:
+        print(f"Data saved to {file}")
+
+
+def get_all_reviews_from_dataset(dataset):
+    return [review for dict_of_reviews in dataset["dataset"] for review in dict_of_reviews["reviews"]]
 
 
 def main():
-    try:
-        with open("annotated_reviews_czech.json", "r", encoding="utf-8") as fopen:
-            data = json.load(fopen)
-    except (FileNotFoundError, ValueError) as err:
-        print(f"Failed to load data. Error:{err}")
-    else:
-        # reviews = [review["text"] for review in data["dataset"][1]["reviews"]]
-        # tokenized_reviews = data_to_dataset(reviews)
-        # print(" ============ \n")
-        # print(f" Num of reviews: {len(tokenized_reviews)} \n")
-        # print(f" Samples:\n")
-        # for r in tokenized_reviews[5:10]:
-        #     print(r)
-        # print(" ============ \n")
-        # fill_in_missing_data(data)
-        df = data_to_df(data)
-        pd.set_option('display.max_columns', 10)
-        print(df.groupby("polarity").describe(include="object"))
+    parser = argparse.ArgumentParser('dataset.py')
+    parser.add_argument('--config', help='configuration YAML file.')
+    parser.add_argument('--input', default='', help='set dataset input file')
+    parser.add_argument('--output', default='', help='set dataset output file')
+    parser.add_argument('--to_conll', action="store_true", help='set dataset output file')
+    parser.add_argument('--fill_missing', action="store_true", help='set dataset output file')
+    parser.add_argument('--stats', action="store_true", help="get stats for polarity"),
+
+    args = parser.parse_args()
+
+    if args.to_conll:
+        if args.input == "":
+            args.input = "annotated_reviews_czech_filled.json"
+        else:
+            if args.input.split(".")[1] != "json":
+                raise ValueError("File doesn't seem to be a json file.")
+        dataset = load_json_data(args.input)
+        conll = dataset_to_conll(dataset)
+        if args.output == "":
+            args.output = args.input.split(".")[0].join(".conll")
+        save_conll_data(args.output, conll)
+    if args.fill_missing:
+        if args.input == "":
+            args.input = "annotated_reviews_czech.json"
+        else:
+            if args.input.split(".")[1] != "json":
+                raise ValueError("File doesn't seem to be a json file.")
+
+        if args.output == "":
+            args.output = args.input.split(".")[0].join(["filled", ".json"])
+
+        dataset = fill_in_missing_data(load_json_data(args.input))
+        save_json_data(args.output, dataset)
 
 
 if __name__ == "__main__":
