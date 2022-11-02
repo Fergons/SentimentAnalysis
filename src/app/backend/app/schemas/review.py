@@ -11,8 +11,7 @@ class ReviewBase(BaseModel):
 
 
 class ReviewCreate(ReviewBase):
-    game_id: str
-    user_id: int
+    review: str
 
 
 # Properties to receive via API on update

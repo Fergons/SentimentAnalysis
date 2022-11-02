@@ -5,8 +5,7 @@ from pydantic import BaseModel, EmailStr
 
 
 class UserBase(BaseModel):
-    id: str
-
+    id: int
 
 class UserCreate(UserBase):
     id: str

@@ -22,6 +22,11 @@ class Review(Base):
 
     apect_sum_polarity = Column(String)
 
+    # user stats
+    playtime_forever = Column(Integer)
+    playtime_last_two_weeks = Column(Integer)
+    playtime_at_review = Column(Integer)
+
     # one(game) to many(reviews)
     game = relationship("Game", back_populates="game")
     # one(user) to many(reviews)
