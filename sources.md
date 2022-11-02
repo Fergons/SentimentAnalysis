@@ -20,3 +20,6 @@ https://stackoverflow.com/questions/63979544/using-trained-bert-model-and-data-p
 Does syntax matter? A strong baseline for 
 Aspect-based Sentiment Analysis with RoBERT: https://arxiv.org/pdf/2104.04986.pdf \
 (code: https://github.com/yhcc/BARTABSA)
+
+
+https://www.figma.com/file/bBB4V9b9HvClzgYPtMOQWh/SentimentAnalysis?node-id=35%3A3632
