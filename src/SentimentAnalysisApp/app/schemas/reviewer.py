@@ -4,20 +4,20 @@ from typing import Optional
 from pydantic import BaseModel, EmailStr
 
 
-class UserBase(BaseModel):
+class ReviewerBase(BaseModel):
     id: int
 
-class UserCreate(UserBase):
+class ReviewerCreate(ReviewerBase):
     id: str
 
 
 # Properties to receive via API on update
-class UserUpdate(UserBase):
+class ReviewerUpdate(ReviewerBase):
     num_reviews: Optional[int] = None
     num_games_owned: Optional[int] = None
 
 
-class UserInDBBase(UserBase):
+class ReviewerInDBBase(ReviewerBase):
     id: Optional[str] = None
 
     class Config:
@@ -25,10 +25,10 @@ class UserInDBBase(UserBase):
 
 
 # Additional properties to return via API
-class User(UserInDBBase):
+class Reviewer(ReviewerInDBBase):
     pass
 
 
 # Additional properties stored in DB
-class UserInDB(UserInDBBase):
+class ReviewerInDB(ReviewerInDBBase):
     pass

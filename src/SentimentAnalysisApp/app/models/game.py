@@ -1,4 +1,4 @@
-from backend.app.db.base_class import Base
+from app.db.base_class import Base
 from sqlalchemy import Boolean, Column, Integer, String, DateTime, func
 from sqlalchemy.orm import relationship
 
@@ -6,7 +6,7 @@ from sqlalchemy.orm import relationship
 class Game(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
-    steam_app_id = Column(String, index=True)
+    steam_app_id = Column(String, index=True, unique=True)
     image_url = Column(String)
     release_timestamp = Column(DateTime(timezone=True), default=None)
     # sources
@@ -19,4 +19,4 @@ class Game(Base):
     steam_updated_at = Column(DateTime(timezone=True), default=None, onupdate=func.now())
     info_updated_at = Column(DateTime(timezone=True), default=None, onupdate=func.now())
     # one(game) to many(reviews)
-    reviews = relationship("Review", back_populates="review")
+    reviews = relationship("Review", back_populates="game")

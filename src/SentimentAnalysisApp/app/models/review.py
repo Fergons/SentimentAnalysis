@@ -1,12 +1,13 @@
-from backend.app.db.base_class import Base
+from app.db.base_class import Base
 from sqlalchemy import Boolean, Column, Integer, String, DateTime, func, ForeignKey, TEXT
 from sqlalchemy.orm import relationship
 
 
 class Review(Base):
     id = Column(Integer, primary_key=True, index=True)
+    review_id = Column(Integer)  # source platform dependant
     game_id = Column(Integer, ForeignKey('game.id'))
-    user_id = Column(Integer, ForeignKey('user.id'))
+    user_id = Column(Integer, ForeignKey('reviewer.id'))
     source_url = Column(String)
 
     language = Column(String)
@@ -28,6 +29,8 @@ class Review(Base):
     playtime_at_review = Column(Integer)
 
     # one(game) to many(reviews)
-    game = relationship("Game", back_populates="game")
+    game = relationship("Game", back_populates="reviews")
     # one(user) to many(reviews)
-    user = relationship("User", back_populates="user")
+    user = relationship("Reviewer", back_populates="reviews")
+    # one(review) to many(aspects)
+    aspects = relationship("Aspect", back_populates="review")
