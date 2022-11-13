@@ -22,7 +22,7 @@ class GameSource(Base):
     id = Column(Integer, primary_key=True, index=True)
     
     game_id = Column(Integer, ForeignKey('game.id'))
-    source_id = Column(String, ForeignKey('source.id'))
+    source_id = Column(Integer, ForeignKey('source.id'))
     
     # app_id is the identification of the game in the source's DB
     app_id = Column(String, index=True, unique=True) 
