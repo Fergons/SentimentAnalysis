@@ -8,7 +8,7 @@ class Review(Base):
     source_review_id = Column(Integer)  # source platform dependant
     game_id = Column(Integer, ForeignKey('game.id'))
     user_id = Column(Integer, ForeignKey('reviewer.id'))
-    source_id = Column(String, ForeignKey('source.id'))
+    source_id = Column(Integer, ForeignKey('source.id'))
 
     language = Column(String)
     text = Column(TEXT)
