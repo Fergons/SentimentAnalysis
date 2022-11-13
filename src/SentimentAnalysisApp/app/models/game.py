@@ -1,22 +1,34 @@
 from app.db.base_class import Base
-from sqlalchemy import Boolean, Column, Integer, String, DateTime, func
+from sqlalchemy import Boolean, Column, Integer, String, DateTime, func, ForeignKey
 from sqlalchemy.orm import relationship
 
 
 class Game(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
-    steam_app_id = Column(String, index=True, unique=True)
     image_url = Column(String)
+
     release_timestamp = Column(DateTime(timezone=True), default=None)
-    # sources
-    metacritic_user_reviews_url = Column(String)
-    gamespot_review_url = Column(String)
-    gamespot_user_reviews_url = Column(String)
-    # when was the last update for each source
-    metacritic_updated_at = Column(DateTime(timezone=True), default=None, onupdate=func.now())
-    gamespot_updated_at = Column(DateTime(timezone=True), default=None, onupdate=func.now())
-    steam_updated_at = Column(DateTime(timezone=True), default=None, onupdate=func.now())
-    info_updated_at = Column(DateTime(timezone=True), default=None, onupdate=func.now())
+    updated_at = Column(DateTime(timezone=True), default=None, onupdate=func.now())
+
     # one(game) to many(reviews)
     reviews = relationship("Review", back_populates="game")
+    sources = relationship("GameSource", back_populates="game")
+    categories = relationship("GameCategory", back_populates="game")
+
+
+class Category(Base):
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True)
+
+    games = relationship("GameCategory", back_populates="category")
+
+
+class GameCategory(Base):
+    id = Column(Integer, primary_key=True, index=True)
+
+    game_id = Column(Integer, ForeignKey('game.id'))
+    category_id = Column(Integer, ForeignKey('category.id'))
+
+    game = relationship("Game", back_populates="categories")
+    category = relationship("Category", back_populates="games")

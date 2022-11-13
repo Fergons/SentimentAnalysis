@@ -1,33 +1,54 @@
-import datetime
+from datetime import datetime
 from typing import List
 from typing import Optional
 from pydantic import BaseModel, AnyHttpUrl
+from review import ReviewBase
+
+
+class CategoryBase(BaseModel):
+    id: int
+    name: str
+
+
+class CategoryCreate(CategoryBase):
+    name: str
+
+
+class CategoryUpdate(CategoryBase):
+    name: str
 
 
 class GameBase(BaseModel):
-    id: str
+    id: int
+    name: str
+    image_url: Optional[AnyHttpUrl]
+    release_timestamp: datetime
 
 
 class GameCreate(GameBase):
-    steam_app_id: str
+    name: str
+    image_url: Optional[AnyHttpUrl] = None
+    release_timestamp: Optional[datetime] = None
+    category_id: Optional[int] = None
+    category_name: Optional[str] = None
+    source_id: Optional[int] = None
+    source_app_id: Optional[int] = None
+    source_url: Optional[str] = None
 
 
 # Properties to receive via API on update
 class GameUpdate(GameBase):
     name: Optional[str] = None
     image_url: Optional[AnyHttpUrl] = None
-    metacritic_user_reviews_url: Optional[AnyHttpUrl] = None
-    gamespot_review_url: Optional[AnyHttpUrl] = None
-    gamespot_user_reviews_url: Optional[AnyHttpUrl] = None
+    release_timestamp: Optional[datetime] = None
+    category_id: Optional[int] = None
+    category_name: Optional[str] = None
+    source_id: Optional[int] = None
+    source_app_id: Optional[int] = None
+    source_url: Optional[str] = None
 
 
 class GameInDBBase(GameBase):
-    id: Optional[str] = None
-    metacritic_updated_at: Optional[datetime.datetime] = None
-    gamespot_updated_at: Optional[datetime.datetime] = None
-    steam_updated_at: Optional[datetime.datetime] = None
-    info_updated_at: Optional[datetime.datetime] = None
-
     class Config:
         orm_mode = True
 

@@ -1,24 +1,31 @@
 import datetime
 from typing import List
 from typing import Optional
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, AnyHttpUrl
 
 
 class ReviewerBase(BaseModel):
     id: int
+    source_id: int
+
 
 class ReviewerCreate(ReviewerBase):
-    id: str
+    source_id: Optional[int] = None
+    source_url: AnyHttpUrl
+    num_reviews: Optional[int] = None
 
 
 # Properties to receive via API on update
 class ReviewerUpdate(ReviewerBase):
+    source_id: Optional[int] = None
+    source_url: Optional[AnyHttpUrl] = None
     num_reviews: Optional[int] = None
-    num_games_owned: Optional[int] = None
 
 
 class ReviewerInDBBase(ReviewerBase):
-    id: Optional[str] = None
+    id: int
+    source_id: int
+    updated_at: datetime
 
     class Config:
         orm_mode = True

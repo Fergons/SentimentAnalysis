@@ -1,10 +1,3 @@
-"""
-Put here any Python code that must be runned before application startup.
-It is included in `init.sh` script.
-
-By defualt `main` create a superuser if it does not exist.
-"""
-
 import asyncio
 from typing import Optional
 
@@ -24,13 +17,11 @@ from app.db.session import async_session
 games = [
     {
     "id": 1,
-    "steam_app_id": "730",
     "name": "CS:GO",
     "release_timestamp": datetime.now().astimezone()
     },
     {
     "id": 2,
-    "steam_app_id": "530",
     "name": "Dota2",
     "release_timestamp": datetime.now().astimezone()
     }
@@ -39,20 +30,14 @@ games = [
 reviewers = [
     {
         "id": 1,
-        "num_steam_reviews": 30,
-        "num_steam_games_owned": 30,
         "updated_at": datetime.now().astimezone()
     },
     {
         "id": 2,
-        "num_steam_reviews": 21,
-        "num_steam_games_owned": 3230,
         "updated_at": datetime.now().astimezone()
     },
     {
         "id": 3,
-        "num_steam_reviews": 40,
-        "num_steam_games_owned": 40,
         "updated_at": datetime.now().astimezone()
     }
 ]
@@ -66,8 +51,8 @@ reviews = [
         "review":   "Aight..   Well i think u need some luck or skill in this game...   Its rly cool if u meet some good  NOT toxic people in here...     But yeah like every single game it does have toxic community + smurfs hacker and whatever...   \n\n          ANYWAYS :: : : :   : : : : :: : :   IT  IS    A   REALLY    GOOD   GAME : : : :: : : : ::   APPROVED!  :DDDDDDD\n\n\n                   :DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD\n\n\nIts kinda fun..  playing with friends...",
         "summary": "Cool shit",
         "score": "7.5",
-        "created_at":datetime.now().astimezone(),
-        "processed_at":datetime.now().astimezone(),
+        "created_at": datetime.now().astimezone(),
+        "processed_at": datetime.now().astimezone(),
         "apect_sum_polarity": "6.5"
     },
     {

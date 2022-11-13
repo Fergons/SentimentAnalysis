@@ -5,25 +5,42 @@ from pydantic import BaseModel, EmailStr, AnyHttpUrl
 
 
 class ReviewBase(BaseModel):
-    review: str
-    created_at: datetime.datetime
+    id: int
+    text: str
     source_url: AnyHttpUrl
 
 
 class ReviewCreate(ReviewBase):
-    review: str
-
-
-# Properties to receive via API on update
-class ReviewUpdate(ReviewBase):
+    text: str
+    source_id: Optional[int] = None
+    source_url: Optional[AnyHttpUrl] = None
     language: Optional[str] = None
-    review: Optional[str] = None
     summary: Optional[str] = None
     score: Optional[str] = None
     helpful_score: Optional[str] = None
     good: Optional[str] = None
     bad: Optional[str] = None
-    apect_sum_polarity: Optional[str] = None
+    reviewer_id: Optional[str] = None
+    reviewer_time_played_at_review: Optional[int] = None
+    game_id: Optional[str] = None
+    game_name: Optional[str] = None
+
+
+# Properties to receive via API on update
+class ReviewUpdate(ReviewBase):
+    text: Optional[str] = None
+    source_id: Optional[int] = None
+    source_url: Optional[AnyHttpUrl] = None
+    language: Optional[str] = None
+    summary: Optional[str] = None
+    score: Optional[str] = None
+    helpful_score: Optional[str] = None
+    good: Optional[str] = None
+    bad: Optional[str] = None
+    reviewer_id: Optional[str] = None
+    reviewer_time_played_at_review: Optional[int] = None
+    game_id: Optional[str] = None
+    game_name: Optional[str] = None
 
 
 class ReviewInDBBase(ReviewBase):

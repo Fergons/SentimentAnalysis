@@ -5,18 +5,19 @@ from sqlalchemy.orm import relationship
 
 class Review(Base):
     id = Column(Integer, primary_key=True, index=True)
-    review_id = Column(Integer)  # source platform dependant
+    source_review_id = Column(Integer)  # source platform dependant
     game_id = Column(Integer, ForeignKey('game.id'))
     user_id = Column(Integer, ForeignKey('reviewer.id'))
-    source_url = Column(String)
+    source_id = Column(String, ForeignKey('source.id'))
 
     language = Column(String)
-    review = Column(TEXT)
+    text = Column(TEXT)
     summary = Column(TEXT)
     score = Column(String)
     helpful_score = Column(String)
     good = Column(TEXT)
     bad = Column(TEXT)
+    voted_up = Column(Boolean)
 
     created_at = Column(DateTime(timezone=True), default=None)
     processed_at = Column(DateTime(timezone=True), default=None, onupdate=func.now())
@@ -34,3 +35,5 @@ class Review(Base):
     user = relationship("Reviewer", back_populates="reviews")
     # one(review) to many(aspects)
     aspects = relationship("Aspect", back_populates="review")
+
+    source = relationship("Source", back_populates="reviews")
