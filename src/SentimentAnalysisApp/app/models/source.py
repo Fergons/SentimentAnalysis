@@ -5,11 +5,12 @@ from sqlalchemy.orm import relationship
 
 class Source(Base):
     id = Column(Integer, primary_key=True, index=True)
-    
+    name = Column(String, index=True)
     url = Column(String, index=True, unique=True)
     user_reviews_url = Column(String, unique=True)
     critic_reviews_url = Column(String, unique=True)
-    
+    games_url = Column(String, unique=True)
+
     updated_at = Column(DateTime(timezone=True), default=None, onupdate=func.now())
 
     reviews = relationship("Review", back_populates="source")

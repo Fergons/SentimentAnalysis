@@ -18,12 +18,12 @@ games = [
     {
     "id": 1,
     "name": "CS:GO",
-    "release_timestamp": datetime.now().astimezone()
+    "release_datetime": datetime.now().astimezone()
     },
     {
     "id": 2,
     "name": "Dota2",
-    "release_timestamp": datetime.now().astimezone()
+    "release_datetime": datetime.now().astimezone()
     }
 ]
 

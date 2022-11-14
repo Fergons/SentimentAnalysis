@@ -29,7 +29,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(), nullable=True),
     sa.Column('image_url', sa.String(), nullable=True),
-    sa.Column('release_timestamp', sa.DateTime(timezone=True), nullable=True),
+    sa.Column('release_datetime', sa.DateTime(timezone=True), nullable=True),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
@@ -37,7 +37,7 @@ def upgrade():
     op.create_index(op.f('ix_game_name'), 'game', ['name'], unique=False)
     op.create_table('source',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('url', sa.String(), nullable=True),
+    sa.Column('_url', sa.String(), nullable=True),
     sa.Column('user_reviews_url', sa.String(), nullable=True),
     sa.Column('critic_reviews_url', sa.String(), nullable=True),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
@@ -46,7 +46,7 @@ def upgrade():
     sa.UniqueConstraint('user_reviews_url')
     )
     op.create_index(op.f('ix_source_id'), 'source', ['id'], unique=False)
-    op.create_index(op.f('ix_source_url'), 'source', ['url'], unique=True)
+    op.create_index(op.f('ix_source_url'), 'source', ['_url'], unique=True)
     op.create_table('gamecategory',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('game_id', sa.Integer(), nullable=True),

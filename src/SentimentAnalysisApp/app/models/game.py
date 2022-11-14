@@ -8,7 +8,7 @@ class Game(Base):
     name = Column(String, index=True)
     image_url = Column(String)
 
-    release_timestamp = Column(DateTime(timezone=True), default=None)
+    release_date = Column(DateTime(timezone=True), default=None)
     updated_at = Column(DateTime(timezone=True), default=None, onupdate=func.now())
 
     # one(game) to many(reviews)
