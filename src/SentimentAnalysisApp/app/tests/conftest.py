@@ -35,7 +35,7 @@ async def client():
 async def test_db_setup_sessionmaker():
     # assert if we use TEST_DB URL for 100%
     assert config.settings.ENVIRONMENT == "PYTEST"
-    assert str(async_engine.url) == config.settings.TEST_SQLALCHEMY_DATABASE_URI
+    assert str(async_engine._url) == config.settings.TEST_SQLALCHEMY_DATABASE_URI
 
     # always drop and create test db tables between tests session
     async with async_engine.begin() as conn:
