@@ -5,13 +5,13 @@ from pydantic import BaseModel, EmailStr, AnyHttpUrl
 
 
 class ReviewBase(BaseModel):
-    id: int
     text: str
     source_url: AnyHttpUrl
 
 
 class ReviewCreate(ReviewBase):
     text: str
+    source_review_id: Optional[str] = None
     source_id: Optional[int] = None
     source_url: Optional[AnyHttpUrl] = None
     language: Optional[str] = None

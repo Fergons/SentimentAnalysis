@@ -5,7 +5,6 @@ from pydantic import BaseModel, AnyHttpUrl
 
 
 class AspectBase(BaseModel):
-    id: id
     term: str
     category: str
     polarity: str
@@ -31,7 +30,7 @@ class AspectUpdate(AspectBase):
 
 
 class AspectInDBBase(AspectBase):
-    id: Optional[str] = None
+    id: int
     metacritic_updated_at: Optional[datetime.datetime] = None
     Aspectspot_updated_at: Optional[datetime.datetime] = None
     steam_updated_at: Optional[datetime.datetime] = None

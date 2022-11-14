@@ -77,7 +77,7 @@ async def run_migrations_online():
     """
     configuration = config.get_section(config.config_ini_section)
     assert configuration
-    configuration["sqlalchemy.url"] = get_database_uri()
+    configuration["sqlalchemy._url"] = get_database_uri()
     connectable = AsyncEngine(
         engine_from_config(
             configuration,

@@ -2,11 +2,10 @@ from datetime import datetime
 from typing import List
 from typing import Optional
 from pydantic import BaseModel, AnyHttpUrl
-from review import ReviewBase
+from .review import ReviewBase
 
 
 class CategoryBase(BaseModel):
-    id: int
     name: str
 
 
@@ -19,18 +18,17 @@ class CategoryUpdate(CategoryBase):
 
 
 class GameBase(BaseModel):
-    id: int
     name: str
     image_url: Optional[AnyHttpUrl]
-    release_timestamp: datetime
+    release_date: datetime
 
 
 class GameCreate(GameBase):
     name: str
     image_url: Optional[AnyHttpUrl] = None
-    release_timestamp: Optional[datetime] = None
-    category_id: Optional[int] = None
-    category_name: Optional[str] = None
+    release_date: Optional[datetime] = None
+    categories_ids: Optional[List[int]] = None
+    categories_names: Optional[List[str]] = None
     source_id: Optional[int] = None
     source_app_id: Optional[int] = None
     source_url: Optional[str] = None
@@ -40,15 +38,16 @@ class GameCreate(GameBase):
 class GameUpdate(GameBase):
     name: Optional[str] = None
     image_url: Optional[AnyHttpUrl] = None
-    release_timestamp: Optional[datetime] = None
-    category_id: Optional[int] = None
-    category_name: Optional[str] = None
+    release_date: Optional[datetime] = None
+    categories_ids: Optional[List[int]] = None
+    categories_names: Optional[List[str]] = None
     source_id: Optional[int] = None
     source_app_id: Optional[int] = None
     source_url: Optional[str] = None
 
 
 class GameInDBBase(GameBase):
+    id: int
     class Config:
         orm_mode = True
 

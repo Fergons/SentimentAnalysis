@@ -5,7 +5,6 @@ from pydantic import BaseModel, EmailStr, AnyHttpUrl
 
 
 class ReviewerBase(BaseModel):
-    id: int
     source_id: int
 
 
