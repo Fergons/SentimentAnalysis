@@ -1,8 +1,8 @@
 from datetime import datetime
-from typing import List
+from typing import List, Union
 from typing import Optional
 from pydantic import BaseModel, AnyHttpUrl
-from .review import ReviewBase
+from . import Review, SourceBase, ReviewBase
 
 
 class CategoryBase(BaseModel):
@@ -17,21 +17,26 @@ class CategoryUpdate(CategoryBase):
     name: str
 
 
+class CategoryInDBBase(CategoryBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
+class Category(CategoryInDBBase):
+    pass
+
+
 class GameBase(BaseModel):
     name: str
-    image_url: Optional[AnyHttpUrl]
-    release_date: datetime
 
 
 class GameCreate(GameBase):
     name: str
     image_url: Optional[AnyHttpUrl] = None
     release_date: Optional[datetime] = None
-    categories_ids: Optional[List[int]] = None
-    categories_names: Optional[List[str]] = None
-    source_id: Optional[int] = None
-    source_app_id: Optional[int] = None
-    source_url: Optional[str] = None
+    categories: Optional[List[CategoryBase]] = None
 
 
 # Properties to receive via API on update
@@ -39,22 +44,26 @@ class GameUpdate(GameBase):
     name: Optional[str] = None
     image_url: Optional[AnyHttpUrl] = None
     release_date: Optional[datetime] = None
-    categories_ids: Optional[List[int]] = None
-    categories_names: Optional[List[str]] = None
-    source_id: Optional[int] = None
-    source_app_id: Optional[int] = None
-    source_url: Optional[str] = None
+    reviews: Optional[List[ReviewBase]] = None
+    categories: Optional[List[CategoryBase]] = None
+    sources: Optional[List[SourceBase]] = None
 
 
 class GameInDBBase(GameBase):
     id: int
+    updated_at: datetime
+
     class Config:
         orm_mode = True
 
 
-# Additional properties to return via API
 class Game(GameInDBBase):
-    pass
+    name: str
+    image_url: Optional[AnyHttpUrl] = None
+    release_date: Optional[datetime] = None
+    reviews: Optional[List[ReviewBase]] = None
+    categories: Optional[List[CategoryBase]] = None
+    sources: Optional[List[SourceBase]] = None
 
 
 # Additional properties stored in DB

@@ -9,7 +9,7 @@ class Source(Base):
     url = Column(String, index=True, unique=True)
     user_reviews_url = Column(String, unique=True)
     critic_reviews_url = Column(String, unique=True)
-    games_url = Column(String, unique=True)
+    list_of_games_url = Column(String, unique=True)
 
     updated_at = Column(DateTime(timezone=True), default=None, onupdate=func.now())
 

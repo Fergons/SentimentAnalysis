@@ -93,7 +93,7 @@ def upgrade():
     sa.Column('voted_up', sa.Boolean(), nullable=True),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('processed_at', sa.DateTime(timezone=True), nullable=True),
-    sa.Column('apect_sum_polarity', sa.String(), nullable=True),
+    sa.Column('aspect_sum_polarity', sa.String(), nullable=True),
     sa.Column('playtime_forever', sa.Integer(), nullable=True),
     sa.Column('playtime_last_two_weeks', sa.Integer(), nullable=True),
     sa.Column('playtime_at_review', sa.Integer(), nullable=True),

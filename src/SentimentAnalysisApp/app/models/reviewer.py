@@ -5,6 +5,7 @@ from sqlalchemy.orm import relationship
 
 class Reviewer(Base):
     id = Column(Integer, primary_key=True, index=True)
+    source_reviewer_id = Column(String)
     source_id = Column(Integer, ForeignKey('source.id'))
     updated_at = Column(DateTime(timezone=True), default=None, onupdate=func.now())
     num_reviews = Column(Integer)

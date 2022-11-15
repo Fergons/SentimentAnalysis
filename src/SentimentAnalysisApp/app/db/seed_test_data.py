@@ -53,7 +53,7 @@ reviews = [
         "score": "7.5",
         "created_at": datetime.now().astimezone(),
         "processed_at": datetime.now().astimezone(),
-        "apect_sum_polarity": "6.5"
+        "aspect_sum_polarity": "6.5"
     },
     {
         "id": 2,
@@ -65,7 +65,7 @@ reviews = [
         "score": "7.5",
         "created_at":datetime.now().astimezone(),
         "processed_at":datetime.now().astimezone(),
-        "apect_sum_polarity": "6.2"
+        "aspect_sum_polarity": "6.2"
     }
 ]
 

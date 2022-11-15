@@ -2,6 +2,7 @@ import datetime
 from typing import List
 from typing import Optional
 from pydantic import BaseModel, AnyHttpUrl
+from . import ReviewBase
 
 
 class AspectBase(BaseModel):
@@ -9,15 +10,11 @@ class AspectBase(BaseModel):
     category: str
     polarity: str
     confidence: str
-    review_id: int
+    review: ReviewBase
 
 
 class AspectCreate(AspectBase):
-    term: str
-    category: str
-    polarity: str
     confidence: Optional[str] = None
-    review_id: Optional[int] = None
 
 
 # Properties to receive via API on update
@@ -26,15 +23,11 @@ class AspectUpdate(AspectBase):
     category: Optional[str] = None
     polarity: Optional[str] = None
     confidence: Optional[str] = None
-    review_id: Optional[int] = None
 
 
 class AspectInDBBase(AspectBase):
     id: int
-    metacritic_updated_at: Optional[datetime.datetime] = None
-    Aspectspot_updated_at: Optional[datetime.datetime] = None
-    steam_updated_at: Optional[datetime.datetime] = None
-    info_updated_at: Optional[datetime.datetime] = None
+    updated_at: datetime
 
     class Config:
         orm_mode = True
@@ -47,4 +40,4 @@ class Aspect(AspectInDBBase):
 
 # Additional properties stored in DB
 class AspectInDB(AspectInDBBase):
-    pass
+    model_id: str

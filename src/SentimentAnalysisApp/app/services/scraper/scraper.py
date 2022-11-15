@@ -144,8 +144,13 @@ class SteamScraper(Scraper):
                                     formatter_params={"game_id": str(game_id)})
 
     async def get_games_info(self, game_ids: Iterable[Union[str, int]]):
-        for game_id in game_ids:
-            yield await self.get_game_info(game_id)
+        tasks = [self.get_game_info(game_id) for game_id in game_ids]
+        counter = 1
+        for future in asyncio.as_completed(tasks):
+            result: GameUpdate = await future
+            # process(result)
+            logger.log(logging.INFO, f"{counter}. results are from: {result.source_app_id}:{result.name}!")
+            counter += 1
 
     @staticmethod
     def game_reviews_formatter(r):
@@ -228,10 +233,9 @@ class SteamScraper(Scraper):
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
-
-    try:
-        loop.run_until_complete()
-
-    except KeyboardInterrupt:
-        loop.stop()
-        pass
+    # try:
+    #     loop.run_until_complete()
+    #
+    # except KeyboardInterrupt:
+    #     loop.stop()
+    #     pass

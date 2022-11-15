@@ -13,7 +13,7 @@ class ReviewSource(Enum):
     STEAM = 'steam'
     METACRITIC = 'metacritic'
     GAMESPOT = 'gamespot'
-    ALL='all'
+    ALL = 'all'
 
 
 def review_filter(reviews):

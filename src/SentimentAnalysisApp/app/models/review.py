@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship
 
 class Review(Base):
     id = Column(Integer, primary_key=True, index=True)
-    source_review_id = Column(Integer)  # source platform dependant
+    source_review_id = Column(String)  # source platform dependant
     game_id = Column(Integer, ForeignKey('game.id'))
     user_id = Column(Integer, ForeignKey('reviewer.id'))
     source_id = Column(Integer, ForeignKey('source.id'))
@@ -20,13 +20,11 @@ class Review(Base):
     voted_up = Column(Boolean)
 
     created_at = Column(DateTime(timezone=True), default=None)
+    updated_at = Column(DateTime(timezone=True), default=None)
     processed_at = Column(DateTime(timezone=True), default=None, onupdate=func.now())
 
-    apect_sum_polarity = Column(String)
+    aspect_sum_polarity = Column(String)
 
-    # user stats
-    playtime_forever = Column(Integer)
-    playtime_last_two_weeks = Column(Integer)
     playtime_at_review = Column(Integer)
 
     # one(game) to many(reviews)
