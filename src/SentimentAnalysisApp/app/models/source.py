@@ -5,11 +5,17 @@ from sqlalchemy.orm import relationship
 
 class Source(Base):
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True)
-    url = Column(String, index=True, unique=True)
-    user_reviews_url = Column(String, unique=True)
-    critic_reviews_url = Column(String, unique=True)
-    list_of_games_url = Column(String, unique=True)
+    name = Column(String, index=True, unique=True)
+    url = Column(String, index=True)
+
+    user_reviews_url = Column(String)
+    critic_reviews_url = Column(String)
+
+    game_detail_url = Column(String)
+    list_of_games_url = Column(String)
+
+    reviewer_detail_url = Column(String)
+    list_of_reviewers_url = Column(String)
 
     updated_at = Column(DateTime(timezone=True), default=None, onupdate=func.now())
 
@@ -25,8 +31,8 @@ class GameSource(Base):
     game_id = Column(Integer, ForeignKey('game.id'))
     source_id = Column(Integer, ForeignKey('source.id'))
     
-    # app_id is the identification of the game in the source's DB
-    app_id = Column(String, index=True, unique=True) 
+    # source_game_id is the identification of the game in the source's DB
+    source_game_id = Column(String, index=True, unique=True)
     updated_at = Column(DateTime(timezone=True), default=None, onupdate=func.now())
 
     game = relationship("Game", back_populates="sources")

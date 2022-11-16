@@ -35,6 +35,7 @@ minversion = "6.0"
 addopts = "-v"
 testpaths = [
     "app/tests",
+    "app/services/scraper/tests"
 ]
 
 [tool.isort]

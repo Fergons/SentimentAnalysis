@@ -1,23 +1,28 @@
-from typing import List
+from typing import List, Optional
 
 from fastapi.encoders import jsonable_encoder
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
 
 from app.crud.base import CRUDBase
 from app.models.source import Source
-from app.schemas.source import SourceCreate, SourceCreate
+from app.schemas.source import SourceCreate, SourceUpdate
 
 
-class CRUDSource(CRUDBase[Source, SourceCreate, SourceCreate]):
-    def create_with_url(
-            self, db: Session, *, obj_in: SourceCreate, url: str,
+class CRUDSource(CRUDBase[Source, SourceCreate, SourceUpdate]):
+    async def create_with_url(
+            self, db: AsyncSession, *, obj_in: SourceCreate, url: str,
     ) -> Source:
         obj_in_data = jsonable_encoder(obj_in)
         db_obj = self.model(**obj_in_data, url=url)  # type: ignore
         db.add(db_obj)
-        db.commit()
-        db.refresh(db_obj)
+        await db.commit()
+        await db.refresh(db_obj)
         return db_obj
 
+    async def get_by_name(self, db: AsyncSession, *, name: str) -> Optional[Source]:
+        result = await db.execute(select(Source).where(Source.name == name))
+        return result.scalars().first()
 
-Source = CRUDSource(Source)
+
+crud_source = CRUDSource(Source)

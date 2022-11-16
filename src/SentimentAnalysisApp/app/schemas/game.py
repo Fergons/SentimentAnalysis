@@ -1,9 +1,11 @@
 from datetime import datetime
-from typing import List, Union
+from typing import List, Union, TYPE_CHECKING
 from typing import Optional
-from pydantic import BaseModel, AnyHttpUrl
-from . import Review, SourceBase, ReviewBase
+from pydantic import BaseModel, AnyHttpUrl, Field
 
+if TYPE_CHECKING:
+    from .review import Review
+    from .source import Source
 
 class CategoryBase(BaseModel):
     name: str
@@ -36,7 +38,11 @@ class GameCreate(GameBase):
     name: str
     image_url: Optional[AnyHttpUrl] = None
     release_date: Optional[datetime] = None
-    categories: Optional[List[CategoryBase]] = None
+
+
+class GameFromSourceCreate(GameCreate):
+    source_id: int
+    source_game_id: str
 
 
 # Properties to receive via API on update
@@ -44,9 +50,13 @@ class GameUpdate(GameBase):
     name: Optional[str] = None
     image_url: Optional[AnyHttpUrl] = None
     release_date: Optional[datetime] = None
-    reviews: Optional[List[ReviewBase]] = None
+    reviews: Optional[List["Review"]] = None
     categories: Optional[List[CategoryBase]] = None
-    sources: Optional[List[SourceBase]] = None
+
+
+class GameFromSourceUpdate(GameUpdate):
+    source_id: int
+    source_game_id: str
 
 
 class GameInDBBase(GameBase):
@@ -61,9 +71,9 @@ class Game(GameInDBBase):
     name: str
     image_url: Optional[AnyHttpUrl] = None
     release_date: Optional[datetime] = None
-    reviews: Optional[List[ReviewBase]] = None
+    reviews: Optional[List["Review"]] = None
     categories: Optional[List[CategoryBase]] = None
-    sources: Optional[List[SourceBase]] = None
+    sources: Optional[List[GameFromSourceCreate]] = None
 
 
 # Additional properties stored in DB

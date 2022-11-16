@@ -1,22 +1,26 @@
 from datetime import datetime
-from typing import List
-from typing import Optional
+from typing import List, TYPE_CHECKING, Optional
 from pydantic import BaseModel, EmailStr, AnyHttpUrl
 # from . import SourceInDBBase, ReviewerInDBBase, GameInDBBase, AspectInDBBase
 # from . import SourceCreate, ReviewerCreate, GameCreate, AspectCreate
-from . import SourceBase, ReviewerBase, GameBase, AspectBase
+
+if TYPE_CHECKING:
+    from .reviewer import Reviewer
+    from .source import Source
+    from .game import Game
+    from .aspect import Aspect
 
 
 class ReviewBase(BaseModel):
     text: str
     language: str
     source_review_id: str
-    source: SourceBase
-    reviewer: ReviewerBase
-    game: GameBase
+    source: "Source"
+    reviewer: "Reviewer"
+    game: "Game"
 
     aspect_sum_polarity: Optional[str] = None
-    aspects: Optional[List[AspectBase]] = None
+    aspects: Optional[List["Aspect"]] = None
 
 
 class ReviewCreate(ReviewBase):
@@ -34,8 +38,8 @@ class ReviewUpdate(ReviewBase):
     text: Optional[str] = None
     language: Optional[str] = None
 
-    source: Optional[SourceBase] = None
-    game: Optional[GameBase] = None
+    source: Optional["Source"] = None
+    game: Optional["Game"] = None
 
     summary: Optional[str] = None
     score: Optional[str] = None
@@ -46,7 +50,7 @@ class ReviewUpdate(ReviewBase):
     playtime_at_review: Optional[int] = None
 
     aspect_sum_polarity: Optional[str] = None
-    aspects: Optional[List[AspectBase]] = None
+    aspects: Optional[List["Aspect"]] = None
 
 
 class ReviewInDBBase(ReviewBase):

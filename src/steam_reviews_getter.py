@@ -7,7 +7,8 @@ import asyncio
 import logging
 from functools import partial
 from dateutil import parser as date_parser
-
+from bs4 import BeautifulSoup
+from pydantic import BaseModel
 
 class ReviewSource(Enum):
     STEAM = 'steam'
@@ -22,11 +23,13 @@ def review_filter(reviews):
     return list(filtered_reviews)
 
 
+def save_json(filename, data, **kwargs):
+    with open(filename, "w", encoding="utf-8") as fopen:
+        json.dump(data, fopen, **kwargs)
 
-
-def save_json(filename,data):
-   with open(filename, "w") as fopen:
-        json.dump(data, fopen)
+def save_text(filename, data):
+    with open(filename, "w", encoding="utf-8") as fopen:
+        fopen.write(data)
 
 
 def download_json(appid, language="czech", day_range=10000):
@@ -46,7 +49,8 @@ def download_json(appid, language="czech", day_range=10000):
             query_summary = response_json.get("query_summary")
             success = response_json.get("success", 0)
             print(f"Reponse summary: {query_summary}")
-            reviews += [review.get("review", "").encode("utf-8").decode("utf-8") for review in response_json.get("reviews", {})] # if review.get("voted_up")]
+            reviews += [review.get("review", "").encode("utf-8").decode("utf-8") for review in
+                        response_json.get("reviews", {})]  # if review.get("voted_up")]
             params["cursor"] = response_json.get("cursor")
             if success == 1:
                 if params["cursor"] in used_cursors:
@@ -74,7 +78,6 @@ def process_json(appid, language):
 
 # get all app ids on steam at https://api.steampowered.com/ISteamApps/GetAppList/v2/
 async def get_steam_app_ids(session=None, *args, **kwargs):
-
     url = "https://api.steampowered.com/ISteamApps/GetAppList/v2/"
     async with session.get(url=url) as response:
         if response.status == 200:
@@ -85,7 +88,6 @@ async def get_steam_app_ids(session=None, *args, **kwargs):
 
 
 async def get_gamespot_review_by_steam_app_id(session=None, app_id=None, *args, **kwargs):
-
     if app_id is None:
         return None
     url = "http://www.gamespot.com/api/games/"
@@ -119,10 +121,9 @@ def process_gamespot_api_response(data):
 
 
 async def get_steam_reviews_for_app_id(session=None, app_id=None, *args, **kwargs):
-
     url = f"https://store.steampowered.com/appreviews/{app_id}"
     params = {
-        "json":1
+        "json": 1
     }
     # add parameters to api request
     params.update(kwargs)
@@ -133,23 +134,18 @@ async def get_steam_reviews_for_app_id(session=None, app_id=None, *args, **kwarg
 
 
 async def get_gamespot_reviews(session=None, *args, **kwargs):
-
     url = ""
     async with session.get() as response:
         pass
 
 
 async def get_metacritic_reviews(session=None, *args, **kwargs):
-
     pass
 
 
-
- # set because of psycopg3 that can not run in default asyncio Event Loop
- # asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
- # self.loop = asyncio.get_event_loop()
-
-
+# set because of psycopg3 that can not run in default asyncio Event Loop
+# asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+# self.loop = asyncio.get_event_loop()
 
 
 class MainSystem:
@@ -159,8 +155,9 @@ class MainSystem:
 
 class GamesInfoGetter:
     """
-    Gets information for games in app_id list.
+    Gets information for games in source_game_id list.
     """
+
     def __init__(self, session=None):
         if session is None:
             raise TypeError("GamesInfoGetter: session is None. Please provide aiohttp.clientSession object.")
@@ -190,7 +187,7 @@ class GamesInfoGetter:
     def save_config(self):
         config = self.get_config()
         if config is None:
-            config = {"steam_blacklist_app_ids":list(self.steam_blacklist_app_ids)}
+            config = {"steam_blacklist_app_ids": list(self.steam_blacklist_app_ids)}
         else:
             config["steam_blacklist_app_ids"] = list(self.steam_blacklist_app_ids)
         try:
@@ -259,7 +256,6 @@ class GamesInfoGetter:
         results = await asyncio.gather(*map(partial_func, map(self.create_steam_app_info_url, app_ids)))
         return results
 
-
     @staticmethod
     def create_steam_app_info_url(app_id):
         return f"https://store.steampowered.com/api/appdetails?appids={app_id}&language=english"
@@ -296,8 +292,6 @@ class GamesInfoGetter:
                     return None
         else:
             return steam_app_ids
-
-
 
 
 class ReviewsGetter:
@@ -340,7 +334,6 @@ class ReviewsGetter:
     def get_url(self):
         return ""
 
-
     @classmethod
     def get_base_review_url_by_source(cls, source):
         if ReviewSource.STEAM:
@@ -352,10 +345,16 @@ class ReviewsGetter:
         return
 
 
+def get_meta():
+    user_agent = {'User-agent': 'Mozilla/5.0'}
+    r = re.get("https://www.metacritic.com/game/pc/portal-2", headers=user_agent)
+    print(r.content)
 
-async def main():
+
+def main():
     download_json(appid="1938090", language="czech", day_range=20000)
     # async with aiohttp.ClientSession() as session:
+
     #     db = DatabaseHandler()
     #     getter = GamesInfoGetter(session=session)
     #     getter.load_config()
@@ -377,12 +376,76 @@ async def main():
     #     getter.save_config()
 
 
+def get_languages_in_dict():
+    language = {
+        "english_name": "",
+        "native_name": "",
+        "api_code": "",
+        "web_api_code": ""}
+    languages = []
+    r = re.get("https://partner.steamgames.com/doc/store/localization/languages")
+    if r.status_code == 200:
+        soup = BeautifulSoup(r.text, "html.parser")
+        table = soup.findAll('table')[0]
+        print(table)
+        for row in table.findAll("tr")[1:]:
+            cols = row.findAll("td")
+            languages.append(
+                {"english_name": cols[0].text,
+                 "native_name": cols[1].text,
+                 "api_code": cols[2].text,
+                 "web_api_code": cols[3].text})
+
+    print(languages)
+    save_json("../data/steam_languages.json", languages, ensure_ascii=False)
+
+    if len(languages) > 0:
+        with open("../data/python_enum_def_steam_languages.py", "w", encoding="utf-8") as fopen:
+            lines1 = [f"class SteamApiLanguageCodes(str,Enum):\n"]
+            lines2 = [f"class SteamWebApiLanguageCodes(str,Enum):\n"]
+            for language in languages:
+                lines1.append(f"    {language['api_code'].upper()} = \"{language['api_code']}\"\n")
+                lines2.append(f"    {language['api_code'].upper()} = \"{language['web_api_code']}\"\n")
+            fopen.writelines([*lines1, *lines2])
+    return languages
+
+
+def model_from_dict(model_name, d):
+    object = [f"class {model_name}(BaseModel):\n"]
+    objects = [object]
+    for k,v in d.items():
+        object.append(f"    {k}: {type(v).__name__}\n")
+        if isinstance(v, dict):
+            objects.extend(model_from_dict(k, v))
+    return objects
+
+# https://jsontopydantic.com/
+def base_model_from_json_response():
+    r = re.get("https://store.steampowered.com/api/appdetails?appids=730&json=1")
+    data = r.json()
+    objects = []
+
+    if r.status_code == 200 and data.get("730",{}).get("success", False):
+        objects.extend(model_from_dict("SteamAppDetailResponse",data))
+        print(objects)
+        with open("../data/response_appdetails_objects.txt", "w", encoding="utf-8") as fopen:
+            for object in objects:
+                fopen.writelines(object)
+                fopen.write("\n\n")
+
+    else:
+        print("request failed")
+
+
+
+
+
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
-    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-    asyncio.get_event_loop().run_until_complete(main())
+    # asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+    # asyncio.get_event_loop().run_until_complete(main())
 
-
-
-
+    # get_languages_in_dict()
+    base_model_from_json_response()

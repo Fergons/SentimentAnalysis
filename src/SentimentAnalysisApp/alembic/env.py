@@ -31,7 +31,12 @@ target_metadata = Base.metadata
 
 
 def get_database_uri():
-    return app_config.settings.DEFAULT_SQLALCHEMY_DATABASE_URI
+    if app_config.settings.ENVIRONMENT == "DEV":
+        return app_config.settings.DEFAULT_SQLALCHEMY_DATABASE_URI
+    if app_config.settings.ENVIRONMENT == "PYTEST":
+        return app_config.settings.TEST_SQLALCHEMY_DATABASE_URI
+    if app_config.settings.ENVIRONMENT == "PRODUCTION":
+        return app_config.settings.DEFAULT_SQLALCHEMY_DATABASE_URI
 
 
 def run_migrations_offline():
@@ -77,7 +82,7 @@ async def run_migrations_online():
     """
     configuration = config.get_section(config.config_ini_section)
     assert configuration
-    configuration["sqlalchemy._url"] = get_database_uri()
+    configuration["sqlalchemy.url"] = get_database_uri()
     connectable = AsyncEngine(
         engine_from_config(
             configuration,

@@ -1,8 +1,10 @@
-import datetime
-from typing import List
+from datetime import datetime
+from typing import List, TYPE_CHECKING
 from typing import Optional
 from pydantic import BaseModel, AnyHttpUrl
-from . import ReviewBase
+
+if TYPE_CHECKING:
+    from .review import Review
 
 
 class AspectBase(BaseModel):
@@ -10,7 +12,7 @@ class AspectBase(BaseModel):
     category: str
     polarity: str
     confidence: str
-    review: ReviewBase
+    review: "Review"
 
 
 class AspectCreate(AspectBase):

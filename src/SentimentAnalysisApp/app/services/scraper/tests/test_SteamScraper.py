@@ -17,11 +17,15 @@ logger = logging.getLogger("test_SteamScraper.py")
 
 @pytest.mark.asyncio
 async def test_get_games_info():
-    games = []
     async with SteamScraper() as scraper:
-        async for game in scraper.get_games_info([730, 630]):
-            games.append(game)
-    return len(games) == 2
+        infos = await scraper.get_games_info([730, 630])
+    assert len(infos) == 2
+
+@pytest.mark.asyncio
+async def test_not_a_game_info():
+    async with SteamScraper() as scraper:
+        infos = await scraper.get_games_info([1381570])
+    assert len(infos) == 0
 
 
 @pytest.mark.asyncio
@@ -39,7 +43,7 @@ async def test_get_game_reviews_with_large_limit():
     reviews = []
     hashes = []
     async with SteamScraper() as scraper:
-        async for page in scraper.game_reviews_page_generator(730, language="czech", limit=100000):
+        async for page in scraper.game_reviews_page_generator(730, language="czech", limit=10000):
 
             try:
                 assert all(map(lambda x: x.get("language") == "czech", page))
@@ -53,11 +57,18 @@ async def test_get_game_reviews_with_large_limit():
             hashes.append(md5_checksum)
             reviews.extend(page)
 
-
-    assert len(reviews) >= 1000
+    assert len(reviews) >= 3000
 
 
 @pytest.mark.asyncio
 async def test_get_reviews_from_list_of_game_ids():
     async with SteamScraper() as scraper:
         await scraper.get_games_reviews([730, 620, 578080], [{"language": "czech", "limit": 10000} for x in range(3)])
+
+
+
+@pytest.mark.asyncio
+async def test_game_info_to_game_DB():
+    async with SteamScraper() as scraper:
+        infos = await scraper.get_games_info([730, 630])
+    assert len(infos) == 2

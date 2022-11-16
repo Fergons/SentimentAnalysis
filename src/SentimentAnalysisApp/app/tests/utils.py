@@ -6,7 +6,7 @@ from pydantic.networks import EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app import schemas
-from app.models import User
+from app.models.user import User
 
 
 def random_lower_string(length: int = 32) -> str:
