@@ -19,9 +19,9 @@ class Source(Base):
 
     updated_at = Column(DateTime(timezone=True), default=None, onupdate=func.now())
 
-    reviews = relationship("Review", back_populates="source")
-    reviewers = relationship("Reviewers", back_populates="source")
-    games = relationship("GameSource", back_populates="source")
+    reviews = relationship("Review", back_populates="source", lazy="selectin")
+    reviewers = relationship("Reviewer", back_populates="source", lazy="selectin")
+    games = relationship("GameSource", back_populates="source", lazy="selectin")
 
 
 # mapping table between many to many relationship (Game <-> Source)
@@ -35,5 +35,5 @@ class GameSource(Base):
     source_game_id = Column(String, index=True, unique=True)
     updated_at = Column(DateTime(timezone=True), default=None, onupdate=func.now())
 
-    game = relationship("Game", back_populates="sources")
-    source = relationship("Source", back_populates="games")
+    game = relationship("Game", back_populates="sources", lazy="selectin")
+    source = relationship("Source", back_populates="games", lazy="selectin")

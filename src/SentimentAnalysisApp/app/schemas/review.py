@@ -15,20 +15,18 @@ class ReviewBase(BaseModel):
     text: str
     language: str
     source_review_id: str
-    source: "Source"
-    reviewer: "Reviewer"
-    game: "Game"
-
-    aspect_sum_polarity: Optional[str] = None
-    aspects: Optional[List["Aspect"]] = None
 
 
 class ReviewCreate(ReviewBase):
+    text: str
+    language: str = None
+    source_review_id: str = None
     summary: Optional[str] = None
     score: Optional[str] = None
     helpful_score: Optional[str] = None
     good: Optional[str] = None
     bad: Optional[str] = None
+    voted_up: Optional[bool] = None
     playtime_at_review: Optional[int] = None
     created_at: datetime = datetime.now()
 

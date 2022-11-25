@@ -20,4 +20,4 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
         return db_obj
 
 
-review = CRUDReview(Review)
+crud_review = CRUDReview(Review)

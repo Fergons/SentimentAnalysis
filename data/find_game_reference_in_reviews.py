@@ -132,15 +132,25 @@ def test1(words, file):
     print(len(reviews_with_references))
 
 
-def get_comparisons_to_other_games_stats(words, file):
+def get_comparisons_to_other_games_stats(name, words, file):
     with open(file, encoding="utf-8") as fopen:
         reviews = json.load(fopen)
+    filtered_reviews = [ review for review in reviews if len(review.split(" ")) > 1]
     reviews_with_references = find_references_in_reviews(words_to_match=words, reviews=reviews)
-    print("-"*30)
-    print(f"Number of reviews: {len(reviews)}")
-    print(f"Number of reviews with reference: {len(reviews_with_references)}")
-    print(f"Percentile: {round(len(reviews_with_references)/len(reviews)*100,2)}%")
-    print("-" * 30)
+    with open(f"comparisons_in_{name}.txt", "w", encoding="utf8") as fopen:
+        fopen.write("-"*30)
+        fopen.write(f"\nReviews: {file}\n\n")
+        fopen.write(f"Number of reviews: {len(reviews)}\n")
+        fopen.write(f"Number of filtered reviews: {len(reviews)}\n")
+        fopen.write(f"Number of reviews with reference: {len(reviews_with_references)}\n")
+        fopen.write(f"Percentile: {round(len(reviews_with_references)/len(reviews)*100,2)}%\n")
+        fopen.write(f"Percentile(filtered): {round(len(reviews_with_references)/len(filtered_reviews)*100,2)}%\n")
+        fopen.write("-" * 30)
+
+        for review in reviews_with_references:
+            fopen.write("-"*50)
+            fopen.write(f"\n{review}\n")
+
     return reviews_with_references
 
 def get_context(words, file) -> object:
@@ -158,7 +168,7 @@ def get_context(words, file) -> object:
     return before_context, after_context
 
 
-def test2():
+def xtest2():
     """
     finds most popular comparison phrases and prints some stats
     """
@@ -176,7 +186,7 @@ def test2():
     print(counter)
 
 
-def test3():
+def xtest3():
     before, after = get_context(
         ["oproti", "lepší než", "lepší jak", "better than", "Better than", "better then", "než v", "lepsi nez",
          "to jako", "hra jak", "game like"], "appid_578080_czech.json")
@@ -196,18 +206,19 @@ if __name__ == "__main__":
     #for file in ("appid_359550_czech.json","appid_578080_czech.json","appid_1938090_czech.json"):
     # for r6s
     print("R6S")
-    get_comparisons_to_other_games_stats(
+    get_comparisons_to_other_games_stats("R6S",
         ["ARC", "fofrnajt", "PUBG", 'fortnite', "H1Z1", "BF2042", "BF1","BF4", "BF3", "battlefield", "valorant", "GTA", "COD", "konter","csgo", "cs", "csko", "cska", "csku", "gocko", "gocku", "gočku", "gočko", "gočka", "cs:go", "cs go", "counter","call of duty", "codko", "MW4", "overwatch", "OW"]+["oproti", "lepší než", "lepší jak", "better than", "Better than", "better then", "než v", "lepsi nez",
          "to jako", "hra jak", "game like","horsi nez","horší než"], "appid_359550_czech.json")
     #for pubg
     print("PUBG")
-    get_comparisons_to_other_games_stats(
+    get_comparisons_to_other_games_stats("PUBG",
         ["ARC", "fofrnajt", 'fortnite', "H1Z1", "BF2042","BF4",  "BF1", "BF3", "battlefield", "valorant", "GTA", "COD", "konter","csgo", "cs", "csko", "cska", "csku", "gocko", "gocku", "gočku", "gočko", "gočka", "cs:go", "cs go", "counter","call of duty", "codko", "MW4","war zone", "overwatch", "OW"]+["oproti", "lepší než", "lepší jak", "better than", "Better than", "better then", "než v", "lepsi nez",
          "to jako", "hra jak", "game like","horsi nez","horší než"], "appid_578080_czech.json")
     # for cod
     print("COD")
-    get_comparisons_to_other_games_stats(
+    get_comparisons_to_other_games_stats("COD",
         ["ARC", "fofrnajt", "PUBG", 'fortnite', "H1Z1", "BF2042", "BF1", "BF4", "BF3", "battlefield", "valorant", "GTA",
          "konter", "csgo", "cs", "csko", "cska", "csku", "gocko", "gocku", "gočku", "gočko", "gočka", "cs:go",
          "cs go", "counter", "MW4", "overwatch", "OW"]+["oproti", "lepší než", "lepší jak", "better than", "Better than", "better then", "než v", "lepsi nez",
          "to jako", "hra jak", "game like","horsi nez","horší než"], "appid_1938090_czech.json")
+

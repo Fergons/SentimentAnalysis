@@ -24,5 +24,4 @@ class CRUDSource(CRUDBase[Source, SourceCreate, SourceUpdate]):
         result = await db.execute(select(Source).where(Source.name == name))
         return result.scalars().first()
 
-
 crud_source = CRUDSource(Source)

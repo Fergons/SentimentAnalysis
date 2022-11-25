@@ -70,5 +70,12 @@ async def test_get_reviews_from_list_of_game_ids():
 @pytest.mark.asyncio
 async def test_game_info_to_game_DB():
     async with SteamScraper() as scraper:
-        infos = await scraper.get_games_info([730, 630])
-    assert len(infos) == 2
+        game_details = await scraper.get_games_info([730, 630])
+    assert len(game_details) == 2
+
+
+
+
+
+
+

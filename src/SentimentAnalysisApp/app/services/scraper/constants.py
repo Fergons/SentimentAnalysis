@@ -137,26 +137,29 @@ class SteamReviewer(BaseModel):
     playtime_at_review: Optional[int] = None
     last_played: Optional[int] = None
 
+    class Config:
+        allow_population_by_field_name = True
+
 
 class SteamReview(BaseModel):
     recommendationid: str = Field(alias="source_review_id")
     author: SteamReviewer
     language: Union[SteamApiLanguageCodes, SteamWebApiLanguageCodes]
-    review: str
-    timestamp_created: int
+    review: str = Field(alias="text")
+    timestamp_created: int = Field(alias="created_at")
     timestamp_updated: int
     voted_up: bool
     votes_up: int
     votes_funny: int
-    weighted_vote_score: str
+    weighted_vote_score: str = Field(alias="helpful_score")
     comment_count: int
     steam_purchase: bool
     received_for_free: bool
     written_during_early_access: bool
 
-
     class Config:
         use_enum_values = True
+        allow_population_by_field_name = True
 
 
 class SteamAppReleaseDate(BaseModel):
@@ -184,7 +187,7 @@ class SteamAppCategory(BaseModel):
 class SteamAppDetail(BaseModel):
     type: Literal["game"]
     name: str
-    steam_appid: int = Field(alias="source_app_id")
+    steam_appid: int = Field(alias="source_game_id")
     supported_languages: Optional[str] = None
     header_image: Optional[str] = Field(alias="image_url", default=None)
     developers: Optional[list] = None

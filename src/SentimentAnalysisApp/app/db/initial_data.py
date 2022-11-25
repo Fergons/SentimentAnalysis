@@ -1,10 +1,3 @@
-"""
-Put here any Python code that must be runned before application startup.
-It is included in `init.sh` script.
-
-By defualt `main` create a superuser if it does not exist.
-"""
-
 import asyncio
 from typing import Optional
 
@@ -12,11 +5,17 @@ from fastapi_users.password import get_password_hash
 from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 from sqlalchemy import select
 
-from app import schemas
-from app.core import config
-from app.models.user import User
-from app.db.session import async_session
+import schemas
+from core import config
+from models.user import User
+from db.session import async_session
 
+"""
+Put here any Python code that must be runned before application startup.
+It is included in `init.sh` script.
+
+By defualt `main` create a superuser if it does not exist.
+"""
 
 async def main() -> None:
     print("Start initial data")

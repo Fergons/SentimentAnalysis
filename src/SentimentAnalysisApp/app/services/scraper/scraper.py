@@ -232,19 +232,22 @@ class SteamScraper(Scraper):
             # process
             # ...
             all_reviews.extend(page)
-        return game_id, len(all_reviews)
+        return game_id, all_reviews
 
     async def get_games_reviews(self,
                                 game_ids: Iterable[Union[str, int]],
                                 query_params: Iterable[dict]):
+        results = {}
         tasks = [self.get_game_reviews(game_id, **params) for game_id, params in zip(game_ids, query_params)]
         counter = 1
         for future in asyncio.as_completed(tasks):
             result = await future
-            game_id, num_reviews = result
-            logger.log(logging.INFO, f"{counter}. results are from: {game_id} num_reviews: {num_reviews}!")
+            game_id, reviews = result
+            results[game_id] = reviews
+            logger.log(logging.INFO, f"{counter}. results are from: {game_id} num_reviews: {len(reviews)}!")
             logger.log(logging.INFO, f"Progress {counter}/{len(tasks)} tasks done!")
             counter += 1
+        return results
 
 
 class GamespotScraper(Scraper):

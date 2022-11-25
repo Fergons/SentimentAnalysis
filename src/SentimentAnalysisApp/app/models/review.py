@@ -28,10 +28,10 @@ class Review(Base):
     playtime_at_review = Column(Integer)
 
     # one(game) to many(reviews)
-    game = relationship("Game", back_populates="reviews")
+    game = relationship("Game", back_populates="reviews", lazy="selectin")
     # one(user) to many(reviews)
-    user = relationship("Reviewer", back_populates="reviews")
+    user = relationship("Reviewer", back_populates="reviews", lazy="selectin")
     # one(review) to many(aspects)
-    aspects = relationship("Aspect", back_populates="review")
+    aspects = relationship("Aspect", back_populates="review", lazy="selectin")
 
-    source = relationship("Source", back_populates="reviews")
+    source = relationship("Source", back_populates="reviews", lazy="selectin")

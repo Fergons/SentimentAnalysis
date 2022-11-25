@@ -26,4 +26,4 @@ class CRUDReviewer(CRUDBase[Reviewer, ReviewerCreate, ReviewerUpdate]):
         return db_obj
 
 
-reviewer = CRUDReviewer(Reviewer)
+crud_reviewer = CRUDReviewer(Reviewer)
