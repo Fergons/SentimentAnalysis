@@ -1,5 +1,7 @@
 from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, Union
 
+from sqlalchemy import update
+
 from app.db.base import Base
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
@@ -76,3 +78,6 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         await db.delete(obj)
         await db.commit()
         return obj
+
+    async def touch(self, db: AsyncSession, *, obj_id: int):
+        await db.execute(update(self.model).where(self.model.id == obj_id))

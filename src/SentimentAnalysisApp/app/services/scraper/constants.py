@@ -22,7 +22,7 @@ class ContentType(str, Enum):
 
 
 # 200 calls per 5 mins
-STEAM_API_RATE_LIMIT = {"max_rate": 40, "time_period": 70}
+STEAM_API_RATE_LIMIT = {"max_rate": 200, "time_period": 60}
 DEFAULT_RATE_LIMIT = {"max_rate": 1000, "time_period": 60}
 
 SOURCES = {

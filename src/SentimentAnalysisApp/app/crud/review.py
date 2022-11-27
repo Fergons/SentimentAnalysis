@@ -57,7 +57,6 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
             if db_obj is not None:
                 # possible update of the review in the DB
                 continue
-
             reviewer_db_obj = await crud_reviewer.get_by_source_id(db, obj.source_id, obj.reviewer.source_reviewer_id)
             if reviewer_db_obj is None:
                 obj.reviewer.source_id = obj.source_id

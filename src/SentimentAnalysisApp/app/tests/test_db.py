@@ -93,83 +93,83 @@ async def test_create_db_games(session: AsyncSession):
         assert game.sources[0].source_id == steam.id
 
 
-# @pytest.mark.anyio
-# async def test_create_db_reviews(session: AsyncSession):
-#     games = await crud_game.get_multi(session)
-#     assert len(games) == 2
-#     source_id = games[0].sources[0].source_id
-#     game_ids = [game.id for game in games]
-#     source_game_ids = [game.sources[0].source_game_id for game in games]
-#     async with steam_scraper as scraper:
-#         results = await scraper.get_games_reviews(source_game_ids, [{"language": "czech", "limit": 100} for _ in range(len(source_game_ids))])
-#         for game_id, db_game_id in zip(source_game_ids, game_ids):
-#             reviews = results[game_id]
-#             for review in reviews:
-#                 review_db = await crud_review.create(session,
-#                                                      obj_in=ReviewCreate.parse_obj(
-#                                                          review.dict(by_alias=True, exclude={"author": True})))
-#                 review_db.game_id = db_game_id
-#                 review_db.source_id = games[0].sources[0].source_id
-#                 await session.commit()
-#                 await session.refresh(review_db)
-#
-#     result = await session.execute(select(Review))
-#     assert len(result.scalars().all()) == 200
-#
-#
-# @pytest.mark.anyio
-# async def test_crud_review_create_multi(session: AsyncSession):
-#     _max = 1000
-#     games = await crud_game.get_multi(session)
-#     assert len(games) == 2
-#     source_id = games[0].sources[0].source_id
-#     game_ids = [game.id for game in games]
-#     source_game_ids = [game.sources[0].source_game_id for game in games]
-#     async with steam_scraper as scraper:
-#         results = await scraper.get_games_reviews(source_game_ids, [{"language": "czech", "limit": _max} for _ in range(len(source_game_ids))])
-#         review_create_objs = [
-#             ReviewCreate(source_id=source_id, game_id=db_game_id, **review.dict(by_alias=True))
-#             for game_id, db_game_id in zip(source_game_ids, game_ids)
-#             for review in results[game_id]
-#         ]
-#
-#         await crud_review.create_multi(session, objs_in=review_create_objs)
-#
-#     result = await session.execute(select(Review))
-#     reviews_in_db = result.scalars().all()
-#     logger.log(logging.DEBUG, f"number of review in table: {len(reviews_in_db)}")
-#     assert len(reviews_in_db) >= _max - int(_max / 2)
-#
-# @pytest.mark.anyio
-# async def test_crud_review_create_review_with_reviewer(session: AsyncSession):
-#     games = await crud_game.get_multi(session)
-#     assert len(games) == 2
-#     source_id = games[0].sources[0].source_id
-#     game_ids = [game.id for game in games]
-#     source_game_ids = [game.sources[0].source_game_id for game in games]
-#     async with steam_scraper as scraper:
-#         results = await scraper.get_games_reviews(source_game_ids, [{"language": "czech", "limit": 100} for _ in range(len(source_game_ids))])
-#         review_create_objs = [
-#             ReviewCreate.parse_obj({"source_id": source_id, "game_id": db_game_id, **review.dict(by_alias=True)})
-#             for game_id, db_game_id in zip(source_game_ids, game_ids)
-#             for review in results[game_id]
-#         ]
-#         logger.log(logging.DEBUG, review_create_objs[0].reviewer)
-#         await crud_review.create_with_reviewer_multi(session, objs_in=review_create_objs)
-#
-#     result = await session.execute(select(Review))
-#     reviews_in_db = result.scalars().all()
-#     logger.log(logging.DEBUG, f"number of review in table: {len(reviews_in_db)}")
-#     assert len(reviews_in_db) >= 150
+@pytest.mark.anyio
+async def test_create_db_reviews(session: AsyncSession):
+    games = await crud_game.get_multi(session)
+    assert len(games) == 2
+    source_id = games[0].sources[0].source_id
+    game_ids = [game.id for game in games]
+    source_game_ids = [game.sources[0].source_game_id for game in games]
+    async with steam_scraper as scraper:
+        results = await scraper.get_games_reviews(source_game_ids, [{"language": "czech", "limit": 100} for _ in range(len(source_game_ids))])
+        for game_id, db_game_id in zip(source_game_ids, game_ids):
+            reviews = results[game_id]
+            for review in reviews:
+                review_db = await crud_review.create(session,
+                                                     obj_in=ReviewCreate.parse_obj(
+                                                         review.dict(by_alias=True, exclude={"author": True})))
+                review_db.game_id = db_game_id
+                review_db.source_id = games[0].sources[0].source_id
+                await session.commit()
+                await session.refresh(review_db)
 
-# @pytest.mark.anyio
-# async def test_remove_game(session: AsyncSession):
-#     games = await crud_game.get_multi(session)
-#     assert len(games) == 2
-#     await crud_game.remove(session, id=games[1].id)
-#     games = await crud_game.get_multi(session)
-#     assert len(games) == 1
-#     result = await session.execute(select(GameSource))
-#     #test cascade delete
-#     gamesources = result.scalars().all()
-#     assert len(gamesources) == 1
+    result = await session.execute(select(Review))
+    assert len(result.scalars().all()) == 200
+
+
+@pytest.mark.anyio
+async def test_crud_review_create_multi(session: AsyncSession):
+    _max = 1000
+    games = await crud_game.get_multi(session)
+    assert len(games) == 2
+    source_id = games[0].sources[0].source_id
+    game_ids = [game.id for game in games]
+    source_game_ids = [game.sources[0].source_game_id for game in games]
+    async with steam_scraper as scraper:
+        results = await scraper.get_games_reviews(source_game_ids, [{"language": "czech", "limit": _max} for _ in range(len(source_game_ids))])
+        review_create_objs = [
+            ReviewCreate(source_id=source_id, game_id=db_game_id, **review.dict(by_alias=True))
+            for game_id, db_game_id in zip(source_game_ids, game_ids)
+            for review in results[game_id]
+        ]
+
+        await crud_review.create_multi(session, objs_in=review_create_objs)
+
+    result = await session.execute(select(Review))
+    reviews_in_db = result.scalars().all()
+    logger.log(logging.DEBUG, f"number of review in table: {len(reviews_in_db)}")
+    assert len(reviews_in_db) >= _max - int(_max / 2)
+
+@pytest.mark.anyio
+async def test_crud_review_create_review_with_reviewer(session: AsyncSession):
+    games = await crud_game.get_multi(session)
+    assert len(games) == 2
+    source_id = games[0].sources[0].source_id
+    game_ids = [game.id for game in games]
+    source_game_ids = [game.sources[0].source_game_id for game in games]
+    async with steam_scraper as scraper:
+        results = await scraper.get_games_reviews(source_game_ids, [{"language": "czech", "limit": 100} for _ in range(len(source_game_ids))])
+        review_create_objs = [
+            ReviewCreate.parse_obj({"source_id": source_id, "game_id": db_game_id, **review.dict(by_alias=True)})
+            for game_id, db_game_id in zip(source_game_ids, game_ids)
+            for review in results[game_id]
+        ]
+        logger.log(logging.DEBUG, review_create_objs[0].reviewer)
+        await crud_review.create_with_reviewer_multi(session, objs_in=review_create_objs)
+
+    result = await session.execute(select(Review))
+    reviews_in_db = result.scalars().all()
+    logger.log(logging.DEBUG, f"number of review in table: {len(reviews_in_db)}")
+    assert len(reviews_in_db) >= 150
+
+@pytest.mark.anyio
+async def test_remove_game(session: AsyncSession):
+    games = await crud_game.get_multi(session)
+    assert len(games) == 2
+    await crud_game.remove(session, id=games[1].id)
+    games = await crud_game.get_multi(session)
+    assert len(games) == 1
+    result = await session.execute(select(GameSource))
+    #test cascade delete
+    gamesources = result.scalars().all()
+    assert len(gamesources) == 1

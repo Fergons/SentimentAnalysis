@@ -1,7 +1,8 @@
 import logging
-from typing import List, Optional, Any
+from typing import List, Optional, Any, Tuple
 
 from fastapi.encoders import jsonable_encoder
+from sqlalchemy import column, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
@@ -61,7 +62,30 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]) :
         await db.refresh(game_db_obj)
         return game_db_obj
 
-    async def get_all_source_ids_from_source(self, db: AsyncSession, *, source_id: int) -> List[int]:
+
+    async def get_all_db_games_from_source(self, db: AsyncSession, *, source_id: int) -> List[GameSource]:
+        result = await db.execute(
+            select(GameSource)
+            .where(
+                (GameSource.source_id == source_id) &
+                (GameSource.game_id is not None)
+            )
+        )
+        return result.scalars().all()
+
+    async def get_all_not_updated_db_games_from_source(self, db: AsyncSession, *, source_id: int) -> List[GameSource]:
+        result = await db.execute(
+            select(GameSource, Game)
+            .where(
+                (GameSource.source_id == source_id) &
+                (GameSource.game_id == Game.id) &
+                (Game.updated_at is not None)
+            )
+            .options(selectinload(GameSource.game))
+        )
+        return result.scalars().all()
+
+    async def get_all_app_ids_from_source(self, db: AsyncSession, *, source_id: int) -> List[int]:
         result = await db.execute(select(GameSource.source_game_id).where(GameSource.source_id == source_id))
         return result.scalars().all()
 

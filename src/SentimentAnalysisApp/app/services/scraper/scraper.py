@@ -1,12 +1,15 @@
 import os
 
 import logging
+
+
 from pydantic import ValidationError
 
 from typing import Union, List, Callable, Tuple, Iterable, Any, Optional
 
 import httpx
 from http import HTTPStatus
+from httpx import ConnectTimeout, ConnectError
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -183,7 +186,7 @@ class SteamScraper(Scraper):
                                review_type: Optional[str] = "all",
                                purchase_type: Optional[str] = "all",
                                cursor: Optional[str] = "*",
-                               limit: int = 10000):
+                               limit: int = 100):
 
         params = {
             "json": 1,
@@ -195,11 +198,13 @@ class SteamScraper(Scraper):
             "purchase_type": purchase_type,
             "num_per_page": limit if limit <= 100 else 100
         }
-
         params = {k: v for k, v in params.items() if v is not None}
         while limit > 0:
             async with self.rate_limit:
-                response = await self.session.get(f"{self.user_reviews_url}/{game_id}", params=params)
+                try:
+                    response = await self.session.get(f"{self.user_reviews_url}/{game_id}", params=params)
+                except (TimeoutError, ConnectTimeout, ConnectError, AssertionError):
+                    continue
 
             logger.log(logging.INFO, f"api call({self.request_counter}):{game_id}: {response.url}")
             result: SteamAppReviewsResponse = self.handle_response(response, formatter=self.game_reviews_formatter)
@@ -238,7 +243,8 @@ class SteamScraper(Scraper):
 
     async def get_games_reviews(self,
                                 game_ids: Iterable[Union[str, int]],
-                                query_params: Iterable[dict]):
+                                query_params: Iterable[dict],
+                                processor: Callable):
         results = {}
         tasks = [self.get_game_reviews(game_id, **params) for game_id, params in zip(game_ids, query_params)]
         counter = 1
