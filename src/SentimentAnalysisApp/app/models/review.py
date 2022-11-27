@@ -1,13 +1,14 @@
 from app.db.base_class import Base
-from sqlalchemy import Boolean, Column, Integer, String, DateTime, func, ForeignKey, TEXT
+from sqlalchemy import Boolean, Column, Integer, String, DateTime, func, ForeignKey, TEXT, UniqueConstraint
 from sqlalchemy.orm import relationship
 
 
 class Review(Base):
     id = Column(Integer, primary_key=True, index=True)
     source_review_id = Column(String)  # source platform dependant
+    source_reviewer_id = Column(String)
     game_id = Column(Integer, ForeignKey('game.id'))
-    user_id = Column(Integer, ForeignKey('reviewer.id'))
+    reviewer_id = Column(Integer, ForeignKey('reviewer.id'))
     source_id = Column(Integer, ForeignKey('source.id'))
 
     language = Column(String)
@@ -30,8 +31,9 @@ class Review(Base):
     # one(game) to many(reviews)
     game = relationship("Game", back_populates="reviews", lazy="selectin")
     # one(user) to many(reviews)
-    user = relationship("Reviewer", back_populates="reviews", lazy="selectin")
+    reviewer = relationship("Reviewer", back_populates="reviews", lazy="selectin")
     # one(review) to many(aspects)
-    aspects = relationship("Aspect", back_populates="review", lazy="selectin")
+    aspects = relationship("Aspect", back_populates="review", lazy="selectin", cascade="all, delete")
 
     source = relationship("Source", back_populates="reviews", lazy="selectin")
+    UniqueConstraint(source_review_id, source_id)

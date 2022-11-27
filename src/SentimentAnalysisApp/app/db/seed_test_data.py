@@ -106,8 +106,8 @@ async def main() -> None:
         review1.game = game1
         review2.game = game1
 
-        review1.user = user1
-        review2.user = user1
+        review1.reviewer = user1
+        review2.reviewer = user1
 
         review1.aspects.append(aspect1)
         review1.aspects.append(aspect2)

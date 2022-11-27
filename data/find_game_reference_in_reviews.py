@@ -124,7 +124,7 @@ def find(regex: re.Pattern = None, review: str = None, context: bool = False):
         # print(match)
         return review
 
-def test1(words, file):
+def xtest1(words, file):
     with open(file, encoding="utf-8") as fopen:
         reviews = json.load(fopen)
     print(len(reviews))

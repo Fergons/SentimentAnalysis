@@ -1,8 +1,9 @@
-from typing import Literal, Union, List, Optional
+from typing import Literal, Union, List, Optional, Dict
 from datetime import datetime
 from enum import Enum
 from app.schemas import Source
 from pydantic import BaseModel, validator, Field
+from pydantic.schema import schema
 
 
 class SourceName(str, Enum):
@@ -21,7 +22,7 @@ class ContentType(str, Enum):
 
 
 # 200 calls per 5 mins
-STEAM_API_RATE_LIMIT = {"max_rate": 200, "time_period": 60}
+STEAM_API_RATE_LIMIT = {"max_rate": 40, "time_period": 70}
 DEFAULT_RATE_LIMIT = {"max_rate": 1000, "time_period": 60}
 
 SOURCES = {
@@ -29,7 +30,7 @@ SOURCES = {
         {
             "url": "https://store.steampowered.com/api",
             "name": SourceName.STEAM,
-            "user_reviews_url": "https://store.steampowered.com/appreviews/",
+            "user_reviews_url": "https://store.steampowered.com/appreviews",
             "game_detail_url": "https://store.steampowered.com/api/appdetails",
             "list_of_games_url": "https://api.steampowered.com/ISteamApps/GetAppList/v2",
         },
@@ -143,7 +144,7 @@ class SteamReviewer(BaseModel):
 
 class SteamReview(BaseModel):
     recommendationid: str = Field(alias="source_review_id")
-    author: SteamReviewer
+    author: SteamReviewer = Field(alias="reviewer")
     language: Union[SteamApiLanguageCodes, SteamWebApiLanguageCodes]
     review: str = Field(alias="text")
     timestamp_created: int = Field(alias="created_at")
@@ -162,21 +163,9 @@ class SteamReview(BaseModel):
         allow_population_by_field_name = True
 
 
-class SteamAppReleaseDate(BaseModel):
-    coming_soon: bool
-    date: datetime
-
-    @validator("date", pre=True)
-    def parse_date(cls, value):
-        return datetime.strptime(
-            value,
-            "%d %b, %Y"
-        )
-
-
 class SteamMetacriticReview(BaseModel):
     score: int
-    url: str
+    url: Optional[str] = None
 
 
 class SteamAppCategory(BaseModel):
@@ -185,8 +174,8 @@ class SteamAppCategory(BaseModel):
 
 
 class SteamAppDetail(BaseModel):
-    type: Literal["game"]
-    name: str
+    type: str = ""
+    name: str = ""
     steam_appid: int = Field(alias="source_game_id")
     supported_languages: Optional[str] = None
     header_image: Optional[str] = Field(alias="image_url", default=None)
@@ -195,10 +184,19 @@ class SteamAppDetail(BaseModel):
     metacritic: Optional[SteamMetacriticReview] = None
     categories: List[SteamAppCategory] = []
     genres: List[SteamAppCategory] = []
-    release_date: SteamAppReleaseDate
+    release_date: Optional[datetime]
 
     class Config:
         allow_population_by_field_name = True
+
+    @validator("release_date", pre=True)
+    def parse_date(cls, value):
+        if value["coming_soon"]:
+            return None
+        return datetime.strptime(
+            value["date"],
+            "%d %b, %Y"
+        )
 
 
 class SteamAppReviewsResponse(BaseModel):
@@ -208,24 +206,39 @@ class SteamAppReviewsResponse(BaseModel):
     query_summary: SteamReviewQuerySummary
     error: str = ""
 
+    @classmethod
     @validator("success", pre=True)
     def validate_status(cls, value):
         if value == 1:
             return value
         else:
-            raise ValueError(f"status:{value} error:{cls.error}")
+            raise ValueError(f"Response status: {value}")
 
 
 class SteamAppDetailResponse(BaseModel):
     success: bool
-    data: SteamAppDetail
+    data: Optional[SteamAppDetail] = None
     error: str = ""
 
+    @classmethod
     @validator("success", pre=True)
     def validate_status(cls, value):
         if value:
             return value
         else:
-            raise ValueError(f"status:{value} error:{cls.error}")
+            raise ValueError(f"Response status: {value}")
+
+
+class SteamApp(BaseModel):
+    name: str
+    appid: int
+
+
+class SteamAppListResponse(BaseModel):
+    apps: List[SteamApp]
+
+    def __init__(self, **kwargs):
+        kwargs["apps"] = kwargs["applist"]["apps"]
+        super().__init__(**kwargs)
 
 

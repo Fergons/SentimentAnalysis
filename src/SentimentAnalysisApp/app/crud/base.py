@@ -27,6 +27,16 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         obj = result.scalars().first()
         return obj
 
+    async def get_by_source_id(self, db: AsyncSession, source_id: Any, source_obj_id: Any) -> Optional[ModelType]:
+        result = await db.execute(
+            select(self.model)
+            .where(
+                (self.model.source_id == source_id) &
+                (getattr(self.model, f"source_{self.model.__tablename__}_id") == source_obj_id)
+            )
+        )
+        return result.scalars().first()
+
     async def get_multi(
             self, db: AsyncSession, *, skip: int = 0, limit: int = 100
     ) -> List[ModelType]:
@@ -34,7 +44,6 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         return result.scalars().all()
 
     async def create(self, db: AsyncSession, *, obj_in: CreateSchemaType) -> ModelType:
-        obj_in_data = jsonable_encoder(obj_in)
         db_obj = self.model(**obj_in.dict())  # type: ignore
         db.add(db_obj)
         await db.commit()

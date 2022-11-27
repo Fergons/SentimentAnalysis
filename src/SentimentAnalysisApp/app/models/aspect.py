@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship
 
 class Aspect(Base):
     id = Column(Integer, primary_key=True, index=True)
-    review_id = Column(Integer, ForeignKey('review.id'))
+    review_id = Column(Integer, ForeignKey('review.id', ondelete="CASCADE"))
     term = Column(String)
     category = Column(String)
     polarity = Column(String)

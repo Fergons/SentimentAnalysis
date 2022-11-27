@@ -7,9 +7,13 @@ from typing import Union, List, Callable, Tuple, Iterable, Any, Optional
 
 import httpx
 from http import HTTPStatus
-from .constants import ContentType, STEAM_API_RATE_LIMIT, SOURCES, SourceName, DEFAULT_RATE_LIMIT, SteamAppDetail, \
-    SteamAppDetailResponse, SteamAppReviewsResponse
+
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from constants import ContentType, STEAM_API_RATE_LIMIT, SOURCES, SourceName, DEFAULT_RATE_LIMIT, SteamAppDetail, \
+    SteamAppDetailResponse, SteamAppReviewsResponse, SteamAppListResponse, SteamApp
 from aiolimiter import AsyncLimiter
+from app.db.session import async_session
 from datetime import date
 from datetime import datetime
 
@@ -86,7 +90,11 @@ class Scraper:
                         formatter_params: dict = {},
                         ) -> Any:
         if validator(response, **validator_params):
-            return formatter(response, **formatter_params)
+            try:
+                return formatter(response, **formatter_params)
+            except ValidationError:
+                return None
+
 
     async def get_game_reviews(self, game_id):
         pass
@@ -100,16 +108,6 @@ class Scraper:
     async def get_reviewer_info(self, reviewer_id):
         pass
 
-    async def _get_game_reviews_api(self, game_id):
-        # async with httpx.AsyncClient() as client:
-        #     r = await client.get('https://www.example.com/')
-        # if r.status_code == HTTPStatus.OK:
-        #     return r
-        pass
-
-    def _scrape_games(self):
-        pass
-
 
 class SteamScraper(Scraper):
     _source = SOURCES[SourceName.STEAM]
@@ -121,13 +119,13 @@ class SteamScraper(Scraper):
                          rate_limit=self._rate_limit,
                          **self._source)
 
-    async def get_games(self):
+    async def get_games(self) -> List[SteamApp]:
         response = await self.session.get(self.list_of_games_url)
         result = self.handle_response(response,
                                       self.json_response_validator,
-                                      lambda r: r.json().get("applist", {}).get("apps"))
+                                      lambda r: SteamAppListResponse.parse_obj(r.json()).apps)
         if result is not None:
-            return [app for app in result if app.get("name") != ""]
+            return [app for app in result if app.name != ""]
 
     @staticmethod
     def game_info_formatter(r, **params) -> Optional[SteamAppDetail]:
@@ -135,10 +133,10 @@ class SteamScraper(Scraper):
         try:
             return [SteamAppDetailResponse.parse_obj(detail).data for app, detail in r_json.items()][0]
         except ValidationError as e:
-            logger.log(logging.DEBUG, e)
+            logger.log(logging.ERROR, e)
             return None
 
-    async def get_game_info(self, game_id: Union[int, str]) -> SteamAppDetail:
+    async def get_game_info(self, game_id: Union[int, str]) -> Optional[SteamAppDetail]:
         params = {
             "appids": game_id,
             "language": "eng"
@@ -231,6 +229,10 @@ class SteamScraper(Scraper):
         async for page in self.game_reviews_page_generator(game_id, **kwargs):
             # process
             # ...
+            # processor = kwargs.get("processor")
+            # if kwargs.get("processor") is not None:
+            #     processor(game_id=game_id, reviews=page)
+
             all_reviews.extend(page)
         return game_id, all_reviews
 
@@ -261,6 +263,7 @@ class GamespotScraper(Scraper):
                          api_key=self._api_key,
                          rate_limit=self._rate_limit,
                          **self._source)
+
 
 
 if __name__ == "__main__":

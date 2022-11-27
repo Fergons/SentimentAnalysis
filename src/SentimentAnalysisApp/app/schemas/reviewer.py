@@ -9,16 +9,17 @@ if TYPE_CHECKING:
 
 
 class ReviewerBase(BaseModel):
-    name: str = ""
+    name: Optional[str] = None
     source_reviewer_id: str
 
 
 class ReviewerCreate(ReviewerBase):
-    name: str = ""
+    name: Optional[str] = None
+    source_id: Optional[int] = None
     source_reviewer_id: str
+    num_games_owned: Optional[int] = None
     num_reviews: Optional[int] = None
-
-
+    playtime_at_review: Optional[int] = None
 
 # Properties to receive via API on update
 class ReviewerUpdate(ReviewerBase):

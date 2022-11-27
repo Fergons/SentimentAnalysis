@@ -13,15 +13,15 @@ class Game(Base):
 
     # one(game) to many(reviews)
     reviews = relationship("Review", back_populates="game", lazy="selectin")
-    sources = relationship("GameSource", back_populates="game", lazy="selectin")
-    categories = relationship("GameCategory", back_populates="game", lazy="selectin")
-
+    # reviewers = relationship("GameReviewer", back_populates="game", lazy="selectin", cascade="all, delete")
+    sources = relationship("GameSource", back_populates="game", lazy="selectin", cascade="all, delete")
+    categories = relationship("GameCategory", back_populates="game", lazy="selectin", cascade="all, delete")
 
 class Category(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
 
-    games = relationship("GameCategory", back_populates="category", lazy="selectin")
+    games = relationship("GameCategory", back_populates="category", lazy="selectin", cascade="all, delete")
 
 
 class GameCategory(Base):

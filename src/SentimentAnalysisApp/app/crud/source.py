@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
 from app.crud.base import CRUDBase
-from app.models.source import Source
+from app.models.source import Source, GameSource
 from app.schemas.source import SourceCreate, SourceUpdate
 
 
@@ -23,5 +23,10 @@ class CRUDSource(CRUDBase[Source, SourceCreate, SourceUpdate]):
     async def get_by_name(self, db: AsyncSession, *, name: str) -> Optional[Source]:
         result = await db.execute(select(Source).where(Source.name == name))
         return result.scalars().first()
+
+    async def get_by_url(self, db: AsyncSession, *, url: str) -> Optional[Source]:
+        result = await db.execute(select(Source).where(Source.url == url))
+        return result.scalars().first()
+
 
 crud_source = CRUDSource(Source)

@@ -14,3 +14,4 @@ Review.update_forward_refs(Game=Game, Source=Source, Aspect=Aspect, Reviewer=Rev
 Aspect.update_forward_refs(Review=Review,)
 Source.update_forward_refs(Game=Game, Review=Review, Reviewer=Reviewer)
 GameFromSourceCreate.update_forward_refs(Source=Source)
+ReviewCreate.update_forward_refs(ReviewerCreate=ReviewerCreate)

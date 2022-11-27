@@ -21,7 +21,7 @@ class Source(Base):
 
     reviews = relationship("Review", back_populates="source", lazy="selectin")
     reviewers = relationship("Reviewer", back_populates="source", lazy="selectin")
-    games = relationship("GameSource", back_populates="source", lazy="selectin")
+    games = relationship("GameSource", back_populates="source", lazy="selectin", cascade="all, delete")
 
 
 # mapping table between many to many relationship (Game <-> Source)

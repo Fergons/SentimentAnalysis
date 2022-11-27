@@ -5,10 +5,12 @@ from fastapi_users.password import get_password_hash
 from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 from sqlalchemy import select
 
-import schemas
-from core import config
-from models.user import User
-from db.session import async_session
+import app.schemas as schemas
+from app.core import config
+from app.crud import crud_source
+from app.models.user import User
+from app.db.session import async_session
+from app.services.scraper.constants import SOURCES
 
 """
 Put here any Python code that must be runned before application startup.
@@ -26,6 +28,9 @@ async def main() -> None:
             )
         )
         user: Optional[User] = result.scalars().first()
+
+        for name, value in SOURCES.items():
+            await crud_source.create(session, obj_in=schemas.SourceCreate(**value))
 
         if user is None:
             await SQLAlchemyUserDatabase(schemas.UserDB, session, User).create(
