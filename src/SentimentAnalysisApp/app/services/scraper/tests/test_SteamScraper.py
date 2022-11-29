@@ -2,6 +2,7 @@ import hashlib
 import json
 from ..scraper import SteamScraper
 import pytest
+import asyncio
 
 import logging
 
@@ -12,14 +13,12 @@ logging.basicConfig(
 logger = logging.getLogger("test_SteamScraper.py")
 
 
-
-
-
 @pytest.mark.asyncio
 async def test_get_games_info():
     async with SteamScraper() as scraper:
         infos = await scraper.get_games_info([730, 630])
     assert len(infos) == 2
+
 
 @pytest.mark.asyncio
 async def test_not_a_game_info():
@@ -64,14 +63,6 @@ async def test_get_game_reviews_with_large_limit():
 async def test_get_reviews_from_list_of_game_ids():
     async with SteamScraper() as scraper:
         await scraper.get_games_reviews([730, 620, 578080], [{"language": "czech", "limit": 10000} for x in range(3)])
-
-
-
-@pytest.mark.asyncio
-async def test_game_info_to_game_DB():
-    async with SteamScraper() as scraper:
-        game_details = await scraper.get_games_info([730, 630])
-    assert len(game_details) == 2
 
 
 

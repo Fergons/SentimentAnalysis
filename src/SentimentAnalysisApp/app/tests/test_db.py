@@ -12,7 +12,8 @@ from app.models import Base, Source, Review
 from app.schemas import SourceCreate, GameFromSourceCreate, ReviewCreate, ReviewerCreate
 from app.crud import crud_source, crud_game, crud_review
 
-from app.services.scraper.constants import SOURCES, SteamAppDetail, SteamReview
+from app.services.scraper.constants import SOURCES
+from app.services.scraper.steam_resources import SteamAppDetail, SteamReview
 from app.db.session import async_engine, async_session
 from app.services.scraper.scraper import SteamScraper
 from app.models.source import GameSource

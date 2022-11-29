@@ -11,7 +11,7 @@ from app.schemas.game import GameCreate, GameFromSourceCreate
 from app.crud.game import crud_game
 from app.schemas.review import ReviewCreate
 from scraper import SteamScraper, Scraper
-from constants import SteamAppListResponse, SteamApp, SteamReview, SteamAppDetail
+from steam_resources import SteamAppListResponse, SteamApp, SteamReview, SteamAppDetail
 from random import sample
 steam_scraper = SteamScraper()
 

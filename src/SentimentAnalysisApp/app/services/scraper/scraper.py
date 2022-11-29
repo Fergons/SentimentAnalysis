@@ -2,7 +2,7 @@ import os
 
 import logging
 
-
+from fastapi.encoders import jsonable_encoder
 from pydantic import ValidationError
 
 from typing import Union, List, Callable, Tuple, Iterable, Any, Optional
@@ -13,8 +13,22 @@ from httpx import ConnectTimeout, ConnectError
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from constants import ContentType, STEAM_API_RATE_LIMIT, SOURCES, SourceName, DEFAULT_RATE_LIMIT, SteamAppDetail, \
-    SteamAppDetailResponse, SteamAppReviewsResponse, SteamAppListResponse, SteamApp
+from .constants import ContentType, STEAM_API_RATE_LIMIT, SOURCES, SourceName, DEFAULT_RATE_LIMIT
+from .steam_resources import (SteamAppDetail,
+                              SteamAppDetailResponse,
+                              SteamAppReviewsResponse,
+                              SteamAppListResponse,
+                              SteamApp)
+
+from .gamespot_resources import (GamespotRequestParams,
+                                 GamespotFilterParam,
+                                 GamespotSortParam,
+                                 GamespotGame,
+                                 GamespotReviewsSortFields,
+                                 GamespotReviewsFilterFields,
+                                 GamespotReview,
+                                 GamespotApiResponse)
+
 from aiolimiter import AsyncLimiter
 from app.db.session import async_session
 from datetime import date
@@ -87,7 +101,7 @@ class Scraper:
 
     def handle_response(self,
                         response: httpx.Response,
-                        validator: Callable = lambda r: SteamScraper.json_response_validator(r),
+                        validator: Callable = lambda r: Scraper.json_response_validator(r),
                         formatter: Callable = lambda r: r.json(),
                         validator_params: dict = {},
                         formatter_params: dict = {},
@@ -243,8 +257,7 @@ class SteamScraper(Scraper):
 
     async def get_games_reviews(self,
                                 game_ids: Iterable[Union[str, int]],
-                                query_params: Iterable[dict],
-                                processor: Callable):
+                                query_params: Iterable[dict]):
         results = {}
         tasks = [self.get_game_reviews(game_id, **params) for game_id, params in zip(game_ids, query_params)]
         counter = 1
@@ -270,7 +283,60 @@ class GamespotScraper(Scraper):
                          rate_limit=self._rate_limit,
                          **self._source)
 
+    @staticmethod
+    def game_reviews_formatter(r) -> Optional[GamespotApiResponse]:
+        r_json = r.json()
+        return GamespotApiResponse.parse_obj(r_json)
 
+
+    @staticmethod
+    def game_info_formatter():
+        pass
+
+    async def get_games(self) -> List[SteamApp]:
+        pass
+
+    async def game_reviews_page_generator(self, params: GamespotRequestParams, max_reviews: int = 100):
+        while max_reviews > params.limit*params.offset:
+
+            async with self.rate_limit:
+                try:
+                    response = await self.session.get(self.user_reviews_url, params=params.dict(exclude_none=True))
+                except (TimeoutError, ConnectTimeout, ConnectError, AssertionError):
+                    continue
+                logger.log(logging.INFO, f"api call({self.request_counter}):{params.offset}:{response.url}")
+
+            result: GamespotApiResponse = self.handle_response(response, formatter=self.game_reviews_formatter)
+            if result is None:
+                logger.log(logging.INFO, f"no result StopAsyncIteration ")
+                break
+
+            if result.number_of_page_results < params.limit:
+                logger.log(logging.INFO, f"all reviews scraped StopAsyncIteration {result}")
+                break
+
+            params.offset = params.offset + result.number_of_page_results
+            logger.log(logging.DEBUG,
+                       f"api call({self.request_counter}): get_game_reviews yield {len(result.results)} reviews")
+            self.request_counter += 1
+            yield result.results
+
+    async def get_game_info(self, game_id: Union[int, str]) -> Optional[SteamAppDetail]:
+        pass
+
+
+    async def get_game_reviews(self, game_id, **kwargs):
+        pass
+
+    async def get_games_info(self, game_ids: Iterable[Union[str, int]]) -> List[SteamAppDetail]:
+        pass
+
+    async def get_games_reviews(self,
+                                game_ids: Iterable[Union[str, int]],
+                                query_params: Iterable[dict],
+                                processor: Callable):
+
+        pass
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
