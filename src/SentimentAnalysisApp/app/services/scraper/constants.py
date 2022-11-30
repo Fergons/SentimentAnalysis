@@ -48,9 +48,10 @@ SOURCES = {
         {
             "url": "https://www.gamespot.com/api/",
             "name": SourceName.GAMESPOT,
-            "user_reviews_url": "https://www.gamespot.com/api/reviews",
-            "game_detail_url": "http://www.gamespot.com/api/games",
-            "list_of_games_url": "http://www.gamespot.com/api/games",
+            "user_reviews_url": "https://www.gamespot.com/api/reviews/",
+            "critic_reviews_url": "https://www.gamespot.com/api/reviews/",
+            "game_detail_url": "http://www.gamespot.com/api/games/",
+            "list_of_games_url": "http://www.gamespot.com/api/games/",
         }
 }
 

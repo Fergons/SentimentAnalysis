@@ -99,12 +99,12 @@ class GamespotFranchise(BaseModel):
 class GamespotGame(BaseModel):
     id: int
     name: str
-    description: str
-    release_date: datetime
-    deck: str
-    image: GamespotImage
-    genres: List[GamespotGenre] = []
-    themes: List[GamespotTheme]
+    description: Optional[str] = None
+    release_date: Optional[datetime] = None
+    deck: Optional[str] = None
+    image: Optional[GamespotImage] = None
+    genres: Optional[List[GamespotGenre]] = []
+    themes: Optional[List[GamespotTheme]] = []
     franchises: Optional[List[GamespotFranchise]] = None
     images_api_url: Optional[AnyHttpUrl] = None
     reviews_api_url: Optional[AnyHttpUrl] = None
@@ -125,21 +125,22 @@ class GamespotGame(BaseModel):
 
 
 class GamespotReview(BaseModel):
+    id: int = Field(alias="source_game_id")
+    authors: str = Field(alias="reviewer")
+    lede: str = Field(alias="text")
+    language: str = "english"
     publish_date: datetime
     update_date: datetime
     review_type: str
-    id: int
-    authors: str
     title: str
     image: GamespotImage
     score: str
     deck: str
     good: List[str]
     bad: List[str]
-    body: str
-    lede: str
-    game: GamespotGame
+    game: Optional[GamespotGame] = None
     site_detail_url: str
+
 
     class Config:
         allow_population_by_field_name = True
@@ -161,7 +162,7 @@ class GamespotReview(BaseModel):
 class GamespotRequestParams(BaseModel):
     api_key: str = os.environ.get("GAMESPOT_API_KEY")
     format: Literal["xml", "json", "jsonp"] = "json"
-    field_list: Optional[List[str]]
+    field_list: Optional[str] = None
     limit: int = 100
     offset: int = 0
     sort: Optional[GamespotSortParam] = None  # &sort=field:direction where direction is either asc or desc.
@@ -169,6 +170,13 @@ class GamespotRequestParams(BaseModel):
     # Date filters: &filter=field:start date|end date (using datetime format)
     # Associations: &association=guid
     filter: Optional[List[GamespotFilterParam]] = None
+
+    @validator("field_list", always=True, pre=True)
+    def create_field_list(cls, value) -> Optional[str]:
+        if isinstance(value, list):
+            return ",".join(value)
+        else:
+            return value
 
     @validator("sort")
     def validate_sort(cls, value):

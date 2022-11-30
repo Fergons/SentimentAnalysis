@@ -3,13 +3,14 @@ import os
 import logging
 
 from fastapi.encoders import jsonable_encoder
-from pydantic import ValidationError
+
+from pydantic import ValidationError, AnyHttpUrl
 
 from typing import Union, List, Callable, Tuple, Iterable, Any, Optional
 
 import httpx
 from http import HTTPStatus
-from httpx import ConnectTimeout, ConnectError
+from httpx import ConnectTimeout, ConnectError, URL
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -36,7 +37,7 @@ from datetime import datetime
 
 import asyncio
 
-logger = logging.getLogger("scraper.py")
+logger = logging.getLogger()
 
 
 class Scraper:
@@ -91,9 +92,13 @@ class Scraper:
         self.request_counter = 0
 
         self.default_request_params = {"api_key": self.api_key} if self.api_key is not None else {}
+        self.headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0"
+                        # "Cookie": "hello_from_gs=1",
+                        # "Accept":"text/html,application/xhtml+xml,application/xml"
+                        }
 
     async def __aenter__(self):
-        self.session = httpx.AsyncClient()
+        self.session = httpx.AsyncClient(timeout=None)
         return self
 
     async def __aexit__(self, *args):
@@ -109,9 +114,26 @@ class Scraper:
         if validator(response, **validator_params):
             try:
                 return formatter(response, **formatter_params)
-            except ValidationError:
-                return None
+            except ValidationError as e:
+                logger.log(logging.INFO, f"Validation failed for response from {response.url}.")
+                logger.log(logging.DEBUG, e)
+        else:
+            logger.log(logging.INFO, f"Validation failed for response from {response.url}.")
+            logger.log(logging.DEBUG, response.text)
 
+    async def get_retry(self, url, retries: int = 3, **kwargs):
+        for retry in range(retries):
+            async with self.rate_limit:
+                try:
+                    response = await self.session.get(url, **kwargs)
+                except (TimeoutError, ConnectTimeout, ConnectError, AssertionError):
+                    logger.log(logging.INFO, f"api call:{response.url} TIMED OUT! retry: {retry+1}")
+                    continue
+                else:
+                    logger.log(logging.INFO, f"api call:{response.url}")
+                    break
+
+        return response
 
     async def get_game_reviews(self, game_id):
         pass
@@ -220,7 +242,7 @@ class SteamScraper(Scraper):
                 except (TimeoutError, ConnectTimeout, ConnectError, AssertionError):
                     continue
 
-            logger.log(logging.INFO, f"api call({self.request_counter}):{game_id}: {response.url}")
+            logger.log(logging.INFO, f"api call:{game_id}: {response.url}")
             result: SteamAppReviewsResponse = self.handle_response(response, formatter=self.game_reviews_formatter)
             if result is None:
                 logger.log(logging.INFO, f"no result StopAsyncIteration ")
@@ -238,8 +260,7 @@ class SteamScraper(Scraper):
 
             params["cursor"] = cursor
             limit -= num_reviews
-            logger.log(logging.DEBUG, f"api call({self.request_counter}):{game_id}: get_game_reviews yield")
-            self.request_counter += 1
+            logger.log(logging.DEBUG, f"api call:{game_id}: get_game_reviews yield")
             yield reviews
 
     async def get_game_reviews(self, game_id, **kwargs):
@@ -288,7 +309,6 @@ class GamespotScraper(Scraper):
         r_json = r.json()
         return GamespotApiResponse.parse_obj(r_json)
 
-
     @staticmethod
     def game_info_formatter():
         pass
@@ -296,30 +316,34 @@ class GamespotScraper(Scraper):
     async def get_games(self) -> List[SteamApp]:
         pass
 
+    async def get_reviews_page(self, params: GamespotRequestParams) -> Tuple[URL, Optional[GamespotApiResponse]]:
+        response = await self.get_retry(self.critic_reviews_url,
+                                        headers=self.headers,
+                                        params=params.dict(exclude_none=True))
+        return response.url, self.handle_response(response, formatter=self.game_reviews_formatter)
+
     async def game_reviews_page_generator(self, params: GamespotRequestParams, max_reviews: int = 100):
-        while max_reviews > params.limit*params.offset:
-
-            async with self.rate_limit:
-                try:
-                    response = await self.session.get(self.user_reviews_url, params=params.dict(exclude_none=True))
-                except (TimeoutError, ConnectTimeout, ConnectError, AssertionError):
-                    continue
-                logger.log(logging.INFO, f"api call({self.request_counter}):{params.offset}:{response.url}")
-
-            result: GamespotApiResponse = self.handle_response(response, formatter=self.game_reviews_formatter)
-            if result is None:
-                logger.log(logging.INFO, f"no result StopAsyncIteration ")
-                break
-
-            if result.number_of_page_results < params.limit:
-                logger.log(logging.INFO, f"all reviews scraped StopAsyncIteration {result}")
-                break
-
-            params.offset = params.offset + result.number_of_page_results
-            logger.log(logging.DEBUG,
-                       f"api call({self.request_counter}): get_game_reviews yield {len(result.results)} reviews")
-            self.request_counter += 1
+        url, result = await self.get_reviews_page(params=params)
+        if result is None:
+            return
+        logger.log(logging.INFO, f"Number of all reviews: {result.number_of_total_results}")
+        if max_reviews is None or max_reviews > result.number_of_total_results:
+            max_reviews = result.number_of_total_results
+        if result.number_of_page_results < params.limit:
             yield result.results
+            return
+
+        tasks = [self.get_reviews_page(params=params.copy(update={"offset": offset}))
+                 for offset in range(result.number_of_page_results, max_reviews, params.limit)]
+        failed_urls = []
+        for future in asyncio.as_completed(tasks):
+            url, result = await future
+            if result is None:
+                failed_urls.append(url)
+                continue
+            logger.info(f"api call:{url}\n{' '*30} returned {len(result.results)} reviews")
+            yield result.results
+
 
     async def get_game_info(self, game_id: Union[int, str]) -> Optional[SteamAppDetail]:
         pass

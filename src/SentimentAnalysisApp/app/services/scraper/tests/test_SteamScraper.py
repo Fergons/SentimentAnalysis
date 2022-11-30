@@ -10,7 +10,7 @@ logging.basicConfig(
     level=logging.DEBUG,
     format='%(asctime)s - %(levelname)s: %(message)s',
 )
-logger = logging.getLogger("test_SteamScraper.py")
+logger = logging.getLogger()
 
 
 @pytest.mark.asyncio
