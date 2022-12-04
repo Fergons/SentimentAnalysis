@@ -12,7 +12,7 @@ class AspectBase(BaseModel):
     category: str
     polarity: str
     confidence: str
-    review: "Review"
+    review_id: int
 
 
 class AspectCreate(AspectBase):

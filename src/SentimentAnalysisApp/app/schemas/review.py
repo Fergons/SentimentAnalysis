@@ -7,7 +7,7 @@ from pydantic import BaseModel, EmailStr, AnyHttpUrl
 if TYPE_CHECKING:
     from .reviewer import ReviewerCreate
     from .source import Source
-    from .game import Game
+    from .game import Game, GameCreate
     from .aspect import Aspect
 
 
@@ -21,6 +21,8 @@ class ReviewCreate(ReviewBase):
     text: str
     language: str = None
     reviewer: Optional["ReviewerCreate"] = None
+    game: Optional["GameCreate"] = None
+    reviewer_id: int = None
     game_id: int = None
     source_id: int = None
     source_review_id: str = None

@@ -6,7 +6,7 @@ from fastapi.encoders import jsonable_encoder
 
 from pydantic import ValidationError, AnyHttpUrl
 
-from typing import Union, List, Callable, Tuple, Iterable, Any, Optional
+from typing import Union, List, Callable, Tuple, Iterable, Any, Optional, AsyncGenerator
 
 import httpx
 from http import HTTPStatus
@@ -28,7 +28,7 @@ from .gamespot_resources import (GamespotRequestParams,
                                  GamespotReviewsSortFields,
                                  GamespotReviewsFilterFields,
                                  GamespotReview,
-                                 GamespotApiResponse)
+                                 GamespotApiResponse, SortDirection)
 
 from aiolimiter import AsyncLimiter
 from app.db.session import async_session
@@ -134,6 +134,9 @@ class Scraper:
                     break
 
         return response
+
+    async def get_all_reviews(self):
+        pass
 
     async def get_game_reviews(self, game_id):
         pass
@@ -322,15 +325,21 @@ class GamespotScraper(Scraper):
                                         params=params.dict(exclude_none=True))
         return response.url, self.handle_response(response, formatter=self.game_reviews_formatter)
 
-    async def game_reviews_page_generator(self, params: GamespotRequestParams, max_reviews: int = 100):
+    async def game_reviews_page_generator(self, max_reviews: Optional[int] = 100
+                                          ) -> AsyncGenerator[List[GamespotReview], None]:
+        params = GamespotRequestParams(
+            sort=GamespotSortParam(field=GamespotReviewsSortFields.publish_date,
+                                   direction=SortDirection.DESC)
+        )
+
         url, result = await self.get_reviews_page(params=params)
         if result is None:
             return
+        yield result.results
         logger.log(logging.INFO, f"Number of all reviews: {result.number_of_total_results}")
         if max_reviews is None or max_reviews > result.number_of_total_results:
             max_reviews = result.number_of_total_results
         if result.number_of_page_results < params.limit:
-            yield result.results
             return
 
         tasks = [self.get_reviews_page(params=params.copy(update={"offset": offset}))
@@ -344,23 +353,29 @@ class GamespotScraper(Scraper):
             logger.info(f"api call:{url}\n{' '*30} returned {len(result.results)} reviews")
             yield result.results
 
-
     async def get_game_info(self, game_id: Union[int, str]) -> Optional[SteamAppDetail]:
         pass
 
-
-    async def get_game_reviews(self, game_id, **kwargs):
+    async def get_game_reviews(self, **kwargs):
         pass
+
 
     async def get_games_info(self, game_ids: Iterable[Union[str, int]]) -> List[SteamAppDetail]:
         pass
 
-    async def get_games_reviews(self,
-                                game_ids: Iterable[Union[str, int]],
-                                query_params: Iterable[dict],
-                                processor: Callable):
+    async def get_all_reviews(self) -> List[GamespotReview]:
+        params = GamespotRequestParams(
+            sort=GamespotSortParam(
+                field=GamespotReviewsSortFields.publish_date,
+                direction=SortDirection.DESC)
+        )
+        reviews = []
+        async for page in self.game_reviews_page_generator(max_reviews=None):
+            reviews.extend(page)
+        return reviews
 
-        pass
+
+
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()

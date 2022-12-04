@@ -97,7 +97,7 @@ class GamespotFranchise(BaseModel):
 
 
 class GamespotGame(BaseModel):
-    id: int
+    id: int = Field(alias="source_game_id")
     name: str
     description: Optional[str] = None
     release_date: Optional[datetime] = None
@@ -125,19 +125,19 @@ class GamespotGame(BaseModel):
 
 
 class GamespotReview(BaseModel):
-    id: int = Field(alias="source_game_id")
-    authors: str = Field(alias="reviewer")
+    id: int = Field(alias="source_review_id")
+    authors: str
     lede: str = Field(alias="text")
     language: str = "english"
-    publish_date: datetime
+    publish_date: datetime = Field(alias="created_at")
     update_date: datetime
     review_type: str
     title: str
     image: GamespotImage
     score: str
     deck: str
-    good: List[str]
-    bad: List[str]
+    good: str
+    bad: str
     game: Optional[GamespotGame] = None
     site_detail_url: str
 
@@ -145,11 +145,11 @@ class GamespotReview(BaseModel):
     class Config:
         allow_population_by_field_name = True
 
-    @validator("good", "bad", pre=True)
-    def parse_good_bad(cls, value):
-        if value == "":
-            return []
-        return value.split("|")
+    # @validator("good", "bad", pre=True)
+    # def parse_good_bad(cls, value):
+    #     if value == "":
+    #         return []
+    #     return value.split("|")
 
     @validator("publish_date", "update_date", pre=True)
     def parse_dates(cls, value):

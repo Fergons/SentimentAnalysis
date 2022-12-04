@@ -7,11 +7,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.session import async_session
 from app.crud.source import crud_source
 from app.crud.review import crud_review
-from app.schemas.game import GameCreate, GameFromSourceCreate
+from app.schemas.game import GameCreate
 from app.crud.game import crud_game
-from app.schemas.review import ReviewCreate
-from scraper import SteamScraper, Scraper
-from steam_resources import SteamAppListResponse, SteamApp, SteamReview, SteamAppDetail
+from app.schemas.review import ReviewCreate, ReviewCreate
+from .scraper import SteamScraper, Scraper
+from .gamespot_resources import GamespotRequestParams
+from .steam_resources import SteamAppListResponse, SteamApp, SteamReview, SteamAppDetail
 from random import sample
 steam_scraper = SteamScraper()
 
@@ -71,11 +72,12 @@ class DBScraper:
                     )
                     continue
 
-                obj_in = GameFromSourceCreate(
+                obj_in = GameCreate(
                     source_id=self.db_source.id,
                     **detail.dict(by_alias=True)
                 )
                 categories = [category.description for category in detail.categories]
+                categories.extend([genre.description for genre in detail.genres])
                 await crud_game.create_with_categories_by_names_and_source(
                     self.session, obj_in=obj_in, names=categories
                 )
@@ -84,7 +86,7 @@ class DBScraper:
             logger.log(logging.INFO, f"Group {group_counter}/{len(games)//bulk_size} done!")
             group_counter += 1
 
-    async def scrape_all_game_reviews(self, game_ids: List[str] = None, db_game_ids: List[int] = None):
+    async def scrape_all_reviews_with_reviewer_for_games(self, game_ids: List[str] = None):
         games = await crud_game.get_all_not_updated_db_games_from_source(self.session, source_id=self.db_source.id)
         if game_ids is None:
             game_ids = {game.source_game_id: game.game.id for game in games}
@@ -107,6 +109,23 @@ class DBScraper:
             logger.log(logging.INFO, f"Progress {counter}/{len(tasks)} tasks done!")
             counter += 1
 
+    async def scrape_all_reviews_with_game(self, max_reviews: int = 100):
+        async for page in self.scraper.game_reviews_page_generator(max_reviews=max_reviews):
+            objs_in = []
+
+            for review in page:
+                review_obj = ReviewCreate.parse_obj(review.dict(by_alias=True))
+                if review_obj.game is None:
+                    continue
+                review_obj.source_id = self.db_source.id
+                review_obj.game.source_id = self.db_source.id
+                objs_in.append(review_obj)
+
+            await crud_review.create_with_game_multi(self.session, objs_in=objs_in)
+
+
+
+
 
 
 async def main():
@@ -114,7 +133,7 @@ async def main():
         async with steam_scraper as scraper:
             db_scraper: DBScraper = await DBScraper.create(scraper=scraper, session=session)
             # await db_scraper.scrape_games()
-            await db_scraper.scrape_all_game_reviews()
+            await db_scraper.scrape_all_reviews_with_reviewer_for_games()
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()

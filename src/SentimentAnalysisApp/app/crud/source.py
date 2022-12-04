@@ -6,7 +6,11 @@ from sqlalchemy.future import select
 
 from app.crud.base import CRUDBase
 from app.models.source import Source, GameSource
-from app.schemas.source import SourceCreate, SourceUpdate
+from app.schemas.source import SourceCreate, SourceUpdate, GameSourceCreate, GameSourceUpdate
+
+
+class CRUDGameSource(CRUDBase[GameSource, GameSourceCreate, GameSourceUpdate]):
+    pass
 
 
 class CRUDSource(CRUDBase[Source, SourceCreate, SourceUpdate]):
@@ -30,3 +34,4 @@ class CRUDSource(CRUDBase[Source, SourceCreate, SourceUpdate]):
 
 
 crud_source = CRUDSource(Source)
+crud_game_source = CRUDGameSource(GameSource)

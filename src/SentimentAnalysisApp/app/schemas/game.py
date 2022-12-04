@@ -38,10 +38,7 @@ class GameCreate(GameBase):
     name: str
     image_url: Optional[AnyHttpUrl] = None
     release_date: Optional[datetime] = None
-
-
-class GameFromSourceCreate(GameCreate):
-    source_id: int
+    source_id: Optional[int] = None
     source_game_id: str
 
 
@@ -52,11 +49,6 @@ class GameUpdate(GameBase):
     release_date: Optional[datetime] = None
     reviews: Optional[List["Review"]] = None
     categories: Optional[List[CategoryBase]] = None
-
-
-class GameFromSourceUpdate(GameUpdate):
-    source_id: int
-    source_game_id: str
 
 
 class GameInDBBase(GameBase):
@@ -73,7 +65,7 @@ class Game(GameInDBBase):
     release_date: Optional[datetime] = None
     reviews: Optional[List["Review"]] = None
     categories: Optional[List[CategoryBase]] = None
-    sources: Optional[List[GameFromSourceCreate]] = None
+    sources: Optional[List[GameCreate]] = None
 
 
 # Additional properties stored in DB

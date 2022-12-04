@@ -57,3 +57,18 @@ class Source(SourceInDBBase):
     reviews: Optional[List["Review"]] = None
     reviewers: Optional[List["Reviewer"]] = None
     games: Optional[List["Game"]] = None
+
+
+class GameSource(BaseModel):
+    source_game_id: str
+
+
+class GameSourceCreate(GameSource):
+    game_id: int
+    source_id: int
+
+
+class GameSourceUpdate(GameSource):
+    game_id: int
+    source_id: int
+    source_game_id: str
