@@ -35,7 +35,7 @@ class CRUDCategory(CRUDBase[Category, CategoryCreate, CategoryUpdate]) :
 class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]) :
     async def get_by_source_id(self, db: AsyncSession, source_id: Any, source_game_id: Any) -> Optional[Game]:
         result = await db.execute(select(GameSource).where((GameSource.source_id == source_id) &
-                                                           (GameSource.source_game_id == source_game_id))
+                                                           (GameSource.source_game_id == str(source_game_id)))
                                   .options(selectinload(GameSource.game)))
         db_obj = result.scalars().first()
         if db_obj is None:

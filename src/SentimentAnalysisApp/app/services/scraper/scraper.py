@@ -1,7 +1,9 @@
 import os
 
 import logging
+import random
 
+from bs4 import BeautifulSoup
 from fastapi.encoders import jsonable_encoder
 
 from pydantic import ValidationError, AnyHttpUrl
@@ -14,6 +16,7 @@ from httpx import ConnectTimeout, ConnectError, URL
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from services.scraper.doupe_resources import DoupeReviewsRequestParams, game_tags, DoupeReview, MAX_PAGE
 from .constants import ContentType, STEAM_API_RATE_LIMIT, SOURCES, SourceName, DEFAULT_RATE_LIMIT
 from .steam_resources import (SteamAppDetail,
                               SteamAppDetailResponse,
@@ -114,9 +117,15 @@ class Scraper:
         if validator(response, **validator_params):
             try:
                 return formatter(response, **formatter_params)
+
             except ValidationError as e:
                 logger.log(logging.INFO, f"Validation failed for response from {response.url}.")
                 logger.log(logging.DEBUG, e)
+
+            except Exception as e:
+                logger.log(logging.INFO, f"Unexpected response error? {response.url}.")
+                logger.log(logging.DEBUG, e)
+
         else:
             logger.log(logging.INFO, f"Validation failed for response from {response.url}.")
             logger.log(logging.DEBUG, response.text)
@@ -167,7 +176,9 @@ class SteamScraper(Scraper):
                                       self.json_response_validator,
                                       lambda r: SteamAppListResponse.parse_obj(r.json()).apps)
         if result is not None:
-            return [app for app in result if app.name != ""]
+            applist = [app for app in result if app.name != ""]
+            random.shuffle(applist)
+            return applist
 
     @staticmethod
     def game_info_formatter(r, **params) -> Optional[SteamAppDetail]:
@@ -246,7 +257,9 @@ class SteamScraper(Scraper):
                     continue
 
             logger.log(logging.INFO, f"api call:{game_id}: {response.url}")
-            result: SteamAppReviewsResponse = self.handle_response(response, formatter=self.game_reviews_formatter)
+            result: SteamAppReviewsResponse = self.handle_response(response,
+                                                                   validator=self.json_response_validator,
+                                                                   formatter=self.game_reviews_formatter)
             if result is None:
                 logger.log(logging.INFO, f"no result StopAsyncIteration ")
                 break
@@ -301,7 +314,7 @@ class GamespotScraper(Scraper):
     _api_key = os.environ.get("GAMESPOT_API_KEY")
 
     def __init__(self):
-        super().__init__(content_type=ContentType.XML,
+        super().__init__(content_type=ContentType.JSON,
                          is_api=True,
                          api_key=self._api_key,
                          rate_limit=self._rate_limit,
@@ -323,7 +336,9 @@ class GamespotScraper(Scraper):
         response = await self.get_retry(self.critic_reviews_url,
                                         headers=self.headers,
                                         params=params.dict(exclude_none=True))
-        return response.url, self.handle_response(response, formatter=self.game_reviews_formatter)
+        return response.url, self.handle_response(response,
+                                                  validator=self.json_response_validator,
+                                                  formatter=self.game_reviews_formatter)
 
     async def game_reviews_page_generator(self, max_reviews: Optional[int] = 100
                                           ) -> AsyncGenerator[List[GamespotReview], None]:
@@ -331,7 +346,6 @@ class GamespotScraper(Scraper):
             sort=GamespotSortParam(field=GamespotReviewsSortFields.publish_date,
                                    direction=SortDirection.DESC)
         )
-
         url, result = await self.get_reviews_page(params=params)
         if result is None:
             return
@@ -359,7 +373,6 @@ class GamespotScraper(Scraper):
     async def get_game_reviews(self, **kwargs):
         pass
 
-
     async def get_games_info(self, game_ids: Iterable[Union[str, int]]) -> List[SteamAppDetail]:
         pass
 
@@ -375,6 +388,57 @@ class GamespotScraper(Scraper):
         return reviews
 
 
+class DoupeScraper(Scraper):
+    _source = SOURCES[SourceName.DOUPE]
+    _rate_limit = DEFAULT_RATE_LIMIT
+
+    def __init__(self):
+        super().__init__(content_type=ContentType.JSON,
+                         is_api=True,
+                         rate_limit=self._rate_limit,
+                         **self._source)
+
+    @staticmethod
+    def game_reviews_formatter(r) -> Optional[List[DoupeReview]]:
+        soup = BeautifulSoup(r.text, "html.parser")
+        nodes = {}
+        reviews = []
+        for element in soup.find_all("span", {"class": game_tags.keys()}):
+            url = element.parent.parent.find("a", {"class": "ar-title"})["href"]
+            tags = nodes.get(url)
+            if tags is None:
+                nodes[url] = []
+                tags = nodes[url]
+            tags.append(game_tags[element["class"][0]])
+
+        for url, tags in nodes.items():
+            reviews.append(DoupeReview(url=url, tags=tags))
+
+        return reviews
+
+    async def get_reviews_page(self, params: DoupeReviewsRequestParams):
+        response = await self.get_retry(self.critic_reviews_url,
+                                        headers=self.headers,
+                                        params=params.dict(exclude_none=True)
+                                        )
+        return response.url, self.handle_response(response,
+                                                  validator=self.html_response_validator,
+                                                  formatter=self.game_reviews_formatter)
+
+    async def game_reviews_page_generator(self) -> AsyncGenerator[List[GamespotReview], None]:
+        params = DoupeReviewsRequestParams(
+            pgnum=1
+        )
+        tasks = [self.get_reviews_page(params=params.copy(update={"pgnum": page_num}))
+                 for page_num in range(1, MAX_PAGE)]
+        failed_urls = []
+        for future in asyncio.as_completed(tasks):
+            url, result = await future
+            if result is None:
+                failed_urls.append(url)
+                continue
+            logger.info(f"api call:{url}\n{' '*30} returned {len(result)} reviews")
+            yield result
 
 
 if __name__ == "__main__":

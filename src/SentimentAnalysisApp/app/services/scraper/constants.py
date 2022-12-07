@@ -10,6 +10,7 @@ class SourceName(str, Enum):
     STEAM = 'steam'
     METACRITIC = 'metacritic'
     GAMESPOT = 'gamespot'
+    DOUPE = 'doupe'
     ALL = 'all'
 
 
@@ -22,8 +23,8 @@ class ContentType(str, Enum):
 
 
 # 200 calls per 5 mins
-STEAM_API_RATE_LIMIT = {"max_rate": 200, "time_period": 60}
-DEFAULT_RATE_LIMIT = {"max_rate": 1000, "time_period": 60}
+STEAM_API_RATE_LIMIT = {"max_rate": 6, "time_period": 10}
+DEFAULT_RATE_LIMIT = {"max_rate": 200, "time_period": 60}
 
 SOURCES = {
     SourceName.STEAM:
@@ -52,7 +53,17 @@ SOURCES = {
             "critic_reviews_url": "https://www.gamespot.com/api/reviews/",
             "game_detail_url": "http://www.gamespot.com/api/games/",
             "list_of_games_url": "http://www.gamespot.com/api/games/",
-        }
+        },
+
+    SourceName.DOUPE:
+        {
+            "url": "https://doupe.zive.cz",
+            "name": SourceName.DOUPE,
+            "user_reviews_url": "https://doupe.zive.cz/recenze/",
+            "critic_reviews_url": "https://doupe.zive.cz/recenze/",
+            "game_detail_url": None,
+            "list_of_games_url": None,
+        },
 }
 
 

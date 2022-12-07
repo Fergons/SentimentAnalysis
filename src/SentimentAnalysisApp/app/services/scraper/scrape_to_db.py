@@ -63,7 +63,7 @@ class DBScraper:
                     continue
                 if detail.type != "game":
                     db_game = await crud_game.get_by_source_id(
-                        self.session, source_id=self.db_source.id, source_obj_id=detail.steam_appid)
+                        self.session, source_id=self.db_source.id, source_game_id=detail.steam_appid)
                     if db_game is not None:
                         continue
 
@@ -132,8 +132,8 @@ async def main():
     async with async_session() as session:
         async with steam_scraper as scraper:
             db_scraper: DBScraper = await DBScraper.create(scraper=scraper, session=session)
-            # await db_scraper.scrape_games()
-            await db_scraper.scrape_all_reviews_with_reviewer_for_games()
+            await db_scraper.scrape_games()
+            # await db_scraper.scrape_all_reviews_with_reviewer_for_games()
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()

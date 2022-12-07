@@ -21,13 +21,6 @@ from ..gamespot_resources import (GamespotRequestParams,
                                   GamespotReviewsSortFields,
                                   SortDirection)
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    format='%(asctime)s - %(levelname)s: %(message)s',
-)
-logger = logging.getLogger()
-
-
 @pytest.fixture(scope="session")
 def anyio_backend():
     return "asyncio"

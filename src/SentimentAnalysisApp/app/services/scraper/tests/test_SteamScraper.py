@@ -36,7 +36,7 @@ async def test_get_game_reviews_with_large_limit():
     reviews = []
     hashes = []
     async with SteamScraper() as scraper:
-        async for page in scraper.game_reviews_page_generator(730, language="czech", limit=10000):
+        async for page in scraper.game_reviews_page_generator(730, language="czech", limit=200):
 
             try:
                 assert all(map(lambda x: x.language == "czech", page))
