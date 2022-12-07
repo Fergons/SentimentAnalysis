@@ -131,17 +131,21 @@ class Scraper:
             logger.log(logging.DEBUG, response.text)
 
     async def get_retry(self, url, retries: int = 3, **kwargs):
+
         for retry in range(retries):
+            response = None
             async with self.rate_limit:
                 try:
                     response = await self.session.get(url, **kwargs)
                 except (TimeoutError, ConnectTimeout, ConnectError, AssertionError):
-                    logger.log(logging.INFO, f"api call:{response.url} TIMED OUT! retry: {retry+1}")
+                    if response is not None:
+                        logger.log(logging.INFO, f"api call:{response.url} TIMED OUT! retry: {retry+1}")
                     continue
                 else:
                     logger.log(logging.INFO, f"api call:{response.url}")
                     break
-
+        if response is None:
+            raise ValueError(f"Could establish connection to {url}.")
         return response
 
     async def get_all_reviews(self):
@@ -413,24 +417,52 @@ class DoupeScraper(Scraper):
 
         for url, tags in nodes.items():
             reviews.append(DoupeReview(url=url, tags=tags))
-
         return reviews
 
+    @staticmethod
+    def game_review_formatter(r, review=None) -> Optional[DoupeReview]:
+        soup = BeautifulSoup(r.text, "html.parser")
+        good_container = soup.find("div", {"class": "rating-plus"}) or\
+                         soup.find("ul", {"class": "game-plus"}) or\
+                         soup.find("td", {"bgcolor": "#e2e2e2"})
+
+        bad_container = soup.find("div", {"class": "rating-minus"}) or\
+                        soup.find("ul", {"class": "game-minus"}) or\
+                        soup.find("td", {"bgcolor": "#ababab"})
+
+        score = soup.find("span", {"class": "bigger"}).string or \
+                soup.find("span", {"class": "rating"})["content"] or \
+                soup.find("strong",
+                          string=lambda t: t in ("Závěrečné hodnocení:",
+                                                 "Celkové hodnocení:")).next_sibling.split("/")[0]
+
+        text_container = soup.find("div", {"class": "infobox-data"})
+        if text_container is not None:
+            review.text = text_container.find("p").string
+        if good_container is not None:
+            review.good = "|".join([x.string for x in good_container.find_all("li", recursive=True)])
+        if bad_container is not None:
+            review.bad = "|".join([x.string for x in bad_container.find_all("li", recursive=True)])
+        review.score = score
+        return review
+
+
     async def get_reviews_page(self, params: DoupeReviewsRequestParams):
+        exclude = {"pgnum"} if params.pgnum == 1 else {}
         response = await self.get_retry(self.critic_reviews_url,
                                         headers=self.headers,
-                                        params=params.dict(exclude_none=True)
+                                        params=params.dict(exclude=exclude,exclude_none=True)
                                         )
         return response.url, self.handle_response(response,
                                                   validator=self.html_response_validator,
                                                   formatter=self.game_reviews_formatter)
 
-    async def game_reviews_page_generator(self) -> AsyncGenerator[List[GamespotReview], None]:
+    async def game_reviews_page_generator(self, max_pages: int = MAX_PAGE) -> AsyncGenerator[List[GamespotReview], None]:
         params = DoupeReviewsRequestParams(
             pgnum=1
         )
         tasks = [self.get_reviews_page(params=params.copy(update={"pgnum": page_num}))
-                 for page_num in range(1, MAX_PAGE)]
+                 for page_num in range(1, max_pages)]
         failed_urls = []
         for future in asyncio.as_completed(tasks):
             url, result = await future
@@ -439,6 +471,24 @@ class DoupeScraper(Scraper):
                 continue
             logger.info(f"api call:{url}\n{' '*30} returned {len(result)} reviews")
             yield result
+
+    async def get_reviews_detail(self,  reviews: List[DoupeReview]) -> List[DoupeReview]:
+        tasks = [self.get_review_detail(review=review)
+                 for review in reviews]
+        results = await asyncio.gather(*tasks)
+        return results
+
+    async def get_review_detail(self, review: DoupeReview) -> Tuple[URL, Optional[DoupeReview]]:
+        response = await self.get_retry(review.url,
+                                        headers=self.headers)
+
+        return response.url, self.handle_response(response,
+                                                  validator=self.html_response_validator,
+                                                  formatter=self.game_review_formatter,
+                                                  formatter_params={"review": review})
+
+
+
 
 
 if __name__ == "__main__":
