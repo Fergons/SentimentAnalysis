@@ -2,12 +2,13 @@ import logging
 from typing import List, Optional, Any, Tuple
 
 from fastapi.encoders import jsonable_encoder
-from sqlalchemy import column, update
+from sqlalchemy import column, update, func, cast
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
 from app.crud.base import CRUDBase
+from app.db.session import RegConfig
 from app.crud.source import crud_source
 from app.models.source import GameSource, Source
 from app.models.game import Game, Category, GameCategory
@@ -31,7 +32,6 @@ class CRUDCategory(CRUDBase[Category, CategoryCreate, CategoryUpdate]) :
         await db.commit()
 
 
-
 class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]) :
     async def get_by_source_id(self, db: AsyncSession, source_id: Any, source_game_id: Any) -> Optional[Game]:
         result = await db.execute(select(GameSource).where((GameSource.source_id == source_id) &
@@ -43,7 +43,12 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]) :
         return db_obj.game
 
     async def get_by_name(self, db: AsyncSession, *, name: str) -> Optional[Category]:
-        result = await db.execute(select(self.model).where(self.model.name == name))
+        ts_query = func.plainto_tsquery(cast("english", RegConfig), name)
+        stmt = select(self.model).where(
+            self.model.name_tsv.bool_op("@@")(ts_query)
+        ).limit(5)
+
+        result = await db.execute(stmt)
         return result.scalars().first()
 
     async def create_with_categories_by_names(

@@ -1,22 +1,13 @@
 import os
-
 import logging
 import random
-
 from bs4 import BeautifulSoup
-from fastapi.encoders import jsonable_encoder
-
 from pydantic import ValidationError, AnyHttpUrl
-
 from typing import Union, List, Callable, Tuple, Iterable, Any, Optional, AsyncGenerator
-
 import httpx
 from http import HTTPStatus
 from httpx import ConnectTimeout, ConnectError, URL
-
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from services.scraper.doupe_resources import DoupeReviewsRequestParams, game_tags, DoupeReview, MAX_PAGE
+from .doupe_resources import DoupeReviewsRequestParams, game_tags, DoupeReview, MAX_PAGE
 from .constants import ContentType, STEAM_API_RATE_LIMIT, SOURCES, SourceName, DEFAULT_RATE_LIMIT
 from .steam_resources import (SteamAppDetail,
                               SteamAppDetailResponse,
@@ -34,10 +25,6 @@ from .gamespot_resources import (GamespotRequestParams,
                                  GamespotApiResponse, SortDirection)
 
 from aiolimiter import AsyncLimiter
-from app.db.session import async_session
-from datetime import date
-from datetime import datetime
-
 import asyncio
 
 logger = logging.getLogger()

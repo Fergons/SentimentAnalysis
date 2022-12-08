@@ -15,7 +15,8 @@ from app.crud import crud_source, crud_game, crud_review
 from app.services.scraper.constants import SOURCES
 from app.services.scraper.steam_resources import SteamAppDetail, SteamReview
 from app.db.session import async_engine, async_session
-from app.services.scraper.scraper import SteamScraper
+from app.services.scraper.scraper import SteamScraper, GamespotScraper, DoupeScraper
+from app.services.scraper.db_scraper import DBScraper
 from app.models.source import GameSource
 
 logging.basicConfig(
@@ -23,18 +24,12 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s: %(message)s',
 )
 logger = logging.getLogger("test_db.py")
-steam_scraper = SteamScraper()
+
+
 
 @pytest.fixture(scope="session")
 def anyio_backend():
     return "asyncio"
-
-
-@pytest.fixture(scope="session")
-def event_loop():
-    loop = asyncio.get_event_loop()
-    yield loop
-    loop.close()
 
 
 @pytest.fixture(scope="session")
@@ -56,11 +51,30 @@ async def session(init_db) -> AsyncGenerator[AsyncSession, None]:
     async with init_db() as session:
         try:
             yield session
-        except:
+        except Exception as e:
             logger.log(logging.CRITICAL, f"Integrity error calling session.close()")
+            raise e
         finally:
             session.close()
 
+
+
+
+@pytest.fixture
+async def steam_db_scraper(session: AsyncSession):
+    async with SteamScraper() as scraper:
+        yield await DBScraper.create(scraper=scraper, session=session)
+
+
+@pytest.fixture
+async def gamespot_db_scraper(session: AsyncSession):
+    async with GamespotScraper() as scraper:
+        yield await DBScraper.create(scraper=scraper, session=session)
+
+@pytest.fixture
+async def doupe_db_scraper(session: AsyncSession):
+    async with DoupeScraper() as scraper:
+        yield await DBScraper.create(scraper=scraper, session=session)
 
 @pytest.mark.anyio
 async def test_create_db_sources(session: AsyncSession):
@@ -68,10 +82,10 @@ async def test_create_db_sources(session: AsyncSession):
     for name, value in SOURCES.items():
         new_source = await crud_source.create(session, obj_in=SourceCreate(**value))
         results.append(new_source)
-    assert len(results) == 3
+    assert len(results) == len(SOURCES.keys())
 
     result = await session.execute(select(Source))
-    assert len(result.scalars().all()) == 3
+    assert len(result.scalars().all()) == len(SOURCES.keys())
 
 
 @pytest.mark.anyio
@@ -79,8 +93,8 @@ async def test_create_db_games(session: AsyncSession):
     steam = await crud_source.get_by_name(session, name="steam")
     assert steam is not None
 
-    async with steam_scraper as scraper:
-        result = await scraper.get_games_info([730, 630])
+    async with SteamScraper() as scraper:
+        result = await scraper.get_games_info([730, 1938090])
     assert len(result) == 2
     for detail in result:
         logger.log(logging.DEBUG, detail.dict(by_alias=True))
@@ -148,7 +162,7 @@ async def test_crud_review_create_review_with_reviewer(session: AsyncSession):
     source_id = games[0].sources[0].source_id
     game_ids = [game.id for game in games]
     source_game_ids = [game.sources[0].source_game_id for game in games]
-    async with steam_scraper as scraper:
+    async with SteamScraper() as scraper:
         results = await scraper.get_games_reviews(source_game_ids, [{"language": "czech", "limit": 100} for _ in range(len(source_game_ids))])
         review_create_objs = [
             ReviewCreate.parse_obj({"source_id": source_id, "game_id": db_game_id, **review.dict(by_alias=True)})
@@ -161,3 +175,15 @@ async def test_crud_review_create_review_with_reviewer(session: AsyncSession):
     reviews_in_db = result.scalars().all()
     logger.log(logging.DEBUG, f"number of review in table: {len(reviews_in_db)}")
     assert len(reviews_in_db) >= 150
+
+
+@pytest.mark.anyio
+async def test_gamespot_db_scraper(gamespot_db_scraper, session: AsyncSession):
+    result = await session.execute(select(Review).where(Review.source_id == gamespot_db_scraper.db_source.id))
+    reviews_in_db = result.scalars().all()
+    assert len(reviews_in_db) == 0
+    await gamespot_db_scraper.scrape_all_reviews_with_game(max_reviews=100)
+    result = await session.execute(select(Review).where(Review.source_id == gamespot_db_scraper.db_source.id))
+    reviews_in_db = result.scalars().all()
+    logger.debug(f"Num gamespot reviews in db: {len(reviews_in_db)}")
+    assert len(reviews_in_db) > 0

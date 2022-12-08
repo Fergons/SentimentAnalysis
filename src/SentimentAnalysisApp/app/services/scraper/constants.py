@@ -1,9 +1,5 @@
-from typing import Literal, Union, List, Optional, Dict
-from datetime import datetime
 from enum import Enum
-from app.schemas import Source
-from pydantic import BaseModel, validator, Field
-from pydantic.schema import schema
+
 
 
 class SourceName(str, Enum):

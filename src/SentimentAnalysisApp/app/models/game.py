@@ -1,11 +1,16 @@
 from app.db.base_class import Base
-from sqlalchemy import Boolean, Column, Integer, String, DateTime, func, ForeignKey
+from sqlalchemy import Boolean, Column, Integer, String, DateTime, func, ForeignKey, Computed, Index
 from sqlalchemy.orm import relationship
+from sqlalchemy_utils.types.ts_vector import TSVectorType
+
 
 
 class Game(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
+    name_tsv = Column(
+        TSVectorType("content", regconfig="english"),
+        Computed("to_tsvector('english', \"name\")", persisted=True))
     image_url = Column(String)
 
     release_date = Column(DateTime(timezone=True), default=None)
@@ -16,6 +21,10 @@ class Game(Base):
     # reviewers = relationship("GameReviewer", back_populates="game", lazy="selectin", cascade="all, delete")
     sources = relationship("GameSource", back_populates="game", lazy="selectin", cascade="all, delete")
     categories = relationship("GameCategory", back_populates="game", lazy="selectin", cascade="all, delete")
+
+    __table_args__ = (
+        Index("idx_game_name_tsv", name_tsv, postgresql_using="gin"),
+    )
 
 class Category(Base):
     id = Column(Integer, primary_key=True, index=True)
