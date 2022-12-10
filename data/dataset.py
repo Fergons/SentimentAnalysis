@@ -1,16 +1,10 @@
 import json
 import re
-from nltk import tokenize
+import emoji
 import pandas as pd
 import sys
 import argparse
-
-
-# sentences = tokenize.sent_tokenize("I po takové době od vydání hra vypadá dobře, hraje se ještě líp a to hlavní, dostává stále nový obsah. Tuto hru mohu velice doporučit pro hráče, kteří hledají taktičtější Counter-Strike.", language="czech")
-
-
-
-
+from nltk import tokenize
 
 def fill_in_missing_data(data):
     """
@@ -44,13 +38,47 @@ def fill_in_missing_data(data):
     return data
 
 
-def clean_text(texts):
+
+def remove_emojis(text):
+    return emoji.replace_emoji(text, replace='')
+
+def remove_emoticons(text):
+    emoticon_string = r"""
+    (?:
+      [<>]?
+      [:;=8]                     # eyes
+      [\-o\*\']?                 # optional nose
+      [\)\]\(\[dDpP/\:\}\{@\|\\] # mouth      
+      |
+      [\)\]\(\[dDpP/\:\}\{@\|\\] # mouth
+      [\-o\*\']?                 # optional nose
+      [:;=8]                     # eyes
+      [<>]?
+    )"""
+    return re.sub(emoticon_string, '', text)
+
+def clean_text(string):
     """
     Removes unnecessary whitespaces, characters, emoticons, non ASCII characters, punctuation, normalizes to lowercase.
-    :param texts: list of texts to clean
-    :return: list of cleaned texts
+    :param string: string to clean
+    :return: cleaned string
     """
-    pass
+    # remove graphical emoji
+    string = remove_emojis(string)
+    # remove textual emoji
+    string = remove_emoticons(string)
+
+    string = ' '.join(string.split())
+
+    # remove user
+    # assuming user has @ in front
+    string = re.sub(r"""(?:@[\w_]+)""", '', string)
+
+    #remove # and @
+    for punc in "'\":!@#":
+        string = string.replace(punc, '')
+
+    return string
 
 
 def dataset_to_df(dataset):
@@ -99,6 +127,24 @@ def dataset_to_df(dataset):
         orient='index')
     return df
 
+def dataset_to_pyabsa(dataset):
+    reviews = get_all_reviews_from_dataset(dataset)
+    dataset = []
+    for review in reviews:
+        text = review.get("text")
+        terms = review.get("aspectTerms", [])
+        for term in terms:
+            word_seq = term.get("term")
+            if word_seq is not None and word_seq != "":
+                try:
+                    new_text = re.sub(word_seq, "$T$", text)
+                    dataset.append((new_text, word_seq, term.get("polarity").capitalize()))
+                except AttributeError:
+                    print(word_seq, " ", text, "\n")
+                    raise
+                else:
+                    continue
+    return dataset
 
 def dataset_to_conll(dataset):
     """
@@ -122,8 +168,8 @@ def dataset_to_conll(dataset):
     conll_dataset = []
     for review in reviews:
         text = review["text"]
-        if review["text"] != "":
-            words = tokenize.word_tokenize(review["text"], language="czech")
+        if text != "":
+            words = tokenize.word_tokenize(text, language="czech")
             terms = review["aspectTerms"]
             labels = ["O"]*len(words)
             for term in terms:
@@ -151,6 +197,18 @@ def load_json_data(file):
         raise
     else:
         return data
+
+
+def save_pyabsa_data(file, dataset):
+    try:
+        with open(file, "w", encoding="utf-8") as fopen:
+            for (t, a, p) in dataset:
+                fopen.write(f"{t}\n{a}\n{p}\n")
+    except (FileNotFoundError, ValueError) as err:
+        print(f"Failed to save data.")
+        raise
+    else:
+        print(f"Data saved to {file}")
 
 
 def save_json_data(file, data):
@@ -184,10 +242,10 @@ def get_all_reviews_from_dataset(dataset):
 
 def main():
     parser = argparse.ArgumentParser('dataset.py')
-    parser.add_argument('--config', help='configuration YAML file.')
     parser.add_argument('--input', default='', help='set dataset input file')
     parser.add_argument('--output', default='', help='set dataset output file')
     parser.add_argument('--to_conll', action="store_true", help='set dataset output file')
+    parser.add_argument('--to_pyabsa', action="store_true", help='set dataset output file')
     parser.add_argument('--fill_missing', action="store_true", help='set dataset output file')
     parser.add_argument('--stats', action="store_true", help="get stats for polarity"),
 
@@ -212,10 +270,23 @@ def main():
                 raise ValueError("File doesn't seem to be a json file.")
 
         if args.output == "":
-            args.output = args.input.split(".")[0].join(["filled", ".json"])
+            args.output = args.input.split(".")[0].join(["filled_", ".json"])
 
         dataset = fill_in_missing_data(load_json_data(args.input))
         save_json_data(args.output, dataset)
+
+    if args.to_pyabsa:
+        if args.input == "":
+            args.input = "annotated_reviews_czech.json"
+        else:
+            if args.input.split(".")[1] != "json":
+                raise ValueError("File doesn't seem to be a json file.")
+
+        if args.output == "":
+            args.output = args.input.split(".")[0].join(["pyabsa_", ".txt"])
+
+        dataset = dataset_to_pyabsa(load_json_data(args.input))
+        save_pyabsa_data(args.output, dataset)
 
 
 if __name__ == "__main__":

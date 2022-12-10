@@ -6735,6 +6735,7 @@
              },
              {
                "term":"grafika", "category":"visuals",
+               "polarity":"positive",
                "from":0,
                "to":0
              }
