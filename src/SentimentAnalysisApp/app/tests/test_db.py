@@ -178,12 +178,41 @@ async def test_crud_review_create_review_with_reviewer(session: AsyncSession):
 
 
 @pytest.mark.anyio
+async def test_steam_db_scraper(steam_db_scraper, session: AsyncSession):
+    await steam_db_scraper.scrape_all_reviews_for_not_updated_games(max_reviews=100)
+
+
+
+@pytest.mark.anyio
 async def test_gamespot_db_scraper(gamespot_db_scraper, session: AsyncSession):
     result = await session.execute(select(Review).where(Review.source_id == gamespot_db_scraper.db_source.id))
     reviews_in_db = result.scalars().all()
     assert len(reviews_in_db) == 0
-    await gamespot_db_scraper.scrape_all_reviews_with_game(max_reviews=100)
+    await gamespot_db_scraper.scrape_all_reviews(max_reviews=100)
     result = await session.execute(select(Review).where(Review.source_id == gamespot_db_scraper.db_source.id))
     reviews_in_db = result.scalars().all()
     logger.debug(f"Num gamespot reviews in db: {len(reviews_in_db)}")
     assert len(reviews_in_db) > 0
+
+
+@pytest.mark.anyio
+async def test_doupe_db_scraper(doupe_db_scraper, session: AsyncSession):
+    await doupe_db_scraper.scrape_all_reviews(max_reviews=100)
+    result = await session.execute(select(Review).where(Review.source_id == doupe_db_scraper.db_source.id))
+    reviews_in_db = result.scalars().all()
+    logger.debug(f"Num doupe reviews in db: {len(reviews_in_db)}")
+    assert len(reviews_in_db) > 0
+
+
+# @pytest.mark.anyio
+# async def test_game_name_search(gamespot_db_scraper, session: AsyncSession):
+#     game = await crud_game.get_by_name(session, name="Need for Speed most wanted")
+#     assert game is not None
+#     logger.debug(game.name)
+#
+#
+# @pytest.mark.anyio
+# async def test_doupe_db_scraper(gamespot_db_scraper, session: AsyncSession):
+#     game = await crud_game.get_by_name(session, name="Need for Speed most wanted")
+#     assert game is not None
+#     logger.debug(game.name)

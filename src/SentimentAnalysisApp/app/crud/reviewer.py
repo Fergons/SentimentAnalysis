@@ -25,5 +25,19 @@ class CRUDReviewer(CRUDBase[Reviewer, ReviewerCreate, ReviewerUpdate]):
         await db.refresh(db_obj)
         return db_obj
 
+    async def create_from_source(
+            self, db: AsyncSession, *, obj_in: ReviewerCreate
+    ) -> Optional[Reviewer]:
+        db_obj = await self.get_by_source_id(db, source_id=obj_in.source_id, source_obj_id=obj_in.source_reviewer_id)
+        if db_obj is not None:
+            return db_obj
+
+        obj_in_data = obj_in.dict(exclude={"playtime_at_review"})
+        db_obj = self.model(**obj_in_data)  # type: ignore
+        db.add(db_obj)
+        await db.commit()
+        await db.refresh(db_obj)
+        return db_obj
+
 
 crud_reviewer = CRUDReviewer(Reviewer)

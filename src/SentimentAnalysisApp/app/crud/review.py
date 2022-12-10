@@ -46,8 +46,17 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
             if db_obj is not None:
                 # possible update of the review in the DB
                 continue
-            db_obj = self.model(**obj.dict(exclude={"reviewer": True}))  # type: ignore
+
+            db_obj = self.model(**obj.dict(exclude={"game", "reviewer"}))  # type: ignore
+            if obj.game is not None:
+                db_obj_game = await crud_game.create_from_source(db, obj_in=obj.game)
+                db_obj.game_id = db_obj_game.id
+            if obj.reviewer is not None:
+                db_obj_reviewer = await crud_reviewer.create_from_source(db, obj_in=obj.reviewer)
+                db_obj.reviewer_id = db_obj_reviewer.id
+
             db.add(db_obj)
+
         await db.commit()
 
     async def create_with_reviewer_multi(

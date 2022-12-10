@@ -141,7 +141,6 @@ class GamespotReview(BaseModel):
     game: Optional[GamespotGame] = None
     site_detail_url: str
 
-
     class Config:
         allow_population_by_field_name = True
 

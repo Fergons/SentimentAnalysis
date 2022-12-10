@@ -117,16 +117,25 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]) :
         await db.commit()
 
     async def create_from_source(self, db: AsyncSession, *,
-                                 obj_in: GameCreate):
-        game_source_db_obj = GameSource(
-            source_id=obj_in.source_id,            # type: ignore
-            source_game_id=str(obj_in.source_game_id)   # type: ignore
-        )
-        db_obj = Game(**obj_in.dict(exclude={"source_id", "source_game_id"}))  # type: ignore
-        game_source_db_obj.game_id = db_obj.id
-        db.add(db_obj)
+                                 obj_in: GameCreate) -> Optional[Game]:
+        db_obj = await self.get_by_source_id(db,
+                                             source_id=obj_in.source_id,
+                                             source_game_id=obj_in.source_game_id)
+        if db_obj is not None:
+            return db_obj
+
+        db_obj = await self.get_by_name(db, name=obj_in.name)
+        if db_obj is None:
+            db_obj = Game(**obj_in.dict(exclude={"source_id", "source_game_id"}))  # type: ignore
+            db.add(db_obj)
+
+        game_source_db_obj = GameSource(source_id=obj_in.source_id,  # type: ignore
+                                        source_game_id=str(obj_in.source_game_id))  # type: ignore
+        game_source_db_obj.game = db_obj
         db.add(game_source_db_obj)
         await db.commit()
+        await db.refresh(db_obj)
+        return db_obj
 
 
 

@@ -1,4 +1,5 @@
 import os
+import json
 import logging
 import random
 from bs4 import BeautifulSoup
@@ -7,7 +8,7 @@ from typing import Union, List, Callable, Tuple, Iterable, Any, Optional, AsyncG
 import httpx
 from http import HTTPStatus
 from httpx import ConnectTimeout, ConnectError, URL
-from .doupe_resources import DoupeReviewsRequestParams, game_tags, DoupeReview, MAX_PAGE
+from .doupe_resources import DoupeReviewsRequestParams, game_tags, DoupeReview, MAX_PAGE, MAX_PER_PAGE
 from .constants import ContentType, STEAM_API_RATE_LIMIT, SOURCES, SourceName, DEFAULT_RATE_LIMIT
 from .steam_resources import (SteamAppDetail,
                               SteamAppDetailResponse,
@@ -356,7 +357,7 @@ class GamespotScraper(Scraper):
                 failed_urls.append(url)
                 continue
             logger.info(f"api call:{url}\n{' '*30} returned {len(result.results)} reviews")
-            yield result.results
+            yield [r for r in result.results if r.game is not None]
 
     async def get_game_info(self, game_id: Union[int, str]) -> Optional[SteamAppDetail]:
         pass
@@ -409,6 +410,7 @@ class DoupeScraper(Scraper):
     @staticmethod
     def game_review_formatter(r, review=None) -> Optional[DoupeReview]:
         soup = BeautifulSoup(r.text, "html.parser")
+        # all_json_data = soup.find_all('script', attrs={'type':'application/ld+json'})
         good_container = soup.find("div", {"class": "rating-plus"}) or\
                          soup.find("ul", {"class": "game-plus"}) or\
                          soup.find("td", {"bgcolor": "#e2e2e2"})
@@ -417,37 +419,45 @@ class DoupeScraper(Scraper):
                         soup.find("ul", {"class": "game-minus"}) or\
                         soup.find("td", {"bgcolor": "#ababab"})
 
-        score = soup.find("span", {"class": "bigger"}).string or \
-                soup.find("span", {"class": "rating"})["content"] or \
+        score_container = soup.find("span", {"class": "bigger"})or \
+                soup.find("span", {"class": "rating"}) or \
                 soup.find("strong",
                           string=lambda t: t in ("Závěrečné hodnocení:",
-                                                 "Celkové hodnocení:")).next_sibling.split("/")[0]
+                                                 "Celkové hodnocení:"))
 
-        text_container = soup.find("div", {"class": "infobox-data"})
+        # text_container = soup.find("div", {"class": "infobox-data"})
+        text_container = soup.find("h3", string="Verdikt")
+
         if text_container is not None:
-            review.text = text_container.find("p").string
+            review.text = text_container.parent.find("p", recursive=True).string
         if good_container is not None:
             review.good = "|".join([x.string for x in good_container.find_all("li", recursive=True)])
         if bad_container is not None:
             review.bad = "|".join([x.string for x in bad_container.find_all("li", recursive=True)])
-        review.score = score
+        if score_container is not None:
+            review.score = score_container.string or\
+                           score_container.get("content") or\
+                           score_container.next_sibling.split("/")[0]
+        if review.text is None:
+            review.text = ""
         return review
-
 
     async def get_reviews_page(self, params: DoupeReviewsRequestParams):
         exclude = {"pgnum"} if params.pgnum == 1 else {}
         response = await self.get_retry(self.critic_reviews_url,
                                         headers=self.headers,
-                                        params=params.dict(exclude=exclude,exclude_none=True)
+                                        params=params.dict(exclude=exclude, exclude_none=True)
                                         )
         return response.url, self.handle_response(response,
                                                   validator=self.html_response_validator,
                                                   formatter=self.game_reviews_formatter)
 
-    async def game_reviews_page_generator(self, max_pages: int = MAX_PAGE) -> AsyncGenerator[List[GamespotReview], None]:
+    async def game_reviews_page_generator(self, max_reviews: int = 100, max_pages: int = MAX_PAGE) -> AsyncGenerator[List[GamespotReview], None]:
         params = DoupeReviewsRequestParams(
             pgnum=1
         )
+        if max_pages*MAX_PER_PAGE > int(max_reviews/MAX_PER_PAGE)*2:
+            max_pages = int(max_reviews/MAX_PER_PAGE)*2
         tasks = [self.get_reviews_page(params=params.copy(update={"pgnum": page_num}))
                  for page_num in range(1, max_pages)]
         failed_urls = []
@@ -456,6 +466,7 @@ class DoupeScraper(Scraper):
             if result is None:
                 failed_urls.append(url)
                 continue
+            await self.get_reviews_detail(result)
             logger.info(f"api call:{url}\n{' '*30} returned {len(result)} reviews")
             yield result
 
@@ -474,15 +485,3 @@ class DoupeScraper(Scraper):
                                                   formatter=self.game_review_formatter,
                                                   formatter_params={"review": review})
 
-
-
-
-
-if __name__ == "__main__":
-    loop = asyncio.get_event_loop()
-    # try:
-    #     loop.run_until_complete()
-    #
-    # except KeyboardInterrupt:
-    #     loop.stop()
-    #     pass

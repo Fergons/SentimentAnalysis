@@ -86,12 +86,12 @@ class DBScraper:
             logger.log(logging.INFO, f"Group {group_counter}/{len(games)//bulk_size} done!")
             group_counter += 1
 
-    async def scrape_all_reviews_with_reviewer_for_games(self, game_ids: List[str] = None):
+    async def scrape_all_reviews_for_not_updated_games(self, game_ids: List[str] = None, max_reviews: int = 100000):
         games = await crud_game.get_all_not_updated_db_games_from_source(self.session, source_id=self.db_source.id)
         if game_ids is None:
             game_ids = {game.source_game_id: game.game.id for game in games}
 
-        tasks = [self.scraper.get_game_reviews(game_id, **{"language": "czech", "limit": 1000000}) for game_id in game_ids.keys()]
+        tasks = [self.scraper.get_game_reviews(game_id, **{"language": "czech", "limit": max_reviews}) for game_id in game_ids.keys()]
         counter = 1
         for future in asyncio.as_completed(tasks):
             result = await future
@@ -102,30 +102,28 @@ class DBScraper:
                     ReviewCreate(source_id=self.db_source.id, game_id=game_ids[game_id], **review.dict(by_alias=True))
                     for review in reviews
                 ]
-                await crud_review.create_with_reviewer_multi(self.session, objs_in=review_create_objs)
+                await crud_review.create_multi(self.session, objs_in=review_create_objs)
                 await crud_game.touch(self.session, obj_id=game_ids[game_id])
 
             logger.log(logging.INFO, f"{counter}. results are from: {game_id} num_reviews: {len(reviews)}!")
             logger.log(logging.INFO, f"Progress {counter}/{len(tasks)} tasks done!")
             counter += 1
 
-    async def scrape_all_reviews_with_game(self, max_reviews: int = 100):
-        async for page in self.scraper.game_reviews_page_generator(max_reviews=max_reviews):
+    async def scrape_all_reviews(self, max_reviews: int = 100):
+        async for page in self.scraper.game_reviews_page_generator():
             objs_in = []
 
             for review in page:
                 review_obj = ReviewCreate.parse_obj(review.dict(by_alias=True))
-                if review_obj.game is None:
-                    continue
                 review_obj.source_id = self.db_source.id
-                review_obj.game.source_id = self.db_source.id
+                if review_obj.game is not None:
+                    review_obj.game.source_id = self.db_source.id
+                if review_obj.reviewer is not None:
+                    review_obj.reviewer.source_id = self.db_source.id
                 objs_in.append(review_obj)
-
-            await crud_review.create_with_game_multi(self.session, objs_in=objs_in)
-
-
-
-
+                if len(objs_in) >= max_reviews:
+                    break
+            await crud_review.create_multi(self.session, objs_in=objs_in)
 
 
 async def main():

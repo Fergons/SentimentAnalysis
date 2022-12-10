@@ -3,6 +3,7 @@ from typing import Optional, List
 from pydantic import BaseModel, Field
 
 MAX_PAGE = 90
+MAX_PER_PAGE = 36
 
 game_tags = {
     "tag-Akce": "Action",
@@ -23,11 +24,12 @@ class DoupeReviewsRequestParams(BaseModel):
 class DoupeReview(BaseModel):
     url: str = Field(alias="source_review_id")
     score: Optional[str] = None
-    text: Optional[str] = None
+    text: str = ""
     good: Optional[str] = None
     bad: Optional[str] = None
     source_reviewer_id: Optional[str] = None
     tags: Optional[List[str]] = None
+    language: str = "czech"
 
     class Config:
         allow_population_by_field_name = True
