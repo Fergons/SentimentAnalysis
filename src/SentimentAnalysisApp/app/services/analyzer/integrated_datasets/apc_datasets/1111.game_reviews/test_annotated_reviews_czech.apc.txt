@@ -1,0 +1,432 @@
+Hra je propracovaná, je to takové reálnější $T$, každou chvilku vychází update.
+CS:GO
+Positive
+Hra je propracovaná, je to takové reálnější CS:GO, každou chvilku vychází $T$.
+update
+Positive
+I přes krátkou $T$ a němou hrdinku jsem si hru užil dosytosti.
+herní dobu
+Negative
+I přes krátkou herní dobu a němou $T$ jsem si hru užil dosytosti.
+hrdinku
+Negative
+$T$ je originální.
+Příběh
+Positive
+$T$ je ale bohužel kvůli hře vykloubena tolikrát, že se vám chce křičet "PROČ???".
+Příběhová logika
+Negative
+hra má fakt dobrý $T$
+grafický zpracování
+Positive
+jsou tam tak $T$ ze to neni mozne
+toxicti hraci
+Negative
+Poslední dobou mi připadá že se o $T$ začali starat jenom mi připadá že by to chtělo udělat něco z tou optimalizací.
+technickou stránku hry
+Positive
+Poslední dobou mi připadá že se o technickou stránku hry začali starat jenom mi připadá že by to chtělo udělat něco z tou $T$.
+optimalizací
+Negative
+Je to o nervy ale asi nejlepší $T$ a jen tak se neomrzí, furt něco nového...
+RANK systém
+Positive
+Myslím že jedna z nejlepších FPS stříleček s dobrou $T$ a svižným tempem.
+hratelností
+Positive
+Myslím že jedna z nejlepších FPS stříleček s dobrou hratelností a svižným $T$.
+tempem
+Neutral
+Většina $T$ je taky dost triviální.
+pazlů
+Negative
+Každý $T$ má svůj příběh stejnak jako každá sezona (operace).
+agent
+Neutral
+Každý agent má svůj $T$ stejnak jako každá sezona (operace).
+příběh
+Neutral
+Každý agent má svůj příběh stejnak jako každá $T$ (operace).
+sezona
+Neutral
+hra nemá $T$
+češtinu
+Negative
+Jedna z nejlepších taktických střileček na trhu alespoň pro mě co se $T$ týče.
+hratelnosti
+Positive
+vše kazí opravdu příšerné $T$ a kamera
+ovládání
+Negative
+vše kazí opravdu příšerné ovládání a $T$
+kamera
+Negative
+Skvělá hra, za tu $T$ se vyplatí
+cenu
+Positive
+Hra má neskutečně propracovaný $T$, agenti jsou neskutečně zajímavou součástí hry a člověk si může hrát klidně jednoho agenta.
+systém destrukce
+Positive
+Hra má neskutečně propracovaný systém destrukce, $T$ jsou neskutečně zajímavou součástí hry a člověk si může hrát klidně jednoho agenta.
+agenti
+Positive
+Hra má neskutečně propracovaný systém destrukce, agenti jsou neskutečně zajímavou součástí hry a člověk si může hrát klidně jednoho $T$.
+agenta
+Neutral
+Super hra good $T$ a cena
+grafika
+Positive
+Super hra good grafika a $T$
+cena
+Positive
+Jenom mě trošku vadí $T$
+komunita
+Negative
+Samozřejmě má své chyby v podobě někdy blbnoucých $T$ či hitboxů ale na 95% hra funguje jak má.
+serverů
+Negative
+Samozřejmě má své chyby v podobě někdy blbnoucých serverů či $T$ ale na 95% hra funguje jak má.
+hitboxů
+Negative
+Hra se navíc neustále mění díky novým $T$ s novými schopnostmi, reworkům map.
+operátorům
+Positive
+Hra se navíc neustále mění díky novým operátorům s novými $T$, reworkům map.
+schopnostmi
+Positive
+Hra se navíc neustále mění díky novým operátorům s novými schopnostmi, $T$.
+reworkům map
+Positive
+dá se dorát za 1.5 hodiny ale kvůli těm $T$ je to tak na 4 hodiny
+bugům
+Negative
+$T$ není perfektní, ale když nehrajete ranked, je to celkem snesitelné
+matchmaking
+Negative
+Hra má dobrý $T$.
+příběh
+Positive
+$T$ fungují dobře údržba serverů se většinou píše na před
+servery
+Positive
+servery fungují dobře $T$ se většinou píše na před
+údržba serverů
+Positive
+nefungujúce $T$ a OTRASNA kamera
+3D prostredíe
+Negative
+nefungujúce 3D prostredíe a OTRASNA $T$
+kamera
+Negative
+Sice jsou nějaké $T$ obtížnější, ale to vůbec nevadí od toho jsou tam 2 hráči.
+mise
+Conflict
+Pokud někdo hledá hru, která není jen o zběsilém $T$, ale je o taktice, mluvení a znalosti map a agentů, tak tohle je hra pro něj.
+běhání
+Neutral
+Pokud někdo hledá hru, která není jen o zběsilém běhání, ale je o $T$, mluvení a znalosti map a agentů, tak tohle je hra pro něj.
+taktice
+Positive
+Pokud někdo hledá hru, která není jen o zběsilém běhání, ale je o taktice, $T$ a znalosti map a agentů, tak tohle je hra pro něj.
+mluvení
+Positive
+Pokud někdo hledá hru, která není jen o zběsilém běhání, ale je o taktice, mluvení a $T$, tak tohle je hra pro něj.
+znalosti map a agentů
+Positive
+hra je hodně o $T$.
+kooperaci týmu
+Neutral
+Bavilo mě to ještě víc než první díl a nově přidanej $T$ tomu dal jinej rozměr kterej z toho udělal ještě zajímavější hru.
+multiplayer
+Positive
+Má slabé servery, ne jednou se mi stalo, že mi $T$ skákal z obvyklých 9ti na 1500 a hra byla tudíž absolutně nehratelná
+ping
+Negative
+Má slabé $T$, ne jednou se mi stalo, že mi ping skákal z obvyklých 9ti na 1500 a hra byla tudíž absolutně nehratelná
+servery
+Negative
+supr $T$, realistyka, fyzika a mnoho dalšieho doporučujem 9/10 1 zla komunita hráčov
+grafika
+Positive
+supr grafika, $T$, fyzika a mnoho dalšieho doporučujem 9/10 1 zla komunita hráčov
+realistyka
+Positive
+supr grafika, realistyka, $T$ a mnoho dalšieho doporučujem 9/10 1 zla komunita hráčov
+fyzika
+Positive
+supr grafika, realistyka, fyzika a mnoho dalšieho doporučujem 9/10 1 zla $T$
+komunita hráčov
+Negative
+Množsvo nových $T$ za tie roky tu pribudlo
+operatorov
+Positive
+Od poloviny hry se brutálně zvýší $T$.
+obtížnost
+Neutral
+Nehrál jsem sice $T$ protože neznám nikoho kdo by jsi ho se mnou zahrát ale podle recenzí věřím že je taky dobrý.
+coop
+Neutral
+Nehrál jsem sice coop protože neznám nikoho kdo by jsi ho se mnou zahrát ale podle $T$ věřím že je taky dobrý.
+recenzí
+Positive
+$T$ jsou tu o dost lepší než ve většině hrách
+hitboxi
+Positive
+Když si člověk zvykne na stupidní $T$, tak jde v podstatě jen o skákačku.
+ovládání
+Negative
+velky $T$jak obranych tak utocnych
+vyber agentu 
+Positive
+$T$ v týhle hře je absolutní brutus!
+Fyzika
+Positive
+Kvalitní a časté $T$ jsou taky TOP
+updaty
+Positive
+Super hra, vyladěný $T$ hra jede na low pc 150 FPS super hra nenaročná a zábavná
+engine
+Positive
+Super hra, vyladěný engine hra jede na $T$ 150 FPS super hra nenaročná a zábavná
+low pc
+Positive
+Jen ten $T$ je docela dlouhý !!!
+loading na low-gaming pc
+Negative
+Hra je skvěle hratelná, jen $T$ občas nefungují.
+ubisoft servery
+Negative
+Hodně $T$, hodně hráčů, hodně map a dobrá grafika.
+operátorů
+Positive
+Hodně operátorů, hodně $T$, hodně map a dobrá grafika.
+hráčů
+Positive
+Hodně operátorů, hodně hráčů, hodně $T$ a dobrá grafika.
+map
+Positive
+Hodně operátorů, hodně hráčů, hodně map a dobrá $T$.
+grafika
+Positive
+Skvělá $T$!
+komunita komunikativních spoluhráčů
+Positive
+$T$ je nádherný, dojemný a trošku smutný.
+Příběh
+Positive
+veľmi dobra hra až na par $T$ ale inač mam rad tuto hru
+bugou
+Negative
+je možnost hrát za $T$
+operátory všeho druhu
+Positive
+Potřebujete $T$ abyste tuto hru vubec rozjeli
+vysoko kvalitní notebook
+Negative
+$T$ je nemožné
+uhnutí
+Negative
+$T$ je hezká a příběh se zajímavě vyvíjel, ale nestačilo mi to na to, abych hru hrál dál.
+Grafika
+Positive
+Grafika je hezká a $T$ se zajímavě vyvíjel, ale nestačilo mi to na to, abych hru hrál dál.
+příběh
+Positive
+Hra trpí ohromným $T$, které ubisoft vůbec neřeší.
+množstvím glitchů
+Negative
+Hra trpí ohromným množstvím glitchů, které $T$ vůbec neřeší.
+ubisoft
+Neutral
+nulový $T$, kde postavy nemluví
+příběh
+Negative
+nulový příběh, kde $T$ nemluví
+postavy
+Negative
+$T$ je ale fádní, celkem nezajímavý a totálně předvídatelný.
+Příběh
+Negative
+$T$ je zajímavý, v co-opu je velká sranda s kamarádem, grafika na svoji dobu pěkná
+Singleplayer
+Positive
+Singleplayer je zajímavý, v $T$ je velká sranda s kamarádem, grafika na svoji dobu pěkná
+co-opu
+Positive
+Singleplayer je zajímavý, v co-opu je velká sranda s kamarádem, $T$ na svoji dobu pěkná
+grafika
+Positive
+Hádanky jsou dobře udělané.
+hádanky
+Positive
+ve hře objevuje pár $T$ či glitchů a hitboxy nejsou taky zrovna nejlepší ale i přesto dávam hře 9/10
+bugů
+Negative
+ve hře objevuje pár bugů či $T$ a hitboxy nejsou taky zrovna nejlepší ale i přesto dávam hře 9/10
+glitchů
+Negative
+ve hře objevuje pár bugů či glitchů a $T$ nejsou taky zrovna nejlepší ale i přesto dávam hře 9/10
+hitboxy
+Negative
+Skvělá $T$, která umožňuje mnoho stylů pohybu
+herní mechanika
+Positive
+Skvělá herní mechanika, která umožňuje mnoho $T$
+stylů pohybu
+Positive
+$T$ jsou docela jednoduché
+úrovně
+Negative
+Celkem v pohodě hra, ale $T$ stojí za hovno
+ubisoft servery
+Negative
+i hráči se $T$ si zahrají
+slabším pc
+Positive
+výborná co-op střílečka s rozsáhlou $T$ a DLC zdarma
+destrukcí
+Neutral
+výborná $T$ s rozsáhlou destrukcí a DLC zdarma
+co-op střílečka
+Positive
+výborná co-op střílečka s rozsáhlou destrukcí a $T$ zdarma
+DLC
+Positive
+nefunguje mi vůbec $T$
+kurzor
+Negative
+Hra je zaměřená na $T$ které se pravděpodobně s dobrým týmem dočkáte.
+týmovou spolupráci
+Neutral
+Hra je zaměřená na týmovou spolupráci které se pravděpodobně s dobrým $T$ dočkáte.
+týmem
+Neutral
+nezvyšuje se $T$
+náročnost
+Negative
+Nádherný rozprávkový $T$ a príbeh troch hrdinov.
+svet
+Positive
+Nádherný rozprávkový svet a $T$ troch hrdinov.
+príbeh
+Positive
+Super hra, která má určitě svoje chyby ale $T$ je super.
+hratelnost
+Positive
+Takže $T$ doporučuji koupit i když se u toho budete občas nervová když jsou rozbité hitboxy.
+hru
+Positive
+Takže hru doporučuji koupit i když se u toho budete občas nervová když jsou rozbité $T$.
+hitboxy
+Negative
+mám dobré zkušenosti s $T$ hry a hratelnost je taky super
+komunitou
+Positive
+mám dobré zkušenosti s komunitou hry a $T$ je taky super
+hratelnost
+Positive
+strašně dobře optimalizovaná, třeba mě to rozjede na full ($T$) a to mám 1060
+grafiku
+Neutral
+velmy super hra maá dobrou $T$ a je temněř realistycká
+grafiku
+Positive
+stve me jak moc stoji ti $T$
+operatori
+Negative
+vyborna hra len obcas su tam $T$ ale inak ok
+hackeri
+Negative
+Když to vyšlo měla tato hra potenciál, ale díky $T$ hra je pořád ve "sračkách", problémy s připojením, špatný hitbox, atd... a nesnaží se to opravit.
+ubshitu
+Negative
+Když to vyšlo měla tato hra potenciál, ale díky ubshitu hra je pořád ve "sračkách", problémy s připojením, špatný $T$, atd... a nesnaží se to opravit.
+hitbox
+Negative
+Když to vyšlo měla tato hra potenciál, ale díky ubshitu hra je pořád ve "sračkách", $T$, špatný hitbox, atd... a nesnaží se to opravit.
+problémy s připojením
+Negative
+Minus je že je tam spoustu $T$ a toxic komunita a hlavně hackeři.
+rusáku
+Negative
+Minus je že je tam spoustu rusáku a toxic $T$ a hlavně hackeři.
+komunita
+Negative
+Minus je že je tam spoustu rusáku a toxic komunita a hlavně $T$.
+hackeři
+Negative
+Nehraju to dlouho, ale s $T$ jsem zatím žádný problém neměl.
+bugy
+Positive
+Pokud máte rádi $T$, tak jí můžu jen doporučit.
+5v5 kompetitivní akci
+Neutral
+$T$ je velmi líbivá
+Grafika
+Positive
+Je to celkem realistická hra s výbornou $T$ a skvělá hratelnost.
+grafikou
+Positive
+Je to celkem realistická hra s výbornou grafikou a skvělá $T$.
+hratelnost
+Positive
+někdy je $T$ příšerná
+kontrola
+Negative
+zbožnuju když hry maj $T$
+ničitelné prostředí
+Positive
+Po $T$ ani po hudební stránce není co vytknout, ale ovládání to bohužel kazí.
+grafické stránce
+Positive
+Po grafické stránce ani po $T$ není co vytknout, ale ovládání to bohužel kazí.
+hudební stránce
+Positive
+Po grafické stránce ani po hudební stránce není co vytknout, ale $T$ to bohužel kazí.
+ovládání
+Negative
+$T$ jsou působiví, zvuky přebíjení totéž
+zvuky zbraní
+Positive
+zvuky zbraní jsou působiví, $T$ totéž
+zvuky přebíjení
+Positive
+Po $T$ neurazí a hudba také nijak netahá za uši, ale to prostě nestačí.
+vizuální stránce
+Neutral
+Po vizuální stránce neurazí a $T$ také nijak netahá za uši, ale to prostě nestačí.
+hudba
+Neutral
+velmi propracované $T$ do detailu
+mapy
+Positive
+Tato hra v standart edici je k $T$ a výkonu velmi dobrá ale po 200h trochu omrzí, ale díky častým velkým updatum ubisoftu hra stale zaujímá.
+ceně
+Positive
+Tato hra v standart edici je k ceně a výkonu velmi dobrá ale po 200h trochu omrzí, ale díky častým velkým $T$ hra stale zaujímá.
+updatum ubisoftu
+Positive
+Hra pro mě byla jen pětihodinovým chozením po nudném (často tmavém) a nepřehledném $T$.
+prostředí
+Negative
+Hodně dělají $T$ ve kterých jsou pokaždé nový operátoři.
+updaty
+Positive
+Hodně dělají updaty ve kterých jsou pokaždé nový $T$.
+operátoři
+Neutral
+8/10 a to kvůli špatnému $T$, kolikrát i dlouhému vyhledávání hry, a hlavně kvůli věčném problémům Ubi s tím, aby se na sebe mohli hráči připojit
+matchmakingu
+Negative
+8/10 a to kvůli špatnému matchmakingu, kolikrát i dlouhému $T$, a hlavně kvůli věčném problémům Ubi s tím, aby se na sebe mohli hráči připojit
+vyhledávání hry
+Negative
+Tato hra má super $T$, některé levely jsou lehké a některé dají zabrat, kooperace tuto hru dělá ještě mnohem lepší.
+příběh
+Positive
+Tato hra má super příběh, některé $T$ jsou lehké a některé dají zabrat, kooperace tuto hru dělá ještě mnohem lepší.
+levely
+Neutral
+Tato hra má super příběh, některé levely jsou lehké a některé dají zabrat, $T$ tuto hru dělá ještě mnohem lepší.
+kooperace
+Positive

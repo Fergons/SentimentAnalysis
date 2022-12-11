@@ -36,7 +36,7 @@ def get_database_uri():
     if app_config.settings.ENVIRONMENT == "PYTEST":
         return app_config.settings.TEST_SQLALCHEMY_DATABASE_URI
     if app_config.settings.ENVIRONMENT == "PRODUCTION":
-        return app_config.settings.DEFAULT_SQLALCHEMY_DATABASE_URI
+        return app_config.settings.PRODUCTION_SQLALCHEMY_DATABASE_URI
 
 
 def run_migrations_offline():

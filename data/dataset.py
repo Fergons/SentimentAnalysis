@@ -1,8 +1,11 @@
 import json
+import os
 import re
 import emoji
 import pandas as pd
 import sys
+import random
+import string
 import argparse
 from nltk import tokenize
 
@@ -38,47 +41,36 @@ def fill_in_missing_data(data):
     return data
 
 
-
-def remove_emojis(text):
-    return emoji.replace_emoji(text, replace='')
+def create_train_test(dataset):
+    reviews = get_all_reviews_from_dataset(dataset)
+    random.shuffle(reviews)
+    num_train = int(len(reviews)*0.7)
+    train = reviews[:num_train]
+    test = reviews[num_train:]
+    return train, test
 
 def remove_emoticons(text):
-    emoticon_string = r"""
-    (?:
-      [<>]?
-      [:;=8]                     # eyes
-      [\-o\*\']?                 # optional nose
-      [\)\]\(\[dDpP/\:\}\{@\|\\] # mouth      
-      |
-      [\)\]\(\[dDpP/\:\}\{@\|\\] # mouth
-      [\-o\*\']?                 # optional nose
-      [:;=8]                     # eyes
-      [<>]?
-    )"""
+    emoticon_string = r"(?:[<>]?[:;=8][\-o\*\']?[\)\]\(\[dDpP\/\:\}\{@\|\\]|[\)\]\(\[dDpP\/\:\}\{@\|\\][\-o\*\']?[:;=8][<>]?)"
     return re.sub(emoticon_string, '', text)
 
-def clean_text(string):
+
+def clean_text(text):
     """
     Removes unnecessary whitespaces, characters, emoticons, non ASCII characters, punctuation, normalizes to lowercase.
-    :param string: string to clean
+    :param text: string to clean
     :return: cleaned string
     """
+    text = ' '.join(text.split())
     # remove graphical emoji
-    string = remove_emojis(string)
+    text = emoji.replace_emoji(text)
     # remove textual emoji
-    string = remove_emoticons(string)
-
-    string = ' '.join(string.split())
-
-    # remove user
-    # assuming user has @ in front
-    string = re.sub(r"""(?:@[\w_]+)""", '', string)
+    text = remove_emoticons(text)
 
     #remove # and @
-    for punc in "'\":!@#":
-        string = string.replace(punc, '')
+    for punc in '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~':
+        text = text.replace(punc, '')
 
-    return string
+    return text
 
 
 def dataset_to_df(dataset):
@@ -127,8 +119,12 @@ def dataset_to_df(dataset):
         orient='index')
     return df
 
+
 def dataset_to_pyabsa(dataset):
-    reviews = get_all_reviews_from_dataset(dataset)
+    if isinstance(dataset, list):
+        reviews = dataset
+    else:
+        reviews = get_all_reviews_from_dataset(dataset)
     dataset = []
     for review in reviews:
         text = review.get("text")
@@ -145,6 +141,7 @@ def dataset_to_pyabsa(dataset):
                 else:
                     continue
     return dataset
+
 
 def dataset_to_conll(dataset):
     """
@@ -198,6 +195,16 @@ def load_json_data(file):
     else:
         return data
 
+def load_txt_data(file):
+    try:
+        with open(file, "r", encoding="utf-8") as fopen:
+            data = fopen.readlines()
+    except (FileNotFoundError, ValueError) as err:
+        print(f"Failed to load data.")
+        raise
+    else:
+        return data
+
 
 def save_pyabsa_data(file, dataset):
     try:
@@ -244,9 +251,12 @@ def main():
     parser = argparse.ArgumentParser('dataset.py')
     parser.add_argument('--input', default='', help='set dataset input file')
     parser.add_argument('--output', default='', help='set dataset output file')
-    parser.add_argument('--to_conll', action="store_true", help='set dataset output file')
-    parser.add_argument('--to_pyabsa', action="store_true", help='set dataset output file')
-    parser.add_argument('--fill_missing', action="store_true", help='set dataset output file')
+    parser.add_argument('--to_conll', action="store_true", help='transform to conll and save dataset')
+    parser.add_argument('--to_pyabsa', action="store_true", help='transform to pyabsa and save dataset')
+    parser.add_argument('--create_train_test', action="store_true", help='split data to train and test dataset')
+    parser.add_argument('--init_pyabsa', action="store_true", help='initialize pyabsa dataset folder setup')
+    parser.add_argument('--clean', action="store_true", help='clean reviews from input file')
+    parser.add_argument('--fill_missing', action="store_true", help='fill in missing values')
     parser.add_argument('--stats', action="store_true", help="get stats for polarity"),
 
     args = parser.parse_args()
@@ -262,7 +272,7 @@ def main():
         if args.output == "":
             args.output = args.input.split(".")[0].join(".conll")
         save_conll_data(args.output, conll)
-    if args.fill_missing:
+    elif args.fill_missing:
         if args.input == "":
             args.input = "annotated_reviews_czech.json"
         else:
@@ -275,7 +285,11 @@ def main():
         dataset = fill_in_missing_data(load_json_data(args.input))
         save_json_data(args.output, dataset)
 
-    if args.to_pyabsa:
+    elif args.init_pyabsa:
+        from pyabsa import download_all_available_datasets
+        download_all_available_datasets()
+
+    elif args.to_pyabsa:
         if args.input == "":
             args.input = "annotated_reviews_czech.json"
         else:
@@ -288,6 +302,38 @@ def main():
         dataset = dataset_to_pyabsa(load_json_data(args.input))
         save_pyabsa_data(args.output, dataset)
 
+    elif args.clean:
+        if args.input == "":
+            raise ValueError("No input file chosen. --input filename")
+
+        if args.output == "":
+            args.output = args.input.split(".")[0].join(["cleaned_", ".txt"])
+
+        if ".json" in args.input:
+            list_of_reviews = load_json_data(args.input)
+            cleaned = [clean_text(review) for review in list_of_reviews]
+            save_json_data(args.output, cleaned)
+        elif ".txt" in args.input:
+            list_of_reviews = load_txt_data(args.input)
+            cleaned = [f"{clean_text(review)}\n" for review in list_of_reviews]
+            with open(args.output, "r", encoding="utf-8") as fopen:
+                fopen.writelines(cleaned)
+
+    elif args.create_train_test:
+        if args.input == "":
+            args.input = "annotated_reviews_czech.json"
+        else:
+            if args.input.split(".")[1] != "json":
+                raise ValueError("File doesn't seem to be a json file.")
+
+        train_output = args.input.split(".")[0].join(["train_", ".txt"])
+        test_output = args.input.split(".")[0].join(["test_", ".txt"])
+
+        train, test = create_train_test(load_json_data(args.input))
+        train = dataset_to_pyabsa(train)
+        test = dataset_to_pyabsa(test)
+        save_pyabsa_data(train_output, train)
+        save_pyabsa_data(test_output, test)
 
 if __name__ == "__main__":
     main()

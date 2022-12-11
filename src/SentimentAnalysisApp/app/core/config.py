@@ -57,6 +57,14 @@ class Settings(BaseSettings):
     TEST_DATABASE_DB: str
     TEST_SQLALCHEMY_DATABASE_URI: str = ""
 
+    # POSTGRESQL PRODUCTION DATABASE
+    PRODUCTION_DATABASE_HOSTNAME: str
+    PRODUCTION_DATABASE_USER: str
+    PRODUCTION_DATABASE_PASSWORD: str
+    PRODUCTION_DATABASE_PORT: str
+    PRODUCTION_DATABASE_DB: str
+    PRODUCTION_SQLALCHEMY_DATABASE_URI: str = ""
+
     # FIRST SUPERUSER
     FIRST_SUPERUSER_EMAIL: EmailStr
     FIRST_SUPERUSER_PASSWORD: str
@@ -88,6 +96,17 @@ class Settings(BaseSettings):
             host=values["TEST_DATABASE_HOSTNAME"],
             port=values["TEST_DATABASE_PORT"],
             path=f"/{values['TEST_DATABASE_DB']}",
+        )
+
+    @validator("PRODUCTION_SQLALCHEMY_DATABASE_URI")
+    def _assemble_production_db_connection(cls, v: str, values: dict[str, str]) -> str:
+        return AnyUrl.build(
+            scheme="postgresql+asyncpg",
+            user=values["PRODUCTION_DATABASE_USER"],
+            password=values["PRODUCTION_DATABASE_PASSWORD"],
+            host=values["PRODUCTION_DATABASE_HOSTNAME"],
+            port=values["PRODUCTION_DATABASE_PORT"],
+            path=f"/{values['PRODUCTION_DATABASE_DB']}",
         )
 
     class Config:
