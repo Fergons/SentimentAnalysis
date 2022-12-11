@@ -9,7 +9,7 @@ class Game(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     name_tsv = Column(
-        TSVectorType("content", regconfig="english"),
+        TSVectorType("name", regconfig="english"),
         Computed("to_tsvector('english', \"name\")", persisted=True))
     image_url = Column(String)
 

@@ -1,5 +1,8 @@
+from sqlalchemy_utils import TSVectorType
+
 from app.db.base_class import Base
-from sqlalchemy import Boolean, Column, Integer, String, DateTime, func, ForeignKey, TEXT, UniqueConstraint
+from sqlalchemy import Boolean, Column, Integer, String, DateTime, func, ForeignKey, TEXT, UniqueConstraint, Computed, \
+    Index
 from sqlalchemy.orm import relationship
 
 
@@ -13,6 +16,9 @@ class Review(Base):
 
     language = Column(String)
     text = Column(TEXT)
+    text_tsv = Column(
+        TSVectorType("text", regconfig="english"),
+        Computed("to_tsvector('english', \"text\")", persisted=True))
     summary = Column(TEXT)
     score = Column(String)
     helpful_score = Column(String)
@@ -37,3 +43,7 @@ class Review(Base):
 
     source = relationship("Source", back_populates="reviews", lazy="selectin")
     UniqueConstraint(source_review_id, source_id)
+
+    __table_args__ = (
+        Index("idx_review_text_tsv", text_tsv, postgresql_using="gin"),
+    )
