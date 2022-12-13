@@ -598,7 +598,7 @@
           "aspectCategories": [
             {
               "category": "overall",
-              "polarity": "conflict"
+              "polarity": "neutral"
             }
           ]
         },
@@ -758,7 +758,7 @@
             {
               "term": "mise","category":"level design",
 
-              "polarity": "conflict",
+              "polarity": "neutral",
               "from": 17,
               "to": 21
             }
@@ -1575,7 +1575,7 @@
           "aspectCategories": [
             {
               "category": "game mode",
-              "polarity": "conflict"
+              "polarity": "neutral"
             }
           ]
         },
@@ -1909,7 +1909,7 @@
           "aspectTerms": [
             {
               "term": "prostředí",
-              "polarity": "conflict",
+              "polarity": "neutral",
               "category":"game environment",
               "from": 0,
               "to": 0
@@ -1918,7 +1918,7 @@
           "aspectCategories": [
             {
               "category": "game environment",
-              "polarity": "conflict"
+              "polarity": "neutral"
             }
           ]
         },
@@ -2152,7 +2152,7 @@
             {
               "term": "Pozadia úrovní",
               "category":"visuals",
-              "polarity": "conflict",
+              "polarity": "neutral",
               "from": 0,
               "to": 0
             }
@@ -2160,7 +2160,7 @@
           "aspectCategories": [
             {
               "category": "visuals",
-              "polarity": "conflict"
+              "polarity": "netural"
             }
           ]
         },
@@ -2288,7 +2288,7 @@
           "aspectCategories": [
             {
               "category": "controls",
-              "polarity": "conflict"
+              "polarity": "neutral"
             }
           ]
         },
@@ -2782,7 +2782,7 @@
             {
               "term": "CS:GO",
               "category":"comparison",
-              "polarity": "neutral",
+              "polarity": "negative",
               "from": 0,
               "to": 0
             }
@@ -4632,7 +4632,7 @@
              {
                "term":"csgo",
                "category":"comparison",
-               "polarity":"neutral",
+               "polarity":"negative",
                "from":0,
                "to":0
              }
@@ -4736,7 +4736,7 @@
            "aspectCategories":[
              {
                "category":"overall",
-               "polarity":"conflict"
+               "polarity":"neutral"
              },
              {
                "category":"multiplayer",
@@ -4798,7 +4798,7 @@
              },
              {
                "category":"overall",
-               "polarity":"conflict"
+               "polarity":"neutral"
              }
            ]
         },
@@ -5325,7 +5325,7 @@
            "aspectTerms":[
              {
                "term":"vývojáři","category":"developers",
-               "polarity":"positive",
+               "polarity":"neutral",
                "from":0,
                "to":0
              },
@@ -5705,7 +5705,7 @@
            "aspectTerms":[
              {
                "term":"CS:GO", "category":"comparison",
-               "polarity":"positive",
+               "polarity":"neutral",
                "from":0,
                "to":0
              },
@@ -5977,19 +5977,19 @@
            "aspectTerms":[
              {
                "term":"bugů","category":"gameplay",
-               "polarity":"negative",
+               "polarity":"neutral",
                "from":0,
                "to":0
              },
              {
                "term":"glitchů","category":"gameplay",
-               "polarity":"negative",
+               "polarity":"neutral",
                "from":0,
                "to":0
              },
              {
                "term":"hitboxy","category":"gameplay",
-               "polarity":"negative",
+               "polarity":"neutral",
                "from":0,
                "to":0
              }
@@ -6231,7 +6231,7 @@
            "aspectCategories":[
              {
                "category":"overall",
-               "polarity":"conflict"
+               "polarity":"neutral"
              },
              {
                "category":"community",
@@ -6253,7 +6253,7 @@
            "aspectCategories":[
              {
                "category":"multiplayer",
-               "polarity":"conflict"
+               "polarity":"neutral"
              }
            ]
         },
@@ -6269,18 +6269,18 @@
              },
              {
                "term":"","category":"performance",
-               "polarity":"positive",
+               "polarity":"negative",
                "from":0,
                "to":0
              },
              {
                "term":"bug","category":"gameplay",
-               "polarity":"positive",
+               "polarity":"negative",
                "from":0,
                "to":0
              },
              {
-               "term":"toxic komunita","category":"community",
+               "term":"komunita","category":"community",
                "polarity":"negative",
                "from":0,
                "to":0
@@ -6620,7 +6620,13 @@
                "to":0
              },
              {
-               "term":"unikátní schopnost a vybavení","category":"character design",
+               "term":"unikátní schopnost","category":"character design",
+               "polarity":"neutral",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"vybavení","category":"character design",
                "polarity":"neutral",
                "from":0,
                "to":0
@@ -7119,7 +7125,7 @@
              },
              {
                "category":"bugs",
-               "polarity":"neutral"
+               "polarity":"positive"
              }
            ]
         },
@@ -7270,13 +7276,13 @@
            "aspectTerms":[
              {
                "term":"bugů","category":"gameplay",
-               "polarity":"negative",
+               "polarity":"neutral",
                "from":0,
                "to":0
              },
              {
                "term":"ubisoftu","category":"developers",
-               "polarity":"negative",
+               "polarity":"neutral",
                "from":0,
                "to":0
              }
@@ -7304,19 +7310,19 @@
              },
              {
                "term":"taktice","category":"gameplay",
-               "polarity":"positive",
+               "polarity":"neutral",
                "from":0,
                "to":0
              },
              {
                "term":"mluvení","category":"gameplay",
-               "polarity":"positive",
+               "polarity":"neutral",
                "from":0,
                "to":0
              },
              {
                "term":"znalosti map a agentů","category":"gameplay",
-               "polarity":"positive",
+               "polarity":"neutral",
                "from":0,
                "to":0
              }
@@ -7497,6 +7503,12 @@
              {
                "term":"developeri fortnajtu","category":"developers",
                "polarity":"negative",
+               "from":0,
+               "to":0
+             },
+             {
+               "term":"Skiny","category":"developers",
+               "polarity":"neutral",
                "from":0,
                "to":0
              }
@@ -7921,7 +7933,7 @@
              },
              {
                "term":"CS:GO", "category":"comparison",
-               "polarity":"neutral",
+               "polarity":"negative",
                "from":0,
                "to":0
              }

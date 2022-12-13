@@ -41,12 +41,25 @@ def fill_in_missing_data(data):
     return data
 
 
-def create_train_test(dataset):
+def create_train_test(dataset, train=0.8):
     reviews = get_all_reviews_from_dataset(dataset)
-    random.shuffle(reviews)
-    num_train = int(len(reviews)*0.7)
-    train = reviews[:num_train]
-    test = reviews[num_train:]
+    new_reviews = []
+    # check if aspect terms with neutral polarity if yes, remove review from reviews
+    # for review in reviews:
+    #     neutral = False
+    #     terms = review.get("aspectTerms", [])
+    #     for term in terms:
+    #         if term.get("polarity") == "neutral":
+    #             neutral = True
+    #             break
+    #     if not neutral:
+    #         new_reviews.append(review)
+    new_reviews = reviews
+    train_size = int(train * len(new_reviews))
+
+    random.shuffle(new_reviews)
+    train = new_reviews[:train_size]
+    test = new_reviews[train_size:]
     return train, test
 
 def remove_emoticons(text):
@@ -254,6 +267,7 @@ def main():
     parser.add_argument('--to_conll', action="store_true", help='transform to conll and save dataset')
     parser.add_argument('--to_pyabsa', action="store_true", help='transform to pyabsa and save dataset')
     parser.add_argument('--create_train_test', action="store_true", help='split data to train and test dataset')
+    parser.add_argument('--train_test_ratio', default=0.8, type=float, help='set ratio of train/test dataset')
     parser.add_argument('--init_pyabsa', action="store_true", help='initialize pyabsa dataset folder setup')
     parser.add_argument('--clean', action="store_true", help='clean reviews from input file')
     parser.add_argument('--fill_missing', action="store_true", help='fill in missing values')
@@ -329,11 +343,12 @@ def main():
         train_output = args.input.split(".")[0].join(["train_", ".txt"])
         test_output = args.input.split(".")[0].join(["test_", ".txt"])
 
-        train, test = create_train_test(load_json_data(args.input))
+        train, test = create_train_test(load_json_data(args.input), train=args.train_test_ratio)
         train = dataset_to_pyabsa(train)
         test = dataset_to_pyabsa(test)
         save_pyabsa_data(train_output, train)
         save_pyabsa_data(test_output, test)
+
 
 if __name__ == "__main__":
     main()
