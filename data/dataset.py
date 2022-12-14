@@ -9,6 +9,18 @@ import string
 import argparse
 from nltk import tokenize
 
+MY_DATASET = "D:/BP/data/filled_annotated_reviews_czech.json"
+
+
+def get_my_dataset():
+    """Gets my dataset."""
+    return load_json_data(file=MY_DATASET)
+
+
+def get_annotated_reviews():
+    """Gets annotated reviews from the dataset."""
+    return get_all_reviews_from_dataset(get_my_dataset())
+
 def fill_in_missing_data(data):
     """
     Assigns ids to reviews.
@@ -19,7 +31,6 @@ def fill_in_missing_data(data):
     id_counter = 0
     for set_of_reviews in data["dataset"]:
         for review in set_of_reviews["reviews"]:
-            review_id = review.get("reviewId")
             review_text = review.get("text")
             terms = review.get("aspectTerms", [])
             review["reviewId"] = id_counter
@@ -32,9 +43,9 @@ def fill_in_missing_data(data):
                     if word_seq is not None and word_seq != "":
                         try:
                             span = re.search(word_seq, review_text).span()
-                        except AttributeError:
+                        except AttributeError as e:
                             print(word_seq, " ", review_text, "\n")
-                            raise
+                            raise e
                         else:
                             term["from"] = span[0]
                             term["to"] = span[1]
@@ -107,7 +118,7 @@ def clean_text(text):
     return text
 
 
-def dataset_to_df(dataset):
+def dataset_to_df(dataset) -> pd.DataFrame:
     """
     Transforms annotated dataset from json format to dataframe.
     ...
@@ -143,7 +154,7 @@ def dataset_to_df(dataset):
     :return: pandas.DataFrame dataframe representing data
     """
     data_new = {idx: dict_of_reviews["reviews"] for idx, dict_of_reviews in enumerate(dataset["dataset"])}
-    data_restructured = {(i, review["reviewId"], term_id): term
+    data_restructured = {(i, review["text"], term_id): term
          for i in data_new.keys()  # for each list of reviews
          for review in data_new[i]  # for each review in the list of reviews
          for term_id, term in enumerate(review["aspectTerms"])
@@ -247,7 +258,7 @@ def save_pyabsa_data(file, dataset):
                 fopen.write(f"{t}\n{a}\n{p}\n")
     except (FileNotFoundError, ValueError) as err:
         print(f"Failed to save data.")
-        raise
+        raise err
     else:
         print(f"Data saved to {file}")
 
@@ -255,7 +266,7 @@ def save_pyabsa_data(file, dataset):
 def save_json_data(file, data):
     try:
         with open(file, "w", encoding="utf-8") as fopen:
-            json.dump(fopen, data)
+            json.dump(data, fopen)
     except (FileNotFoundError, ValueError) as err:
         print(f"Failed to save data.")
         raise

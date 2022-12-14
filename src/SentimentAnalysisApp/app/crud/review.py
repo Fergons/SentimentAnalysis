@@ -20,6 +20,12 @@ from app.models.source import GameSource
 
 
 class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
+    async def get_with_good_and_bad_by_language_multi(self, db: AsyncSession, *, language: str) -> List[Review]:
+        result = await db.execute(select(Review).where((Review.language == "czech") &
+                                                       ((Review.good is not None) | (Review.bad is not None)))
+                                  )
+        return result.scalars().all()
+
     async def create_with_text(
             self, db: AsyncSession, *, obj_in: ReviewCreate, text: str
     ) -> Review:
