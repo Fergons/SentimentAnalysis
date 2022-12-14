@@ -133,7 +133,7 @@ class Scraper:
                     logger.log(logging.INFO, f"api call:{response.url}")
                     break
         if response is None:
-            raise ValueError(f"Could establish connection to {url}.")
+            raise ValueError(f"Could not establish connection to {url}.")
         return response
 
     async def get_all_reviews(self):
@@ -352,7 +352,10 @@ class GamespotScraper(Scraper):
                  for offset in range(result.number_of_page_results, max_reviews, params.limit)]
         failed_urls = []
         for future in asyncio.as_completed(tasks):
-            url, result = await future
+            try:
+                url, result = await future
+            except ValueError as e:
+                failed_urls.append(url)
             if result is None:
                 failed_urls.append(url)
                 continue
@@ -458,6 +461,8 @@ class DoupeScraper(Scraper):
         )
         if max_pages*MAX_PER_PAGE > int(max_reviews/MAX_PER_PAGE)*2:
             max_pages = int(max_reviews/MAX_PER_PAGE)*2
+            if max_pages > max_pages:
+                max_pages = max_pages
         tasks = [self.get_reviews_page(params=params.copy(update={"pgnum": page_num}))
                  for page_num in range(1, max_pages)]
         failed_urls = []

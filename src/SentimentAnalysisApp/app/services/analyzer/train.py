@@ -5,9 +5,9 @@ from pyabsa import DatasetItem, ModelSaveOption, DeviceTypeOption
 config = ATEPC.ATEPCConfigManager.get_atepc_config_english()
 config.model = ATEPC.ATEPCModelList.FAST_LCF_ATEPC
 config.evaluate_begin = 0
-config.max_seq_len = 256
+config.max_seq_len = 512
 config.batch_size = 16
-config.pretrained_bert = "yangheng/deberta-v3-large-absa-v1.1"
+config.pretrained_bert = "microsoft/mdeberta-v3-base"
 config.log_step = -1
 config.l2reg = 1e-8
 config.num_epoch = 20

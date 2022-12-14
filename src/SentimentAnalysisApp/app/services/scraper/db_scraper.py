@@ -10,7 +10,7 @@ from app.crud.review import crud_review
 from app.schemas.game import GameCreate
 from app.crud.game import crud_game
 from app.schemas.review import ReviewCreate, ReviewCreate
-from .scraper import SteamScraper, Scraper
+from .scraper import SteamScraper, Scraper, DoupeScraper
 from .gamespot_resources import GamespotRequestParams
 from .steam_resources import SteamAppListResponse, SteamApp, SteamReview, SteamAppDetail
 from random import sample
@@ -110,7 +110,7 @@ class DBScraper:
             counter += 1
 
     async def scrape_all_reviews(self, max_reviews: int = 100):
-        async for page in self.scraper.game_reviews_page_generator():
+        async for page in self.scraper.game_reviews_page_generator(max_reviews=max_reviews):
             objs_in = []
 
             for review in page:
@@ -126,6 +126,13 @@ class DBScraper:
             await crud_review.create_multi(self.session, objs_in=objs_in)
 
 
+async def scrape_doupe_reviews():
+    async with async_session() as session:
+        async with DoupeScraper() as scraper:
+            db_scraper = await DBScraper.create(scraper=scraper, session=session)
+            await db_scraper.scrape_all_reviews(max_reviews=2000)
+
+
 async def main():
     async with async_session() as session:
         async with steam_scraper as scraper:
@@ -135,5 +142,5 @@ async def main():
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
+    loop.run_until_complete(scrape_doupe_reviews())
     loop.close()

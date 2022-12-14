@@ -30,7 +30,12 @@ async def main() -> None:
         user: Optional[User] = result.scalars().first()
 
         for name, value in SOURCES.items():
-            await crud_source.create(session, obj_in=schemas.SourceCreate(**value))
+            source = await crud_source.get_by_name(session, name=name)
+            if source is None:
+                await crud_source.create(session, obj_in=schemas.SourceCreate(**value))
+                print(f"Created source {name}.")
+            else:
+                print(f"Source {name} already exists")
 
         if user is None:
             await SQLAlchemyUserDatabase(schemas.UserDB, session, User).create(

@@ -41,19 +41,40 @@ def fill_in_missing_data(data):
     return data
 
 
-def create_train_test(dataset, train=0.8):
+def duplicate_reviews_with_neutral_terms(dataset):
+    """
+    Duplicates reviews that contain aspect terms with neutral polarity.
+    :param dataset: dict data in json format
+    :return: dict data in json format
+    """
     reviews = get_all_reviews_from_dataset(dataset)
     new_reviews = []
-    # check if aspect terms with neutral polarity if yes, remove review from reviews
-    # for review in reviews:
-    #     neutral = False
-    #     terms = review.get("aspectTerms", [])
-    #     for term in terms:
-    #         if term.get("polarity") == "neutral":
-    #             neutral = True
-    #             break
-    #     if not neutral:
-    #         new_reviews.append(review)
+    for review in reviews:
+        terms = review.get("aspectTerms", [])
+        for term in terms:
+            if term.get("polarity") == "neutral":
+                new_reviews.append(review)
+                new_reviews.append(review)
+                break
+    reviews.extend(new_reviews)
+    return reviews
+
+def remove_reviews_with_neutral_terms(dataset):
+    reviews = get_all_reviews_from_dataset(dataset)
+    new_reviews = []
+    for review in reviews:
+        neutral = False
+        terms = review.get("aspectTerms", [])
+        for term in terms:
+            if term.get("polarity") == "neutral":
+                neutral = True
+                break
+        if not neutral:
+            new_reviews.append(review)
+    return new_reviews
+
+def create_train_test(dataset, train=0.8):
+    reviews = duplicate_reviews_with_neutral_terms(dataset)
     new_reviews = reviews
     train_size = int(train * len(new_reviews))
 
