@@ -9,6 +9,7 @@ from app.db.session import async_session
 from app.crud.review import crud_review
 from data.dataset import get_my_dataset, dataset_to_df, get_all_reviews_from_dataset, save_pyabsa_data, dataset_to_pyabsa
 
+
 def substitute(texts):
     from nlpaug.augmenter.word import ContextualWordEmbsAug
     """Substitutes some words in given texts with contextually similar words."""

@@ -85,7 +85,7 @@ def remove_reviews_with_neutral_terms(dataset):
     return new_reviews
 
 def create_train_test(dataset, train=0.8):
-    reviews = duplicate_reviews_with_neutral_terms(dataset)
+    reviews = dataset
     new_reviews = reviews
     train_size = int(train * len(new_reviews))
 
@@ -372,10 +372,15 @@ def main():
             if args.input.split(".")[1] != "json":
                 raise ValueError("File doesn't seem to be a json file.")
 
-        train_output = args.input.split(".")[0].join(["train_", ".txt"])
-        test_output = args.input.split(".")[0].join(["test_", ".txt"])
+        if args.output == "":
+            train_output = args.input.split(".")[0].join(["train_", ".apc.txt"])
+            test_output = args.input.split(".")[0].join(["test_", ".apc.txt"])
+        else:
+            train_output = args.output.split(".")[0].join(["train_", ".apc.txt"])
+            test_output = args.output.split(".")[0].join(["test_", ".apc.txt"])
 
-        train, test = create_train_test(load_json_data(args.input), train=args.train_test_ratio)
+        train, test = create_train_test(get_all_reviews_from_dataset(load_json_data(args.input)),
+                                        train=args.train_test_ratio)
         train = dataset_to_pyabsa(train)
         test = dataset_to_pyabsa(test)
         save_pyabsa_data(train_output, train)

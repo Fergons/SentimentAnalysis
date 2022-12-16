@@ -204,15 +204,12 @@ async def test_doupe_db_scraper(doupe_db_scraper, session: AsyncSession):
     assert len(reviews_in_db) > 0
 
 
-# @pytest.mark.anyio
-# async def test_game_name_search(gamespot_db_scraper, session: AsyncSession):
-#     game = await crud_game.get_by_name(session, name="Need for Speed most wanted")
-#     assert game is not None
-#     logger.debug(game.name)
-#
-#
-# @pytest.mark.anyio
-# async def test_doupe_db_scraper(gamespot_db_scraper, session: AsyncSession):
-#     game = await crud_game.get_by_name(session, name="Need for Speed most wanted")
-#     assert game is not None
-#     logger.debug(game.name)
+@pytest.mark.anyio
+async def test_get_steam_reviews_100_limit_100_offset(steam_db_scraper, session: AsyncSession):
+    reviews = await crud_review.get_not_processed_by_source(session,
+                                                            source_id=steam_db_scraper.db_source.id,
+                                                            limit=100,
+                                                            offset=100)
+    logger.debug(len(reviews))
+    assert len(reviews) <= 100
+    assert all(map(lambda x: x.processed_at is None, reviews))

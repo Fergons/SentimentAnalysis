@@ -6,6 +6,7 @@ from fastapi.encoders import jsonable_encoder
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
+from sqlalchemy.sql.expression import null
 
 from app.crud.reviewer import crud_reviewer
 from app.crud.base import CRUDBase
@@ -24,6 +25,37 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
         result = await db.execute(select(Review).where((Review.language == "czech") &
                                                        ((Review.good is not None) | (Review.bad is not None)))
                                   )
+        return result.scalars().all()
+
+    async def get_by_user(self, db: AsyncSession, *, user_id: int) -> List[Review]:
+        result = await db.execute(select(Review).where(Review.reviewer_id == user_id))
+        return result.scalars().all()
+
+    async def get_by_game(self, db: AsyncSession, *, game_id: int) -> List[Review]:
+        result = await db.execute(select(Review).where(Review.game_id == game_id))
+        return result.scalars().all()
+
+    async def get_not_processed(self, db: AsyncSession, *, limit: int = 100, offset: int = 0) -> List[Review]:
+        result = await db.execute(select(Review).where(Review.processed_at is None).limit(limit).offset(offset))
+        return result.scalars().all()
+
+    async def get_not_processed_by_source(self, db: AsyncSession,
+                                          source_id: int,
+                                          limit: int = 100,
+                                          offset: int = 0) -> Optional[Review]:
+
+        if offset > 2000:
+            stmt = select(Review.id)\
+                .where((Review.processed_at is None) & (Review.source_id == source_id))\
+                .limit(limit).offset(offset)
+            result_ids = await db.execute(stmt)
+            ids = result_ids.scalars().all()
+            stmt = select(Review).where(Review.id.in_(ids))
+        else:
+            stmt = select(Review).where((Review.processed_at == null()) & (Review.source_id == source_id))\
+                .limit(limit).offset(offset)
+
+        result = await db.execute(stmt)
         return result.scalars().all()
 
     async def create_with_text(

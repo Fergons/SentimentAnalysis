@@ -28,7 +28,7 @@ class Review(Base):
 
     created_at = Column(DateTime(timezone=True), default=None)
     updated_at = Column(DateTime(timezone=True), default=None)
-    processed_at = Column(DateTime(timezone=True), default=None, onupdate=func.now())
+    processed_at = Column(DateTime(timezone=True), default=None)
 
     aspect_sum_polarity = Column(String)
 
