@@ -68,7 +68,7 @@ async def steam_db_scraper(session: AsyncSession):
 
 @pytest.fixture
 async def gamespot_db_scraper(session: AsyncSession):
-    async with GamespotScraper() as scraper:
+    async with GamespotScraper(api_key=config.settings.GAMESPOT_API_KEY) as scraper:
         yield await DBScraper.create(scraper=scraper, session=session)
 
 @pytest.fixture

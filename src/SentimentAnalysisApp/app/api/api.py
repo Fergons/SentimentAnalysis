@@ -12,7 +12,7 @@ from fastapi import APIRouter
 
 from app.api.deps import fastapi_users
 from app.core import security
-from app.api.endpoints import analyzer
+from app.api.endpoints import analyzer, games
 
 api_router = APIRouter()
 api_router.include_router(
@@ -35,4 +35,10 @@ api_router.include_router(
     analyzer.router,
     prefix="/analyzer",
     tags=["analyzer"]
+)
+
+api_router.include_router(
+    games.router,
+    prefix="/games",
+    tags=["games"]
 )

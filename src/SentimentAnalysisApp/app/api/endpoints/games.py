@@ -42,7 +42,7 @@ async def delete_game(
     return game
 
 
-@router.get("/games", response_model=List[schemas.Game])
+@router.get("/", response_model=List[schemas.Game])
 async def read_games(
     *,
     db: Session = Depends(deps.get_session),
@@ -53,6 +53,6 @@ async def read_games(
     """
     Retrieve games.
     """
-    games = await crud.game.get_multi(db, skip=skip, limit=limit)
+    games = await crud.game.get_multi(db, offset=skip, limit=limit)
     return games
 

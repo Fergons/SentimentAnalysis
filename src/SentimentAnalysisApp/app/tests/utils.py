@@ -1,3 +1,4 @@
+import datetime
 import random
 import string
 from typing import List
@@ -46,26 +47,20 @@ async def create_db_user(
     return new_user
 
 
-async def create_sources(session: AsyncSession) -> List[schemas.Source]:
+async def create_obj(session: AsyncSession, model, **kwargs) -> models.Source:
+    for k, v in kwargs.items():
+        if ("_at" in k or "_date" in k) and isinstance(v, str):
+            # date format string for 2020-10-20 20:24:54.000000 +00:00
+            kwargs[k] = datetime.datetime.strptime(v, "%Y-%m-%d %H:%M:%S.%f %z")
+    db_obj = model(**kwargs) # type: ignore
+    session.add(db_obj)
+    await session.commit()
+    return db_obj
+
+
+async def create_objs(session: AsyncSession, model, objs: List[dict]) -> List[models.Source]:
     results = []
-    for name, value in SOURCES.items():
-        new_source = await crud.source.create(session, obj_in=schemas.SourceCreate(**value))
-        results.append(new_source)
-    assert len(results) == len(SOURCES.keys())
-
-    result = await session.execute(select(models.Source))
-    assert len(result.scalars().all()) == len(SOURCES.keys())
+    for obj in objs:
+        db_obj = await create_obj(session, model, **obj)
+        results.append(db_obj)
     return results
-
-
-async def create_game():
-
-    return await crud.game.create(
-        schemas.GameCreate(
-            name=random_lower_string(),
-            image_url=random_http_url(),
-            source_id=1,
-            source_game_id=str(random.randint(123213, 24331413))
-        )
-    )
-

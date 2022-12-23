@@ -55,7 +55,7 @@ class GameUpdate(GameBase):
 
 class GameInDBBase(GameBase):
     id: int
-    updated_at: datetime
+    updated_at: Optional[datetime] = None
 
     class Config:
         orm_mode = True
@@ -65,9 +65,6 @@ class Game(GameInDBBase):
     name: str
     image_url: Optional[AnyHttpUrl] = None
     release_date: Optional[datetime] = None
-    reviews: Optional[List["Review"]] = None
-    categories: Optional[List[Category]] = None
-    sources: Optional[List["Source"]] = None
 
 
 # Additional properties stored in DB
