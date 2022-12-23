@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, TYPE_CHECKING, Optional
+from typing import List, TYPE_CHECKING, Optional, Union
 from pydantic import BaseModel, EmailStr, AnyHttpUrl
 # from . import SourceInDBBase, ReviewerInDBBase, GameInDBBase, AspectInDBBase
 # from . import SourceCreate, ReviewerCreate, GameCreate, AspectCreate
@@ -14,7 +14,6 @@ if TYPE_CHECKING:
 class ReviewBase(BaseModel):
     text: str
     language: str
-    source_review_id: str
 
 
 class ReviewCreate(ReviewBase):
@@ -58,11 +57,12 @@ class ReviewUpdate(ReviewBase):
 
 class ReviewInDBBase(ReviewBase):
     id: str
-    game_id: int
-    source_id: int
-    user_id: int
+    game_id: Optional[int] = None
+    source_id: Optional[int] = None
+    user_id: Optional[int] = None
     processed_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
+    source_review_id: Union[int, str, None] = None
 
     class Config:
         orm_mode = True

@@ -93,12 +93,14 @@ def substitute_review_aspects(review, old_aspects, new_aspects):
         review = review.replace(aspect, new_aspect)
     return review
 
+
 def augment_reviews_with_aspects(reviews, aspects=None):
     """Augments given reviews by matching labeled aspects."""
     augmented_reviews = []
     for review in reviews:
         review.get("terms")
     return augmented_reviews
+
 
 async def augment_my_dataset():
     """Augments my dataset with aspects from the database."""

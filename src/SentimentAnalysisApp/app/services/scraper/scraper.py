@@ -156,11 +156,13 @@ class SteamScraper(Scraper):
     _source = SOURCES[SourceName.STEAM]
     _rate_limit = STEAM_API_RATE_LIMIT
 
-    def __init__(self):
+    def __init__(self, api_key: str = None, rate_limit: dict = _rate_limit):
         super().__init__(content_type=ContentType.JSON,
                          is_api=True,
-                         rate_limit=self._rate_limit,
-                         **self._source)
+                         api_key=api_key,
+                         rate_limit=rate_limit,
+                         **self._source
+                         )
 
     async def get_games(self) -> List[SteamApp]:
         response = await self.session.get(self.list_of_games_url)
@@ -303,13 +305,12 @@ class SteamScraper(Scraper):
 class GamespotScraper(Scraper):
     _source = SOURCES[SourceName.GAMESPOT]
     _rate_limit = DEFAULT_RATE_LIMIT
-    _api_key = os.environ.get("GAMESPOT_API_KEY")
 
-    def __init__(self):
+    def __init__(self, api_key: str, rate_limit: dict = _rate_limit):
         super().__init__(content_type=ContentType.JSON,
                          is_api=True,
-                         api_key=self._api_key,
-                         rate_limit=self._rate_limit,
+                         api_key=api_key,
+                         rate_limit=rate_limit,
                          **self._source)
 
     @staticmethod
@@ -387,10 +388,11 @@ class DoupeScraper(Scraper):
     _source = SOURCES[SourceName.DOUPE]
     _rate_limit = DEFAULT_RATE_LIMIT
 
-    def __init__(self):
+    def __init__(self, api_key: str = None, rate_limit: dict = _rate_limit):
         super().__init__(content_type=ContentType.JSON,
-                         is_api=True,
-                         rate_limit=self._rate_limit,
+                         is_api=False,
+                         api_key=api_key,
+                         rate_limit=rate_limit,
                          **self._source)
 
     @staticmethod

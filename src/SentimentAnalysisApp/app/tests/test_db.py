@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core import config
 from app.models import Base, Source, Review
 from app.schemas import SourceCreate, GameCreate, ReviewCreate, ReviewerCreate
-from app.crud import crud_source, crud_game, crud_review
+from app import crud
 
 from app.services.scraper.constants import SOURCES
 from app.services.scraper.steam_resources import SteamAppDetail, SteamReview
@@ -80,7 +80,7 @@ async def doupe_db_scraper(session: AsyncSession):
 async def test_create_db_sources(session: AsyncSession):
     results = []
     for name, value in SOURCES.items():
-        new_source = await crud_source.create(session, obj_in=SourceCreate(**value))
+        new_source = await crud.source.create(session, obj_in=SourceCreate(**value))
         results.append(new_source)
     assert len(results) == len(SOURCES.keys())
 
@@ -90,7 +90,7 @@ async def test_create_db_sources(session: AsyncSession):
 
 @pytest.mark.anyio
 async def test_create_db_games(session: AsyncSession):
-    steam = await crud_source.get_by_name(session, name="steam")
+    steam = await crud.source.get_by_name(session, name="steam")
     assert steam is not None
 
     async with SteamScraper() as scraper:
@@ -102,7 +102,7 @@ async def test_create_db_games(session: AsyncSession):
         categories_names = [category.description for category in detail.categories]
         obj_in = GameCreate(source_id=steam.id, **detail_dict)
         logger.log(logging.DEBUG, obj_in.dict())
-        game = await crud_game.create_with_categories_by_names_and_source(session, obj_in=obj_in, names=categories_names)
+        game = await crud.game.create_with_categories_by_names_and_source(session, obj_in=obj_in, names=categories_names)
         assert game.name == detail.name
         assert game.sources is not None
         assert game.sources[0].source_id == steam.id
@@ -110,7 +110,7 @@ async def test_create_db_games(session: AsyncSession):
 
 # @pytest.mark.anyio
 # async def test_create_db_reviews(session: AsyncSession):
-#     games = await crud_game.get_multi(session)
+#     games = await crud.game.get_multi(session)
 #     assert len(games) == 2
 #     source_id = games[0].sources[0].source_id
 #     game_ids = [game.id for game in games]
@@ -120,7 +120,7 @@ async def test_create_db_games(session: AsyncSession):
 #         for game_id, db_game_id in zip(source_game_ids, game_ids):
 #             reviews = results[game_id]
 #             for review in reviews:
-#                 review_db = await crud_review.create(session,
+#                 review_db = await crud.review.create(session,
 #                                                      obj_in=ReviewCreate.parse_obj(
 #                                                          review.dict(by_alias=True, exclude={"author": True})))
 #                 review_db.game_id = db_game_id
@@ -135,7 +135,7 @@ async def test_create_db_games(session: AsyncSession):
 # @pytest.mark.anyio
 # async def test_crud_review_create_multi(session: AsyncSession):
 #     _max = 100
-#     games = await crud_game.get_multi(session)
+#     games = await crud.game.get_multi(session)
 #     assert len(games) == 2
 #     source_id = games[0].sources[0].source_id
 #     game_ids = [game.id for game in games]
@@ -148,7 +148,7 @@ async def test_create_db_games(session: AsyncSession):
 #             for review in results[game_id]
 #         ]
 #
-#         await crud_review.create_multi(session, objs_in=review_create_objs)
+#         await crud.review.create_multi(session, objs_in=review_create_objs)
 #
 #     result = await session.execute(select(Review))
 #     reviews_in_db = result.scalars().all()
@@ -157,7 +157,7 @@ async def test_create_db_games(session: AsyncSession):
 
 @pytest.mark.anyio
 async def test_crud_review_create_review_with_reviewer(session: AsyncSession):
-    games = await crud_game.get_multi(session)
+    games = await crud.game.get_multi(session)
     assert len(games) == 2
     source_id = games[0].sources[0].source_id
     game_ids = [game.id for game in games]
@@ -169,7 +169,7 @@ async def test_crud_review_create_review_with_reviewer(session: AsyncSession):
             for game_id, db_game_id in zip(source_game_ids, game_ids)
             for review in results[game_id]
         ]
-        await crud_review.create_with_reviewer_multi(session, objs_in=review_create_objs)
+        await crud.review.create_with_reviewer_multi(session, objs_in=review_create_objs)
 
     result = await session.execute(select(Review))
     reviews_in_db = result.scalars().all()
@@ -206,7 +206,7 @@ async def test_doupe_db_scraper(doupe_db_scraper, session: AsyncSession):
 
 @pytest.mark.anyio
 async def test_get_steam_reviews_100_limit_100_offset(steam_db_scraper, session: AsyncSession):
-    reviews = await crud_review.get_not_processed_by_source(session,
+    reviews = await crud.review.get_not_processed_by_source(session,
                                                             source_id=steam_db_scraper.db_source.id,
                                                             limit=100,
                                                             offset=100)

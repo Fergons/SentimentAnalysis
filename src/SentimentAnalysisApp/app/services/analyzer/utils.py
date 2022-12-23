@@ -1,12 +1,20 @@
 import re
 import emoji
-
+import locale
 
 
 def remove_emoticons(text):
-    emoticon_string = r"(?:[<>]?[:;=8][\-o\*\']?[\)\]\(\[dDpP\/\:\}\{@\|\\]|[\)\]\(\[dDpP\/\:\}\{@\|\\][\-o\*\']?[:;=8][<>]?)"
+    emoticon_string = r"(?:[<>]?[:;=8][\-o\*\']?[\)\]\(\[dDpP\/\:\}\{@\|\\]+|[\)\]\(\[dDpP\/\:\}\{@\|\\][\-o\*\']?[:;=8][<>]?)"
     return re.sub(emoticon_string, '', text)
 
+def replace_price_with_placeholder(text):
+    """
+    Replaces price with placeholder
+    :param text: string to clean
+    :return: cleaned string
+    """
+    text = re.sub(r'\d+(?:[.,]\d+)? ?[$€£¥₩₹₽₿]+', 'price', text)
+    return text
 
 def clean(text):
     """
@@ -15,12 +23,16 @@ def clean(text):
     :return: cleaned string
     """
     text = ' '.join(text.split())
-    # remove graphical emoji
     text = emoji.replace_emoji(text)
-    # remove textual emoji
     text = remove_emoticons(text)
-    for punc in '"\'*+-/<=>?@[\\]^_`{|}~':
-        text = text.replace(punc, ' ')
+    text = replace_price_with_placeholder(text)
+
+    #remove non-ascii characters except czech and slovak characters
+    text = re.sub(r'[^\x00-\x7FáäčďéěíĺľňóôŕřšťúůýžÁÄČĎÉĚÍĹĽŇÓÔŔŘŠŤÚŮÝŽ]+', ' ', text)
+
+    for x in '"\'*+-/<=>?@[\\]^_`{|}~':
+        text = text.replace(x, ' ')
+
     # remove duplicate punctuation
     text = re.sub(r'([!?.():]){2,}', r'\1', text)
 

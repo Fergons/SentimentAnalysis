@@ -7,6 +7,7 @@ if TYPE_CHECKING:
     from .review import Review
     from .source import Source
 
+
 class CategoryBase(BaseModel):
     name: str
 
@@ -40,6 +41,7 @@ class GameCreate(GameBase):
     release_date: Optional[datetime] = None
     source_id: Optional[int] = None
     source_game_id: str
+    # categories: Optional[List["CategoryCreate"]] = None
 
 
 # Properties to receive via API on update
@@ -64,8 +66,8 @@ class Game(GameInDBBase):
     image_url: Optional[AnyHttpUrl] = None
     release_date: Optional[datetime] = None
     reviews: Optional[List["Review"]] = None
-    categories: Optional[List[CategoryBase]] = None
-    sources: Optional[List[GameCreate]] = None
+    categories: Optional[List[Category]] = None
+    sources: Optional[List["Source"]] = None
 
 
 # Additional properties stored in DB

@@ -64,7 +64,7 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]) :
     async def create_with_categories_by_names_and_source(
             self, db: AsyncSession, *, obj_in: GameCreate, names: List[str]
     ) -> Optional[Game]:
-        obj_in_data = obj_in.dict()
+        obj_in_data = obj_in.dict(exclude={"source_id", "source_game_id", "categories"})
         game_db_obj = await self.create_with_categories_by_names(
             db,
             obj_in=GameCreate(**obj_in_data),
@@ -126,7 +126,10 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]) :
 
         db_obj = await self.get_by_name(db, name=obj_in.name)
         if db_obj is None:
-            db_obj = Game(**obj_in.dict(exclude={"source_id", "source_game_id"}))  # type: ignore
+            # db_obj = await self.create_with_categories_by_names_and_source(db,
+            #                                                                obj_in=obj_in,
+            #                                                                names=[c.name for c in obj_in.categories])
+            db_obj = Game(**obj_in.dict(exclude={"source_id", "source_game_id", "categories"}))  # type: ignore
             db.add(db_obj)
 
         game_source_db_obj = GameSource(source_id=obj_in.source_id,  # type: ignore

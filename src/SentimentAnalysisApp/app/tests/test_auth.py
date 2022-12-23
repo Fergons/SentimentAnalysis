@@ -8,8 +8,11 @@ from httpx import AsyncClient
 from app.schemas import UserDB
 
 # All test coroutines in file will be treated as marked (async allowed).
-pytestmark = pytest.mark.asyncio
+pytestmark = pytest.mark.anyio
 
+@pytest.fixture(scope="session")
+def anyio_backend():
+    return "asyncio"
 
 async def test_login_endpoints(client: AsyncClient, default_user: UserDB):
 

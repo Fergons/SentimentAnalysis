@@ -13,8 +13,7 @@ from app.schemas.review import ReviewCreate, ReviewCreate
 from .scraper import SteamScraper, Scraper, DoupeScraper
 from .gamespot_resources import GamespotRequestParams
 from .steam_resources import SteamAppListResponse, SteamApp, SteamReview, SteamAppDetail
-from random import sample
-steam_scraper = SteamScraper()
+from .constants import STEAM_REVIEWS_API_RATE_LIMIT
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -135,12 +134,12 @@ async def scrape_doupe_reviews():
 
 async def main():
     async with async_session() as session:
-        async with steam_scraper as scraper:
+        async with SteamScraper() as scraper:
             db_scraper: DBScraper = await DBScraper.create(scraper=scraper, session=session)
-            await db_scraper.scrape_games()
-            # await db_scraper.scrape_all_reviews_with_reviewer_for_games()
+            # await db_scraper.scrape_games()
+            await db_scraper.scrape_all_reviews_for_not_updated_games()
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(scrape_doupe_reviews())
+    loop.run_until_complete(main())
     loop.close()

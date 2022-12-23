@@ -12,6 +12,7 @@ from fastapi import APIRouter
 
 from app.api.deps import fastapi_users
 from app.core import security
+from app.api.endpoints import analyzer
 
 api_router = APIRouter()
 api_router.include_router(
@@ -28,4 +29,10 @@ api_router.include_router(
     fastapi_users.get_users_router(),
     prefix="/users",
     tags=["users"],
+)
+
+api_router.include_router(
+    analyzer.router,
+    prefix="/analyzer",
+    tags=["analyzer"]
 )

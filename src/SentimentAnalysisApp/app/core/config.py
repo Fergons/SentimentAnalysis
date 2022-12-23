@@ -69,6 +69,9 @@ class Settings(BaseSettings):
     FIRST_SUPERUSER_EMAIL: EmailStr
     FIRST_SUPERUSER_PASSWORD: str
 
+    # GAMESPOT API KEY
+    GAMESPOT_API_KEY: str
+
     # VALIDATORS
     @validator("BACKEND_CORS_ORIGINS")
     def _assemble_cors_origins(cls, cors_origins: Union[str, list[AnyHttpUrl]]):

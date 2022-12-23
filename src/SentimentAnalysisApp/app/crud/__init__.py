@@ -1,4 +1,4 @@
-from .review import crud_review
-from .game import crud_game, crud_category
-from .source import crud_source
-from .reviewer import crud_reviewer
+from .review import crud_review as review
+from .game import crud_game as game, crud_category as category
+from .source import crud_source as source
+from .reviewer import crud_reviewer as reviewer

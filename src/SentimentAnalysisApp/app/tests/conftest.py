@@ -26,8 +26,8 @@ def event_loop():
 
 
 @pytest.fixture(scope="session")
-async def client():
-    async with AsyncClient(app=app, base_url="http://doesnt.matter") as client:
+async def client() -> AsyncGenerator[AsyncClient, None]:
+    async with AsyncClient(app=app, base_url="http://127.0.0.1:8000") as client:
         yield client
 
 
@@ -35,7 +35,7 @@ async def client():
 async def test_db_setup_sessionmaker():
     # assert if we use TEST_DB URL for 100%
     assert config.settings.ENVIRONMENT == "PYTEST"
-    assert str(async_engine._url) == config.settings.TEST_SQLALCHEMY_DATABASE_URI
+    assert str(async_engine.url) == config.settings.TEST_SQLALCHEMY_DATABASE_URI
 
     # always drop and create test db tables between tests session
     async with async_engine.begin() as conn:
@@ -61,3 +61,20 @@ async def superuser_user(session: AsyncSession):
     return await utils.create_db_user(
         superuser_user_email, superuser_user_hash, session, is_superuser=True
     )
+
+
+@pytest.fixture
+async def access_token(client: AsyncClient):
+    access_token_res = await client.post(
+        "/auth/jwt/login",
+        data={
+            "username": "geralt@wiedzmin.pl",
+            "password": "geralt",
+        },
+        headers={"Content-Type": "application/x-www-form-urlencoded"},
+    )
+    assert access_token_res.status_code == 200
+    token = access_token_res.json()
+    access_token = token.get("access_token")
+    assert access_token is not None
+    return access_token
