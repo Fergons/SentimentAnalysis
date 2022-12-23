@@ -1,6 +1,7 @@
 from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, Union
 
 from sqlalchemy import update
+from sqlalchemy.inspection import inspect
 
 from app.db.base import Base
 from fastapi.encoders import jsonable_encoder
@@ -59,7 +60,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             db_obj: ModelType,
             obj_in: Union[UpdateSchemaType, Dict[str, Any]]
     ) -> ModelType:
-        obj_data = jsonable_encoder(db_obj)
+        obj_data = inspect(db_obj).attrs.keys()
         if isinstance(obj_in, dict):
             update_data = obj_in
         else:

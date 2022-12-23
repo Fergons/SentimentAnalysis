@@ -5,53 +5,23 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas import UserDB
 from app import models
 import logging
-from .utils import create_objs
-from .test_data import (TEST_CATEGORY,
-                        TEST_GAME,
-                        TEST_GAME_CATEGORY,
-                        TEST_GAME_SOURCE,
-                        TEST_REVIEW,
-                        TEST_REVIEWER,
-                        TEST_SOURCE)
+from .utils import seed_initial_test_data
+
 
 # All test coroutines in file will be treated as marked (async allowed).
 pytestmark = pytest.mark.anyio
 logger = logging.getLogger()
+
 
 @pytest.fixture(scope="session")
 def anyio_backend():
     return "asyncio"
 
 
-@pytest.fixture
-async def seed_initial_test_data(session: AsyncSession):
-    # seed table category
-    categories = await create_objs(session, models.Category, TEST_CATEGORY)
-    # seed table source
-    sources = await create_objs(session, models.Source, TEST_SOURCE)
-    # seed table game
-    games = await create_objs(session, models.Game, TEST_GAME)
-    # seed table game_source
-    game_sources = await create_objs(session, models.GameSource, TEST_GAME_SOURCE)
-    # seed table game_category
-    game_categories = await create_objs(session, models.GameCategory, TEST_GAME_CATEGORY)
-    # seed table reviewer
-    reviewers = await create_objs(session, models.Reviewer, TEST_REVIEWER)
-    # seed table review
-    reviews = await create_objs(session, models.Review, TEST_REVIEW)
-
-    return {"category": categories,
-            "source": sources,
-            "game": games,
-            "gamesource": game_sources,
-            "gamecategory": game_categories,
-            "reviewer": reviewers,
-            "review": reviews
-            }
-
-
-async def test_get_games_endpoint(client: AsyncClient, default_user: UserDB, access_token: str, seed_initial_test_data):
+async def test_get_games_endpoint(session: AsyncSession, client: AsyncClient, default_user: UserDB, access_token: str):
     # test get games endpoint
+    await seed_initial_test_data(session)
+
     resp = await client.get(
         "/games/",
         headers={"Authorization": f"Bearer {access_token}"}
@@ -59,3 +29,41 @@ async def test_get_games_endpoint(client: AsyncClient, default_user: UserDB, acc
     assert resp.status_code == 200
     data = resp.json()
     logger.info(data)
+
+
+#test get game by id endpoint
+async def test_get_game_by_id_endpoint(client: AsyncClient, access_token: str):
+    resp = await client.get(
+        "/games/22",
+        headers={"Authorization": f"Bearer {access_token}"}
+    )
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["id"] == 22
+
+# test create game endpoint
+async def test_create_game_endpoint(client: AsyncClient, access_token: str):
+    resp = await client.post(
+        "/games/",
+        headers={"Authorization": f"Bearer {access_token}"},
+        json={
+            "name": "test title"
+        }
+    )
+    assert resp.status_code == 201
+    data = resp.json()
+    assert data["name"] == "test title"
+
+
+# test update game endpoint
+async def test_update_game_endpoint(client: AsyncClient, access_token: str):
+    resp = await client.put(
+        "/games/22",
+        headers={"Authorization": f"Bearer {access_token}"},
+        json={
+            "name": "test title updated"
+        }
+    )
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["name"] == "test title updated"

@@ -58,8 +58,6 @@ async def session(init_db) -> AsyncGenerator[AsyncSession, None]:
             session.close()
 
 
-
-
 @pytest.fixture
 async def steam_db_scraper(session: AsyncSession):
     async with SteamScraper() as scraper:
