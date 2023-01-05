@@ -1,7 +1,7 @@
 from typing import Any, List
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app import crud, models, schemas
 from app.api import deps
@@ -12,7 +12,7 @@ router = APIRouter()
 @router.get("/{id}", response_model=schemas.Game)
 async def read_game(
     *,
-    db: Session = Depends(deps.get_session),
+    db: AsyncSession = Depends(deps.get_session),
     id: int,
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
@@ -28,7 +28,7 @@ async def read_game(
 @router.delete("/{id}", response_model=schemas.Game)
 async def delete_game(
     *,
-    db: Session = Depends(deps.get_session),
+    db: AsyncSession = Depends(deps.get_session),
     id: int,
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
@@ -45,7 +45,7 @@ async def delete_game(
 @router.get("/", response_model=List[schemas.Game])
 async def read_games(
     *,
-    db: Session = Depends(deps.get_session),
+    db: AsyncSession = Depends(deps.get_session),
     skip: int = 0,
     limit: int = 100,
     current_user: models.User = Depends(deps.get_current_active_user),
@@ -60,7 +60,7 @@ async def read_games(
 @router.put("/{id}", response_model=schemas.Game)
 async def update_game(
     *,
-    db: Session = Depends(deps.get_session),
+    db: AsyncSession = Depends(deps.get_session),
     id: int,
     game_in: schemas.GameUpdate,
     current_user: models.User = Depends(deps.get_current_active_user),
@@ -77,7 +77,7 @@ async def update_game(
 @router.post("/", response_model=schemas.Game, status_code=201)
 async def create_game(
     *,
-    db: Session = Depends(deps.get_session),
+    db: AsyncSession = Depends(deps.get_session),
     game_in: schemas.GameCreate,
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:

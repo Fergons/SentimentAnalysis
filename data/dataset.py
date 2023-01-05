@@ -9,7 +9,7 @@ import string
 import argparse
 from nltk import tokenize
 
-MY_DATASET = "D:/BP/data/filled_annotated_reviews_czech.json"
+MY_DATASET = "E:/BP/data/filled_annotated_reviews_czech.json"
 
 
 def get_my_dataset():

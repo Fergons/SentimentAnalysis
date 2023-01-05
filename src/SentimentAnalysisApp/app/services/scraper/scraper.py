@@ -312,6 +312,7 @@ class GamespotScraper(Scraper):
                          api_key=api_key,
                          rate_limit=rate_limit,
                          **self._source)
+        self.api_key = api_key
 
     @staticmethod
     def game_reviews_formatter(r) -> Optional[GamespotApiResponse]:
@@ -336,8 +337,10 @@ class GamespotScraper(Scraper):
     async def game_reviews_page_generator(self, max_reviews: Optional[int] = 100
                                           ) -> AsyncGenerator[List[GamespotReview], None]:
         params = GamespotRequestParams(
-            sort=GamespotSortParam(field=GamespotReviewsSortFields.publish_date,
-                                   direction=SortDirection.DESC)
+            api_key=self.api_key,
+            sort=GamespotSortParam(
+                field=GamespotReviewsSortFields.publish_date,
+                direction=SortDirection.DESC)
         )
         url, result = await self.get_reviews_page(params=params)
         if result is None:
@@ -374,6 +377,7 @@ class GamespotScraper(Scraper):
 
     async def get_all_reviews(self) -> List[GamespotReview]:
         params = GamespotRequestParams(
+            api_key=self.api_key,
             sort=GamespotSortParam(
                 field=GamespotReviewsSortFields.publish_date,
                 direction=SortDirection.DESC)
