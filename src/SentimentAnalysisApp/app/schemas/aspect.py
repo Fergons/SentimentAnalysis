@@ -16,6 +16,9 @@ class AspectBase(BaseModel):
 
 
 class AspectCreate(AspectBase):
+    term: str = ""
+    category: Optional[str] = None
+    polarity: str
     confidence: Optional[str] = None
 
 
