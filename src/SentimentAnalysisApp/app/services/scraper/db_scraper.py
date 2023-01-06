@@ -14,6 +14,7 @@ from .scraper import SteamScraper, Scraper, DoupeScraper
 from .gamespot_resources import GamespotRequestParams
 from .steam_resources import SteamAppListResponse, SteamApp, SteamReview, SteamAppDetail
 from .constants import STEAM_REVIEWS_API_RATE_LIMIT
+from app.core.config import settings
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -132,14 +133,29 @@ async def scrape_doupe_reviews():
             await db_scraper.scrape_all_reviews(max_reviews=2000)
 
 
-async def main():
+async def scrape_steam_games():
+    async with async_session() as session:
+        async with SteamScraper(rate_limit={"max_rate": 3, "time_period": 1}) as scraper:
+            db_scraper = await DBScraper.create(scraper=scraper, session=session)
+            await db_scraper.scrape_games(bulk_size=100)
+
+
+async def scrape_steam_reviews():
     async with async_session() as session:
         async with SteamScraper() as scraper:
-            db_scraper: DBScraper = await DBScraper.create(scraper=scraper, session=session)
-            # await db_scraper.scrape_games()
+            db_scraper = await DBScraper.create(scraper=scraper, session=session)
             await db_scraper.scrape_all_reviews_for_not_updated_games()
+
+
+async def main():
+    async with async_session() as session:
+
+        async with SteamScraper() as scraper:
+            db_scraper: DBScraper = await DBScraper.create(scraper=scraper, session=session)
+            await db_scraper.scrape_games()
+            # await db_scraper.scrape_all_reviews_for_not_updated_games()
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
+    loop.run_until_complete(scrape_steam_games())
     loop.close()

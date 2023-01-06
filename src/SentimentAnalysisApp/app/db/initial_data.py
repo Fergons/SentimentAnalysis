@@ -5,9 +5,8 @@ from fastapi_users.password import get_password_hash
 from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 from sqlalchemy import select
 
-import app.schemas as schemas
 from app.core import config
-from app.crud import crud_source
+from app import crud, models, schemas
 from app.models.user import User
 from app.db.session import async_session
 from app.services.scraper.constants import SOURCES
@@ -30,9 +29,9 @@ async def main() -> None:
         user: Optional[User] = result.scalars().first()
 
         for name, value in SOURCES.items():
-            source = await crud_source.get_by_name(session, name=name)
+            source = await crud.source.get_by_name(session, name=name)
             if source is None:
-                await crud_source.create(session, obj_in=schemas.SourceCreate(**value))
+                await crud.source.create(session, obj_in=schemas.SourceCreate(**value))
                 print(f"Created source {name}.")
             else:
                 print(f"Source {name} already exists")

@@ -8,6 +8,8 @@ from app.core import config
 
 if config.settings.ENVIRONMENT == "PYTEST":
     sqlalchemy_database_uri = config.settings.TEST_SQLALCHEMY_DATABASE_URI
+elif config.settings.ENVIRONMENT == "PRODUCTION":
+    sqlalchemy_database_uri = config.settings.PRODUCTION_SQLALCHEMY_DATABASE_URI
 else:
     sqlalchemy_database_uri = config.settings.DEFAULT_SQLALCHEMY_DATABASE_URI
 

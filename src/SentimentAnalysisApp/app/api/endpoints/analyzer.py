@@ -11,7 +11,7 @@ router = APIRouter()
 
 
 @router.post("/analyze")
-def analyze_text(
+async def analyze_text(
         *,
         db: AsyncSession = Depends(deps.get_session),
         review: schemas.ReviewCreate,
