@@ -115,6 +115,7 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]) :
         )
         db.add(game_source_db_obj)
         await db.commit()
+        await db.refresh(game_source_db_obj)
 
     async def create_from_source(self, db: AsyncSession, *,
                                  obj_in: GameCreate) -> Optional[Game]:

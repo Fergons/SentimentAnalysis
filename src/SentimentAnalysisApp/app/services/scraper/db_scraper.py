@@ -135,7 +135,7 @@ async def scrape_doupe_reviews():
 
 async def scrape_steam_games():
     async with async_session() as session:
-        async with SteamScraper(rate_limit={"max_rate": 3, "time_period": 1}) as scraper:
+        async with SteamScraper(rate_limit={"max_rate": 2, "time_period": 3}) as scraper:
             db_scraper = await DBScraper.create(scraper=scraper, session=session)
             await db_scraper.scrape_games(bulk_size=100)
 

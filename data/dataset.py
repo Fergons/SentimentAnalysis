@@ -84,6 +84,39 @@ def remove_reviews_with_neutral_terms(dataset):
             new_reviews.append(review)
     return new_reviews
 
+def replace_subgroup_names_with_parent_group_name(dataset):
+    """
+    Replaces subgroup names with parent group name
+    :param dataset: dataset in json format
+    :return: dataset with replaced subgroup names
+    """
+    category_map = {
+        'gameplay': ['gameplay', 'game mode', 'story', 'level design',
+                     'multiplayer', 'violence', 'character design',
+                     'controls', 'tutorial', 'quality', 'gun play',
+                     'game environment', 'game design'],
+        'price': ['price'],
+        'audio_visuals': ['visuals', 'sounds', 'game environment', 'game design'],
+        'performance_bugs': ['performance', 'reviews', 'saves', 'developers', 'updates', 'anticheat'],
+        'community': ['languages', 'difficulty', 'content', 'community', 'comparison'],
+        'overall': ['overall']
+    }
+    reviews = get_all_reviews_from_dataset(dataset)
+    for review in reviews:
+        terms = review.get("aspectTerms", [])
+        for term in terms:
+            replaced = False
+            for category, subgroups in category_map.items():
+                if term.get("category", term["term"]) in subgroups:
+                    term["category"] = category
+                    replaced = True
+                    break
+
+            if not replaced:
+                term["category"] = "other"
+
+    return dataset
+
 def create_train_test(dataset, train=0.8):
     reviews = dataset
     new_reviews = reviews
@@ -303,7 +336,7 @@ def main():
     parser.add_argument('--init_pyabsa', action="store_true", help='initialize pyabsa dataset folder setup')
     parser.add_argument('--clean', action="store_true", help='clean reviews from input file')
     parser.add_argument('--fill_missing', action="store_true", help='fill in missing values')
-    parser.add_argument('--stats', action="store_true", help="get stats for polarity"),
+    parser.add_argument('--rename_categories', action="store_true", help='renames subgroup categories to main group')
 
     args = parser.parse_args()
 
@@ -385,6 +418,20 @@ def main():
         test = dataset_to_pyabsa(test)
         save_pyabsa_data(train_output, train)
         save_pyabsa_data(test_output, test)
+
+    elif args.rename_categories:
+        if args.input == "":
+            args.input = "annotated_reviews_czech.json"
+        else:
+            if args.input.split(".")[1] != "json":
+                raise ValueError("File doesn't seem to be a json file.")
+
+        if args.output == "":
+            args.output = args.input.split(".")[0].join(["renamed_subgroups_", ".json"])
+
+        dataset = load_json_data(args.input)
+        grouped = replace_subgroup_names_with_parent_group_name(dataset)
+        save_json_data(args.output, grouped)
 
 
 if __name__ == "__main__":
