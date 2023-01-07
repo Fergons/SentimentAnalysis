@@ -9,7 +9,7 @@ import string
 import argparse
 from nltk import tokenize
 
-MY_DATASET = "E:/BP/data/filled_annotated_reviews_czech.json"
+MY_DATASET = "filled_annotated_reviews_czech.json"
 
 
 def get_my_dataset():
@@ -94,11 +94,11 @@ def replace_subgroup_names_with_parent_group_name(dataset):
         'gameplay': ['gameplay', 'game mode', 'story', 'level design',
                      'multiplayer', 'violence', 'character design',
                      'controls', 'tutorial', 'quality', 'gun play',
-                     'game environment', 'game design'],
+                     'game environment', 'game design', 'difficulty', 'content'],
         'price': ['price'],
         'audio_visuals': ['visuals', 'sounds', 'game environment', 'game design'],
-        'performance_bugs': ['performance', 'reviews', 'saves', 'developers', 'updates', 'anticheat'],
-        'community': ['languages', 'difficulty', 'content', 'community', 'comparison'],
+        'performance_bugs': ['performance', 'saves', 'developers', 'updates', 'anticheat'],
+        'community': ['languages', 'reviews', 'community', 'comparison'],
         'overall': ['overall']
     }
     reviews = get_all_reviews_from_dataset(dataset)

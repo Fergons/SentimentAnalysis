@@ -59,3 +59,5 @@ https://ieeexplore.ieee.org/document/8090997 (Aspect-based summarization for gam
 https://direct.mit.edu/coli/article/42/3/595/1534/Sentiment-Analysis-Mining-Opinions-Sentiments-and (Bing Liu, Sentiment Analysis: Mining Opinions, Sentiments, and Emotions,  doi:10.1017/9781108639286.007) 
 https://ieeexplore.ieee.org/document/6912257 ( app reviews) pg 156
 https://ieeexplore.ieee.org/document/9660559 (ABSA steam)
+
+http://lindat.mff.cuni.cz/services/udpipe/ (UDPipe for czech could be helpful for LCF BERT)

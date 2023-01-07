@@ -2228,10 +2228,11 @@
         },
         {
           "reviewId": 95,
-          "text": "odporná kamera","category":"controls",
+          "text": "odporná kamera",
           "aspectTerms": [
             {
               "term": "kamera",
+              "category":"controls",
               "polarity": "negative",
               "from": 0,
               "to": 0
@@ -4490,6 +4491,7 @@
            "aspectTerms":[
              {
                "term":"principu obrana a útok",
+               "category":"gameplay",
                "polarity":"neutral",
                "from":0,
                "to":0
@@ -4814,6 +4816,7 @@
              },
              {
                "term":"cenu",
+               "category":"price",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -7704,6 +7707,7 @@
            "aspectTerms":[
              {
                "term":"aktualizací",
+               "category":"updates",
                "polarity":"negative",
                "from":0,
                "to":0
