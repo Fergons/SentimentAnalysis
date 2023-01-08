@@ -1,3 +1,4 @@
+import argparse
 import asyncio
 import logging
 from typing import List, Optional
@@ -10,7 +11,7 @@ from app.crud.review import crud_review
 from app.schemas.game import GameCreate
 from app.crud.game import crud_game
 from app.schemas.review import ReviewCreate, ReviewCreate
-from .scraper import SteamScraper, Scraper, DoupeScraper
+from .scraper import SteamScraper, Scraper, DoupeScraper, GamespotScraper
 from .gamespot_resources import GamespotRequestParams
 from .steam_resources import SteamAppListResponse, SteamApp, SteamReview, SteamAppDetail
 from .constants import STEAM_REVIEWS_API_RATE_LIMIT
@@ -126,7 +127,16 @@ class DBScraper:
             await crud_review.create_multi(self.session, objs_in=objs_in)
 
 
+async def scrape_gamespot_reviews():
+    """Scrape gamespot reviews. This method is used to get initial data for system"""
+    async with async_session() as session:
+        async with GamespotScraper(api_key=settings.GAMESPOT_API_KEY) as scraper:
+            db_scraper = await DBScraper.create(scraper, session)
+            await db_scraper.scrape_all_reviews()
+
+
 async def scrape_doupe_reviews():
+    """Scrape all reviews from doupe.cz. This method is used to get initial data for system"""
     async with async_session() as session:
         async with DoupeScraper() as scraper:
             db_scraper = await DBScraper.create(scraper=scraper, session=session)
@@ -134,6 +144,7 @@ async def scrape_doupe_reviews():
 
 
 async def scrape_steam_games():
+    """Scrape all games from steam. This method is used to get initial data for system"""
     async with async_session() as session:
         async with SteamScraper(rate_limit={"max_rate": 2, "time_period": 3}) as scraper:
             db_scraper = await DBScraper.create(scraper=scraper, session=session)
@@ -141,6 +152,7 @@ async def scrape_steam_games():
 
 
 async def scrape_steam_reviews():
+    """Scrape all reviews from steam for scraped games. This method is used to get initial data for system"""
     async with async_session() as session:
         async with SteamScraper() as scraper:
             db_scraper = await DBScraper.create(scraper=scraper, session=session)
@@ -148,14 +160,32 @@ async def scrape_steam_reviews():
 
 
 async def main():
-    async with async_session() as session:
+    loop = asyncio.get_event_loop()
 
-        async with SteamScraper() as scraper:
-            db_scraper: DBScraper = await DBScraper.create(scraper=scraper, session=session)
-            await db_scraper.scrape_games()
-            # await db_scraper.scrape_all_reviews_for_not_updated_games()
+    parser = argparse.ArgumentParser('dataset.py')
+    parser.add_argument('--steam-games', action='store_true')
+    parser.add_argument('--steam-reviews', action='store_true')
+    parser.add_argument('--doupe-reviews', action='store_true')
+    parser.add_argument('--gamespot-reviews', action='store_true')
+
+    args = parser.parse_args()
+    method = None
+    if args.steam_games:
+        method = scrape_steam_games
+    elif args.steam_reviews:
+        method = scrape_steam_reviews
+    elif args.doupe_reviews:
+        method = scrape_doupe_reviews
+    elif args.gamespot_reviews:
+        method = scrape_gamespot_reviews
+
+    if method:
+        loop.run_until_complete(method())
+        loop.close()
+
+    else:
+        parser.print_help()
+
 
 if __name__ == "__main__":
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(scrape_steam_games())
-    loop.close()
+    main()
