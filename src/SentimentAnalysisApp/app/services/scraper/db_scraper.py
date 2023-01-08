@@ -108,11 +108,11 @@ class DBScraper:
                     for review in reviews
                 ]
                 await crud_review.create_multi(self.session, objs_in=review_create_objs)
-                await crud_game.touch(self.session, obj_id=game_ids[game_id])
 
             logger.log(logging.INFO, f"{counter}. results are from: {game_id} num_reviews: {len(reviews)}!")
             logger.log(logging.INFO, f"Progress {counter}/{len(tasks)} tasks done!")
             counter += 1
+            await crud_game.touch(self.session, obj_id=game_ids[game_id])
 
     async def scrape_all_reviews(self, max_reviews: int = 100):
         async for page in self.scraper.game_reviews_page_generator(max_reviews=max_reviews):
@@ -131,23 +131,23 @@ class DBScraper:
             await crud_review.create_multi(self.session, objs_in=objs_in)
 
 
-async def scrape_gamespot_reviews():
+async def scrape_gamespot_reviews(rate_limit: dict = None):
     """Scrape gamespot reviews. This method is used to get initial data for system"""
     async with async_session() as session:
-        async with GamespotScraper(api_key=settings.GAMESPOT_API_KEY) as scraper:
+        async with GamespotScraper(api_key=settings.GAMESPOT_API_KEY, rate_limit=rate_limit) as scraper:
             db_scraper = await DBScraper.create(scraper, session)
             await db_scraper.scrape_all_reviews()
 
 
-async def scrape_doupe_reviews():
+async def scrape_doupe_reviews(rate_limit: dict = None):
     """Scrape all reviews from doupe.cz. This method is used to get initial data for system"""
     async with async_session() as session:
-        async with DoupeScraper() as scraper:
+        async with DoupeScraper(rate_limit=rate_limit) as scraper:
             db_scraper = await DBScraper.create(scraper=scraper, session=session)
             await db_scraper.scrape_all_reviews(max_reviews=2000)
 
 
-async def scrape_steam_games():
+async def scrape_steam_games(rate_limit: dict = None):
     """Scrape all games from steam. This method is used to get initial data for system"""
     async with async_session() as session:
         async with SteamScraper(rate_limit={"max_rate": 2, "time_period": 3}) as scraper:
@@ -155,10 +155,10 @@ async def scrape_steam_games():
             await db_scraper.scrape_games(bulk_size=100)
 
 
-async def scrape_steam_reviews():
+async def scrape_steam_reviews(rate_limit: dict = None):
     """Scrape all reviews from steam for scraped games. This method is used to get initial data for system"""
     async with async_session() as session:
-        async with SteamScraper() as scraper:
+        async with SteamScraper(rate_limit=rate_limit) as scraper:
             db_scraper = await DBScraper.create(scraper=scraper, session=session)
             await db_scraper.scrape_all_reviews_for_not_updated_games()
 
@@ -170,17 +170,25 @@ async def main():
     parser.add_argument('--steam-reviews', action='store_true')
     parser.add_argument('--doupe-reviews', action='store_true')
     parser.add_argument('--gamespot-reviews', action='store_true')
-
+    parser.add_argument('--rate-limit', default=None, type=int, help="Use rate limit for scraper in requests/sec")
     args = parser.parse_args()
 
+    rate_limit = None
+    if args.rate_limit:
+        rate_limit = {"max_rate": args.rate_limit, "time_period": 1}
+
     if args.steam_games:
-        await scrape_steam_games()
+        if rate_limit is not None:
+            await scrape_steam_games(rate_limit=rate_limit)
     elif args.steam_reviews:
-        await scrape_steam_reviews()
+        if rate_limit is not None:
+            await scrape_steam_reviews(rate_limit=rate_limit)
     elif args.doupe_reviews:
-        await scrape_doupe_reviews()
+        if rate_limit is not None:
+            await scrape_doupe_reviews(rate_limit=rate_limit)
     elif args.gamespot_reviews:
-        await scrape_gamespot_reviews()
+        if rate_limit is not None:
+            await scrape_gamespot_reviews(rate_limit=rate_limit)
     else:
         parser.print_help()
 

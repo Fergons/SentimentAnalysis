@@ -54,7 +54,7 @@ if __name__ == '__main__':
                       'Určitě doporučuji ! Vývojáři se snaží s hrou pracovat a posouvat ji dále. Za mě better and better. GJ !!',
                       'Celkem vklidu hra s velmi dobrou grafikou, ale špatnou optimalizací.  :)',
                       "Bezva hra, chce to cvik ale když to baví tak se dá vydržet než si to vychytáte.Doporučuji sluchátka s mikrofonem a umět trochu anglicky, pak je hra o 100 zábavnější.",
-                      "Hra je super, potrebuje ešte pár optimalizácií, ale už teraz je to najlepší Battle Royale aký som kedy hral.PS: Je to jediný Battle Royale, čo som kedy hral :D"
+                      "Hra s výborným potenciálem a věřím že to ještě dotáhnou ke konci, momentálně je herní fyzika/bugy/movement poměrně špatný, prostě na začátku a jde to i vidět, bohužel mě osobně navíc to házelo eror a hra se vypínala, bohužel tam není ani zatím automatické nebo manuální uložení takže jsem tu hru nedohrál tam kam jsem teoretický mohl, ale sadismus, nekorektnost v tom tomu dodává svojí šťávu která tuhle hru požene snad jen vpřed, je to na dobré cestě :)"
                       ]
     # # atepc_examples = "Super dynamické závodění|Povedená prezentace obsahu|Ukázkové připojování do hry|Důraz na sběratele".lower().split("|")
     # analyze_text_bulk(atepc_examples, language='czech')
