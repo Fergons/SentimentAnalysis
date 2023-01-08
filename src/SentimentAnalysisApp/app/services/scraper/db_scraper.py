@@ -16,6 +16,7 @@ from .gamespot_resources import GamespotRequestParams
 from .steam_resources import SteamAppListResponse, SteamApp, SteamReview, SteamAppDetail
 from .constants import STEAM_REVIEWS_API_RATE_LIMIT
 from app.core.config import settings
+from sqlalchemy import exc
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -67,11 +68,14 @@ class DBScraper:
                         self.session, source_id=self.db_source.id, source_game_id=detail.steam_appid)
                     if db_game is not None:
                         continue
-
-                    await crud_game.create_non_game_app_from_source(
-                        self.session, source_id=self.db_source.id, source_obj_id=detail.steam_appid
-                    )
-                    continue
+                    try:
+                        await crud_game.create_non_game_app_from_source(
+                            self.session, source_id=self.db_source.id, source_obj_id=detail.steam_appid
+                        )
+                    except exc.IntegrityError as e:
+                        logger.log(logging.ERROR, f"Integrity Error: {e}")
+                    finally:
+                        continue
 
                 obj_in = GameCreate(
                     source_id=self.db_source.id,
@@ -160,7 +164,6 @@ async def scrape_steam_reviews():
 
 
 async def main():
-    loop = asyncio.get_event_loop()
 
     parser = argparse.ArgumentParser('dataset.py')
     parser.add_argument('--steam-games', action='store_true')
@@ -169,23 +172,20 @@ async def main():
     parser.add_argument('--gamespot-reviews', action='store_true')
 
     args = parser.parse_args()
-    method = None
+
     if args.steam_games:
-        method = scrape_steam_games
+        await scrape_steam_games()
     elif args.steam_reviews:
-        method = scrape_steam_reviews
+        await scrape_steam_reviews()
     elif args.doupe_reviews:
-        method = scrape_doupe_reviews
+        await scrape_doupe_reviews()
     elif args.gamespot_reviews:
-        method = scrape_gamespot_reviews
-
-    if method:
-        loop.run_until_complete(method())
-        loop.close()
-
+        await scrape_gamespot_reviews()
     else:
         parser.print_help()
 
 
 if __name__ == "__main__":
-    main()
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main())
+    loop.close()
