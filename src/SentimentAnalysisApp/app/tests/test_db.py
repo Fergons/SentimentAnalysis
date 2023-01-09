@@ -166,7 +166,6 @@ async def test_steam_db_scraper(steam_db_scraper, session: AsyncSession):
     reviews_in_db = result.scalars().all()
     assert all(map(lambda x: x.reviewer_id is not None, reviews_in_db))
 
-
 @pytest.mark.anyio
 async def test_gamespot_db_scraper(gamespot_db_scraper, session: AsyncSession):
     result = await session.execute(select(Review).where(Review.source_id == gamespot_db_scraper.db_source.id))

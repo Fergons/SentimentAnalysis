@@ -1,6 +1,7 @@
 import argparse
 import asyncio
 import logging
+import random
 from typing import List, Optional
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -49,6 +50,7 @@ class DBScraper:
         logger.log(logging.DEBUG, f"{db_game_ids}")
 
         games: List[SteamApp] = await self.scraper.get_games()
+        random.shuffle(games)
 
         logger.log(logging.INFO, f"{len(db_game_ids)}/{len(games)} already in db!")
         group_counter = 1
@@ -87,7 +89,7 @@ class DBScraper:
                 categories = [category.description for category in detail.categories]
                 categories.extend([genre.description for genre in detail.genres])
                 await crud_game.create_with_categories_by_names_and_source(
-                    self.session, obj_in=obj_in, names=categories
+                    self.session, obj_in=obj_in, source_id=self.db_source.id, source_game_id=detail.steam_appid, names=categories
                 )
                 logger.log(logging.INFO, f"Progress {counter}/{len(tasks)} tasks done!")
 
@@ -104,6 +106,7 @@ class DBScraper:
         for future in asyncio.as_completed(tasks):
             result = await future
             game_id, reviews = result
+            await crud_game.touch(self.session, obj_id=game_ids[game_id])
 
             if len(reviews) > 0:
                 review_create_objs = []
@@ -128,7 +131,7 @@ class DBScraper:
             logger.log(logging.INFO, f"{counter}. results are from: {game_id} num_reviews: {len(reviews)}!")
             logger.log(logging.INFO, f"Progress {counter}/{len(tasks)} tasks done!")
             counter += 1
-            await crud_game.touch(self.session, obj_id=game_ids[game_id])
+
 
     async def scrape_all_reviews(self, max_reviews: int = 100):
         async for page in self.scraper.game_reviews_page_generator(max_reviews=max_reviews):
@@ -195,7 +198,7 @@ async def scrape_steam_games(rate_limit: dict = None):
     async with async_session() as session:
         async with SteamScraper(rate_limit={"max_rate": 2, "time_period": 3}) as scraper:
             db_scraper = await DBScraper.create(scraper=scraper, session=session)
-            await db_scraper.scrape_games(bulk_size=100)
+            await db_scraper.scrape_games(bulk_size=10)
 
 
 async def scrape_steam_reviews(rate_limit: dict = None):
