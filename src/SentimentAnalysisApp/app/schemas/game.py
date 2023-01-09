@@ -39,9 +39,7 @@ class GameCreate(GameBase):
     name: str
     image_url: Optional[AnyHttpUrl] = None
     release_date: Optional[datetime] = None
-    source_id: Optional[int] = None
-    source_game_id: Optional[str] = None
-    # categories: Optional[List["CategoryCreate"]] = None
+
 
 class GameCreateWithSource(GameBase):
     name: str
@@ -49,6 +47,7 @@ class GameCreateWithSource(GameBase):
     release_date: Optional[datetime] = None
     source_id: Optional[int] = None
     source_game_id: Optional[str] = None
+
 
 # Properties to receive via API on update
 class GameUpdate(GameBase):

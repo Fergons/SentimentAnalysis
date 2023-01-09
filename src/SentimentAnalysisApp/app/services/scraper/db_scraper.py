@@ -11,6 +11,9 @@ from app.crud.review import crud_review
 from app.schemas.game import GameCreate
 from app.crud.game import crud_game
 from app.schemas.review import ReviewCreate, ReviewCreate
+from app.schemas.source import GameSourceCreate
+from app.schemas.reviewer import ReviewerCreate
+from app.crud.reviewer import crud_reviewer
 from .scraper import SteamScraper, Scraper, DoupeScraper, GamespotScraper
 from .gamespot_resources import GamespotRequestParams
 from .steam_resources import SteamAppListResponse, SteamApp, SteamReview, SteamAppDetail
@@ -91,7 +94,7 @@ class DBScraper:
             logger.log(logging.INFO, f"Group {group_counter}/{len(games)//bulk_size} done!")
             group_counter += 1
 
-    async def scrape_all_reviews_for_not_updated_games(self, game_ids: List[str] = None, max_reviews: int = 100000):
+    async def scrape_all_reviews_for_not_updated_steam_games(self, game_ids: List[str] = None, max_reviews: int = 100000):
         games = await crud_game.get_all_not_updated_db_games_from_source(self.session, source_id=self.db_source.id)
         if game_ids is None:
             game_ids = {game.source_game_id: game.game.id for game in games}
@@ -103,10 +106,23 @@ class DBScraper:
             game_id, reviews = result
 
             if len(reviews) > 0:
-                review_create_objs = [
-                    ReviewCreate(source_id=self.db_source.id, game_id=game_ids[game_id], **review.dict(by_alias=True))
-                    for review in reviews
-                ]
+                review_create_objs = []
+                for review in reviews:
+                    review_obj = ReviewCreate(source_id=self.db_source.id,
+                                              game_id=game_ids[game_id],
+                                              **review.dict(by_alias=True))
+                    reviewer_obj = ReviewerCreate(source_id=self.db_source.id,
+                                                  **review.author.dict(by_alias=True))
+
+                    db_reviewer = await crud_reviewer.get_by_source_id(self.session,
+                                                                       source_id=self.db_source.id,
+                                                                       source_obj_id=reviewer_obj.source_reviewer_id)
+                    if db_reviewer is None:
+                        db_reviewer = await crud_reviewer.create_from_source(self.session, obj_in=reviewer_obj)
+
+                    review_obj.reviewer_id = db_reviewer.id
+                    review_create_objs.append(review_obj)
+
                 await crud_review.create_multi(self.session, objs_in=review_create_objs)
 
             logger.log(logging.INFO, f"{counter}. results are from: {game_id} num_reviews: {len(reviews)}!")
@@ -119,12 +135,39 @@ class DBScraper:
             objs_in = []
 
             for review in page:
-                review_obj = ReviewCreate.parse_obj(review.dict(by_alias=True))
+                review_data = review.dict(by_alias=True)
+                review_obj = ReviewCreate.parse_obj(review_data)
                 review_obj.source_id = self.db_source.id
-                if review_obj.game is not None:
-                    review_obj.game.source_id = self.db_source.id
-                if review_obj.reviewer is not None:
-                    review_obj.reviewer.source_id = self.db_source.id
+
+                if review_data.get("game") is not None:
+                    game_data = review.game.dict(by_alias=True)
+                    source_game_id = game_data.get("source_game_id")
+                    game_obj = GameCreate.parse_obj(game_data)
+                    db_game = await crud_game.get_by_source_id(self.session,
+                                                               source_id=self.db_source.id,
+                                                               source_game_id=source_game_id)
+
+                    if db_game is None:
+                        db_game = await crud_game.create_from_source(self.session,
+                                                                     obj_in=game_obj,
+                                                                     source_id=self.db_source.id,
+                                                                     source_game_id=source_game_id)
+                    review_obj.game_id = db_game.id
+
+                if review_data.get("reviewer") is not None:
+                    reviewer_data = review.reviewer.dict(by_alias=True)
+                    review_obj.playtime_at_review = reviewer_data.get("playtime_at_review")
+
+                    reviewer_obj = ReviewerCreate.parse_obj(reviewer_data)
+                    reviewer_obj.source_id = self.db_source.id
+
+                    db_reviewer = await crud_reviewer.get_by_source_id(self.session,
+                                                                       source_id=self.db_source.id,
+                                                                       source_obj_id=reviewer_obj.source_reviewer_id)
+                    if db_reviewer is None:
+                        db_reviewer = await crud_reviewer.create_from_source(obj_in=reviewer_obj)
+                    reviewer_obj.id = db_reviewer.id
+
                 objs_in.append(review_obj)
                 if len(objs_in) >= max_reviews:
                     break
@@ -160,7 +203,7 @@ async def scrape_steam_reviews(rate_limit: dict = None):
     async with async_session() as session:
         async with SteamScraper(rate_limit=rate_limit) as scraper:
             db_scraper = await DBScraper.create(scraper=scraper, session=session)
-            await db_scraper.scrape_all_reviews_for_not_updated_games()
+            await db_scraper.scrape_all_reviews_for_not_updated_steam_games()
 
 
 async def main():

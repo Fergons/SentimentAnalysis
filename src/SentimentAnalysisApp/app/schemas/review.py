@@ -19,8 +19,6 @@ class ReviewBase(BaseModel):
 class ReviewCreate(ReviewBase):
     text: str
     language: str = None
-    reviewer: Optional["ReviewerCreate"] = None
-    game: Optional["GameCreate"] = None
     reviewer_id: int = None
     game_id: int = None
     source_id: int = None
@@ -40,8 +38,8 @@ class ReviewUpdate(ReviewBase):
     text: Optional[str] = None
     language: Optional[str] = None
 
-    source: Optional["Source"] = None
-    game: Optional["Game"] = None
+    source_id: Optional[int] = None
+    game_id: Optional[int] = None
 
     summary: Optional[str] = None
     score: Optional[str] = None
@@ -52,7 +50,6 @@ class ReviewUpdate(ReviewBase):
     playtime_at_review: Optional[int] = None
 
     aspect_sum_polarity: Optional[str] = None
-    aspects: Optional[List["Aspect"]] = None
 
 
 class ReviewInDBBase(ReviewBase):

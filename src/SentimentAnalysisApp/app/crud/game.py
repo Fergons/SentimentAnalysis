@@ -62,7 +62,7 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]) :
         return db_obj
 
     async def create_with_categories_by_names_and_source(
-            self, db: AsyncSession, *, obj_in: GameCreate, names: List[str]
+            self, db: AsyncSession, *, obj_in: GameCreate, source_id: int, source_game_id: Any, names: List[str]
     ) -> Optional[Game]:
         obj_in_data = obj_in.dict(exclude={"source_id", "source_game_id", "categories"})
         game_db_obj = await self.create_with_categories_by_names(
@@ -72,8 +72,8 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]) :
         )
         game_source_db_obj = GameSource(
             game_id=game_db_obj.id,                # type: ignore
-            source_id=obj_in.source_id,            # type: ignore
-            source_game_id=obj_in.source_game_id   # type: ignore
+            source_id=source_id,            # type: ignore
+            source_game_id=str(source_game_id)   # type: ignore
         )
         db.add(game_source_db_obj)
         await db.commit()
@@ -118,10 +118,12 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]) :
         await db.refresh(game_source_db_obj)
 
     async def create_from_source(self, db: AsyncSession, *,
-                                 obj_in: GameCreate) -> Optional[Game]:
+                                 obj_in: GameCreate,
+                                 source_id: int,
+                                 source_game_id: Any) -> Optional[Game]:
         db_obj = await self.get_by_source_id(db,
-                                             source_id=obj_in.source_id,
-                                             source_game_id=obj_in.source_game_id)
+                                             source_id=source_id,
+                                             source_game_id=source_game_id)
         if db_obj is not None:
             return db_obj
 
@@ -133,8 +135,8 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]) :
             db_obj = Game(**obj_in.dict(exclude={"source_id", "source_game_id", "categories"}))  # type: ignore
             db.add(db_obj)
 
-        game_source_db_obj = GameSource(source_id=obj_in.source_id,  # type: ignore
-                                        source_game_id=str(obj_in.source_game_id))  # type: ignore
+        game_source_db_obj = GameSource(source_id=source_id,  # type: ignore
+                                        source_game_id=str(source_game_id))  # type: ignore
         game_source_db_obj.game = db_obj
         db.add(game_source_db_obj)
         await db.commit()

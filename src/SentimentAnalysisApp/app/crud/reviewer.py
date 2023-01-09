@@ -32,7 +32,7 @@ class CRUDReviewer(CRUDBase[Reviewer, ReviewerCreate, ReviewerUpdate]):
         if db_obj is not None:
             return db_obj
 
-        obj_in_data = obj_in.dict(exclude={"playtime_at_review"})
+        obj_in_data = obj_in.dict()
         db_obj = self.model(**obj_in_data)  # type: ignore
         db.add(db_obj)
         await db.commit()

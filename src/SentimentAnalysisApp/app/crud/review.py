@@ -85,14 +85,7 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
                 # possible update of the review in the DB
                 continue
 
-            db_obj = self.model(**obj.dict(exclude={"game", "reviewer"}))  # type: ignore
-            if obj.game is not None:
-                db_obj_game = await crud_game.create_from_source(db, obj_in=obj.game)
-                db_obj.game_id = db_obj_game.id
-            if obj.reviewer is not None:
-                db_obj_reviewer = await crud_reviewer.create_from_source(db, obj_in=obj.reviewer)
-                db_obj.reviewer_id = db_obj_reviewer.id
-
+            db_obj = self.model(**obj.dict())  # type: ignore
             db.add(db_obj)
 
         await db.commit()
@@ -100,22 +93,19 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
     async def create_with_reviewer_multi(
             self, db: AsyncSession, *,
             objs_in: List[ReviewCreate],
-            game_id: Optional[int] = None,
-            source_id: Optional[int] = None,
+            reviewers_in: List[ReviewerCreate],
             limit: int = 100):
 
-        for obj in objs_in:
-            db_obj = await self.get_by_source_id(db, obj.source_id, obj.source_review_id)
+        for review_obj, reviewer_obj in zip(objs_in, reviewers_in):
+            db_obj = await self.get_by_source_id(db, review_obj.source_id, review_obj.source_review_id)
             if db_obj is not None:
                 # possible update of the review in the DB
                 continue
-            reviewer_db_obj = await crud_reviewer.get_by_source_id(db, obj.source_id, obj.reviewer.source_reviewer_id)
+            reviewer_db_obj = await crud_reviewer.get_by_source_id(db, reviewer_obj.source_id, reviewer_obj.source_reviewer_id)
             if reviewer_db_obj is None:
-                obj.reviewer.source_id = obj.source_id
-                reviewer_db_obj = Reviewer(**obj.reviewer.dict(exclude={"playtime_at_review"}))  # type: ignore
+                reviewer_db_obj = Reviewer(**reviewer_obj.dict())  # type: ignore
                 db.add(reviewer_db_obj)
-            obj.playtime_at_review = obj.reviewer.playtime_at_review
-            db_obj = self.model(**obj.dict(exclude={"reviewer", "game"}))  # type: ignore
+            db_obj = self.model(**review_obj.dict())  # type: ignore
             db_obj.reviewer = reviewer_db_obj
             db.add(db_obj)
 

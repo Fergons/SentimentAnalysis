@@ -28,13 +28,12 @@ async def analyze_text(
     aspects = []
     for result in results:
         for term, polarity, confidence in zip(result["aspect"], result["sentiment"], result["confidence"]):
-            aspect = await crud.aspect.create(db=db,
-                                              obj_in=schemas.AspectCreate(
-                                                  review_id=review.id,
-                                                  term=term,
-                                                  polarity=polarity,
-                                                  confidence=confidence),
-                                              review_id=review.id)
+            aspect = await crud.aspect.create_for_review(db=db,
+                                                         obj_in=schemas.AspectCreate(
+                                                             term=term,
+                                                             polarity=polarity,
+                                                             confidence=confidence),
+                                                         review_id=review.id)
             aspects.append({"term": term, "polarity": polarity})
 
     return {

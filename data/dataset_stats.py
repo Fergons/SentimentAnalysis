@@ -50,7 +50,7 @@ def create_wordcloud(name, data):
     terms = data.get("positive", []) + data.get("negative", []) + data.get("neutral", [])
     term_fq = Counter(terms)
 
-    wordcloud = WordCloud(width=800, height=800, background_color='white', min_font_size=10).generate_from_frequencies(term_fq)
+    wordcloud = WordCloud(width=800, height=800, background_color='white', min_font_size=12).generate_from_frequencies(term_fq)
 
     # rename keys in data to match colors
     color_to_words = {

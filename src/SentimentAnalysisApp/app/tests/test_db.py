@@ -100,7 +100,11 @@ async def test_create_db_games(session: AsyncSession):
         categories_names = [category.description for category in detail.categories]
         obj_in = GameCreate(source_id=steam.id, **detail_dict)
         logger.log(logging.DEBUG, obj_in.dict())
-        game = await crud.game.create_with_categories_by_names_and_source(session, obj_in=obj_in, names=categories_names)
+        game = await crud.game.create_with_categories_by_names_and_source(session,
+                                                                          obj_in=obj_in,
+                                                                          source_game_id=detail_dict.get("source_game_id"),
+                                                                          source_id=steam.id,
+                                                                          names=categories_names)
         assert game.name == detail.name
         assert game.sources is not None
         assert game.sources[0].source_id == steam.id
@@ -138,7 +142,7 @@ async def test_create_db_games(session: AsyncSession):
 #     source_id = games[0].sources[0].source_id
 #     game_ids = [game.id for game in games]
 #     source_game_ids = [game.sources[0].source_game_id for game in games]
-#     async with steam_scraper as scraper:
+#     async with SteamScraper() as scraper:
 #         results = await scraper.get_games_reviews(source_game_ids, [{"language": "czech", "limit": _max} for _ in range(len(source_game_ids))])
 #         review_create_objs = [
 #             ReviewCreate(source_id=source_id, game_id=db_game_id, **review.dict(by_alias=True))
@@ -153,32 +157,14 @@ async def test_create_db_games(session: AsyncSession):
 #     logger.log(logging.DEBUG, f"number of review in table: {len(reviews_in_db)}")
 #     assert len(reviews_in_db) >= _max - int(_max / 2)
 
-@pytest.mark.anyio
-async def test_crud_review_create_review_with_reviewer(session: AsyncSession):
-    games = await crud.game.get_multi(session)
-    assert len(games) == 2
-    source_id = games[0].sources[0].source_id
-    game_ids = [game.id for game in games]
-    source_game_ids = [game.sources[0].source_game_id for game in games]
-    async with SteamScraper() as scraper:
-        results = await scraper.get_games_reviews(source_game_ids, [{"language": "czech", "limit": 100} for _ in range(len(source_game_ids))])
-        review_create_objs = [
-            ReviewCreate.parse_obj({"source_id": source_id, "game_id": db_game_id, **review.dict(by_alias=True)})
-            for game_id, db_game_id in zip(source_game_ids, game_ids)
-            for review in results[game_id]
-        ]
-        await crud.review.create_with_reviewer_multi(session, objs_in=review_create_objs)
-
-    result = await session.execute(select(Review))
-    reviews_in_db = result.scalars().all()
-    logger.log(logging.DEBUG, f"number of review in table: {len(reviews_in_db)}")
-    assert len(reviews_in_db) >= 150
 
 
 @pytest.mark.anyio
 async def test_steam_db_scraper(steam_db_scraper, session: AsyncSession):
-    await steam_db_scraper.scrape_all_reviews_for_not_updated_games(max_reviews=100)
-
+    await steam_db_scraper.scrape_all_reviews_for_not_updated_steam_games(max_reviews=100)
+    result = await session.execute(select(Review).where(Review.source_id == steam_db_scraper.db_source.id))
+    reviews_in_db = result.scalars().all()
+    assert all(map(lambda x: x.reviewer_id is not None, reviews_in_db))
 
 
 @pytest.mark.anyio
@@ -186,7 +172,7 @@ async def test_gamespot_db_scraper(gamespot_db_scraper, session: AsyncSession):
     result = await session.execute(select(Review).where(Review.source_id == gamespot_db_scraper.db_source.id))
     reviews_in_db = result.scalars().all()
     assert len(reviews_in_db) == 0
-    await gamespot_db_scraper.scrape_all_reviews(max_reviews=100)
+    await gamespot_db_scraper.scrape_all_reviews(max_reviews=3)
     result = await session.execute(select(Review).where(Review.source_id == gamespot_db_scraper.db_source.id))
     reviews_in_db = result.scalars().all()
     logger.debug(f"Num gamespot reviews in db: {len(reviews_in_db)}")

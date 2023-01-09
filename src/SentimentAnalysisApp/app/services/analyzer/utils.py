@@ -13,7 +13,7 @@ def replace_price_with_placeholder(text):
     :param text: string to clean
     :return: cleaned string
     """
-    text = re.sub(r'\d+(?:[.,]\d+)? ?[$€£¥₩₹₽₿]+', 'price', text)
+    text = re.sub(r'\d+(?:[.,]\d+)? ?[$€£¥₩₹₽₿]+', 'peněz', text)
     return text
 
 def clean(text):

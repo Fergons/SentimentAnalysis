@@ -40,9 +40,6 @@ class SourceUpdate(SourceBase):
     list_of_games_url: Optional[AnyHttpUrl] = None
     reviewer_detail_url: Optional[AnyHttpUrl] = None
     list_of_reviewers_url: Optional[AnyHttpUrl] = None
-    reviews: Optional[List["Review"]] = None
-    reviewers: Optional[List["Reviewer"]] = None
-    games: Optional[List["Game"]] = None
 
 
 class SourceInDBBase(SourceBase):
@@ -66,6 +63,7 @@ class GameSource(BaseModel):
 class GameSourceCreate(GameSource):
     game_id: int
     source_id: int
+    source_game_id: str
 
 
 class GameSourceUpdate(GameSource):

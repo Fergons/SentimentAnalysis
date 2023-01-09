@@ -19,13 +19,12 @@ class ReviewerCreate(ReviewerBase):
     source_reviewer_id: str
     num_games_owned: Optional[int] = None
     num_reviews: Optional[int] = None
-    playtime_at_review: Optional[int] = None
+
 
 # Properties to receive via API on update
 class ReviewerUpdate(ReviewerBase):
     num_reviews: Optional[int] = None
-    source: Optional["Source"] = None
-    reviews: Optional[List["Review"]] = None
+    source_id: Optional[int] = None
 
 
 class ReviewerInDBBase(ReviewerBase):
