@@ -145,9 +145,11 @@ def clean_text(text):
     text = remove_emoticons(text)
 
     #remove # and @
-    for punc in '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~':
+    for punc in '"#$%&\'()*+-/:;<=>@[\\]^_`{|}~':
         text = text.replace(punc, '')
 
+    # duplicit punctioation
+    text = re.sub(r'([!?.,]){2,}', r'\1', text)
     return text
 
 

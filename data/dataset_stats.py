@@ -118,6 +118,14 @@ def get_list_of_terms_for_each_category_from_dataframe(df):
         result[category] = df[df.category == category].term.tolist()
     return result
 
+def length_stats_list_of_reviews_from_json_file(filename):
+    with open(filename, "r", encoding="utf-8") as f:
+        data = json.load(f)
+        print(f"Number of reviews: {len(data)}")
+        print(f"Number of unique reviews: {len(set(data))}")
+        df = pd.Series({"reviews": data})
+        df["reviews"].str.len().describe()
+
 def main():
     data = get_my_dataset()
     create_stats_for_dataset(data)
