@@ -24,7 +24,7 @@ class Source(Base):
     games = relationship("GameSource", back_populates="source", lazy="selectin", cascade="all, delete")
 
 
-# mapping table between many to many relationship (Game <-> Source)
+# mapping table between many-to-many relationship (Game <-> Source)
 class GameSource(Base):
     id = Column(Integer, primary_key=True, index=True)
     

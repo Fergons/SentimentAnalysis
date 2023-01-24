@@ -1,7 +1,6 @@
 import requests as re
 import json
 from enum import Enum
-from data.private.keys import GAMESPOT_API_KEY
 from lxml import etree
 import asyncio
 import logging
@@ -448,4 +447,5 @@ if __name__ == "__main__":
     # asyncio.get_event_loop().run_until_complete(main())
 
     # get_languages_in_dict()
-    base_model_from_json_response()
+    # base_model_from_json_response()
+    main()

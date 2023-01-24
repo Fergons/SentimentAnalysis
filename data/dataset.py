@@ -9,7 +9,7 @@ import string
 import argparse
 from nltk import tokenize
 
-MY_DATASET = "E://PythonProjects//SentimentAnalysis//data//filled_annotated_reviews_czech.json"
+MY_DATASET = "D://PythonProjects//SentimentAnalysis//data//filled_annotated_reviews_czech.json"
 
 
 def get_my_dataset():
@@ -97,7 +97,7 @@ def replace_subgroup_names_with_parent_group_name(dataset):
                      'game environment', 'game design', 'difficulty', 'content'],
         'price': ['price'],
         'audio_visuals': ['visuals', 'sounds', 'game environment', 'game design'],
-        'performance_bugs': ['performance', 'saves', 'developers', 'updates', 'anticheat'],
+        'performance_bugs': ['bugs','performance', 'saves', 'developers', 'updates', 'anticheat'],
         'community': ['languages', 'reviews', 'community', 'comparison'],
         'overall': ['overall']
     }
@@ -299,7 +299,7 @@ def save_pyabsa_data(file, dataset):
 def save_json_data(file, data):
     try:
         with open(file, "w", encoding="utf-8") as fopen:
-            json.dump(data, fopen)
+            json.dump(data, fopen, ensure_ascii=False, indent=4)
     except (FileNotFoundError, ValueError) as err:
         print(f"Failed to save data.")
         raise

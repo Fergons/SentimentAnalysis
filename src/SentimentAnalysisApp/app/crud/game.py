@@ -32,15 +32,15 @@ class CRUDCategory(CRUDBase[Category, CategoryCreate, CategoryUpdate]) :
         await db.commit()
 
 
-class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]) :
+class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]):
     async def get_by_source_id(self, db: AsyncSession, source_id: Any, source_game_id: Any) -> Optional[Game]:
-        result = await db.execute(select(GameSource).where((GameSource.source_id == source_id) &
+        result = await db.execute(select(GameSource.game).where((GameSource.source_id == source_id) &
                                                            (GameSource.source_game_id == str(source_game_id)))
                                   .options(selectinload(GameSource.game)))
         db_obj = result.scalars().first()
         if db_obj is None:
             return None
-        return db_obj.game
+        return db_obj
 
     async def get_by_name(self, db: AsyncSession, *, name: str) -> Optional[Category]:
         ts_query = func.plainto_tsquery(cast("english", RegConfig), name)
@@ -115,7 +115,6 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]) :
         )
         db.add(game_source_db_obj)
         await db.commit()
-        await db.refresh(game_source_db_obj)
 
     async def create_from_source(self, db: AsyncSession, *,
                                  obj_in: GameCreate,
@@ -127,7 +126,7 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]) :
         if db_obj is not None:
             return db_obj
 
-        db_obj = await self.get_by_name(db, name=obj_in.name)
+        # db_obj = await self.get_by_name(db, name=obj_in.name)
         if db_obj is None:
             # db_obj = await self.create_with_categories_by_names_and_source(db,
             #                                                                obj_in=obj_in,

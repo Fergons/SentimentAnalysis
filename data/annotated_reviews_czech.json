@@ -3080,7 +3080,7 @@
            "text":"samozřejmě jsou tam bugy jako v každé hře.",
            "aspectTerms":[
              {
-               "term":"bugy","category":"gameplay",
+               "term":"bugy","category":"bugs",
                "polarity":"neutral",
                "from":0,
                "to":0
@@ -5028,7 +5028,7 @@
            "text":"Nehraju to dlouho, ale s bugy jsem zatím žádný problém neměl.",
            "aspectTerms":[
              {
-               "term":"bugy","category":"gameplay",
+               "term":"bugy","category":"bugs",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -7115,7 +7115,7 @@
            "text":"Jeto super skvěle propracovaná hra někdy se někde najdou bugy ale ty vás nějak neomezují ani nezvýhodňuji takže zamě super hra",
            "aspectTerms":[
              {
-               "term":"bugy","category":"gameplay",
+               "term":"bugy","category":"bugs",
                "polarity":"neutral",
                "from":0,
                "to":0
@@ -7186,7 +7186,7 @@
                "to":0
              },
              {
-               "term":"destrukce zdí", "category":"game environment",
+               "term":"propracování destrukce zdí", "category":"game environment",
                "polarity":"positive",
                "from":0,
                "to":0
@@ -7979,6 +7979,14 @@
                "category":"hitbox",
                "polarity":"negative"
              }
+           ]
+        },
+        {
+          "reviewId":0,
+           "text":"",
+           "aspectTerms":[
+           ],
+           "aspectCategories":[
            ]
         }
       ]

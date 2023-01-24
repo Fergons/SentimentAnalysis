@@ -50,7 +50,7 @@ def create_wordcloud(name, data):
     terms = data.get("positive", []) + data.get("negative", []) + data.get("neutral", [])
     term_fq = Counter(terms)
 
-    wordcloud = WordCloud(width=800, height=800, background_color='white', min_font_size=12).generate_from_frequencies(term_fq)
+    wordcloud = WordCloud(width=640, height=480, background_color='white', min_font_size=12).generate_from_frequencies(term_fq)
 
     # rename keys in data to match colors
     color_to_words = {
@@ -103,7 +103,7 @@ def get_terms_for_each_category_grouped_by_polarity(df):
         for polarity in df.polarity.unique():
             try:
                 terms = group.get_group((category, polarity)).term.tolist()
-                filtered_terms = [term for term in terms if len(term) > 1]
+                filtered_terms = [term.lower() for term in terms if len(term) > 1]
                 result[category][polarity] = filtered_terms
             except KeyError:
                 result[category][polarity] = []
