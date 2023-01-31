@@ -58,5 +58,6 @@ if __name__ == '__main__':
                       ]
     # # atepc_examples = "Super dynamické závodění|Povedená prezentace obsahu|Ukázkové připojování do hry|Důraz na sběratele".lower().split("|")
     # analyze_text_bulk(atepc_examples, language='czech')
-    ex = get_extractor()
-    extract_aspects(atepc_examples[-1], extractor=ex)
+    ex = get_extractor(checkpoint_name="fast_lcf_atepc_1110.game_reviews_cdw_apcacc_88.21_apcf1_84.79_atef1_78.6")
+    # extract_aspects("the game is good but has really bad  mechanics and lots of bugs.", extractor=ex)
+    ex.batch_predict([clean(x) for x in atepc_examples], pred_sentiment=True, print_result=True, save_to_file=False)

@@ -2,7 +2,7 @@ import logging
 from typing import List, Optional, Any, Tuple
 
 from fastapi.encoders import jsonable_encoder
-from sqlalchemy import column, update, func, cast
+from sqlalchemy import column, update, func, cast, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
@@ -34,12 +34,17 @@ class CRUDCategory(CRUDBase[Category, CategoryCreate, CategoryUpdate]) :
 
 class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]):
     async def get_by_source_id(self, db: AsyncSession, source_id: Any, source_game_id: Any) -> Optional[Game]:
-        result = await db.execute(select(GameSource.game).where((GameSource.source_id == source_id) &
-                                                           (GameSource.source_game_id == str(source_game_id)))
-                                  .options(selectinload(GameSource.game)))
+        result = await db.execute(select(GameSource.game).where(and_(GameSource.source_id == source_id,
+                                                                     GameSource.source_game_id == str(source_game_id)
+                                                                     )
+                                                                )
+                                  )
         db_obj = result.scalars().first()
         if db_obj is None:
             return None
+        game_id = db_obj.game_id
+        result = await db.execute(select(self.model).where(self.model.id == game_id))
+        db_obj = result.scalars().first()
         return db_obj
 
     async def get_by_name(self, db: AsyncSession, *, name: str) -> Optional[Category]:
@@ -86,7 +91,7 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]):
             select(GameSource)
             .where(
                 (GameSource.source_id == source_id) &
-                (GameSource.game_id is not None)
+                (GameSource.game_id != None)
             )
         )
         return result.scalars().all()
@@ -97,7 +102,7 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]):
             .where(
                 (GameSource.source_id == source_id) &
                 (GameSource.game_id == Game.id) &
-                (Game.updated_at is not None)
+                (Game.updated_at != None)
             )
             .options(selectinload(GameSource.game))
         )
@@ -126,7 +131,7 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]):
         if db_obj is not None:
             return db_obj
 
-        # db_obj = await self.get_by_name(db, name=obj_in.name)
+        db_obj = await self.get_by_name(db, name=obj_in.name)
         if db_obj is None:
             # db_obj = await self.create_with_categories_by_names_and_source(db,
             #                                                                obj_in=obj_in,

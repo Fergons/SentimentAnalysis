@@ -9,7 +9,7 @@ import string
 import argparse
 from nltk import tokenize
 
-MY_DATASET = "D://PythonProjects//SentimentAnalysis//data//filled_annotated_reviews_czech.json"
+MY_DATASET = "E://PythonProjects//SentimentAnalysis//data//filled_annotated_reviews_czech.json"
 
 
 def get_my_dataset():
@@ -96,8 +96,8 @@ def replace_subgroup_names_with_parent_group_name(dataset):
                      'controls', 'tutorial', 'quality', 'gun play',
                      'game environment', 'game design', 'difficulty', 'content'],
         'price': ['price'],
-        'audio_visuals': ['visuals', 'sounds', 'game environment', 'game design'],
-        'performance_bugs': ['bugs','performance', 'saves', 'developers', 'updates', 'anticheat'],
+        'audio_visuals': ['audio_visuals','visuals', 'sounds', 'game environment', 'game design'],
+        'performance_bugs': ['performance_bugs' ,'bugs','performance', 'saves', 'developers', 'updates', 'anticheat'],
         'community': ['languages', 'reviews', 'community', 'comparison'],
         'overall': ['overall']
     }
@@ -346,7 +346,7 @@ def main():
         if args.input == "":
             args.input = "annotated_reviews_czech_filled.json"
         else:
-            if args.input.split(".")[1] != "json":
+            if args.input.split(".")[-1] != "json":
                 raise ValueError("File doesn't seem to be a json file.")
         dataset = load_json_data(args.input)
         conll = dataset_to_conll(dataset)
@@ -357,7 +357,7 @@ def main():
         if args.input == "":
             args.input = "annotated_reviews_czech.json"
         else:
-            if args.input.split(".")[1] != "json":
+            if args.input.split(".")[-1] != "json":
                 raise ValueError("File doesn't seem to be a json file.")
 
         if args.output == "":
@@ -374,7 +374,7 @@ def main():
         if args.input == "":
             args.input = "annotated_reviews_czech.json"
         else:
-            if args.input.split(".")[1] != "json":
+            if args.input.split(".")[-1] != "json":
                 raise ValueError("File doesn't seem to be a json file.")
 
         if args.output == "":
@@ -404,7 +404,7 @@ def main():
         if args.input == "":
             args.input = "annotated_reviews_czech.json"
         else:
-            if args.input.split(".")[1] != "json":
+            if args.input.split(".")[-1] != "json":
                 raise ValueError("File doesn't seem to be a json file.")
 
         if args.output == "":
@@ -425,7 +425,7 @@ def main():
         if args.input == "":
             args.input = "annotated_reviews_czech.json"
         else:
-            if args.input.split(".")[1] != "json":
+            if args.input.split(".")[-1] != "json":
                 raise ValueError("File doesn't seem to be a json file.")
 
         if args.output == "":

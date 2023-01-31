@@ -8379,7 +8379,7 @@
           "text": "opravdu kvalitní hra která mi nejde zapnout",
           "aspectTerms": [
             {
-              "term": "kvalitní hra",
+              "term": "hra",
               "category": "sarcasm",
               "polarity": "negative",
               "from": 0,
@@ -8678,7 +8678,7 @@
               "to": 0
             },
             {
-              "term": "zbraně",
+              "term": "Zbraně",
               "category": "gameplay",
               "polarity": "positive",
               "from": 0,

@@ -7,7 +7,7 @@ from pydantic import ValidationError, AnyHttpUrl
 from typing import Union, List, Callable, Tuple, Iterable, Any, Optional, AsyncGenerator
 import httpx
 from http import HTTPStatus
-from httpx import ConnectTimeout, ConnectError, URL
+from httpx import ConnectTimeout, ConnectError, URL, Response
 from .doupe_resources import DoupeReviewsRequestParams, game_tags, DoupeReview, MAX_PAGE, MAX_PER_PAGE
 from .constants import ContentType, STEAM_API_RATE_LIMIT, SOURCES, SourceName, DEFAULT_RATE_LIMIT
 from .steam_resources import (SteamAppDetail,
@@ -119,9 +119,8 @@ class Scraper:
             logger.log(logging.DEBUG, response.text)
 
     async def get_retry(self, url, retries: int = 3, **kwargs):
-
+        response = None
         for retry in range(retries):
-            response = None
             async with self.rate_limit:
                 try:
                     response = await self.session.get(url, **kwargs)
@@ -132,8 +131,12 @@ class Scraper:
                 else:
                     logger.log(logging.INFO, f"api call:{response.url}")
                     break
+
         if response is None:
-            raise ValueError(f"Could not establish connection to {url}.")
+            logger.error(f"Could not establish connection to {url}.")
+            response = Response(request=httpx.Request("GET", url),
+                                content=None, status_code=HTTPStatus.SERVICE_UNAVAILABLE)
+
         return response
 
     async def get_all_reviews(self):
@@ -491,7 +494,7 @@ class DoupeScraper(Scraper):
         response = await self.get_retry(review.url,
                                         headers=self.headers)
 
-        return response.url, self.handle_response(response,
+        return URL(review.url), self.handle_response(response,
                                                   validator=self.html_response_validator,
                                                   formatter=self.game_review_formatter,
                                                   formatter_params={"review": review})
