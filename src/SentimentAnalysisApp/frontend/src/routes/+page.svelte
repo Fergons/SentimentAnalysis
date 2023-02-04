@@ -1,32 +1,36 @@
 <script lang="ts">
-	import Button, { Label, Icon } from '@smui/button';
-	let clicked = 0;
-	function handleClick(event: CustomEvent | MouseEvent) {
-		event = event as MouseEvent;
-		if (event.button === 0) {
-			clicked++;
-		}
-	}
-	function reset() {
-		clicked = 0;
-	}
+    import Button, {Label, Icon} from '@smui/button';
+    import Card, {Content, Actions} from '@smui/card';
 </script>
 
-<Button on:mousedown={handleClick}>
-	<Icon class="material-icons">thumb_up</Icon>
-	<Label>Click Me</Label>
-</Button>
-<p class="mdc-typography--body1">
-	{#if clicked}
-		You've clicked the button {clicked} time{clicked === 1 ? '' : 's'}. You can
-		<a on:click={reset} href="javascript:void(0);">reset it</a>.
-	{:else}
-		<span class="grayed">You haven't clicked the button.</span>
-	{/if}
-</p>
+<section class="about-section">
+    <div class="about-text-container">
+        <p class="mdc-typography--body1">
+            Welcome to our project on Aspect Based Sentiment Analysis! Our goal is to analyze
+            user-generated reviews and gain insights into specific aspects of the individual games and
+            game genres. Using state-of-the-art natural language processing techniques, we aim to
+            accurately identify and categorize the sentiments expressed in each aspect of the reviews.
+        </p>
+        <p class="mdc-typography--body1">Please login to continue using our service.</p>
+    </div>
+</section>
+
+<section class="features-section">
+    <div class="about-features-text">
+        <p class="mdc-typography--body1">Please login to continue using our service.</p>
+    </div>
+</section>
 
 <style>
-	.grayed {
-		opacity: 0.6;
-	}
+    .about-section {
+        display: flex;
+        flex-direction: column;
+        width: 33vw;
+    }
+
+    .features-section {
+        display: flex;
+        flex-direction: column;
+        width: 33vw;
+    }
 </style>

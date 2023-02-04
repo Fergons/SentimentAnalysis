@@ -13,8 +13,7 @@ router = APIRouter()
 async def read_game(
     *,
     db: AsyncSession = Depends(deps.get_session),
-    id: int,
-    current_user: models.User = Depends(deps.get_current_active_user),
+    id: int
 ) -> Any:
     """
     Get game by ID.
@@ -47,8 +46,7 @@ async def read_games(
     *,
     db: AsyncSession = Depends(deps.get_session),
     skip: int = 0,
-    limit: int = 100,
-    current_user: models.User = Depends(deps.get_current_active_user),
+    limit: int = 100
 ) -> Any:
     """
     Retrieve games.
@@ -87,5 +85,5 @@ async def create_game(
     game = await crud.game.get_by_name(db, name=game_in.name)
     if game:
         raise HTTPException(status_code=400, detail="Game already exists")
-    game = await crud.game.create_from_source(db=db, obj_in=game_in)
+    game = await crud.game.create_from_source(db=db, obj_in=game_in, source_id=99, source_game_id=666)
     return game

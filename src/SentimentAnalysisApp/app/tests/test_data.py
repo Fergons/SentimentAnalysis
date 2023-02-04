@@ -47,6 +47,19 @@ TEST_SOURCE = [
         "list_of_reviewers_url": None,
         "updated_at": None
     }
+    ,
+    {
+        "id": 99,
+        "name": "test",
+        "url": "http://localhost:8000",
+        "user_reviews_url": "https://doupe.zive.cz/recenze/",
+        "critic_reviews_url": "https://doupe.zive.cz/recenze/",
+        "game_detail_url": None,
+        "list_of_games_url": None,
+        "reviewer_detail_url": None,
+        "list_of_reviewers_url": None,
+        "updated_at": None
+    }
 
 ]
 TEST_GAME = [

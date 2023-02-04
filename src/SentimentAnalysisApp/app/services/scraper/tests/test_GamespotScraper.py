@@ -16,7 +16,7 @@ def anyio_backend():
 @pytest.fixture(scope="module")
 def scraper():
     Meta = GamespotScraper
-    return Meta()
+    return Meta(api_key=os.environ.get("GAMESPOT_API_KEY"))
 
 
 @pytest.mark.anyio
