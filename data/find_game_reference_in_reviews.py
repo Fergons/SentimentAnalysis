@@ -170,7 +170,7 @@ def get_context(words, file) -> object:
 
 def xtest2():
     """
-    finds most popular comparison phrases and prints some stats
+    finds most popular comparison phrases and prints some aspects
     """
     before_context, after_context = get_context(
         ["BF4", "BF3", "battlefield", "valorant", "GTA", "COD", "konter", "csgo", "cs", "csko", "cska", "csku", "gocko",

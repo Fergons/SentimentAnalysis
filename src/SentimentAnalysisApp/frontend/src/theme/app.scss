@@ -1,15 +1,110 @@
-// Import the typography styles.
-//
-// MDC Typography
-//
+// Elevation mixins.
+@use '@material/elevation/index' as elevation;
+
+// Paper mixins.
+@use '@smui/paper/index' as paper;
+@use '@material/theme/index' as theme;
+
 @use '@material/typography/mdc-typography';
 
-html,
-body {
-	padding: 0;
-	margin: 0;
+@use '@material/top-app-bar/index' as top-app-bar;
+
+.mdc-top-app-bar.app-top-app-bar {
+  // Color the top bar with "surface" colors.
+  @include top-app-bar.fill-color(surface);
+  @include top-app-bar.ink-color(on-surface);
+  @include top-app-bar.icon-ink-color(on-surface);
+  // Give it a shadow.
+  @include elevation.elevation(4);
+  // Position it above the drawer.
+  z-index: 7;
 }
 
-.container {
-	padding: 30px;
+html {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+}
+
+body,
+#smui-app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin: 0;
+}
+
+.drawer-container {
+  flex-grow: 1;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+.bar-app-content {
+  align-self: stretch;
+  flex-grow: 1;
+  width: 0;
+}
+
+.app-drawer,
+.app-main-content {
+  overflow: auto;
+  height: 100%;
+}
+
+.app-drawer.app-drawer-adjust {
+  padding-bottom: top-app-bar.$row-height;
+}
+
+
+.app-content {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+}
+
+.app-main-content {
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.app-main-content > section {
+  padding: 48px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.app-main-content > section:after {
+  height: 32px;
+  display: block;
+  content: ' ';
+}
+
+.app-spaced {
+  margin-bottom: 2.5em;
+}
+
+.highlight {
+  background-color: #282b2e;
+  color: #e0e2e4;
+  padding: 1em !important;
+  border-radius: 5px;
+}
+
+.status {
+  max-width: 100%;
+  font-size: 0.9em;
+  word-break: break-word;
+  white-space: normal;
+  margin-bottom: 0;
+}
+
+@include paper.paper-color(svelte-blue, #40b3ff, #fff);
+
+@media (max-width: 460px) {
+  .app-main-content > section {
+    padding: 16px;
+  }
 }
