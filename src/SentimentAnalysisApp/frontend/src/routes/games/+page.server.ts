@@ -1,9 +1,11 @@
-import { getGames } from '../../lib/server/api/games';
-import { error } from '@sveltejs/kit';
+import {getGames} from '../../lib/server/api/games';
+import {error} from '@sveltejs/kit';
 
 export async function load() {
-	const games1 = await getGames();
-	return {
-		games: games1
-	};
+
+    const games = await getGames();
+    return {
+        title: 'Games',
+        games: games
+    };
 }

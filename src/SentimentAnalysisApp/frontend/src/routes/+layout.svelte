@@ -1,17 +1,14 @@
 <script lang="ts">
     import {onDestroy, onMount} from 'svelte';
-    import {mdiFileDocument, mdiWeatherSunny, mdiWeatherNight} from '@mdi/js';
-    import {siDiscord, siTwitter, siGithub} from 'simple-icons/icons';
+    import {mdiWeatherNight, mdiWeatherSunny} from '@mdi/js';
     import TinyGesture from 'tinygesture';
-    import {assets} from '$app/paths';
     import {page} from '$app/stores';
     import TopAppBar, {Row, Section, Title} from '@smui/top-app-bar';
-    import Drawer, {Content, Scrim, AppContent, Header, Subtitle} from '@smui/drawer';
+    import Drawer, {AppContent, Content, Header, Scrim} from '@smui/drawer';
     import IconButton from '@smui/icon-button';
-    import List, {Item, Text, Separator, PrimaryText, Label} from '@smui/list';
+    import List, {Item, Separator, Text} from '@smui/list';
     import Tooltip, {Wrapper} from '@smui/tooltip';
     import {Icon, Svg} from '@smui/common';
-    import {mdiGithub, mdiWeb, mdiChevronLeft} from '@mdi/js';
 
     let topAppBar: TopAppBar;
     let currentPageTitle = '...';
@@ -84,12 +81,11 @@
         drawerOpen = false;
         const hashEl =
             window.location.hash && document.querySelector<HTMLElement>(window.location.hash);
-        const top = (hashEl && hashEl.offsetTop) || 0;
-        mainContent.scrollTop = top;
+        mainContent.scrollTop = (hashEl && hashEl.offsetTop) || 0;
         lastPagePath = previousPagePath;
         previousPagePath = $page.url.pathname;
-        currentPageTitle = $page.data.title ?? activeSection?.title ?? '...';
-        $page.data.title ?
+        currentPageTitle = $page.data.title ?? activeSection?.title ?? '';
+        $page.data.subtitle ?
             currentPageTitle = currentPageTitle + " | " + $page.data.subtitle
             :
             currentPageTitle = currentPageTitle;
@@ -197,14 +193,14 @@
                         {miniWindow ? currentPageTitle : currentPageTitle}
                     </Title>
                 </Section>
-                <Section align="end" toolbar style="color: var(--mdc-on-surface, #000);">
+                <Section align="end" toolbar style="color: #000;">
                     <Wrapper>
                         <IconButton toggle pressed={lightTheme} on:SMUIIconButtonToggle:change={switchTheme}>
                             <Icon component={Svg} viewBox="0 0 24 24" on>
-                                <path fill="currentColor" d={mdiWeatherNight}/>
+                                <path fill="currentColor" d={mdiWeatherNight}></path>
                             </Icon>
                             <Icon component={Svg} viewBox="0 0 24 24">
-                                <path fill="currentColor" d={mdiWeatherSunny}/>
+                                <path fill="currentColor" d={mdiWeatherSunny}></path>
                             </Icon>
                         </IconButton>
                         <Tooltip>{lightTheme ? 'Lights off' : 'Lights on'}</Tooltip>
