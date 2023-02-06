@@ -44,7 +44,7 @@
                         class="signin-form-item"
                         validationMessage="Passwords don't match!"
                 />
-                <Button type="submit" class="signin-button signin-form-item" variant="raised">Sign up</Button>
+                <Button type="submit" class="signin-button signin-form-item" variant="raised" disabled={!match}>Sign up</Button>
                 <div class="signup-cta-container mdc-typography--caption" style="color: grey">
                     <h3>Already have an account? <a href="/signin">Sign In</a></h3>
                 </div>

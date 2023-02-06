@@ -3,10 +3,13 @@
     import Paper from '@smui/paper';
     import Button from '@smui/button';
     import {Icon} from '@smui/common';
+    import {enhance} from "$app/forms";
+    import type { ActionData } from './$types';
+
 
     let email: string | undefined = '';
     let password: string | undefined = '';
-
+    export let form: ActionData;
     const handleSubmit = () => {
             console.log("Submitted!")
     }
@@ -16,8 +19,12 @@
     <div class="signin-form-container">
         <Paper style="width: 460px">
             <h1 class="mdc-typography--headline4" style="margin: 0 0 8px 0; text-align: center">Sign In</h1>
-            <form class="signin-form" on:submit|preventDefault={handleSubmit}>
-                <Textfield bind:value={email} type="email" class="signin-form-item">
+            <form method="post" class="signin-form"  use:enhance>
+                <Textfield bind:value={email}
+                           type="email"
+                           input$name="email"
+                           class="signin-form-item"
+                           required>
                     <svelte:fragment slot="label">
                         <Icon class="material-icons"
                               style="font-size: 1em; line-height: normal; vertical-align: top;"
@@ -30,8 +37,10 @@
                 <Textfield
                         bind:value={password}
                         type="password"
+                        input$name="password"
                         label="Password"
                         class="signin-form-item"
+                        required
                 />
                 <Button type="submit" class="signin-button signin-form-item" variant="raised">Sign In</Button>
                 <div class="signup-cta-container mdc-typography--caption" style="color: grey">
