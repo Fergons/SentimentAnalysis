@@ -1,15 +1,15 @@
 import type {PageServerLoad, Actions} from './$types';
 import {redirect, error} from '@sveltejs/kit';
 import {signin} from '$lib/server/api/auth';
+import {coo} from "$app/stores";
 
 
 export const load: PageServerLoad = (event) => {
-    const user = event.locals.user;
-
-    if (user) {
+    if (event.locals.authenticated) {
         throw redirect(302, '/');
     }
 };
+
 
 export const actions: Actions = {
     default: async (event) => {
@@ -25,14 +25,14 @@ export const actions: Actions = {
 
         try {
             const token = await signin(email, password);
-            console.log(token)
-            event.cookies.set('access_token', `Bearer ${token}`, {
-                httpOnly: true,
-                path: '/',
-                secure: true,
-                sameSite: 'strict',
-                maxAge: 60 * 60 * 24 // 1 day
-            });
+
+             event.cookies.set('access_token', `Bearer ${token}`, {
+                    httpOnly: true,
+                    path: '/',
+                    secure: true,
+                    sameSite: 'strict',
+                    maxAge: 60 * 60 * 24 // 1 day
+                });
 
 
         } catch (_error) {

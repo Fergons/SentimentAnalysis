@@ -5,12 +5,30 @@ export async function signin(email: string, password: string) {
       username: email,
       password: password,
     });
-      return response.data.access_token;
+    if(response.data.access_token!==undefined)
+        return response.data.access_token;
+    else{
+        console.error(response.data.detail);
+        return null;
+    }
 
   } catch (error) {
-    console.error(error);
-    return error;
+    throw error;
   }
+}
+
+export async function getUser(jwt: string) {
+    try {
+        const response = await api.get('/users/me', {
+        headers: {
+            Authorization: jwt,
+        },
+        });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
 }
 
 export async function signout() {
