@@ -1,34 +1,48 @@
-import { api } from './api';
-export async function signin(email: string, password: string) {
-  try {
-    const response = await api.post('/auth/jwt/login', {
-      username: email,
-      password: password,
-    });
-    if(response.data.access_token!==undefined)
-        return response.data.access_token;
-    else{
-        console.error(response.data.detail);
-        return null;
-    }
+import {api, handleApiResponseError} from './api';
+import {z} from 'zod';
 
-  } catch (error) {
-    throw error;
-  }
+export const SigninSchema = z.object({
+    email: z
+        .string({required_error: 'Email is required'})
+        .min(1, {message: 'Email is required'})
+        .max(64, {message: 'Email must be less than 64 characters long'})
+        .email({message: 'Email must be a valid email address'}),
+
+    password: z
+        .string({required_error: 'Password is required'})
+        .min(1, {message: 'Password is required'})
+        .max(32, {message: 'Password must be less than 32 characters long'})
+});
+
+export type SigninDataType = z.infer<typeof SigninSchema>;
+
+export type SigninResponse = {
+    access_token: string
+};
+export async function signin(email: string, password: string): Promise<SigninResponse> {
+
+    const response = await api.post('/auth/jwt/login', {
+        username: email,
+        password: password,
+    });
+    return response.data;
 }
 
-export async function getUser(jwt: string) {
-    try {
-        const response = await api.get('/users/me', {
+type AccountDetailResponse = {
+    id: number;
+    email: string;
+    is_active: boolean;
+    is_superuser: boolean;
+    is_verified: boolean;
+}
+
+export async function getAccountDetail<ResultType = Record<string, any>>(jwt: string): Promise<ResultType> {
+    const response = await api.get('/users/me', {
         headers: {
             Authorization: jwt,
         },
-        });
-        return response.data;
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
+    });
+    return response.data;
 }
 
 export async function signout() {

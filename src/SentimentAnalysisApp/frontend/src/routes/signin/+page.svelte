@@ -3,41 +3,97 @@
     import HelperText from '@smui/textfield/helper-text';
     import Paper from '@smui/paper';
     import Button, {Label} from '@smui/button';
+    import IconButton from '@smui/icon-button';
     import {Icon} from '@smui/common';
+    import Snackbar, {Actions} from '@smui/snackbar';
     import {enhance} from "$app/forms";
     import type {ActionData} from './$types';
-    import type {TextfieldInputState} from "../../lib/utils/inputState";
-    import {
-        isTextfieldInputStateValid,
-        makeDefaultTextfieldInputState,
-    } from "../../lib/utils/inputState";
+    import {makeDefaultTextfieldInputState} from "../../lib/utils/inputState";
 
-    let email = makeDefaultTextfieldInputState();
-    let password = makeDefaultTextfieldInputState();
+    export let form: FormData;
+    export let data: ActionData;
 
-    $: disabled = !(isTextfieldInputStateValid(email) && isTextfieldInputStateValid(password));
-    export let form: ActionData;
-    const handleSubmit = () => {
-        console.log("Submitted!")
+    let snackbar: Snackbar;
+    let snackbarText: string = "";
+
+    let email = makeDefaultTextfieldInputState(null, false) //setting dirty to false so we can check if field was touched
+    let password = makeDefaultTextfieldInputState(null, false) // ^this
+
+    function onSubmit({data, form, action, cancel}) {
+
+        return async ({result, update}) => {
+            console.log("result: ", result)
+            if (result) {
+                switch (result.type) {
+                    case "success":
+                        if (result.data.errors) {
+                            const errors = result.data.errors;
+                            email.value = "";
+                            email.value = result.data.data.email;
+                            if (errors.email) {
+                                email.invalid = true;
+                                email.helperText = errors.email;
+                            }
+                            if (errors.password) {
+                                password.invalid = true;
+                            }
+                            if (errors.response) {
+                                if(errors.response.status === 400) {
+                                    snackbarText = "Invalid email or password";
+                                    snackbar.open();
+                                }else{
+                                    snackbarText = "Something went wrong";
+                                    snackbar.open();
+                                }
+                            }
+                        } else {
+                            console.log("success")
+                            window.location.href = "/";
+                        }
+
+                        break;
+                    case "invalid":
+                        console.log("invalid")
+                        break;
+                    default:
+                        console.log("default")
+                        break;
+                }
+            }
+            await update();
+        }
+
     }
 </script>
 
 <section title="Sign In">
+
     <div class="signin-form-container form-container">
+        <Snackbar bind:this={snackbar} labelText={snackbarText}>
+        <Label>This is a snackbar.</Label>
+        <Actions>
+            <IconButton class="material-icons" title="Dismiss">close</IconButton>
+        </Actions>
+    </Snackbar>
         <Paper style="width: 50%; min-width: 250px; align-items: center">
             <h1 class="mdc-typography--headline4" style="margin: 0 0 8px 0; text-align: center">Sign In</h1>
-            <form method="post" class="signin-form form" use:enhance>
-                <Textfield bind:value={email.value}
-                           bind:invalid={email.invalid}
-
-                           helperLine$style="width: 100%;"
-                           updateInvalid
-                           type="email"
-                           input$name="email"
-                           input$autocomplete="email"
-                           class="signin-form-item"
-                           required
-
+            <form method="POST"
+                  class="signin-form form"
+                  use:enhance={onSubmit}
+            >
+                <Textfield
+                        bind:value={email.value}
+                        bind:invalid={email.invalid}
+                        updateInvalid
+                        helperLine$style="width: 100%;"
+                        type="email"
+                        input$name="email"
+                        input$pattern="\S+@\S+\.\S+"
+                        input$title="Please enter a valid email address"
+                        input$maxlength="64"
+                        input$autocomplete="email"
+                        class="signin-form-item"
+                        required
                 >
 
                     <svelte:fragment slot="label">
@@ -48,9 +104,15 @@
                         </Icon>
                         Email
                     </svelte:fragment>
-                    <HelperText validationMsg slot="helper" class="signin-form-item">
-                        That's not a valid email address.
-                    </HelperText>
+
+                    <svelte:fragment slot="helper">
+                        <HelperText
+                                slot="helper"
+                                class="signin-form-item"
+                        >
+                            {email.helperText}
+                        </HelperText>
+                    </svelte:fragment>
                 </Textfield>
 
                 <Textfield
@@ -62,12 +124,12 @@
                         label="Password"
                         class="signin-form-item"
                         required
-                />
+                >
+                </Textfield>
                 <Button
                         type="submit"
                         class="signin-button signin-form-item"
                         variant="raised"
-                        disabled={disabled}
                 >Sign In
                 </Button>
                 <div class="signup-cta-container mdc-typography--caption" style="color: grey">
@@ -98,7 +160,7 @@
 
     * :global(.signin-form-item) {
         width: 100%;
-        margin-bottom: 8px;
+        margin-bottom: 4px;
     }
 
     .signup-cta-container {
@@ -107,5 +169,9 @@
         align-items: center;
         justify-content: center;
         margin-top: 1em;
+    }
+
+    * :global(.signin-button) {
+        margin-top: 8px;
     }
 </style>

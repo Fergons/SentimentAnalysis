@@ -6,9 +6,15 @@
     import TopAppBar, {Row, Section, Title} from '@smui/top-app-bar';
     import Drawer, {AppContent, Content, Header, Scrim} from '@smui/drawer';
     import IconButton from '@smui/icon-button';
+    import Button from '@smui/button';
     import List, {Item, Separator, Text} from '@smui/list';
     import Tooltip, {Wrapper} from '@smui/tooltip';
     import {Icon, Svg} from '@smui/common';
+    import userStore from '../lib/stores/user';
+    import type {User} from "../lib/server/api/types";
+    import type {LayoutServerData} from "../../.svelte-kit/types/src/routes/$types";
+
+    export let data: LayoutServerData;
 
     let topAppBar: TopAppBar;
     let currentPageTitle = '...';
@@ -22,6 +28,7 @@
     let lightTheme: boolean;
     let activeSection: DrawerSection | undefined;
     let lastPagePath: string | undefined;
+    $: currentUser = data?.user;
 
     function switchTheme() {
         lightTheme = !lightTheme;
@@ -117,6 +124,7 @@
             });
         }
         lightTheme = window.matchMedia('(prefers-color-scheme: light)').matches;
+
     });
     onDestroy(() => {
         if (mainContentGesture) {
@@ -125,6 +133,7 @@
         if (drawerGesture) {
             drawerGesture.destroy();
         }
+
     });
 
     function routesEqual(a: string, b: string) {
@@ -194,6 +203,14 @@
                     </Title>
                 </Section>
                 <Section align="end" toolbar style="color: #000;">
+                    {#if currentUser}
+                        <Button tag="a" href="/users/me">{currentUser.email}</Button>
+                        <Button>Logout</Button>
+                    {:else}
+                         <Button>Signin</Button>
+                       <Button>Signup</Button>
+                    {/if}
+
                     <Wrapper>
                         <IconButton toggle pressed={lightTheme} on:SMUIIconButtonToggle:change={switchTheme}>
                             <Icon component={Svg} viewBox="0 0 24 24" on>

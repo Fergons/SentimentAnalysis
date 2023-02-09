@@ -1,16 +1,23 @@
-import {getUser} from "./lib/server/api/auth";
+import {getAccountDetail} from "./lib/server/api/auth";
+import {get} from "svelte/store";
 import type {Handle} from '@sveltejs/kit';
+import userStore from './lib/stores/user';
+import type {User} from "./lib/server/api/types";
 
 /** @type {import('@sveltejs/kit').Handle} */
 
 export let handle: Handle = async function ({event, resolve}) {
     const token = event.cookies.get('access_token');
     if (!token) {
-        event.locals.token = null;
-        event.locals.authenticated = false;
-    }else{
-        event.locals.token = token;
-        event.locals.authenticated = true;
+        userStore.set(null);
+    }else if (!event.locals.user) {
+        if(get(userStore) === null){
+            const user = await getAccountDetail<User>(token);
+            userStore.set(user);
+            event.locals.user = user;
+        }else{
+            event.locals.user = get(userStore);
+        }
     }
       return resolve(event);
 }

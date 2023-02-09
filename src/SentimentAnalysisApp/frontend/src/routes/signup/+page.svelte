@@ -3,15 +3,22 @@
     import Paper from '@smui/paper';
     import Button from '@smui/button';
     import {Icon} from '@smui/common';
+    import {enhance} from "$app/forms";
 
     let email: string | undefined = '';
     let password: string | undefined = '';
     let confirm: string | undefined = '';
+    let invalidEmail: boolean = false;
+    let invalidPassword: boolean = false;
     let match: boolean;
     $: match = password === confirm;
+    $: disabled = !(match && email && password && !invalidEmail && !invalidPassword);
+    async function onSubmit ({data, form, action, cancel}) {
+        return async ({result, update}) =>{
+            await update()
+        }
 
-    const handleSubmit = () => {
-            console.log("Submitted!")
+
     }
 </script>
 
@@ -19,8 +26,18 @@
     <div class="signin-form-container">
         <Paper style="width: 460px">
             <h1 class="mdc-typography--headline4" style="margin: 0 0 8px 0; text-align: center">Create Account</h1>
-            <form class="signin-form" on:submit|preventDefault={handleSubmit}>
-                <Textfield bind:value={email} type="email" class="signin-form-item">
+            <form method="POST" class="signin-form" use:enhance={onSubmit}>
+                <Textfield bind:value={email}
+                           bind:invalid={invalidEmail}
+                           updateInvalid
+                           type="email"
+                           class="signin-form-item"
+                           input$autocomplete="email"
+                           input$type="email"
+                           input$pattern="\S+@\S+\.\S+"
+                           input$maxlength="64"
+                           required
+                >
                     <svelte:fragment slot="label">
                         <Icon class="material-icons"
                               style="font-size: 1em; line-height: normal; vertical-align: top;"
@@ -32,9 +49,14 @@
                 </Textfield>
                 <Textfield
                         bind:value={password}
+                        bind:invalid={invalidPassword}
+                        updateInvalid
                         type="password"
                         label="Password"
                         class="signin-form-item"
+                        input$maxlength="32"
+                        input$minlength="8"
+                        required
                 />
                  <Textfield
                         bind:value={confirm}
@@ -43,8 +65,11 @@
                         label="Confirm Password"
                         class="signin-form-item"
                         validationMessage="Passwords don't match!"
+                        input$maxlength="32"
+                        input$minlength="8"
+                        required
                 />
-                <Button type="submit" class="signin-button signin-form-item" variant="raised" disabled={!match}>Sign up</Button>
+                <Button type="submit" class="signin-button signin-form-item" variant="raised" disabled={disabled}>Sign up</Button>
                 <div class="signup-cta-container mdc-typography--caption" style="color: grey">
                     <h3>Already have an account? <a href="/signin">Sign In</a></h3>
                 </div>

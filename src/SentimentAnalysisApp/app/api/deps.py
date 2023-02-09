@@ -19,7 +19,7 @@ async def get_session() -> AsyncGenerator[AsyncSession, None]:
         try:
             yield session
         finally:
-            session.close()
+            await session.close()
 
 
 async def get_user_db(session: AsyncSession = Depends(get_session)):

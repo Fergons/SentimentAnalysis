@@ -7,16 +7,11 @@
     import {Icon} from "@smui/common";
     import {page} from '$app/stores';
     import Paper from "@smui/paper";
+    import {User} from "../../../lib/server/api/types";
+    import {PageData} from "./$types";
 
-    export let data: {
-        user: {
-            id: string,
-            email: string | null,
-            is_active: boolean,
-            is_superuser: boolean,
-            is_verified: boolean
-        }
-    };
+
+    export let data: PageData;
 
     let email = makeDefaultTextfieldInputState();
     $: data.user.email = email.value;
@@ -43,7 +38,6 @@
                         bind:dirty={email.dirty}
                         style="width: 100%;"
                         disabled={!edit}
-                        label="Email"
                 >
                     <svelte:fragment slot="label">
                         <Icon class="material-icons"

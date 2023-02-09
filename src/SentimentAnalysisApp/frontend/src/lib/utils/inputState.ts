@@ -3,6 +3,7 @@ export type TextfieldInputState = {
     dirty: boolean,
     invalid: boolean,
     focused: boolean,
+    helperText: string
 };
 
 export function makeDefaultTextfieldInputState(value: string | null = null,
@@ -14,6 +15,7 @@ export function makeDefaultTextfieldInputState(value: string | null = null,
         dirty: dirty,
         invalid: invalid,
         focused: focused,
+        helperText: '',
     };
 }
 
