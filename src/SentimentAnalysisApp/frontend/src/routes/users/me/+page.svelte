@@ -5,16 +5,10 @@
     import Switch from '@smui/switch';
     import {enhance} from '$app/forms'
     import {Icon} from "@smui/common";
-    import {page} from '$app/stores';
     import Paper from "@smui/paper";
-    import {User} from "../../../lib/server/api/types";
-    import {PageData} from "./$types";
+    import userStore from "../../../lib/stores/user";
 
-
-    export let data: PageData;
-
-    let email = makeDefaultTextfieldInputState();
-    $: data.user.email = email.value;
+    let email = makeDefaultTextfieldInputState($userStore?.email ?? null);
     let password = makeDefaultTextfieldInputState()
     let edit = false;
 </script>
@@ -23,21 +17,34 @@
     <div class="account-me-container">
         <Paper>
             <FormField>
-                <Switch bind:checked={edit}
-
-                />
-
-                <span slot="label">
-            Edit
-        </span>
+                <Switch bind:checked={edit}/>
+                <span slot="label">Edit
+                </span>
             </FormField>
-            <form method="POST" use:enhance>
+            <form method="POST"
+                  use:enhance={() => {
+                      return async ({ result }) => {
+                            edit=false;
+                            if (result.type === 'success' && !result.errors) {
+                                await userStore.update(user => {
+                                    user.email = email.value
+                                    return user
+                                })
+                            }
+
+                      }
+            }
+            }>
                 <Textfield
                         bind:value={email.value}
                         bind:invalid={email.invalid}
-                        bind:dirty={email.dirty}
+                        updateInvalid
                         style="width: 100%;"
                         disabled={!edit}
+                        input$type="email"
+                        input$required
+                        input$title="Please enter a valid email address"
+                        input$pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{'{2,4}'}$"
                 >
                     <svelte:fragment slot="label">
                         <Icon class="material-icons"
@@ -59,6 +66,7 @@
         display: flex;
         justify-content: center;
         flex-direction: column;
+        width: 60%;
     }
 
 </style>

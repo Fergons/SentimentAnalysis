@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type {Game} from '../server/api/types';
+    import type {Game} from '../shared/types';
     import Card, {
         Media,
         MediaContent,

@@ -1,11 +1,14 @@
 import type {PageServerLoad, Actions} from './$types';
 import {redirect, error} from '@sveltejs/kit';
 import {handleApiResponseError} from "../../lib/server/api/api";
-import {signin} from '../../lib/server/api/auth';
+import {getAccountDetail, signin} from '../../lib/server/api/auth';
 import type {SigninDataType} from '../../lib/server/api/auth';
 import {SigninSchema} from '../../lib/server/api/auth';
 import {api} from '../../lib/server/api/api';
 import {validateFormData} from "../../lib/utils/validation";
+import {invalidateAll} from "$app/navigation";
+import type {User} from "../../lib/shared/types";
+import * as wasi from "wasi";
 
 
 export const load: PageServerLoad = (event) => {
@@ -24,7 +27,6 @@ export const actions: Actions = {
                 errors: validation.errors,
             }
         }
-        console.log(formData)
         try {
             const response = await signin(formData.email, formData.password);
             if (response.access_token === undefined) {
@@ -37,7 +39,6 @@ export const actions: Actions = {
                     }
                 }
             }
-            api.defaults.headers['Authorization'] = `Bearer ${response.access_token}`;
             cookies.set('access_token', `Bearer ${response.access_token}`, {
                 httpOnly: true,
                 path: '/',

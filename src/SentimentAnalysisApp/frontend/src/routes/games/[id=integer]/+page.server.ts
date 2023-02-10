@@ -1,6 +1,6 @@
 import {error} from '@sveltejs/kit';
 import {getGame} from '../../../lib/server/api/games';
-import type {Game} from '../../../lib/server/api/types';
+import type {Game} from '../../../lib/shared/types';
 
 export async function load({params}: { params: { id: string } }) {
 

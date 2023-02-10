@@ -11,10 +11,17 @@
     import Tooltip, {Wrapper} from '@smui/tooltip';
     import {Icon, Svg} from '@smui/common';
     import userStore from '../lib/stores/user';
-    import type {User} from "../lib/server/api/types";
+    import type {User} from "../lib/shared/types";
+    import {applyAction, enhance} from "$app/forms";
     import type {LayoutServerData} from "../../.svelte-kit/types/src/routes/$types";
+    import {invalidateAll} from "$app/navigation";
+    import {browser} from "$app/environment";
 
     export let data: LayoutServerData;
+    const defaultUser = browser ?
+        window.localStorage.getItem('user') ? JSON.parse(window.localStorage.getItem('user')) : null : null;
+    console.log("default user ", data?.user)
+    $userStore = data?.user ?? null;
 
     let topAppBar: TopAppBar;
     let currentPageTitle = '...';
@@ -28,7 +35,6 @@
     let lightTheme: boolean;
     let activeSection: DrawerSection | undefined;
     let lastPagePath: string | undefined;
-    $: currentUser = data?.user;
 
     function switchTheme() {
         lightTheme = !lightTheme;
@@ -202,15 +208,26 @@
                         {miniWindow ? currentPageTitle : currentPageTitle}
                     </Title>
                 </Section>
-                <Section align="end" toolbar style="color: #000;">
-                    {#if currentUser}
-                        <Button tag="a" href="/users/me">{currentUser.email}</Button>
-                        <Button>Logout</Button>
-                    {:else}
-                         <Button>Signin</Button>
-                       <Button>Signup</Button>
-                    {/if}
 
+                <Section align="end" toolbar style="color: #000;">
+
+                    {#if $userStore}
+                        <Button tag="a" href="/users/me">{$userStore.email}</Button>
+                        <form action="/signout" method="POST" use:enhance={() => {
+                            console.log("signout");
+                            return async ({result}) => {
+                                console.log("result signout");
+                                $userStore = null;
+                                await invalidateAll();
+                                await applyAction(result);
+                            }
+                        }}>
+                            <Button>Sign out</Button>
+                        </form>
+                    {:else}
+                        <Button  href="/signin">Signin</Button>
+                        <Button href="/signup">Signup</Button>
+                    {/if}
                     <Wrapper>
                         <IconButton toggle pressed={lightTheme} on:SMUIIconButtonToggle:change={switchTheme}>
                             <Icon component={Svg} viewBox="0 0 24 24" on>
@@ -224,6 +241,7 @@
                     </Wrapper>
                 </Section>
             </Row>
+
         </TopAppBar>
 
         {#if miniWindow}

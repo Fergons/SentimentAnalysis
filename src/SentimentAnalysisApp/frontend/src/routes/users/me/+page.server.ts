@@ -28,23 +28,23 @@ export const actions: Actions = {
             }
         }
         console.log(formData)
-        // try {
-        //     const response = await signin(formData.email);
+        try {
             // const response = await userUpdate(formData.email);
-        // } catch (e) {
-        //     const response = handleApiResponseError(e);
-        //     return {
-        //         data: {
-        //             email: formData.email
-        //         },
-        //         errors: {
-        //             response: response
-        //         }
-        //     }
-        // }
-        return {
-            data:{
-                email: formData.email.trim()
+            const response = {email: formData.email}
+            return {
+                data: {
+                    ...response
+                }
+            }
+        } catch (e) {
+            const response = handleApiResponseError(e);
+            return {
+                data: {
+                    email: formData.email
+                },
+                errors: {
+                    response: response
+                }
             }
         }
     }

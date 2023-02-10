@@ -36,13 +36,18 @@ type AccountDetailResponse = {
     is_verified: boolean;
 }
 
-export async function getAccountDetail<ResultType = Record<string, any>>(jwt: string): Promise<ResultType> {
-    const response = await api.get('/users/me', {
-        headers: {
-            Authorization: jwt,
-        },
-    });
-    return response.data;
+export async function getAccountDetail<ResultType = Record<string, any>>(jwt: string): Promise<ResultType | null> {
+    try {
+        const response = await api.get('/users/me', {
+            headers: {
+                Authorization: jwt,
+            },
+        });
+        return response.data;
+    } catch (e){
+        return null
+    }
+
 }
 
 export async function signout() {
@@ -50,5 +55,9 @@ export async function signout() {
 }
 
 export async function signup(email: string, password: string) {
-
+    const response = await api.post('/auth/register/', {
+        email: email,
+        password: password
+    });
+    return response.data;
 }

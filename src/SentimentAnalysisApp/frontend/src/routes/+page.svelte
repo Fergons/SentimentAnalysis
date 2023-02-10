@@ -1,6 +1,10 @@
 <script lang="ts">
     import Button, {Label, Icon} from '@smui/button';
     import Card, {Content, Actions} from '@smui/card';
+    import {page} from '$app/stores';
+    import userStore from "../lib/stores/user";
+
+    $userStore = $page.data.user ?? null;
 </script>
 
 <section class="about-section">

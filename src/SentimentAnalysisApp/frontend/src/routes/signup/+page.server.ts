@@ -2,7 +2,7 @@ import { z } from 'zod';
 import type {PageServerLoad, Actions} from './$types';
 import {redirect, error} from '@sveltejs/kit';
 import {handleApiResponseError} from "../../lib/server/api/api";
-import {signin} from '../../lib/server/api/auth';
+import {signup} from '../../lib/server/api/auth';
 import type {SigninDataType} from '../../lib/server/api/auth';
 import {SigninSchema} from '../../lib/server/api/auth';
 import {api} from '../../lib/server/api/api';
@@ -56,10 +56,9 @@ export const actions: Actions = {
                 errors: validation.errors,
             }
         }
-        console.log(formData)
         try {
-            const response = await signin(formData.email, formData.password);
-            if (response.access_token === undefined) {
+            const response = await signup(formData.email, formData.password);
+            if (response.email !== formData.email) {
                 return {
                     data: {
                         email: formData.email
@@ -69,15 +68,6 @@ export const actions: Actions = {
                     }
                 }
             }
-            api.defaults.headers['Authorization'] = `Bearer ${response.access_token}`;
-            cookies.set('access_token', `Bearer ${response.access_token}`, {
-                httpOnly: true,
-                path: '/',
-                secure: true,
-                sameSite: 'strict',
-                maxAge: 60 * 60 * 24 // 1 day
-            });
-
         } catch (e) {
             const response = handleApiResponseError(e);
             return {
@@ -89,7 +79,7 @@ export const actions: Actions = {
                 }
             }
         }
-        throw redirect(302, '/');
+        throw redirect(302, '/signin');
     }
 };
 

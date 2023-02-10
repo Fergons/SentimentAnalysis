@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type {Game} from '../../lib/server/api/types';
+    import type {Game} from '../../lib/shared/types';
     // import GameCard from '$lib/components/GameCard.svelte';
     import {goto} from "$app/navigation";
     import List, {Item, PrimaryText, SecondaryText, Graphic, Meta, Text} from '@smui/list';

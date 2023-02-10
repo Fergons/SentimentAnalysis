@@ -34,12 +34,19 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
         result = await db.execute(select(Review).where(Review.reviewer_id == user_id))
         return result.scalars().all()
 
-    async def get_by_game(self, db: AsyncSession, *, game_id: int) -> List[Review]:
+    async def get_multi_by_game(self, db: AsyncSession, *, game_id: int, limit: int = 100, offset: int = 0) -> List[Review]:
         result = await db.execute(select(Review).where(Review.game_id == game_id))
         return result.scalars().all()
 
+    async def get_multi_by_processed(self, db: AsyncSession, *, processed: bool, limit: int = 100, offset: int = 0) -> List[Review]:
+        if processed:
+            result = await db.execute(select(Review).where(Review.processed_at != None).limit(limit).offset(offset))
+        else:
+            result = await db.execute(select(Review).where(Review.processed_at == None).limit(limit).offset(offset))
+        return result.scalars().all()
+
     async def get_not_processed(self, db: AsyncSession, *, limit: int = 100, offset: int = 0) -> List[Review]:
-        result = await db.execute(select(Review).where(Review.processed_at != None).limit(limit).offset(offset))
+        result = await db.execute(select(Review).where(Review.processed_at == None).limit(limit).offset(offset))
         return result.scalars().all()
 
     async def get_not_processed_by_source(self, db: AsyncSession,

@@ -6,9 +6,14 @@
     import IconButton from '@smui/icon-button';
     import {Icon} from '@smui/common';
     import Snackbar, {Actions} from '@smui/snackbar';
-    import {enhance} from "$app/forms";
+    import {applyAction, enhance} from "$app/forms";
     import type {ActionData} from './$types';
     import {makeDefaultTextfieldInputState} from "../../lib/utils/inputState";
+    import {invalidate, invalidateAll} from "$app/navigation";
+    import {redirect} from "@sveltejs/kit";
+    import userStore from "../../lib/stores/user";
+    import user from "../../lib/stores/user";
+    import type {User} from "../../lib/shared/types";
 
     export let form: FormData;
     export let data: ActionData;
@@ -23,44 +28,34 @@
 
         return async ({result, update}) => {
             console.log("result: ", result)
-            if (result) {
-                switch (result.type) {
-                    case "success":
-                        if (result.data.errors) {
-                            const errors = result.data.errors;
-                            email.value = "";
-                            email.value = result.data.data.email;
-                            if (errors.email) {
-                                email.invalid = true;
-                                email.helperText = errors.email;
-                            }
-                            if (errors.password) {
-                                password.invalid = true;
-                            }
-                            if (errors.response) {
-                                if(errors.response.status === 400) {
-                                    snackbarText = "Invalid email or password";
-                                    snackbar.open();
-                                }else{
-                                    snackbarText = "Something went wrong";
-                                    snackbar.open();
-                                }
-                            }
+            if (result.type == "success") {
+                if (result.data.errors) {
+                    const errors = result.data.errors;
+                    email.value = "";
+                    email.value = result.data.data.email;
+                    if (errors.email) {
+                        email.invalid = true;
+                        email.helperText = errors.email;
+                    }
+                    if (errors.password) {
+                        password.invalid = true;
+                    }
+                    if (errors.response) {
+                        if (errors.response.status === 400) {
+                            snackbarText = "Invalid email or password";
+                            snackbar.open();
                         } else {
-                            console.log("success")
-                            window.location.href = "/";
+                            snackbarText = "Something went wrong";
+                            snackbar.open();
                         }
-
-                        break;
-                    case "invalid":
-                        console.log("invalid")
-                        break;
-                    default:
-                        console.log("default")
-                        break;
+                    }
+                } else {
+                    console.log("signin: setting store to: ", result.data.data);
+                    $userStore = result.data.data.user ?? null;
                 }
             }
-            await update();
+            await invalidateAll();
+            await applyAction(result);
         }
 
     }

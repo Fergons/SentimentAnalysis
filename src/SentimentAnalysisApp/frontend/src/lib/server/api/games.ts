@@ -1,4 +1,4 @@
-import type { Game } from '$lib/server/api/types';
+import type { Game } from '../../shared/types';
 
 export async function getGames(): Promise<Array<Game>> {
 	const response = await fetch('http://127.0.0.1:8000/games/', {
@@ -22,7 +22,7 @@ export async function getGames(): Promise<Array<Game>> {
 }
 
 export async function getGame(gameId: string): Promise<Game> {
-	const response = await fetch(`http://127.0.0.1:8000/games/${gameId}/`, {
+	const response = await fetch(`http://127.0.0.1:8000/games/${gameId}`, {
 		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json'
