@@ -3,19 +3,48 @@
     import Paper from '@smui/paper';
     import Button from '@smui/button';
     import {Icon} from '@smui/common';
-    import {enhance} from "$app/forms";
+    import {enhance, applyAction} from "$app/forms";
+    import {page} from '$app/stores';
+    import {redirect, error} from '@sveltejs/kit';
+    import Snackbar, {Label, Actions} from "@smui/snackbar";
+    import IconButton from "@smui/icon-button";
 
+    let snackbar: Snackbar;
+    let snackbarText: string = '';
     let email: string | undefined = '';
     let password: string | undefined = '';
-    let confirm: string | undefined = '';
+    let passwordConfirm: string | undefined = '';
     let invalidEmail: boolean = false;
     let invalidPassword: boolean = false;
     let match: boolean;
-    $: match = password === confirm;
+    $: match = password === passwordConfirm;
     $: disabled = !(match && email && password && !invalidEmail && !invalidPassword);
+
     async function onSubmit ({data, form, action, cancel}) {
         return async ({result, update}) =>{
-            await update()
+            if(result.type !== 'success'){
+                snackbarText = 'Sorry! Something went wrong.';
+                snackbar.open();
+                await update();
+                return;
+            }
+            if(result.data.errors) {
+                const {email, password, ...rest} = result.data.errors;
+                if(email) {
+                    invalidEmail = true;
+                }
+                if(password) {
+                    invalidPassword = true;
+                }
+                for (const [key, value] of Object.entries(rest)) {
+                    snackbarText = `${key}: ${value}`;
+                    snackbar.open();
+                }
+                await update();
+                return;
+            }
+            snackbarText = 'Account created! Redirecting to sign in page...';
+            return redirect(302, '/signin');
         }
 
 
@@ -23,6 +52,12 @@
 </script>
 
 <section title="Sign Up">
+     <Snackbar bind:this={snackbar} labelText={snackbarText}>
+            <Label>This is a snackbar.</Label>
+            <Actions>
+                <IconButton class="material-icons" title="Dismiss">close</IconButton>
+            </Actions>
+        </Snackbar>
     <div class="signin-form-container">
         <Paper style="width: 460px">
             <h1 class="mdc-typography--headline4" style="margin: 0 0 8px 0; text-align: center">Create Account</h1>
@@ -32,6 +67,7 @@
                            updateInvalid
                            type="email"
                            class="signin-form-item"
+                           input$name="email"
                            input$autocomplete="email"
                            input$type="email"
                            input$pattern="\S+@\S+\.\S+"
@@ -54,17 +90,19 @@
                         type="password"
                         label="Password"
                         class="signin-form-item"
+                        input$name="password"
                         input$maxlength="32"
                         input$minlength="8"
                         required
                 />
                  <Textfield
-                        bind:value={confirm}
+                        bind:value={passwordConfirm}
                         invalid={!match}
                         type="password"
                         label="Confirm Password"
                         class="signin-form-item"
                         validationMessage="Passwords don't match!"
+                        input$name="passwordConfirm"
                         input$maxlength="32"
                         input$minlength="8"
                         required

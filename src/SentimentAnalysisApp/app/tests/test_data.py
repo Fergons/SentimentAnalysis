@@ -497,7 +497,7 @@ TEST_REVIEW = [
         "game_id": 278,
         "reviewer_id": 7,
         "source_id": 1,
-        "language": "czech",
+        "language": "english",
         "text": "Fast paced rogue-like RPG/Settlement building game\n\nWithout exploring all locations, main quest line and 100 % achievements sums up to 12 hours of game time.\n\nFirst hour you try to farm resources to build settlement and after you recruit your first follower (mage) you annihilate most of the foes. That means you find OP loot pretty fast and then it's only about quest doing.\n\nAchievements pop only when you save and quit game. Strength ramping of hero could be much slower but otherwise fine game.\n\n7/10",
         "summary": None,
         "score": None,
@@ -804,6 +804,99 @@ TEST_REVIEWER = [
     }
 ]
 
+TEST_ASPECTS = [
+    {
+        "id": 1,
+        "review_id": 777,
+        "term": "game time",
+        "polarity": "neutral",
+        "category": "overall",
+        "confidence": 0.9,
+        "model_id": "mdebertav3_74ATEPC",
+        "updated_at": "2023-02-11 00:00:00.000000 +00:00"
+    },
+    {
+        "id": 2,
+        "review_id": 777,
+        "term": "rogue-like RPG/Settlement building game",
+        "polarity": "positive",
+        "category": "gameplay",
+        "confidence": 0.9,
+        "model_id": "mdebertav3_74ATEPC",
+        "updated_at": "2023-02-11 00:00:00.000000 +00:00"
+    },
+    {
+        "id": 3,
+        "review_id": 777,
+        "term": "farm resources",
+        "polarity": "neutral",
+        "category": "gameplay",
+        "confidence": 0.9,
+        "model_id": "mdebertav3_74ATEPC",
+        "updated_at": "2023-02-11 00:00:00.000000 +00:00"
+    },
+    {
+        "id": 4,
+        "review_id": 777,
+        "term": "settlement",
+        "polarity": "positive",
+        "category": "gameplay",
+        "confidence": 0.9,
+        "model_id": "mdebertav3_74ATEPC",
+        "updated_at": "2023-02-11 00:00:00.000000 +00:00"
+    },
+    {
+        "id": 5,
+        "review_id": 777,
+        "term": "foes",
+        "polarity": "positive",
+        "category": "gameplay",
+        "confidence": 0.9,
+        "model_id": "mdebertav3_74ATEPC",
+        "updated_at": "2023-02-11 00:00:00.000000 +00:00"
+    },
+    {
+        "id": 6,
+        "review_id": 777,
+        "term": "OP loot",
+        "polarity": "positive",
+        "category": "gameplay",
+        "confidence": 0.9,
+        "model_id": "mdebertav3_74ATEPC",
+        "updated_at": "2023-02-11 00:00:00.000000 +00:00"
+    },
+    {
+        "id": 7,
+        "review_id": 777,
+        "term": "quest doing",
+        "polarity": "positive",
+        "category": "gameplay",
+        "confidence": 0.9,
+        "model_id": "mdebertav3_74ATEPC",
+        "updated_at": "2023-02-11 00:00:00.000000 +00:00"
+    },
+    {
+        "id": 8,
+        "review_id": 777,
+        "term": "achievements",
+        "polarity": "neutral",
+        "category": "gameplay",
+        "confidence": 0.9,
+        "model_id": "mdebertav3_74ATEPC",
+        "updated_at": "2023-02-11 00:00:00.000000 +00:00"
+    },
+    {
+        "id": 8,
+        "review_id": 777,
+        "term": "Strength ramping of hero",
+        "polarity": "neutral",
+        "category": "gameplay",
+        "confidence": 0.9,
+        "model_id": "mdebertav3_74ATEPC",
+        "updated_at": "2023-02-11 00:00:00.000000 +00:00"
+    },
+]
+
 ALL_DATA = [
     TEST_SOURCE,
     TEST_CATEGORY,
@@ -811,5 +904,6 @@ ALL_DATA = [
     TEST_REVIEW,
     TEST_REVIEWER,
     TEST_GAME_CATEGORY,
-    TEST_GAME_SOURCE
+    TEST_GAME_SOURCE,
+    TEST_ASPECTS
 ]

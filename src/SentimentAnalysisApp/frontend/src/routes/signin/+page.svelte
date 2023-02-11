@@ -12,8 +12,8 @@
     import {invalidate, invalidateAll} from "$app/navigation";
     import {redirect} from "@sveltejs/kit";
     import userStore from "../../lib/stores/user";
-    import user from "../../lib/stores/user";
-    import type {User} from "../../lib/shared/types";
+    import {OpenAPI, UsersService} from "../../lib/client";
+    import type {User} from "../../lib/client";
 
     export let form: FormData;
     export let data: ActionData;
@@ -28,36 +28,41 @@
 
         return async ({result, update}) => {
             console.log("result: ", result)
-            if (result.type == "success") {
-                if (result.data.errors) {
-                    const errors = result.data.errors;
-                    email.value = "";
-                    email.value = result.data.data.email;
-                    if (errors.email) {
-                        email.invalid = true;
-                        email.helperText = errors.email;
-                    }
-                    if (errors.password) {
-                        password.invalid = true;
-                    }
-                    if (errors.response) {
-                        if (errors.response.status === 400) {
-                            snackbarText = "Invalid email or password";
-                            snackbar.open();
-                        } else {
-                            snackbarText = "Something went wrong";
-                            snackbar.open();
-                        }
-                    }
-                } else {
-                    console.log("signin: setting store to: ", result.data.data);
-                    $userStore = result.data.data.user ?? null;
+            if (result.type !== "success") {
+                // await invalidateAll();
+                await applyAction(result);
+                return;
+            }
+            if (!result.data.errors) {
+                OpenAPI.TOKEN = result.data.token;
+                // @ts-ignore
+                $userStore = await UsersService.usersCurrentUserUsersMeGet();
+                await invalidateAll();
+                await applyAction(result);
+                return;
+
+            } else {
+                const errors = result.data.errors;
+                email.value = "";
+                email.value = result.data.email;
+                if (errors.username) {
+                    email.invalid = true;
+                    email.helperText = errors.username;
+                }
+                if (errors.password) {
+                    password.invalid = true;
+                }
+                if (errors.response) {
+                    if (errors.response.status === 400) {
+                        snackbarText = "Invalid email or password";
+                        snackbar.open();
+                    } else {
+                        snackbarText = "Something went wrong";
+                        snackbar.open();}
                 }
             }
-            await invalidateAll();
             await applyAction(result);
         }
-
     }
 </script>
 
@@ -65,11 +70,11 @@
 
     <div class="signin-form-container form-container">
         <Snackbar bind:this={snackbar} labelText={snackbarText}>
-        <Label>This is a snackbar.</Label>
-        <Actions>
-            <IconButton class="material-icons" title="Dismiss">close</IconButton>
-        </Actions>
-    </Snackbar>
+            <Label>This is a snackbar.</Label>
+            <Actions>
+                <IconButton class="material-icons" title="Dismiss">close</IconButton>
+            </Actions>
+        </Snackbar>
         <Paper style="width: 50%; min-width: 250px; align-items: center">
             <h1 class="mdc-typography--headline4" style="margin: 0 0 8px 0; text-align: center">Sign In</h1>
             <form method="POST"
@@ -82,7 +87,7 @@
                         updateInvalid
                         helperLine$style="width: 100%;"
                         type="email"
-                        input$name="email"
+                        input$name="username"
                         input$pattern="\S+@\S+\.\S+"
                         input$title="Please enter a valid email address"
                         input$maxlength="64"

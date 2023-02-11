@@ -45,6 +45,6 @@ api_router.include_router(
 
 api_router.include_router(
     reviews.router,
-    prefix="/games",
-    tags=["games"]
+    prefix="/reviews",
+    tags=["reviews"]
 )

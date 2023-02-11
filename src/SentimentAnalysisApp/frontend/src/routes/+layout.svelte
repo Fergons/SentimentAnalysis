@@ -21,7 +21,6 @@
     const defaultUser = browser ?
         window.localStorage.getItem('user') ? JSON.parse(window.localStorage.getItem('user')) : null : null;
     console.log("default user ", data?.user)
-    $userStore = data?.user ?? null;
 
     let topAppBar: TopAppBar;
     let currentPageTitle = '...';

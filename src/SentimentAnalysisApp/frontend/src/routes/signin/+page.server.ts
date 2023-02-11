@@ -4,42 +4,42 @@ import {handleApiResponseError} from "../../lib/server/api/api";
 import {getAccountDetail, signin} from '../../lib/server/api/auth';
 import type {SigninDataType} from '../../lib/server/api/auth';
 import {SigninSchema} from '../../lib/server/api/auth';
-import {api} from '../../lib/server/api/api';
 import {validateFormData} from "../../lib/utils/validation";
 import {invalidateAll} from "$app/navigation";
 import type {User} from "../../lib/shared/types";
-import * as wasi from "wasi";
-
+import {AuthService, OpenAPI, UsersService} from "../../lib/client";
+import type {Body_auth_jwt_login_auth_jwt_login_post} from "../../lib/client";
 
 export const load: PageServerLoad = (event) => {
-    if (event.locals.user) {
-        throw redirect(302, '/');
+    if (event.locals.token) {
+        throw redirect(301, '/');
     }
 };
 
 
 export const actions: Actions = {
     default: async ({request, cookies}) => {
-        const formData = Object.fromEntries(await request.formData()) as SigninDataType;
-        const validation = validateFormData<SigninDataType>(formData, SigninSchema);
+        const formData = Object.fromEntries(await request.formData()) as Body_auth_jwt_login_auth_jwt_login_post;
+        const validation = validateFormData<Body_auth_jwt_login_auth_jwt_login_post>(formData, SigninSchema);
         if (!validation.success) {
             return {
                 errors: validation.errors,
             }
         }
         try {
-            const response = await signin(formData.email, formData.password);
+            const response = await AuthService.authJwtLoginAuthJwtLoginPost(formData);
             if (response.access_token === undefined) {
                 return {
-                    data: {
-                        email: formData.email
-                    },
+                    email: formData.username,
                     errors: {
                         response: {status: 500, message: "Unexpected response from server."}
                     }
                 }
             }
-            cookies.set('access_token', `Bearer ${response.access_token}`, {
+            // OpenAPI.TOKEN = response.access_token;
+            // const user = await UsersService.usersCurrentUserUsersMeGet();
+
+            cookies.set('access_token', `${response.access_token}`, {
                 httpOnly: true,
                 path: '/',
                 secure: true,
@@ -47,17 +47,19 @@ export const actions: Actions = {
                 maxAge: 60 * 60 * 24 // 1 day
             });
 
+            return {
+                token: response.access_token,
+            }
+
+
         } catch (e) {
             const response = handleApiResponseError(e);
             return {
-                data: {
-                    email: formData.email
-                },
+                email: formData.username,
                 errors: {
                     response: response
                 }
             }
         }
-        throw redirect(302, '/');
     }
 };

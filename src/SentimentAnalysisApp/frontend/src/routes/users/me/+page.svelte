@@ -7,7 +7,10 @@
     import {Icon} from "@smui/common";
     import Paper from "@smui/paper";
     import userStore from "../../../lib/stores/user";
+    import type {PageServerData} from "./$types";
 
+    export let data: PageServerData;
+    $userStore = data?.user ?? null
     let email = makeDefaultTextfieldInputState($userStore?.email ?? null);
     let password = makeDefaultTextfieldInputState()
     let edit = false;
@@ -23,14 +26,17 @@
             </FormField>
             <form method="POST"
                   use:enhance={() => {
-                      return async ({ result }) => {
+                      return async ({ result, update }) => {
                             edit=false;
-                            if (result.type === 'success' && !result.errors) {
+                            if (result.type === 'success' && !result.data.errors) {
                                 await userStore.update(user => {
-                                    user.email = email.value
+                                    user = result.data
                                     return user
                                 })
+                                await update();
                             }
+                            email.value = $userStore?.email ?? null
+
 
                       }
             }
@@ -41,6 +47,7 @@
                         updateInvalid
                         style="width: 100%;"
                         disabled={!edit}
+                        input$name="email"
                         input$type="email"
                         input$required
                         input$title="Please enter a valid email address"

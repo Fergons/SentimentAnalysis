@@ -4,7 +4,7 @@
     import {page} from '$app/stores';
     import userStore from "../lib/stores/user";
 
-    $userStore = $page.data.user ?? null;
+    // $userStore = $page.data.user ?? null;
 </script>
 
 <section class="about-section">

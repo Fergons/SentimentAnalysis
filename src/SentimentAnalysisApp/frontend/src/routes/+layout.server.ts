@@ -6,6 +6,6 @@ import userStore from "../lib/stores/user";
 export const load: LayoutServerLoad = (event) => {
     console.log("Layout server load");
     return {
-        user: event.locals.user
+        token: event.locals.token
     }
 };

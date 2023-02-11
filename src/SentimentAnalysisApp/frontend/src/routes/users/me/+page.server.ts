@@ -2,26 +2,30 @@ import type {PageServerLoad} from "./$types";
 import {redirect} from "@sveltejs/kit";
 import type {Actions} from "./$types";
 import {validateFormData} from "../../../lib/utils/validation";
-import {api, handleApiResponseError} from "../../../lib/server/api/api";
+import {handleApiResponseError} from "../../../lib/server/api/api";
 import {z} from "zod";
+import {OpenAPI, UsersService} from "../../../lib/client";
+import type {User, UserUpdate} from "../../../lib/client";
+
 
 const updateUserSchema = z.object({
     email: z.string().email().trim()
 });
 export const load: PageServerLoad = async (event) => {
-    if (!event.locals.user) {
+    if (!event.locals.token) {
         throw redirect(302, '/signin');
     } else {
         return {
+            token: event.locals.token,
             user: event.locals.user
         }
     }
 };
 
 export const actions: Actions = {
-    default: async ({request}) => {
-        const formData = Object.fromEntries(await request.formData()) as { email: string };
-        const validation = validateFormData<{ email: string }>(formData, updateUserSchema);
+    default: async ({request,locals}) => {
+        const formData = Object.fromEntries(await request.formData()) as UserUpdate;
+        const validation = validateFormData<UserUpdate>(formData, updateUserSchema);
         if (!validation.success) {
             return {
                 errors: validation.errors,
@@ -29,23 +33,23 @@ export const actions: Actions = {
         }
         console.log(formData)
         try {
-            // const response = await userUpdate(formData.email);
-            const response = {email: formData.email}
-            return {
-                data: {
+            OpenAPI.TOKEN = locals.token;
+            if(locals.user?.id){
+                const response = await UsersService.usersUserUsersIdPatch(locals.user.id, formData);
+                return {
                     ...response
                 }
             }
         } catch (e) {
             const response = handleApiResponseError(e);
             return {
-                data: {
-                    email: formData.email
-                },
+                email: formData.email,
                 errors: {
                     response: response
                 }
             }
+        } finally {
+             OpenAPI.TOKEN = undefined;
         }
     }
 }

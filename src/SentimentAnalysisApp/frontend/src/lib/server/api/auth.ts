@@ -2,7 +2,7 @@ import {api, handleApiResponseError} from './api';
 import {z} from 'zod';
 
 export const SigninSchema = z.object({
-    email: z
+    username: z
         .string({required_error: 'Email is required'})
         .min(1, {message: 'Email is required'})
         .max(64, {message: 'Email must be less than 64 characters long'})

@@ -4,14 +4,14 @@ declare global {
     namespace App {
         // interface Error {}
         interface Locals {
-            user: {
-                id: string;
+            token?: string;
+            user?: {
+                id?: string;
                 email: string;
-                is_active: boolean;
-				is_superuser: boolean;
-				is_verified: boolean;
+                is_active?: boolean;
+				is_superuser?: boolean;
+				is_verified?: boolean;
             }
-            | null
         }
 
         // interface PageData {}
