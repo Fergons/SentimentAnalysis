@@ -14,7 +14,8 @@ from .test_data import (TEST_CATEGORY,
                         TEST_GAME_SOURCE,
                         TEST_REVIEW,
                         TEST_REVIEWER,
-                        TEST_SOURCE)
+                        TEST_SOURCE,
+                        TEST_ASPECTS)
 
 from app import schemas, crud, models
 from app.models.user import User
@@ -88,6 +89,8 @@ async def seed_initial_test_data(session: AsyncSession):
     reviewers = await create_objs(session, models.Reviewer, TEST_REVIEWER)
     # seed table review
     reviews = await create_objs(session, models.Review, TEST_REVIEW)
+    # seed table aspect
+    aspects = await create_objs(session, models.Aspect, TEST_ASPECTS)
 
     return {"category": categories,
             "source": sources,
@@ -95,5 +98,6 @@ async def seed_initial_test_data(session: AsyncSession):
             "gamesource": game_sources,
             "gamecategory": game_categories,
             "reviewer": reviewers,
-            "review": reviews
+            "review": reviews,
+            "aspect": aspects
             }

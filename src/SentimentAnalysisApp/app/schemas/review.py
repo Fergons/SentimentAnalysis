@@ -53,7 +53,7 @@ class ReviewUpdate(ReviewBase):
 
 
 class ReviewInDBBase(ReviewBase):
-    id: str
+    id: int
     game_id: Optional[int] = None
     source_id: Optional[int] = None
     user_id: Optional[int] = None

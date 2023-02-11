@@ -811,7 +811,7 @@ TEST_ASPECTS = [
         "term": "game time",
         "polarity": "neutral",
         "category": "overall",
-        "confidence": 0.9,
+        "confidence": "0.9",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00"
     },
@@ -821,7 +821,7 @@ TEST_ASPECTS = [
         "term": "rogue-like RPG/Settlement building game",
         "polarity": "positive",
         "category": "gameplay",
-        "confidence": 0.9,
+        "confidence": "0.9",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00"
     },
@@ -831,7 +831,7 @@ TEST_ASPECTS = [
         "term": "farm resources",
         "polarity": "neutral",
         "category": "gameplay",
-        "confidence": 0.9,
+        "confidence": "0.9",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00"
     },
@@ -841,7 +841,7 @@ TEST_ASPECTS = [
         "term": "settlement",
         "polarity": "positive",
         "category": "gameplay",
-        "confidence": 0.9,
+        "confidence": "0.9",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00"
     },
@@ -851,7 +851,7 @@ TEST_ASPECTS = [
         "term": "foes",
         "polarity": "positive",
         "category": "gameplay",
-        "confidence": 0.9,
+        "confidence": "0.9",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00"
     },
@@ -861,7 +861,7 @@ TEST_ASPECTS = [
         "term": "OP loot",
         "polarity": "positive",
         "category": "gameplay",
-        "confidence": 0.9,
+        "confidence": "0.9",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00"
     },
@@ -871,17 +871,17 @@ TEST_ASPECTS = [
         "term": "quest doing",
         "polarity": "positive",
         "category": "gameplay",
-        "confidence": 0.9,
+        "confidence": "0.9",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00"
     },
     {
-        "id": 8,
+        "id": 18,
         "review_id": 777,
         "term": "achievements",
         "polarity": "neutral",
         "category": "gameplay",
-        "confidence": 0.9,
+        "confidence": "0.9",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00"
     },
@@ -891,7 +891,7 @@ TEST_ASPECTS = [
         "term": "Strength ramping of hero",
         "polarity": "neutral",
         "category": "gameplay",
-        "confidence": 0.9,
+        "confidence": "0.9",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00"
     },
@@ -901,7 +901,7 @@ TEST_ASPECTS = [
         "term": "gameplay",
         "polarity": "positive",
         "category": "gameplay",
-        "confidence": 0.9,
+        "confidence": "0.9",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00"
     },
@@ -911,7 +911,7 @@ TEST_ASPECTS = [
         "term": "cena samotnej hry",
         "polarity": "negative",
         "category": "price",
-        "confidence": 1.0,
+        "confidence": "0.88",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00"
     },
@@ -921,7 +921,7 @@ TEST_ASPECTS = [
         "term": "cena DLC",
         "polarity": "negative",
         "category": "price",
-        "confidence": 1.0,
+        "confidence": "0.88",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00"
     },
@@ -931,7 +931,7 @@ TEST_ASPECTS = [
         "term": "hráči si musia kúpiť DLC",
         "polarity": "negative",
         "category": "price",
-        "confidence": 1.0,
+        "confidence": "0.88",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00"
     },
@@ -941,11 +941,9 @@ TEST_ASPECTS = [
         "term": "divne zostrihaných story videí",
         "polarity": "negative",
         "category": "audio_visuals",
-        "confidence": 1.0,
+        "confidence": "0.88",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00",
-        "start": 98,
-        "end": 122
     },
     {
         "id": 325,
@@ -953,11 +951,9 @@ TEST_ASPECTS = [
         "term": "game dizajn",
         "polarity": "negative",
         "category": "gameplay",
-        "confidence": 1.0,
+        "confidence": "0.88",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00",
-        "start": 125,
-        "end": 135
     },
     {
         "id": 346,
@@ -965,11 +961,9 @@ TEST_ASPECTS = [
         "term": "bedne s muníciou",
         "polarity": "negative",
         "category": "gameplay",
-        "confidence": 1.0,
+        "confidence": "0.88",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00",
-        "start": 154,
-        "end": 168
     },
     {
         "id": 337,
@@ -977,11 +971,9 @@ TEST_ASPECTS = [
         "term": "story videá",
         "polarity": "negative",
         "category": "audio_visuals",
-        "confidence": 1.0,
+        "confidence": "0.88",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00",
-        "start": 171,
-        "end": 182
     },
     {
         "id": 38,
@@ -989,7 +981,7 @@ TEST_ASPECTS = [
         "term": "módy na vybavení",
         "polarity": "positive",
         "category": "gameplay",
-        "confidence": 1.0,
+        "confidence": "0.88",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00"
     }

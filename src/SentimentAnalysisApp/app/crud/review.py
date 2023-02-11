@@ -59,7 +59,7 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
             query = query.filter(Review.source_id == source_id)
         result = await db.execute(query
                                   .order_by(Review.id)
-                                  .selectinload(Review.aspects)
+                                  .options(selectinload(Review.aspects))
                                   .limit(limit).offset(offset))
         return result.scalars().all()
 

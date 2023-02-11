@@ -82,6 +82,12 @@
             title: 'About',
             route: '/about',
             indent: 0
+        },
+        {
+            name: 'Reviews',
+            title: 'Reviews',
+            route: '/reviews',
+            indent: 0
         }
     ];
 
