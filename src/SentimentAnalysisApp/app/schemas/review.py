@@ -69,6 +69,10 @@ class Review(ReviewInDBBase):
     pass
 
 
+class ReviewWithAspects(ReviewInDBBase):
+    aspects: List["Aspect"] = []
+
+
 # Additional properties stored in DB
 class ReviewInDB(ReviewInDBBase):
     pass

@@ -5,13 +5,13 @@ from typing import List, Optional
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy import select, and_, or_
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 from sqlalchemy.sql.expression import null
 
 from app.crud.reviewer import crud_reviewer
 from app.crud.base import CRUDBase
 from app.models.review import Review
-from app.schemas.review import ReviewCreate, ReviewCreate, ReviewCreate
+from app.schemas.review import ReviewCreate, ReviewCreate, ReviewCreate, ReviewWithAspects
 from app.schemas.reviewer import ReviewerCreate
 from app.models.reviewer import Reviewer
 from app.crud.game import crud_game
@@ -34,15 +34,33 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
         result = await db.execute(select(Review).where(Review.reviewer_id == user_id))
         return result.scalars().all()
 
-    async def get_multi_by_game(self, db: AsyncSession, *, game_id: int, limit: int = 100, offset: int = 0) -> List[Review]:
+    async def get_multi_by_game(self, db: AsyncSession, *, game_id: int, limit: int = 100, offset: int = 0) -> List[
+        Review]:
         result = await db.execute(select(Review).where(Review.game_id == game_id))
         return result.scalars().all()
 
-    async def get_multi_by_processed(self, db: AsyncSession, *, processed: bool, limit: int = 100, offset: int = 0) -> List[Review]:
+    async def get_multi_by_processed(self, db: AsyncSession, *, processed: bool, limit: int = 100, offset: int = 0) -> \
+            List[Review]:
         if processed:
             result = await db.execute(select(Review).where(Review.processed_at != None).limit(limit).offset(offset))
         else:
             result = await db.execute(select(Review).where(Review.processed_at == None).limit(limit).offset(offset))
+        return result.scalars().all()
+
+    async def get_multi_with_aspects(self, db: AsyncSession, *,
+                                     game_id: int = None,
+                                     source_id: int = None,
+                                     limit: int = 100,
+                                     offset: int = 0) -> List[ReviewWithAspects]:
+        query = select(Review).filter(Review.processed_at != None)
+        if game_id is not None:
+            query = query.filter(Review.game_id == game_id)
+        if source_id is not None:
+            query = query.filter(Review.source_id == source_id)
+        result = await db.execute(query
+                                  .order_by(Review.id)
+                                  .selectinload(Review.aspects)
+                                  .limit(limit).offset(offset))
         return result.scalars().all()
 
     async def get_not_processed(self, db: AsyncSession, *, limit: int = 100, offset: int = 0) -> List[Review]:

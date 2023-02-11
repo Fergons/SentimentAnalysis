@@ -5,8 +5,6 @@ import {getAccountDetail, signin} from '../../lib/server/api/auth';
 import type {SigninDataType} from '../../lib/server/api/auth';
 import {SigninSchema} from '../../lib/server/api/auth';
 import {validateFormData} from "../../lib/utils/validation";
-import {invalidateAll} from "$app/navigation";
-import type {User} from "../../lib/shared/types";
 import {AuthService, OpenAPI, UsersService} from "../../lib/client";
 import type {Body_auth_jwt_login_auth_jwt_login_post} from "../../lib/client";
 
@@ -36,9 +34,6 @@ export const actions: Actions = {
                     }
                 }
             }
-            // OpenAPI.TOKEN = response.access_token;
-            // const user = await UsersService.usersCurrentUserUsersMeGet();
-
             cookies.set('access_token', `${response.access_token}`, {
                 httpOnly: true,
                 path: '/',

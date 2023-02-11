@@ -507,7 +507,7 @@ TEST_REVIEW = [
         "voted_up": True,
         "created_at": "2022-05-08 19:27:44.000000 +00:00",
         "updated_at": None,
-        "processed_at": None,
+        "processed_at": "2023-02-11 00:00:00.000000 +00:00",
         "aspect_sum_polarity": None,
         "playtime_at_review": 727
     },
@@ -696,7 +696,7 @@ TEST_REVIEW = [
         "voted_up": False,
         "created_at": "2022-11-13 17:10:08.000000 +00:00",
         "updated_at": None,
-        "processed_at": None,
+        "processed_at": "2023-02-11 00:00:00.000000 +00:00",
         "aspect_sum_polarity": None,
         "playtime_at_review": 4696
     }
@@ -895,6 +895,104 @@ TEST_ASPECTS = [
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00"
     },
+    {
+        "id": 9,
+        "review_id": 777,
+        "term": "gameplay",
+        "polarity": "positive",
+        "category": "gameplay",
+        "confidence": 0.9,
+        "model_id": "mdebertav3_74ATEPC",
+        "updated_at": "2023-02-11 00:00:00.000000 +00:00"
+    },
+    {
+        "id": 1234,
+        "review_id": 1006,
+        "term": "cena samotnej hry",
+        "polarity": "negative",
+        "category": "price",
+        "confidence": 1.0,
+        "model_id": "mdebertav3_74ATEPC",
+        "updated_at": "2023-02-11 00:00:00.000000 +00:00"
+    },
+    {
+        "id": 232423,
+        "review_id": 1006,
+        "term": "cena DLC",
+        "polarity": "negative",
+        "category": "price",
+        "confidence": 1.0,
+        "model_id": "mdebertav3_74ATEPC",
+        "updated_at": "2023-02-11 00:00:00.000000 +00:00"
+    },
+    {
+        "id": 3324,
+        "review_id": 1006,
+        "term": "hráči si musia kúpiť DLC",
+        "polarity": "negative",
+        "category": "price",
+        "confidence": 1.0,
+        "model_id": "mdebertav3_74ATEPC",
+        "updated_at": "2023-02-11 00:00:00.000000 +00:00"
+    },
+    {
+        "id": 4342,
+        "review_id": 1006,
+        "term": "divne zostrihaných story videí",
+        "polarity": "negative",
+        "category": "audio_visuals",
+        "confidence": 1.0,
+        "model_id": "mdebertav3_74ATEPC",
+        "updated_at": "2023-02-11 00:00:00.000000 +00:00",
+        "start": 98,
+        "end": 122
+    },
+    {
+        "id": 325,
+        "review_id": 1006,
+        "term": "game dizajn",
+        "polarity": "negative",
+        "category": "gameplay",
+        "confidence": 1.0,
+        "model_id": "mdebertav3_74ATEPC",
+        "updated_at": "2023-02-11 00:00:00.000000 +00:00",
+        "start": 125,
+        "end": 135
+    },
+    {
+        "id": 346,
+        "review_id": 1006,
+        "term": "bedne s muníciou",
+        "polarity": "negative",
+        "category": "gameplay",
+        "confidence": 1.0,
+        "model_id": "mdebertav3_74ATEPC",
+        "updated_at": "2023-02-11 00:00:00.000000 +00:00",
+        "start": 154,
+        "end": 168
+    },
+    {
+        "id": 337,
+        "review_id": 1006,
+        "term": "story videá",
+        "polarity": "negative",
+        "category": "audio_visuals",
+        "confidence": 1.0,
+        "model_id": "mdebertav3_74ATEPC",
+        "updated_at": "2023-02-11 00:00:00.000000 +00:00",
+        "start": 171,
+        "end": 182
+    },
+    {
+        "id": 38,
+        "review_id": 1006,
+        "term": "módy na vybavení",
+        "polarity": "positive",
+        "category": "gameplay",
+        "confidence": 1.0,
+        "model_id": "mdebertav3_74ATEPC",
+        "updated_at": "2023-02-11 00:00:00.000000 +00:00"
+    }
 ]
 
 ALL_DATA = [
