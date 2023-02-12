@@ -1,5 +1,4 @@
 <script lang="ts">
-    import type {Game} from '../shared/types';
     import Card, {
         Media,
         MediaContent,
@@ -12,6 +11,7 @@
     import Button, {Label, Icon} from '@smui/button';
     import IconButton from '@smui/icon-button';
     import {goto} from '$app/navigation';
+    import type {Game} from '../../lib/client';
 
     export let game: Game;
     let options = {

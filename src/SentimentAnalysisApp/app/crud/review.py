@@ -34,9 +34,23 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
         result = await db.execute(select(Review).where(Review.reviewer_id == user_id))
         return result.scalars().all()
 
-    async def get_multi_by_game(self, db: AsyncSession, *, game_id: int, limit: int = 100, offset: int = 0) -> List[
-        Review]:
+    async def get_multi_by_game(self, db: AsyncSession, *, game_id: int, limit: int = 100, offset: int = 0
+                                ) -> List[Review]:
         result = await db.execute(select(Review).where(Review.game_id == game_id))
+        return result.scalars().all()
+
+    async def get_multi_by_game_and_source(self, db: AsyncSession, *,
+                                           source_id: Optional[int] = None,
+                                           game_id: Optional[int] = None,
+                                           limit: int = 100,
+                                           offset: int = 0
+                                           ) -> List[Review]:
+        query = select(Review).limit(limit).offset(offset)
+        if game_id is not None:
+            query = query.filter(Review.game_id == game_id)
+        if source_id is not None:
+            query = query.filter(Review.source_id == source_id)
+        result = await db.execute(query.order_by(Review.created_at.desc()))
         return result.scalars().all()
 
     async def get_multi_by_processed(self, db: AsyncSession, *, processed: bool, limit: int = 100, offset: int = 0) -> \
@@ -52,15 +66,17 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
                                      source_id: int = None,
                                      limit: int = 100,
                                      offset: int = 0) -> List[ReviewWithAspects]:
-        query = select(Review).filter(Review.processed_at != None)
+        query = select(Review).filter(Review.processed_at != None).limit(limit).offset(offset)
         if game_id is not None:
             query = query.filter(Review.game_id == game_id)
         if source_id is not None:
             query = query.filter(Review.source_id == source_id)
-        result = await db.execute(query
-                                  .order_by(Review.id)
-                                  .options(selectinload(Review.aspects))
-                                  .limit(limit).offset(offset))
+        result = await db.execute(
+            query.order_by(Review.id)
+            .options(
+                selectinload(Review.aspects)
+            )
+        )
         return result.scalars().all()
 
     async def get_not_processed(self, db: AsyncSession, *, limit: int = 100, offset: int = 0) -> List[Review]:
