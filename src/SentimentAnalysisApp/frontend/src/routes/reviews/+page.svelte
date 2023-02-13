@@ -17,13 +17,6 @@
                 <ReviewCard {review}>
                 </ReviewCard>
             {/each}
-            <ReviewCard>
-                </ReviewCard>
-            <ReviewCard>
-                </ReviewCard>
-            <ReviewCard>
-                </ReviewCard>
-
         {/if}
     </div>
 </section>
@@ -43,6 +36,5 @@
         margin-bottom: 48px;
         gap: 8px;
     }
-
 
 </style>
