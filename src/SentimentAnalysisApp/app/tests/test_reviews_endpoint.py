@@ -1,5 +1,6 @@
 import pytest
 from httpx import AsyncClient
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.schemas import UserDB
@@ -48,11 +49,16 @@ async def test_get_review_by_id_endpoint(client: AsyncClient, test_data: None):
 
 
 @pytest.mark.anyio
-async def test_get_summary_endpoint(client: AsyncClient, test_data: None):
+async def test_get_summary_endpoint(client: AsyncClient, session: AsyncSession, test_data: None):
     # test get summary endpoint
     resp = await client.get(
         "/reviews/summary/",
     )
     assert resp.status_code == 200
     data = resp.json()
-    assert data["total_reviews"] == 11
+    all = await session.execute(select(models.Review))
+    all = all.scalars().all()
+    processed = await session.execute(select(models.Review).filter(models.Review.processed_at.isnot(None)))
+    processed = processed.scalars().all()
+    assert sum(data["total"]) == len(all)
+    assert sum(data["processed"]) == len(processed)

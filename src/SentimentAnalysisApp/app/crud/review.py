@@ -88,26 +88,34 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
         Count total reviews, count processed and not processed reviews per game and source by time_interval
         """
         selects = [
-            func.count(Review.id).label('total'),
-            func.date_trunc('month', Review.created_at).label('date')
         ]
-
-        group_by = [
-            'date'
-        ]
+        query = select(
+            func.array_agg(Review.id).label('ids'),
+            func.array_agg(case(
+                [(Review.processed_at != None, Review.id)])).label("processed"),
+            func.date_trunc(time_interval, Review.created_at).label('date')
+        ) \
+        .group_by('date')
 
         if game_id is not None:
-            selects.append(Review.game_id)
-            group_by.append(Review.game_id)
+            query = query.filter(Review.game_id == game_id)
         if source_id is not None:
-            selects.append(Review.source_id)
-            group_by.append(Review.source_id)
+            query = query.filter(Review.source_id == source_id)
 
-        query = select(*selects).group_by(*group_by)
         result = await db.execute(query)
-        print(result.scalars().all())
+        data = result.all()
 
-        return ReviewsSummary(total=0, processed=0, not_processed=0, data=[])
+        total = []
+        processed = []
+        dates = []
+        print(data)
+
+        for all_ids, processed_ids, date in data:
+            total.append(len(all_ids))
+            processed.append(len(list(filter(lambda x: x is not None, processed_ids))))
+            dates.append(date)
+
+        return ReviewsSummary(total=total, processed=processed, num_data_points=len(data))
 
     async def get_not_processed(self, db: AsyncSession, *, limit: int = 100, offset: int = 0) -> List[Review]:
         result = await db.execute(select(Review).where(Review.processed_at == None).limit(limit).offset(offset))

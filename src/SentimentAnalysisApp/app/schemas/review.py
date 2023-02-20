@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import List, TYPE_CHECKING, Optional, Union, Literal
-from pydantic import BaseModel, EmailStr, AnyHttpUrl
+from pydantic import BaseModel, EmailStr, AnyHttpUrl, validator
+
 # from . import SourceInDBBase, ReviewerInDBBase, GameInDBBase, AspectInDBBase
 # from . import SourceCreate, ReviewerCreate, GameCreate, AspectCreate
 
@@ -75,8 +76,7 @@ class ReviewWithAspects(ReviewInDBBase):
 
 
 class ReviewsSummary(BaseModel):
-    total: int
-    num_reviews: int = 0
+    total: List[int] = []
     processed: List[int] = []
     not_processed: List[int] = []
     source_id: Optional[int] = None
@@ -84,6 +84,12 @@ class ReviewsSummary(BaseModel):
     positive: List[int] = []
     negative: List[int] = []
     neutral: List[int] = []
+    dates: List[datetime] = []
+    num_data_points: int = 0
+
+    @validator("processed", always=True)
+    def set_not_processed(cls, v, values):
+        return v or [t-p for t, p in zip(values["total"] - values["processed"])]
 
 # Additional properties stored in DB
 class ReviewInDB(ReviewInDBBase):
