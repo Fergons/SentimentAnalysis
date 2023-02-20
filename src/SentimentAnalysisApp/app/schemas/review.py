@@ -78,7 +78,7 @@ class ReviewWithAspects(ReviewInDBBase):
 class ReviewsSummary(BaseModel):
     total: List[int] = []
     processed: List[int] = []
-    not_processed: List[int] = []
+    not_processed: List[int] = None
     source_id: Optional[int] = None
     game_id: Optional[int] = None
     positive: List[int] = []
@@ -87,9 +87,9 @@ class ReviewsSummary(BaseModel):
     dates: List[datetime] = []
     num_data_points: int = 0
 
-    @validator("processed", always=True)
+    @validator("not_processed", always=True)
     def set_not_processed(cls, v, values):
-        return v or [t-p for t, p in zip(values["total"] - values["processed"])]
+        return v or [t-p for t, p in zip(values["total"], values["processed"])]
 
 # Additional properties stored in DB
 class ReviewInDB(ReviewInDBBase):

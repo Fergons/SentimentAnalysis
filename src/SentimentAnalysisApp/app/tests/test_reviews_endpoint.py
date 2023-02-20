@@ -62,3 +62,23 @@ async def test_get_summary_endpoint(client: AsyncClient, session: AsyncSession, 
     processed = processed.scalars().all()
     assert sum(data["total"]) == len(all)
     assert sum(data["processed"]) == len(processed)
+
+    resp = await client.get(
+        "/reviews/summary/",
+        params={"source_id": 1}
+    )
+
+    assert resp.status_code == 200
+    data2 = resp.json()
+    assert data2["total"] == data["total"]
+
+    resp = await client.get(
+        "/reviews/summary/",
+        params={"source_id": 3}
+    )
+    assert resp.status_code == 200
+    data3 = resp.json()
+    assert data3["total"] == []
+
+
+

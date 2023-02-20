@@ -87,8 +87,7 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
         """
         Count total reviews, count processed and not processed reviews per game and source by time_interval
         """
-        selects = [
-        ]
+        summary = ReviewsSummary()
         query = select(
             func.array_agg(Review.id).label('ids'),
             func.array_agg(case(
@@ -99,8 +98,10 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
 
         if game_id is not None:
             query = query.filter(Review.game_id == game_id)
+            summary.game_id = game_id
         if source_id is not None:
             query = query.filter(Review.source_id == source_id)
+            summary.source_id = source_id
 
         result = await db.execute(query)
         data = result.all()
@@ -115,7 +116,11 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
             processed.append(len(list(filter(lambda x: x is not None, processed_ids))))
             dates.append(date)
 
-        return ReviewsSummary(total=total, processed=processed, num_data_points=len(data))
+        summary.total = total
+        summary.processed = processed
+        summary.dates = dates
+
+        return summary
 
     async def get_not_processed(self, db: AsyncSession, *, limit: int = 100, offset: int = 0) -> List[Review]:
         result = await db.execute(select(Review).where(Review.processed_at == None).limit(limit).offset(offset))
