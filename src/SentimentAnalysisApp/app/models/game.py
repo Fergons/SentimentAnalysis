@@ -2,7 +2,7 @@ from app.db.base_class import Base
 from sqlalchemy import Boolean, Column, Integer, String, DateTime, func, ForeignKey, Computed, Index
 from sqlalchemy.orm import relationship
 from sqlalchemy_utils.types.ts_vector import TSVectorType
-
+from sqlalchemy_utils import aggregated
 
 
 class Game(Base):
@@ -15,6 +15,10 @@ class Game(Base):
 
     release_date = Column(DateTime(timezone=True), default=None)
     updated_at = Column(DateTime(timezone=True), default=None, onupdate=func.now())
+
+    @aggregated('reviews', Column(Integer))
+    def num_reviews(self):
+        return func.count('1')
 
     # one(game) to many(reviews)
     reviews = relationship("Review", back_populates="game", lazy="selectin")

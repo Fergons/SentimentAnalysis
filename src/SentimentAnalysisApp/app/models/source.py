@@ -1,6 +1,7 @@
 from app.db.base_class import Base
 from sqlalchemy import Boolean, Column, Integer, String, DateTime, func, ForeignKey
 from sqlalchemy.orm import relationship
+from sqlalchemy_utils import aggregated
 
 
 class Source(Base):
@@ -18,6 +19,10 @@ class Source(Base):
     list_of_reviewers_url = Column(String)
 
     updated_at = Column(DateTime(timezone=True), default=None, onupdate=func.now())
+
+    @aggregated('reviews', Column(Integer))
+    def num_reviews(self):
+        return func.count('1')
 
     reviews = relationship("Review", back_populates="source", lazy="selectin")
     reviewers = relationship("Reviewer", back_populates="source", lazy="selectin")

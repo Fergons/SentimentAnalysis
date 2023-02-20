@@ -12,11 +12,17 @@ from app.models import Base
 from app.db.session import async_engine, async_session
 from app.tests import utils
 from app.api.deps import get_session
+from .utils import seed_initial_test_data, is_test_data_seeded
 
 default_user_email = "geralt@wiedzmin.pl"
 default_user_hash = get_password_hash("geralt")
 superuser_user_email = "yennefer@wiedzmin.pl"
 superuser_user_hash = get_password_hash("yennefer")
+
+
+@pytest.fixture(scope="session")
+def anyio_backend():
+    return "asyncio"
 
 
 @pytest.fixture(scope="session")
@@ -52,7 +58,7 @@ async def session(test_db_setup_sessionmaker) -> AsyncGenerator[AsyncSession, No
         try:
             yield session
         finally:
-            session.close()
+            await session.close()
 
 
 
@@ -83,3 +89,10 @@ async def access_token(client: AsyncClient):
     access_token = token.get("access_token")
     assert access_token is not None
     return access_token
+
+@pytest.fixture
+async def test_data(session: AsyncSession):
+    if await is_test_data_seeded(session):
+        return
+    await seed_initial_test_data(session)
+    return

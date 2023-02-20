@@ -1,4 +1,4 @@
-from typing import Any, List, Optional
+from typing import Any, List, Optional, Union
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -24,36 +24,43 @@ async def read_review(
     return review
 
 
-@router.get("/", response_model=List[schemas.Review])
+@router.get("/", response_model=List[schemas.ReviewWithAspects])
 async def read_reviews(
         *,
         db: AsyncSession = Depends(deps.get_session),
         game_id: Optional[int] = None,
         source_id: Optional[int] = None,
+        processed: Optional[bool] = True,
         skip: int = 0,
         limit: int = 100
 ) -> Any:
     """
     Read all reviews.
     """
-    reviews = await crud.review.get_multi_by_game_and_source(
-        db,
-        source_id=source_id,
-        game_id=game_id,
-        offset=skip,
-        limit=limit
-    )
-    return reviews
+    if processed:
+        reviews = await crud.review.get_multi_with_aspects(db,
+                                                           source_id=source_id,
+                                                           game_id=game_id,
+                                                           offset=skip,
+                                                           limit=limit)
+        return reviews
+    else:
+        reviews = await crud.review.get_multi_by_game_and_source(
+            db,
+            source_id=source_id,
+            game_id=game_id,
+            offset=skip,
+            limit=limit
+        )
+        return reviews
 
+@router.get("/summary/", response_model=schemas.ReviewsSummary)
+async def get_summary(db: AsyncSession = Depends(deps.get_session),
+                      source_id: Optional[int] = None,
+                      game_id: Optional[int] = None):
 
-@router.get("processed/", response_model=List[schemas.ReviewWithAspects])
-async def read_processed_reviews(db: AsyncSession = Depends(deps.get_session),
-                                 source_id: Optional[int] = None,
-                                 game_id: Optional[int] = None,
-                                 limit: int = 100, skip: int = 0):
-    reviews = await crud.review.get_multi_with_aspects(db,
-                                                       source_id=source_id,
-                                                       game_id=game_id,
-                                                       offset=skip,
-                                                       limit=limit)
-    return reviews
+    summary = await crud.review.get_summary(db,
+                                            source_id=source_id,
+                                            game_id=game_id,
+                                            time_interval="day")
+    return summary

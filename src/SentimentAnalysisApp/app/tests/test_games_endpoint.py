@@ -7,21 +7,16 @@ from app import models
 import logging
 from .utils import seed_initial_test_data
 
-
 # All test coroutines in file will be treated as marked (async allowed).
 pytestmark = pytest.mark.anyio
 logger = logging.getLogger()
 
 
-@pytest.fixture(scope="session")
-def anyio_backend():
-    return "asyncio"
-
-
-async def test_get_games_endpoint(session: AsyncSession, client: AsyncClient, default_user: UserDB, access_token: str):
-    # test get games endpoint
-    await seed_initial_test_data(session)
-
+async def test_get_games_endpoint(session: AsyncSession,
+                                  client: AsyncClient,
+                                  default_user: UserDB,
+                                  access_token: str,
+                                  test_data: None):
     resp = await client.get(
         "/games/",
         headers={"Authorization": f"Bearer {access_token}"}
@@ -31,8 +26,8 @@ async def test_get_games_endpoint(session: AsyncSession, client: AsyncClient, de
     logger.info(data)
 
 
-#test get game by id endpoint
-async def test_get_game_by_id_endpoint(client: AsyncClient, access_token: str):
+# test get game by id endpoint
+async def test_get_game_by_id_endpoint(client: AsyncClient, access_token: str, test_data: None):
     resp = await client.get(
         "/games/22",
         headers={"Authorization": f"Bearer {access_token}"}
@@ -41,8 +36,9 @@ async def test_get_game_by_id_endpoint(client: AsyncClient, access_token: str):
     data = resp.json()
     assert data["id"] == 22
 
+
 # test create game endpoint
-async def test_create_game_endpoint(client: AsyncClient, access_token: str):
+async def test_create_game_endpoint(client: AsyncClient, access_token: str, test_data: None):
     resp = await client.post(
         "/games/",
         headers={"Authorization": f"Bearer {access_token}"},
@@ -56,7 +52,7 @@ async def test_create_game_endpoint(client: AsyncClient, access_token: str):
 
 
 # test update game endpoint
-async def test_update_game_endpoint(client: AsyncClient, access_token: str):
+async def test_update_game_endpoint(client: AsyncClient, access_token: str, test_data: None):
     resp = await client.put(
         "/games/22",
         headers={"Authorization": f"Bearer {access_token}"},

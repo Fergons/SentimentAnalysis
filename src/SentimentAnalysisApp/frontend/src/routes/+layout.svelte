@@ -11,7 +11,7 @@
     import Tooltip, {Wrapper} from '@smui/tooltip';
     import {Icon, Svg} from '@smui/common';
     import userStore from '../lib/stores/user';
-    import type {User} from "../lib/shared/types";
+    import type {User} from "../lib/client";
     import {applyAction, enhance} from "$app/forms";
     import type {LayoutServerData} from "../../.svelte-kit/types/src/routes/$types";
     import {invalidateAll} from "$app/navigation";

@@ -101,3 +101,7 @@ async def seed_initial_test_data(session: AsyncSession):
             "review": reviews,
             "aspect": aspects
             }
+
+async def is_test_data_seeded(session: AsyncSession):
+    result = await session.execute(select(models.Source))
+    return len(result.scalars().all()) > 0

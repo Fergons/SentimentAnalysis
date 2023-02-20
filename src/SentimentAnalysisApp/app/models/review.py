@@ -2,9 +2,9 @@ from sqlalchemy_utils import TSVectorType
 
 from app.db.base_class import Base
 from sqlalchemy import Boolean, Column, Integer, String, DateTime, func, ForeignKey, TEXT, UniqueConstraint, Computed, \
-    Index
+    Index, and_
 from sqlalchemy.orm import relationship
-
+from sqlalchemy_utils import aggregated
 
 class Review(Base):
     id = Column(Integer, primary_key=True, index=True)
@@ -34,12 +34,34 @@ class Review(Base):
 
     playtime_at_review = Column(Integer)
 
+    @aggregated('aspects', Column(Integer))
+    def num_aspects(self):
+        return func.count('1')
+
+    @aggregated('positive_aspects', Column(Integer))
+    def num_positive_aspects(self):
+        return func.count('1')
+
+    @aggregated('negative_aspects', Column(Integer))
+    def num_negative_aspects(self):
+        return func.count('1')
+
+    def num_neutral_aspects(self):
+        return self.num_aspects - self.num_positive_aspects - self.num_negative_aspects
+
     # one(game) to many(reviews)
     game = relationship("Game", back_populates="reviews", lazy="selectin")
     # one(user) to many(reviews)
     reviewer = relationship("Reviewer", back_populates="reviews", lazy="selectin")
     # one(review) to many(aspects)
     aspects = relationship("Aspect", back_populates="review", lazy="selectin", cascade="all, delete")
+
+    positive_aspects = relationship("Aspect",
+                                    primaryjoin="and_(Aspect.review_id == Review.id, Aspect.polarity == 'positive')",
+                                    viewonly=True)
+    negative_aspects = relationship("Aspect",
+                                    primaryjoin="and_(Aspect.review_id == Review.id, Aspect.polarity == 'negative')",
+                                    viewonly=True)
 
     source = relationship("Source", back_populates="reviews", lazy="selectin")
     UniqueConstraint(source_review_id, source_id)

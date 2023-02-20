@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, TYPE_CHECKING, Optional, Union
+from typing import List, TYPE_CHECKING, Optional, Union, Literal
 from pydantic import BaseModel, EmailStr, AnyHttpUrl
 # from . import SourceInDBBase, ReviewerInDBBase, GameInDBBase, AspectInDBBase
 # from . import SourceCreate, ReviewerCreate, GameCreate, AspectCreate
@@ -10,6 +10,7 @@ if TYPE_CHECKING:
     from .game import Game, GameCreate
     from .aspect import Aspect
 
+TimeInterval = Literal["day", "week", "month", "year"]
 
 class ReviewBase(BaseModel):
     text: str
@@ -72,6 +73,17 @@ class Review(ReviewInDBBase):
 class ReviewWithAspects(ReviewInDBBase):
     aspects: List["Aspect"] = []
 
+
+class ReviewsSummary(BaseModel):
+    total: int
+    num_reviews: int = 0
+    processed: List[int] = []
+    not_processed: List[int] = []
+    source_id: Optional[int] = None
+    game_id: Optional[int] = None
+    positive: List[int] = []
+    negative: List[int] = []
+    neutral: List[int] = []
 
 # Additional properties stored in DB
 class ReviewInDB(ReviewInDBBase):

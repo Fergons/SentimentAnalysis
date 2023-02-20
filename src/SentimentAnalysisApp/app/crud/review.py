@@ -1,9 +1,10 @@
 import asyncio
 import logging
-from typing import List, Optional
+from datetime import datetime, timedelta
+from typing import List, Optional, Literal
 
 from fastapi.encoders import jsonable_encoder
-from sqlalchemy import select, and_, or_
+from sqlalchemy import select, and_, or_, func, case, literal_column
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session, selectinload
 from sqlalchemy.sql.expression import null
@@ -11,7 +12,7 @@ from sqlalchemy.sql.expression import null
 from app.crud.reviewer import crud_reviewer
 from app.crud.base import CRUDBase
 from app.models.review import Review
-from app.schemas.review import ReviewCreate, ReviewCreate, ReviewCreate, ReviewWithAspects
+from app.schemas.review import ReviewCreate, ReviewCreate, ReviewCreate, ReviewWithAspects, ReviewsSummary, TimeInterval
 from app.schemas.reviewer import ReviewerCreate
 from app.models.reviewer import Reviewer
 from app.crud.game import crud_game
@@ -78,6 +79,35 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
             )
         )
         return result.scalars().all()
+
+    async def get_summary(self, db: AsyncSession, *,
+                          game_id: Optional[int] = None,
+                          source_id: Optional[int] = None,
+                          time_interval: Literal["day", "hour", "month", "year"] = "day") -> ReviewsSummary:
+        """
+        Count total reviews, count processed and not processed reviews per game and source by time_interval
+        """
+        selects = [
+            func.count(Review.id).label('total'),
+            func.date_trunc('month', Review.created_at).label('date')
+        ]
+
+        group_by = [
+            'date'
+        ]
+
+        if game_id is not None:
+            selects.append(Review.game_id)
+            group_by.append(Review.game_id)
+        if source_id is not None:
+            selects.append(Review.source_id)
+            group_by.append(Review.source_id)
+
+        query = select(*selects).group_by(*group_by)
+        result = await db.execute(query)
+        print(result.scalars().all())
+
+        return ReviewsSummary(total=0, processed=0, not_processed=0, data=[])
 
     async def get_not_processed(self, db: AsyncSession, *, limit: int = 100, offset: int = 0) -> List[Review]:
         result = await db.execute(select(Review).where(Review.processed_at == None).limit(limit).offset(offset))
