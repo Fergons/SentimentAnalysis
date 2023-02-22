@@ -54,14 +54,22 @@ async def read_reviews(
         )
         return reviews
 
+
 @router.get("/summary/", response_model=schemas.ReviewsSummary)
 async def get_summary(db: AsyncSession = Depends(deps.get_session),
                       source_id: Optional[int] = None,
                       game_id: Optional[int] = None):
-
     summary = await crud.review.get_summary(db,
                                             source_id=source_id,
                                             game_id=game_id,
                                             time_interval="day")
-    print(summary)
     return summary
+
+
+@router.get("/{id}/aspects/", response_model=List[schemas.Aspect])
+async def get_aspects(db: AsyncSession = Depends(deps.get_session),
+                      id: int = None):
+    review = await crud.review.get_with_aspects(db=db, id=id)
+    if not review:
+        raise HTTPException(status_code=404, detail="Review not found")
+    return review.aspects

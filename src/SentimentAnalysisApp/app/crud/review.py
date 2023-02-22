@@ -229,5 +229,10 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
 
         await db.commit()
 
+    async def get_with_aspects(self, db: AsyncSession, *, id: int) -> Optional[Review]:
+        result = await db.execute(select(self.model).where(self.model.id == id).options(
+            selectinload(self.model.aspects)
+        ))
+        return result.scalars().first()
 
 crud_review = CRUDReview(Review)
