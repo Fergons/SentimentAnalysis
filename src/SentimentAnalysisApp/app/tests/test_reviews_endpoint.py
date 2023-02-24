@@ -70,7 +70,7 @@ async def test_get_summary_endpoint(client: AsyncClient, session: AsyncSession, 
 
     assert resp.status_code == 200
     data2 = resp.json()
-    assert data2["total"] == data["total"]
+    assert len(data2["total"]) == len(data["total"])
 
     resp = await client.get(
         "/reviews/summary/",

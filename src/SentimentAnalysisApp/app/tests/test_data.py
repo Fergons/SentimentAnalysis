@@ -699,6 +699,266 @@ TEST_REVIEW = [
         "processed_at": "2023-02-11 00:00:00.000000 +00:00",
         "aspect_sum_polarity": None,
         "playtime_at_review": 4696
+    },
+{
+        "id": 2345,
+        "source_review_id": "347612879",
+        "source_reviewer_id": None,
+        "game_id": 22,
+        "reviewer_id": 6,
+        "source_id": 1,
+        "language": "czech",
+        "text": "Tato hra mě opravdu zklamala. Očekával jsem více obsahu a lepší hratelnost. Nedoporučuji.",
+        "summary": None,
+        "score": None,
+        "helpful_score": "0",
+        "good": None,
+        "bad": None,
+        "voted_up": False,
+        "created_at": "2022-12-19 18:34:12.123456 +00:00",
+        "updated_at": None,
+        "processed_at": None,
+        "aspect_sum_polarity": None,
+        "playtime_at_review": 25
+    },
+    {
+        "id": 5678,
+        "source_review_id": "983465213",
+        "source_reviewer_id": None,
+        "game_id": 278,
+        "reviewer_id": 7,
+        "source_id": 1,
+        "language": "czech",
+        "text": "Tuto hru jsem si užil. Grafika je skvělá a hratelnost je návyková. Doporučuji.",
+        "summary": None,
+        "score": None,
+        "helpful_score": "0",
+        "good": None,
+        "bad": None,
+        "voted_up": True,
+        "created_at": "2022-12-22 09:12:34.567890 +00:00",
+        "updated_at": None,
+        "processed_at": None,
+        "aspect_sum_polarity": None,
+        "playtime_at_review": 100
+    },
+    {
+        "id": 9012,
+        "source_review_id": "287345671",
+        "source_reviewer_id": None,
+        "game_id": 281,
+        "reviewer_id": 9,
+        "source_id": 1,
+        "language": "czech",
+        "text": "Tato hra je jednoduchá a zábavná. Určitě si ji zahrajte, pokud máte rádi jednoduché hry.",
+        "summary": None,
+        "score": None,
+        "helpful_score": "0",
+        "good": None,
+        "bad": None,
+        "voted_up": True,
+        "created_at": "2022-12-25 16:42:56.789012 +00:00",
+        "updated_at": None,
+        "processed_at": None,
+        "aspect_sum_polarity": None,
+        "playtime_at_review": 10
+    },
+    {
+        "id": 1234,
+        "source_review_id": "753914268",
+        "source_reviewer_id": None,
+        "game_id": 306,
+        "reviewer_id": 233,
+        "source_id": 1,
+        "language": "czech",
+        "text": "Tato hra mě překvapila. Byla to skvělá zábava a určitě si ji zahraju znovu.",
+        "summary": None,
+        "score": None,
+        "helpful_score": "0",
+        "good": None,
+        "bad": None,
+        "voted_up": True,
+        "created_at": "2022-12-25 16:00:56.789012 +00:00",
+        "updated_at": None,
+        "processed_at": None,
+        "aspect_sum_polarity": None,
+        "playtime_at_review": 10
+    },
+    {
+        "id": 5673,
+        "source_review_id": "984765213",
+        "source_reviewer_id": None,
+        "game_id": 278,
+        "reviewer_id": 7,
+        "source_id": 1,
+        "language": "czech",
+        "text": "Tuto hru jsem si užil. Grafika je skvělá a hratelnost je návyková. Doporučuji.",
+        "summary": None,
+        "score": None,
+        "helpful_score": "0",
+        "good": None,
+        "bad": None,
+        "voted_up": True,
+        "created_at": "2022-12-22 09:12:34.567890 +00:00",
+        "updated_at": None,
+        "processed_at": None,
+        "aspect_sum_polarity": None,
+        "playtime_at_review": 100
+    },
+    # create more reviews here with random integer as "id", random datetime for "created_at", and random "review_source_id" as integer string and "reviewer_id" from ids in REVIEWERS
+    # and "game_id" from ids in GAMES
+    # and "source_id" from ids in SOURCES
+    # and use "czech" for "language"
+    # and use random integer for "playtime_at_review"
+    # and use random game review in czech language for "text" using max 250 characters
+    # and use random integer as string for "helpful_score"
+
+    {
+        "id": 43,
+        "source_review_id": "126556789",
+        "source_reviewer_id": None,
+        "game_id": 278,
+        "reviewer_id": 9,
+        "source_id": 1,
+        "language": "czech",
+        "text": "Tato hra mě překvapila. Byla to skvělá zábava a určitě si ji zahraju znovu.",
+        "summary": None,
+        "score": None,
+        "helpful_score": "0",
+        "good": None,
+        "bad": None,
+        "voted_up": True,
+        "created_at": "2022-12-25 16:00:56.789012 +00:00",
+        "updated_at": None,
+        "processed_at": None,
+        "aspect_sum_polarity": None,
+        "playtime_at_review": 10
+    },
+    {
+        "id": 34,  # random integer
+        "source_review_id": "123456789",  # random integer as string
+        "source_reviewer_id": None,
+        "game_id": 306,  # id from GAMES
+        "reviewer_id": 7,
+        "source_id": 1,
+        "language": "czech",
+        "text": "Tato hra mě překvapila. Byla to skvělá zábava a určitě si ji zahraju znovu.",  # random game review
+        "summary": None,
+        "score": None,
+        "helpful_score": "0",  # random integer as string
+        "good": None,
+        "bad": None,
+        "voted_up": True,
+        "created_at": "2022-12-23 16:00:56.789012 +00:00",  # random datetime
+        "updated_at": None,
+        "processed_at": None,
+        "aspect_sum_polarity": None,
+        "playtime_at_review": 1043  # random integer
+    },
+    {
+        "id": 35,  # random integer
+        "source_review_id": "123766789",  # random integer as string
+        "source_reviewer_id": None,
+        "game_id": 306,  # random id from GAMES
+        "reviewer_id": 7,  # random id from REVIEWERS
+        "source_id": 1,  # random id from SOURCES
+        "language": "czech",
+        "text": "Tato hra mě překvapila. Super gameplay a grafika.",  # random game review
+        "summary": None,
+        "score": None,
+        "helpful_score": "0",  # random integer as string
+        "good": None,
+        "bad": None,
+        "voted_up": True,
+        "created_at": "2022-09-23 16:00:56.789012 +00:00",  # random datetime
+        "updated_at": None,
+        "processed_at": None,
+        "aspect_sum_polarity": None,
+        "playtime_at_review": 133  # random integer
+    },
+    {
+        "id": 36,  # random integer
+        "source_review_id": "82336789",  # random integer as string
+        "source_reviewer_id": None,
+        "game_id": 22,  # random id from (22, 278, 306, 281)
+        "reviewer_id": 7,  # random id from (6, 7, 9, 233)
+        "source_id": 1,
+        "language": "czech",
+        "text": "Super cena za takovou hru.",  # random game review
+        "summary": None,
+        "score": None,
+        "helpful_score": "0",  # random integer as string
+        "good": None,
+        "bad": None,
+        "voted_up": True,
+        "created_at": "2022-12-23 13:00:56.789012 +00:00",  # random datetime
+        "updated_at": None,
+        "processed_at": None,
+        "aspect_sum_polarity": None,
+        "playtime_at_review": 143  # random integer
+    },
+    {
+        "id": 2235,
+        "source_review_id": "95861765",
+        "source_reviewer_id": None,
+        "game_id": 22,
+        "reviewer_id": 6,
+        "source_id": 1,
+        "language": "czech",
+        "text": "Hra je zábavná, ale na můj vkus příliš krátká.",
+        "summary": None,
+        "score": None,
+        "helpful_score": "0",
+        "good": None,
+        "bad": None,
+        "voted_up": True,
+        "created_at": "2022-12-28 13:26:19.548302 +00:00",
+        "updated_at": None,
+        "processed_at": None,
+        "aspect_sum_polarity": None,
+        "playtime_at_review": 150
+    },
+    {
+        "id": 3872,
+        "source_review_id": "746135861",
+        "source_reviewer_id": None,
+        "game_id": 278,
+        "reviewer_id": 7,
+        "source_id": 1,
+        "language": "czech",
+        "text": "Nemůžu si vynachválit grafiku a hudební doprovod, ale hratelnost zůstává slabým místem této hry.",
+        "summary": None,
+        "score": None,
+        "helpful_score": "0",
+        "good": None,
+        "bad": None,
+        "voted_up": False,
+        "created_at": "2022-12-19 09:45:32.846701 +00:00",
+        "updated_at": None,
+        "processed_at": None,
+        "aspect_sum_polarity": None,
+        "playtime_at_review": 250
+    },
+    {
+        "id": 4927,
+        "source_review_id": "52967817",
+        "source_reviewer_id": None,
+        "game_id": 306,
+        "reviewer_id": 9,
+        "source_id": 1,
+        "language": "czech",
+        "text": "Velmi povedená hra s nádhernou grafikou a bohatou hratelností.",
+        "summary": None,
+        "score": None,
+        "helpful_score": "0",
+        "good": None,
+        "bad": None,
+        "voted_up": True,
+        "created_at": "2022-12-09 20:31:59.272080 +00:00",
+        "updated_at": None,
+        "processed_at": None,
+        "aspect_sum_polarity": None,
+        "playtime_at_review": 500
     }
 ]
 

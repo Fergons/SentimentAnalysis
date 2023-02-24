@@ -112,6 +112,10 @@ body,
   margin-bottom: 0;
 }
 
+.overview-container, .stats-container {
+  background-color: theme.$surface;
+}
+
 @include paper.paper-color(svelte-blue, #40b3ff, #fff);
 
 @media (max-width: 460px) {

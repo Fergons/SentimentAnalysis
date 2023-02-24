@@ -5,7 +5,6 @@
     import Button from '@smui/button';
     import {navigating} from "$app/stores";
     import type {PageServerData} from "./$types";
-    import type {Game} from "../../lib/client";
 
     export let data: PageServerData;
     let games = data?.games; // initialValue();

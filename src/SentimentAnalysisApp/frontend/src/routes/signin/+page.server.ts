@@ -1,7 +1,6 @@
 import type {PageServerLoad, Actions} from './$types';
 import {redirect, error} from '@sveltejs/kit';
 import {handleApiResponseError} from "../../lib/server/api/api";
-import {getAccountDetail, signin} from '../../lib/server/api/auth';
 import type {SigninDataType} from '../../lib/server/api/auth';
 import {SigninSchema} from '../../lib/server/api/auth';
 import {validateFormData} from "../../lib/utils/validation";
