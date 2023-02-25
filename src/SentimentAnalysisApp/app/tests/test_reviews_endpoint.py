@@ -60,25 +60,28 @@ async def test_get_summary_endpoint(client: AsyncClient, session: AsyncSession, 
     all = all.scalars().all()
     processed = await session.execute(select(models.Review).filter(models.Review.processed_at.isnot(None)))
     processed = processed.scalars().all()
-    assert sum(data["total"]) == len(all)
-    assert sum(data["processed"]) == len(processed)
+    assert sum([point["total"] for point in data["data"]]) == len(all)
+    assert sum([point["processed"] for point in data["data"]]) == len(processed)
 
     resp = await client.get(
         "/reviews/summary/",
         params={"source_id": 1}
     )
-
     assert resp.status_code == 200
     data2 = resp.json()
-    assert len(data2["total"]) == len(data["total"])
+    all = await session.execute(select(models.Review).where(models.Review.source_id == 1))
+    all = all.scalars().all()
+    assert sum([point["total"] for point in data2["data"] if point["source_id"] == 1]) == len(all)
 
     resp = await client.get(
         "/reviews/summary/",
         params={"source_id": 3}
     )
     assert resp.status_code == 200
+    all = await session.execute(select(models.Review).where(models.Review.source_id == 3))
+    all = all.scalars().all()
     data3 = resp.json()
-    assert data3["total"] == []
+    assert sum([point["total"] for point in data3["data"] if point["source_id"] == 3]) == len(all)
 
 
 

@@ -35,6 +35,8 @@
 
     $: angleSlice = (Math.PI * 2) / $config.x.length;
 
+    let activeCategory = 0;
+
     function anchor(total, i) {
         if (i === 0 || i === total / 2) {
             return 'middle';
@@ -43,6 +45,7 @@
         }
         return 'end';
     }
+
     console.log($config);
 </script>
 <defs>
@@ -85,18 +88,21 @@
         >
         </line>
         <text
-                filter="url(#rounded-corners)"
                 text-anchor="{anchor($config.x.length, i)}"
                 dy="0.35em"
                 font-family="{textFont}"
                 font-size="{textSize}px"
                 fill="{textColor}"
-                class:active={i === $config.activeCategory}
+                class:active={i === activeCategory}
+                on:click={() => {
+                    console.log(`clicked on ${label}`);
+                    activeCategory = i;
+                    dispatch('categorySelected', {category: i});
+                }}
                 on:focus={() => {
                     console.log(`focused on ${label}`);
+                    activeCategory = i;
                     dispatch('categorySelected', {category: i});
-                    console.log($config.activeCategory);
-
                 }}
                 tabindex="0"
                 transform="translate({(labelPlacement) * Math.cos(thisAngleSlice)}, {labelPlacement * Math.sin(thisAngleSlice)})"

@@ -57,10 +57,10 @@ async def read_reviews(
 
 @router.get("/summary/", response_model=schemas.ReviewsSummary)
 async def get_summary(db: AsyncSession = Depends(deps.get_session),
-                      source_id: Optional[int] = None,
-                      game_id: Optional[int] = None):
+                      game_id: Optional[int] = None,
+                      source_ids: Optional[List[int]] = None):
+
     summary = await crud.review.get_summary(db,
-                                            source_id=source_id,
                                             game_id=game_id,
                                             time_interval="day")
     return summary

@@ -13,6 +13,7 @@ if TYPE_CHECKING:
 
 TimeInterval = Literal["day", "week", "month", "year"]
 
+
 class ReviewBase(BaseModel):
     text: str
     language: str
@@ -75,21 +76,26 @@ class ReviewWithAspects(ReviewInDBBase):
     aspects: List["Aspect"] = []
 
 
-class ReviewsSummary(BaseModel):
-    total: List[int] = []
-    processed: List[int] = []
-    not_processed: List[int] = None
-    source_id: Optional[int] = None
-    game_id: Optional[int] = None
-    positive: List[int] = []
-    negative: List[int] = []
-    neutral: List[int] = []
-    dates: List[datetime] = []
-    num_data_points: int = 0
+class ReviewsSummaryDataPoint(BaseModel):
+    total: int
+    processed: int
+    not_processed: int = None
+    positive: Optional[int] = None
+    negative: Optional[int] = None
+    neutral: Optional[int] = None
+    date: datetime
+    source_id: int
 
     @validator("not_processed", always=True)
     def set_not_processed(cls, v, values):
-        return v or [t-p for t, p in zip(values["total"], values["processed"])]
+        return v or values["total"] - values["processed"]
+
+
+class ReviewsSummary(BaseModel):
+    game_id: Optional[int] = None
+    data: List[ReviewsSummaryDataPoint] = []
+    num_data_points: int = 0
+
 
 # Additional properties stored in DB
 class ReviewInDB(ReviewInDBBase):
