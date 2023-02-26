@@ -32,6 +32,10 @@ class CRUDSource(CRUDBase[Source, SourceCreate, SourceUpdate]):
         result = await db.execute(select(Source).where(Source.url == url))
         return result.scalars().first()
 
+    async def get_all(self, db: AsyncSession) -> List[Source]:
+        result = await db.execute(select(self.model))
+        return result.scalars().all()
+
 
 crud_source = CRUDSource(Source)
 crud_game_source = CRUDGameSource(GameSource)

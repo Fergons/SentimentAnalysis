@@ -12,45 +12,40 @@
     import Stats from "../../../lib/components/Stats.svelte";
 
     export let data;
-
-    const stats = data.stats.reviews_summary.data.reduce((acc, cur) => {
-        const sourceId = cur.source_id;
-        const total = cur.total;
-        const date = cur.date;
-
-        if (!acc[date]) {
-            acc[date] = {[sourceId]: total, date};
-        } else {
-            acc[date][sourceId] = total;
-        }
-        return acc;
-    }, {});
+    const {title, subtitle, game, overview, stats} = data;
 
 </script>
 
 <section>
     <div class="overview-container">
-        <Overview data={data.overview.category_scores}/>
+        <Overview data={overview.categories}/>
     </div>
     <Banner open autoClose={false}>
-        <Label slot="label">{data.game.name}</Label>
+        <Label slot="label">{game.name}</Label>
     </Banner>
     <div class="stats-container">
-        <Stats data={Object.values(stats)}/>
+        <Stats data={stats.total}/>
     </div>
 </section>
 
 <style>
     .stats-container {
-        width: 100%;
+        width:100%;
         height: 300px;
+         display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 16px;
     }
 
     .overview-container {
+        width: 100%;
         height: 420px;
         display: flex;
         flex-direction: column;
         justify-content: start;
         align-items: flex-start;
+        gap: 16px;
     }
 </style>

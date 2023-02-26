@@ -44,16 +44,17 @@ class SourceUpdate(SourceBase):
 
 class SourceInDBBase(SourceBase):
     id: int
-    updated_at: datetime
+    updated_at: Optional[datetime] = None
 
     class Config:
         orm_mode = True
 
 
 class Source(SourceInDBBase):
-    reviews: Optional[List["Review"]] = None
-    reviewers: Optional[List["Reviewer"]] = None
-    games: Optional[List["Game"]] = None
+    # reviews: Optional[List["Review"]] = None
+    # reviewers: Optional[List["Reviewer"]] = None
+    # games: Optional[List["Game"]] = None
+    pass
 
 
 class GameSource(BaseModel):

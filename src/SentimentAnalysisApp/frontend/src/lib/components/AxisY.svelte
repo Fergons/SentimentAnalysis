@@ -13,26 +13,20 @@
   /** @type {Boolean} [tickMarks=false] - Show a vertical mark for each tick. */
   export let tickMarks = false;
 
+  /** @type {Boolean} [baseline=false] – Show a solid line at the bottom. */
+  export let baseline = false;
+
   /** @type {Function} [formatTick=d => d] - A function that passes the current tick value and expects a nicely formatted value in return. */
   export let formatTick = d => d;
 
   /** @type {Number|Array|Function} [ticks=4] - If this is a number, it passes that along to the [d3Scale.ticks](https://github.com/d3/d3-scale) function. If this is an array, hardcodes the ticks to those values. If it's a function, passes along the default tick values and expects an array of tick values in return. */
   export let ticks = 4;
 
-  /** @type {Number} [xTick=0] - How far over to position the text marker. */
-  export let xTick = 0;
+  /** @type {Number} [xTick=-4] - How far over to position the text marker. */
+  export let xTick = -4;
 
-  /** @type {Number} [yTick=0] - How far up and down to position the text marker. */
-  export let yTick = 0;
-
-  /** @type {Number} [dxTick=0] - Any optional value passed to the `dx` attribute on the text marker and tick mark (if visible). This is ignored on the text marker if your scale is ordinal. */
-  export let dxTick = 0;
-
-  /** @type {Number} [dyTick=-4] - Any optional value passed to the `dy` attribute on the text marker and tick mark (if visible). This is ignored on the text marker if your scale is ordinal. */
-  export let dyTick = -4;
-
-  /** @type {String} [textAnchor='start'] The CSS `text-anchor` passed to the label. This is automatically set to "end" if the scale has a bandwidth method, like in ordinal scales. */
-  export let textAnchor = 'start';
+  /** @type {Number} [yTick=-1] - How far up and down to position the text marker. */
+  export let yTick = -1;
 
   $: isBandwidth = typeof $yScale.bandwidth === 'function';
 
@@ -44,55 +38,61 @@
           $yScale.ticks(ticks);
 </script>
 
-<g class='axis y-axis' transform='translate({-$padding.left}, 0)'>
-  {#each tickVals as tick (tick)}
-    <g class='tick tick-{tick}' transform='translate({$xRange[0] + (isBandwidth ? $padding.left : 0)}, {$yScale(tick)})'>
+<div class='axis y-axis' style='transform:translate(-{$padding.left}px, 0)'>
+  {#each tickVals as tick, i (tick)}
+    <div class='tick tick-{i}' style='top:{$yScale(tick) + (isBandwidth ? $yScale.bandwidth () / 2 : 0)}%;left:{$xRange[0]}%;'>
       {#if gridlines !== false}
-        <line
-          class="gridline"
-          x2='100%'
-          y1={yTick + (isBandwidth ? ($yScale.bandwidth() / 2) : 0)}
-          y2={yTick + (isBandwidth ? ($yScale.bandwidth() / 2) : 0)}
-        ></line>
+        <div class="gridline" style='top:0;left:{isBandwidth ? $padding.left : 0}px;right:-{$padding.left + $padding.right}px;'></div>
+      {/if}
+      {#if baseline !== false && i === 0}
+        <div class="gridline baseline" style='top:0;left:{isBandwidth ? $padding.left : 0};right:-{$padding.left + $padding.right}px;'></div>
       {/if}
       {#if tickMarks === true}
-        <line
-          class='tick-mark'
-          x1='0'
-          x2='{isBandwidth ? -6 : 6}'
-          y1={yTick + (isBandwidth ? ($yScale.bandwidth() / 2) : 0)}
-          y2={yTick + (isBandwidth ? ($yScale.bandwidth() / 2) : 0)}
-        ></line>
+        <div class="tick-mark" style='top:0;left:{isBandwidth ? $padding.left - 6 : 0}px;width:6px;'></div>
       {/if}
-      <text
-        x='{xTick}'
-        y='{yTick + (isBandwidth ? $yScale.bandwidth() / 2 : 0)}'
-        dx='{isBandwidth ? -9 : dxTick}'
-        dy='{isBandwidth ? 4 : dyTick}'
-        style="text-anchor:{isBandwidth ? 'end' : textAnchor};"
-      >{formatTick(tick)}</text>
-    </g>
+      <div
+        class="text"
+        style='
+          top:{yTick}px;
+          left:{isBandwidth ? ($padding.left + xTick - 4) : 0}px;
+          transform: translate({isBandwidth ? '-100%' : 0}, {isBandwidth ? -50 - Math.floor($yScale.bandwidth() / -2) : '-100'}%);
+        '
+      >{formatTick(tick)}</div>
+    </div>
   {/each}
-</g>
+</div>
 
 <style>
+  .axis,
+  .tick,
+  .tick-mark,
+  .gridline,
+  .baseline,
+  .text {
+    position: absolute;
+  }
+  .axis {
+    width: 100%;
+    height: 100%;
+  }
   .tick {
-    font-size: .725em;
-    font-weight: 200;
+    font-size: 12px;
+    width: 100%;
+    font-weight: 100;
   }
 
-  .tick line {
-    stroke: #aaa;
+  .gridline {
+    border-top: 1px dashed #aaa;
   }
-  .tick .gridline {
-    stroke-dasharray: 2;
-  }
-
-  .tick text {
-    fill: #666;
+  .tick-mark {
+    border-top: 1px solid #aaa;
   }
 
-  .tick.tick-0 line {
-    stroke-dasharray: 0;
+  .baseline.gridline {
+    border-top-style: solid;
+  }
+
+  .tick .text {
+    color: #666;
   }
 </style>

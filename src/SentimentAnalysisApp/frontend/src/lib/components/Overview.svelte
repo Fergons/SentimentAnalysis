@@ -6,12 +6,15 @@
     import AxisRadial from './AxisRadial.svelte';
 
     export let data;
-    const seriesKey = 'name';
+    const seriesKey = 'game_id';
     const xKey = ['gameplay', 'performance_bugs', 'price', 'audio_visuals', 'community', 'story'];
 
-    const seriesNames = ['gameplay', 'price', 'story', 'performance_bugs', 'audio_visuals', 'community'];
-    const data1 = [Object.fromEntries(data)];
-    console.log(data1);
+    const seriesNames =  Object.keys(data[0]).filter(d => d !== seriesKey);
+    data.forEach(d => {
+		seriesNames.forEach(name => {
+			d[name] = +d[name];
+		});
+	});
 
     let activeCategory = 0;
     function setActiveCategory(event) {
@@ -24,11 +27,13 @@
 
 <div class="chart-container">
     <LayerCake
-            padding={{ top: 30, right: 0, bottom: 7, left: 0 }}
+            ssr={true}
+            percentageRange={true}
+            padding={{ top: 16, right: 16, bottom: 16, left: 16 }}
             x={xKey}
             xDomain={[0, 10]}
-            xRange={({ height }) => [0, height / 2]}
-            data={data1}
+            xRange={({ height }) => [0, height / 2.3]}
+            data={data}
     >
         <Svg>
             <AxisRadial textColor="#fff" textFont="roboto-mono" on:categorySelected={setActiveCategory}/>
@@ -40,9 +45,8 @@
 
 <style>
     .chart-container {
-        padding: 16px;
-        width: 30%;
-        height: 80%;
+        width: 40%;
+        height: 100%;
     }
 </style>
 
