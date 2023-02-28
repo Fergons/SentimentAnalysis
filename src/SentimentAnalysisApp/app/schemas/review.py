@@ -23,6 +23,7 @@ class ReviewCreate(ReviewBase):
     text: str
     language: str = None
     reviewer_id: int = None
+    source_reviewer_id: str = None
     game_id: int = None
     source_id: int = None
     source_review_id: str = None

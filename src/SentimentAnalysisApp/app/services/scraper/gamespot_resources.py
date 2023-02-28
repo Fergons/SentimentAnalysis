@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field, validator, AnyHttpUrl
 
 GAMESPOT_DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
+
 class SortDirection(str, Enum):
     ASC = "asc"
     DESC = "desc"
@@ -74,9 +75,6 @@ class GamespotSortParam(BaseModel):
         use_enum_values = True
 
 
-
-
-
 class GamespotImage(BaseModel):
     square_tiny: Optional[str] = None
     screen_tiny: Optional[str] = None
@@ -122,6 +120,14 @@ class GamespotGame(BaseModel):
             value,
             GAMESPOT_DATETIME_FORMAT
         )
+
+
+class GamespotReviewer(BaseModel):
+    source_reviewer_id: str = Field(alias="source_reviewer_id")
+    name: str = ""
+
+    class Config:
+        allow_population_by_field_name = True
 
 
 class GamespotReview(BaseModel):
@@ -210,4 +216,3 @@ class GamespotApiResponse(BaseModel):
         if value == 1:
             return value
         raise ValueError(f"Api call unsuccessful: {values['error']}")
-

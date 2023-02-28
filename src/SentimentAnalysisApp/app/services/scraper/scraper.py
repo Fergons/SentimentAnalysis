@@ -14,7 +14,7 @@ from .steam_resources import (SteamAppDetail,
                               SteamAppDetailResponse,
                               SteamAppReviewsResponse,
                               SteamAppListResponse,
-                              SteamApp)
+                              SteamApp, SteamReview)
 
 from .gamespot_resources import (GamespotRequestParams,
                                  GamespotFilterParam,
@@ -276,15 +276,15 @@ class SteamScraper(Scraper):
             logger.log(logging.DEBUG, f"api call:{game_id}: get_game_reviews yield")
             yield reviews
 
-    async def get_game_reviews(self, game_id, **kwargs):
+    async def get_game_reviews(self, game_id, **kwargs) -> Tuple[str, List[SteamReview]]:
         all_reviews = []
         # filter = lambda x: x if x.get("recommendationid") not in review_ids else None
         async for page in self.game_reviews_page_generator(game_id, **kwargs):
             # process
             # ...
-            # processor = kwargs.get("processor")
-            # if kwargs.get("processor") is not None:
-            #     processor(game_id=game_id, reviews=page)
+            processor = kwargs.get("processor")
+            if processor is not None:
+                processor(game_id=game_id, reviews=page)
 
             all_reviews.extend(page)
         return game_id, all_reviews

@@ -21,6 +21,19 @@ class DoupeReviewsRequestParams(BaseModel):
     pgnum: int = 1
 
 
+class DoupeReviewer(BaseModel):
+    source_reviewer_id: str = Field(alias="source_reviewer_id")
+    name: str = ""
+    class Config:
+        allow_population_by_field_name = True
+
+class DoupeGame(BaseModel):
+    url: str = Field(alias="source_game_id")
+    name: str = ""
+    tags: Optional[List[str]] = None
+    class Config:
+        allow_population_by_field_name = True
+
 class DoupeReview(BaseModel):
     url: str = Field(alias="source_review_id")
     score: Optional[str] = None

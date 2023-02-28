@@ -8,7 +8,7 @@ from typing import AsyncGenerator, List
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core import config
-from app.models import Base, Source, Review
+from app.models import Base, Source, Review, Game
 from app.schemas import SourceCreate, GameCreate, ReviewCreate, ReviewerCreate
 from app import crud
 
@@ -59,20 +59,30 @@ async def session(init_db) -> AsyncGenerator[AsyncSession, None]:
 
 
 @pytest.fixture
-async def steam_db_scraper(session: AsyncSession):
+async def steam_db_scraper(session: AsyncSession, sources):
     async with SteamScraper() as scraper:
         yield await DBScraper.create(scraper=scraper, session=session)
 
 
 @pytest.fixture
-async def gamespot_db_scraper(session: AsyncSession):
+async def gamespot_db_scraper(session: AsyncSession, sources):
     async with GamespotScraper(api_key=config.settings.GAMESPOT_API_KEY) as scraper:
         yield await DBScraper.create(scraper=scraper, session=session)
 
 @pytest.fixture
-async def doupe_db_scraper(session: AsyncSession):
+async def doupe_db_scraper(session: AsyncSession, sources):
     async with DoupeScraper() as scraper:
         yield await DBScraper.create(scraper=scraper, session=session)
+
+@pytest.fixture
+async def sources(session: AsyncSession):
+    """Create sources in db if not in db"""
+    results = []
+    for name, value in SOURCES.items():
+        source = await crud.source.get_by_name(session, name=name)
+        if source is None:
+            source = await crud.source.create(session, obj_in=SourceCreate(**value))
+        results.append(source)
 
 @pytest.mark.anyio
 async def test_create_db_sources(session: AsyncSession):
@@ -158,9 +168,17 @@ async def test_create_db_games(session: AsyncSession):
 #     assert len(reviews_in_db) >= _max - int(_max / 2)
 
 
+@pytest.mark.anyio
+async def test_steam_db_scraper_scrape_games(steam_db_scraper, session: AsyncSession):
+    num_of_games = 2
+    scraped_games = await steam_db_scraper.scrape_games(bulk_size=20, end_after=num_of_games)
+    result = await session.execute(select(GameSource.game_id).where(GameSource.source_id == steam_db_scraper.db_source.id))
+    games_in_db = result.scalars().all()
+    # check if scraped_games are in db
+    assert all(map(lambda x: x in games_in_db, scraped_games))
 
 @pytest.mark.anyio
-async def test_steam_db_scraper(steam_db_scraper, session: AsyncSession):
+async def test_steam_db_scraper_scrape_reviews(steam_db_scraper, session: AsyncSession):
     await steam_db_scraper.scrape_all_reviews_for_not_updated_steam_games(max_reviews=100)
     result = await session.execute(select(Review).where(Review.source_id == steam_db_scraper.db_source.id))
     reviews_in_db = result.scalars().all()

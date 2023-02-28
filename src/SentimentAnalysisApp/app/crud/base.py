@@ -2,6 +2,7 @@ from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, Union
 
 from sqlalchemy import update
 from sqlalchemy.inspection import inspect
+from sqlalchemy.orm import load_only
 
 from app.db.base import Base
 from fastapi.encoders import jsonable_encoder
@@ -31,20 +32,30 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         return obj
 
     async def get_by_source_id(self, db: AsyncSession, source_id: Any, source_obj_id: Any) -> Optional[ModelType]:
-        result = await db.execute(
+        result = await db.scalars(
             select(self.model)
             .where(
                 (self.model.source_id == source_id) &
                 (getattr(self.model, f"source_{self.model.__tablename__}_id") == source_obj_id)
             )
         )
-        return result.scalars().first()
+        return result.first()
+
+    async def get_id_by_source_id(self, db: AsyncSession, source_id: Any, source_obj_id: Any) -> Optional[int]:
+        result = await db.scalars(
+            select(self.model.id)
+            .where(
+                (self.model.source_id == source_id) &
+                (getattr(self.model, f"source_{self.model.__tablename__}_id") == source_obj_id)
+            )
+        )
+        return result.first()
 
     async def get_multi(
             self, db: AsyncSession, *, offset: int = 0, limit: int = 100
     ) -> List[ModelType]:
-        result = await db.execute(select(self.model).offset(offset).limit(limit))
-        return result.scalars().all()
+        result = await db.scalars(select(self.model).offset(offset).limit(limit))
+        return result.all()
 
     async def create(self, db: AsyncSession, *, obj_in: CreateSchemaType) -> ModelType:
         db_obj = self.model(**obj_in.dict())  # type: ignore

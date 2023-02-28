@@ -20,6 +20,11 @@ from app.crud.game import crud_game
 from app.models.game import Game
 from app.models.source import GameSource
 
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(levelname)s: %(message)s',
+)
+logger = logging.getLogger(__name__)
 
 class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
     async def get_with_good_and_bad_by_language_multi(self, db: AsyncSession, *, language: str) -> List[Review]:
@@ -164,15 +169,18 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
         return db_obj
 
     async def create_multi(self, db: AsyncSession, *, objs_in: List[ReviewCreate], limit: int = 100):
+        db_objs = []
         for obj in objs_in:
-            db_obj = await self.get_by_source_id(db, obj.source_id, obj.source_review_id)
-            if db_obj is not None:
+            logger.debug(f"create_multi: Checking if review {obj.source_review_id} in db")
+            db_obj_id = await self.get_id_by_source_id(db, obj.source_id, obj.source_review_id)
+            logger.debug(f"create_multi: review {obj.source_review_id}: {'FOUND' if db_obj_id else 'NOT FOUND'}")
+            if db_obj_id is not None:
                 # possible update of the review in the DB
                 continue
-
             db_obj = self.model(**obj.dict())  # type: ignore
-            db.add(db_obj)
+            db_objs.append(db_obj)
 
+        db.add_all(db_objs)
         await db.commit()
 
     async def create_with_reviewer_multi(
@@ -207,22 +215,8 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
             if db_obj is not None:
                 # possible update of the review in the DB
                 continue
-            game_db_obj = await crud_game.get_by_source_id(db, obj.source_id, obj.game.source_game_id)
-            if game_db_obj is None:
-                game_db_obj = await crud_game.get_by_name(db, name=obj.game.name)
-                if game_db_obj is None:
-                    game_db_obj = Game(**obj.game.dict(exclude={"source_id", "source_game_id"}))  # type: ignore
 
-                game_source_db_obj = GameSource(
-                    source_id=obj.source_id,  # type: ignore
-                    source_game_id=str(obj.game.source_game_id)  # type: ignore
-                )
-
-                game_source_db_obj.game = game_db_obj
-                db.add_all([game_db_obj, game_source_db_obj])
-
-            db_obj = self.model(**obj.dict(exclude={"game", "reviewer"}))  # type: ignore
-            db_obj.game = game_db_obj
+            db_obj = self.model(**obj.dict())  # type: ignore
             db.add(db_obj)
 
         await db.commit()

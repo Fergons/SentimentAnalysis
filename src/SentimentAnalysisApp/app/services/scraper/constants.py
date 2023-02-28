@@ -1,6 +1,11 @@
 from enum import Enum
 
-
+class ScrapingResourceType(str, Enum):
+    alias = "scraping-type"
+    GAME = "game"
+    REVIEW = "review"
+    REVIEWER = "reviewer"
+    SOURCE = "source"
 
 class SourceName(str, Enum):
     STEAM = 'steam'

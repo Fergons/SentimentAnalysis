@@ -28,16 +28,20 @@ class CRUDReviewer(CRUDBase[Reviewer, ReviewerCreate, ReviewerUpdate]):
     async def create_from_source(
             self, db: AsyncSession, *, obj_in: ReviewerCreate
     ) -> Optional[Reviewer]:
-        db_obj = await self.get_by_source_id(db, source_id=obj_in.source_id, source_obj_id=obj_in.source_reviewer_id)
-        if db_obj is not None:
-            return db_obj
-
         obj_in_data = obj_in.dict()
         db_obj = self.model(**obj_in_data)  # type: ignore
         db.add(db_obj)
         await db.commit()
         await db.refresh(db_obj)
         return db_obj
+
+    async def create_multi(self, db: AsyncSession, *, objs_in: List[ReviewerCreate]):
+        db_objs = []
+        for obj in objs_in:
+            db_obj = self.model(**obj.dict())  # type: ignore
+            db_objs.append(db_obj)
+        db.add_all(db_objs)
+        await db.commit()
 
 
 crud_reviewer = CRUDReviewer(Reviewer)
