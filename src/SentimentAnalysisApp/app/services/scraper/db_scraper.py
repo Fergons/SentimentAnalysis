@@ -2,27 +2,31 @@ import argparse
 import asyncio
 import logging
 import random
-from typing import List, Optional, Union, TypeVar, Tuple
+from typing import List, Optional, Union, TypeVar, Tuple, Literal, Any
 
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
 
-from app.db.session import async_session
+from db.session import async_session
 from app.crud.source import crud_source
 from app.crud.review import crud_review
 from app.schemas.game import GameCreate
 from app.crud.game import crud_game
-from app.schemas.review import ReviewCreate, ReviewCreate
+from app.schemas.review import (ReviewCreate)
 from app.schemas.source import GameSourceCreate
 from app.schemas.reviewer import ReviewerCreate
 from app.crud.reviewer import crud_reviewer
+import app.models as models
+import app.schemas as schemas
 from .scraper import SteamScraper, Scraper, DoupeScraper, GamespotScraper
 from .gamespot_resources import GamespotRequestParams, GamespotReview, GamespotGame, GamespotReviewer
 from .doupe_resources import DoupeReview, DoupeGame, DoupeReviewer
-from .steam_resources import SteamAppListResponse, SteamApp, SteamReview, SteamAppDetail, SteamReviewer
-from .constants import STEAM_REVIEWS_API_RATE_LIMIT, ScrapingResourceType
+from .steam_resources import SteamAppListResponse, SteamApp, SteamReview, SteamAppDetail, SteamReviewer, \
+    SteamApiLanguageCodes
+from .constants import STEAM_REVIEWS_API_RATE_LIMIT, ScrapingMode
 from app.core.config import settings
-from sqlalchemy import exc
+from sqlalchemy import exc, and_
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -30,9 +34,20 @@ logging.basicConfig(
 )
 logger = logging.getLogger("scraper_to_db.py")
 
-ScrapedReview = TypeVar('ScrapedReview', SteamReview, DoupeReview, GamespotReview)
-ScrapedGame = TypeVar('ScrapedGame', SteamAppDetail, DoupeGame, GamespotGame)
-ScrapedReviewer = TypeVar('ScrapedReviewer', SteamReviewer, DoupeReviewer, GamespotReviewer)
+ScrapedReviewType = TypeVar('ScrapedReviewType', SteamReview, DoupeReview, GamespotReview)
+ScrapedGameType = TypeVar('ScrapedGameType', SteamAppDetail, DoupeGame, GamespotGame)
+ScrapedReviewerType = TypeVar('ScrapedReviewerType', SteamReviewer, DoupeReviewer, GamespotReviewer)
+ScrapedResourceType = Union[ScrapedReviewType, ScrapedGameType, ScrapedReviewerType]
+
+
+class ScrapingReviewsCriteria(BaseModel):
+    game_id: Optional[int] = None
+    reviewer_id: Optional[int] = None
+    source_id: Optional[int] = None
+    language: Optional[SteamApiLanguageCodes] = "czech"
+    day_range: Optional[int] = None
+    polarity: Optional[Literal["positive", "negative", "neutral"]] = None
+
 
 class DBScraper:
     @classmethod
@@ -47,7 +62,7 @@ class DBScraper:
 
     def __init__(self):
         self.scraper = None
-        self.session = None
+        self.session: Optional[AsyncSession] = None
         self.db_source = None
 
     async def scrape_games(self, bulk_size: int = 20, end_after: int = 1000) -> List[int]:
@@ -114,47 +129,62 @@ class DBScraper:
             logger.log(logging.INFO, f"Group {group_counter}/{len(games) // bulk_size} done!")
             group_counter += 1
 
+    async def bulk_insert_scraped_data(self, data: List[ScrapedResourceType], scraping: ScrapingMode):
+        ...
 
+    async def scrape_reviews_for_game(
+            self,
+            game_id: int,
+            day_range: int = None,
+            language: str = None,
+            max_reviews: int = 100,
+            **kwargs
+    ) -> Tuple[int, int]:
+        num_reviews_scraped = 0
+        source_game_id = await crud_game.get_source_game_id(self.session, id=game_id)
+        async for page in self.scraper.game_reviews_page_generator(game_id=source_game_id, language=language, max_reviews=max_reviews, **kwargs):
+            num_reviews_scraped += len(page)
+            reviews = [reviews.dict(by_alias=True) for reviews in page]
+            reviewers = [r.get("reviewer") for r in reviews]
 
-    async def prepare_scraped_data(self, scraping: ScrapingResourceType,  **kwargs):
-        if scraping == ScrapingResourceType.GAME:
-            return self.prepare_game_data(data)
-        elif scraping == ScrapingResourceType.REVIEW:
-            return self.prepare_review_data(data)
-        elif scraping == ScrapingResourceType.REVIEWER:
-            return self.prepare_reviewer_data(data)
-        else:
-            raise ValueError(f"Unknown scraping resource type: {scraping}")
+            review_ids = [str(r.get("source_review_id")) for r in reviews]
+            reviewer_ids = [str(r.get("source_reviewer_id")) for r in reviewers]
 
-    def prepare_game_data(self, game: BaseModel) -> GameCreate:
-        return GameCreate(
-            **game.dict(by_alias=True)
-        )
+            query_reviews = select(models.Review.id, models.Review.source_review_id)\
+                .where(and_(models.Review.source_id == self.db_source.id,
+                            models.Review.source_review_id.in_(review_ids)))
+            query_reviewers = select(models.Reviewer.id, models.Reviewer.source_reviewer_id)\
+                .where(and_(models.Reviewer.source_id == self.db_source.id,
+                            models.Reviewer.source_reviewer_id.in_(reviewer_ids)))
+            db_review_ids = await self.session.execute(query_reviews)
+            db_reviewer_ids = await self.session.execute(query_reviewers)
+            db_review_ids = {source_id: db_id for db_id, source_id in db_review_ids.all()}
+            db_reviewer_ids = {source_id: db_id for db_id, source_id in db_reviewer_ids.all()}
 
-    def prepare_review_data(self, review: ScrapedReview) -> ReviewCreate:
-        data = review.dict(by_alias=True)
-        reviewer = data.get("reviewer_id")
+            objects_to_insert = []
+            for review in reviews:
+                source_review_id = review.get("source_review_id")
+                source_reviewer_id = review.get("reviewer").get("source_reviewer_id")
+                if source_review_id in db_review_ids.keys():
+                    continue
+                db_review = models.Review(**ReviewCreate(**review).dict())
+                db_review.game_id = game_id
+                db_review.source_id = self.db_source.id
+                # db_review.source_reviewer_id = source_reviewer_id
+                objects_to_insert.append(db_review)
 
-        return ReviewCreate(
-            **review.dict(by_alias=True)
-        )
+                if source_reviewer_id not in db_reviewer_ids.keys():
+                    db_reviewer = models.Reviewer(**ReviewerCreate(**review.get("reviewer")).dict())
+                    db_review.reviewer = db_reviewer
+                    db_reviewer.source_id = self.db_source.id
+                    objects_to_insert.append(db_reviewer)
+                else:
+                    db_review.reviewer_id = db_reviewer_ids.get(source_reviewer_id)
 
-    def prepare_reviewer_data(self, reviewer: BaseModel) -> ReviewerCreate:
-        return ReviewerCreate(
-            **reviewer.dict(by_alias=True)
-        )
+            self.session.add_all(objects_to_insert)
+            await self.session.commit()
 
-
-    def apply_bulk_insert(cls, reviews: List[ScrapedReview], reviewers: List[ReviewerCreate]):
-        return cls.insert_bulk_reviews_to_db
-
-    async def insert_bulk_reviews_to_db(self, reviews: List[ScrapedReview], reviewers: List[ReviewerCreate]):
-
-        for review in reviews:
-            review.source_id = self.db_source.id
-
-        await crud_reviewer.create_multi(self.session, reviewers)
-        await crud_review.create_multi(self.session, reviews)
+        return game_id, num_reviews_scraped
 
     async def scrape_all_reviews_for_not_updated_steam_games(self, game_ids: List[str] = None,
                                                              max_reviews: int = 100000):

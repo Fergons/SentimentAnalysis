@@ -126,7 +126,7 @@ class Scraper:
                     response = await self.session.get(url, **kwargs)
                 except (TimeoutError, ConnectTimeout, ConnectError, AssertionError):
                     if response is not None:
-                        logger.log(logging.INFO, f"api call:{response.url} TIMED OUT! retry: {retry+1}")
+                        logger.log(logging.INFO, f"api call:{response.url} TIMED OUT! retry: {retry + 1}")
                     continue
                 else:
                     logger.log(logging.INFO, f"api call:{response.url}")
@@ -214,7 +214,6 @@ class SteamScraper(Scraper):
             counter += 1
         return results
 
-
     @staticmethod
     def game_reviews_formatter(r):
         result = r.json()
@@ -226,15 +225,15 @@ class SteamScraper(Scraper):
         # return result["reviews"], result["query_summary"]["num_reviews"], result["cursor"]
 
     async def game_reviews_page_generator(self,
-                               game_id: Union[str, int],
-                               filter: Optional[str] = "recent",
-                               language: Optional[str] = "czech",
-                               day_range: Optional[int] = None,
-                               review_type: Optional[str] = "all",
-                               purchase_type: Optional[str] = "all",
-                               cursor: Optional[str] = "*",
-                               limit: int = 100):
-
+                                          game_id: Union[str, int],
+                                          filter: Optional[str] = "recent",
+                                          language: Optional[str] = "czech",
+                                          day_range: Optional[int] = None,
+                                          review_type: Optional[str] = "all",
+                                          purchase_type: Optional[str] = "all",
+                                          cursor: Optional[str] = "*",
+                                          max_reviews: int = 100) -> AsyncGenerator[SteamReview, None]:
+        reviews_processed = 0
         params = {
             "json": 1,
             "filter": filter,
@@ -243,28 +242,28 @@ class SteamScraper(Scraper):
             "cursor": cursor,
             "review_type": review_type,
             "purchase_type": purchase_type,
-            "num_per_page": limit if limit <= 100 else 100
+            "num_per_page": max_reviews if max_reviews <= 100 else 100
         }
         params = {k: v for k, v in params.items() if v is not None}
-        while limit > 0:
+        while reviews_processed < max_reviews:
             async with self.rate_limit:
                 try:
                     response = await self.session.get(f"{self.user_reviews_url}/{game_id}", params=params)
                 except (TimeoutError, ConnectTimeout, ConnectError, AssertionError):
                     continue
 
-            logger.log(logging.INFO, f"api call:{game_id}: {response.url}")
+            logger.debug(f"api call: game {game_id}: {response.url}")
             result: SteamAppReviewsResponse = self.handle_response(response,
                                                                    validator=self.json_response_validator,
                                                                    formatter=self.game_reviews_formatter)
             if result is None:
-                logger.log(logging.INFO, f"no result StopAsyncIteration ")
+                logger.debug(f"no result StopAsyncIteration ")
                 break
 
             reviews, num_reviews, cursor = result.reviews, result.query_summary.num_reviews, result.cursor
 
             if params.get("cursor") is None or params.get("cursor") == cursor:
-                logger.log(logging.INFO, f"cursor StopAsyncIteration {result}")
+                logger.debug(f"cursor StopAsyncIteration {result}")
                 break
             # new cursor received which implies theres is more content but no data in response ->
             # fallback to previous call
@@ -272,8 +271,11 @@ class SteamScraper(Scraper):
                 continue
 
             params["cursor"] = cursor
-            limit -= num_reviews
-            logger.log(logging.DEBUG, f"api call:{game_id}: get_game_reviews yield")
+            reviews_processed += num_reviews
+            if reviews_processed >= max_reviews:
+                reviews = reviews[:max_reviews]
+                logger.debug(f"max_reviews StopAsyncIteration")
+            logger.debug(f"game_api call: game {game_id}: get_game_reviews yield")
             yield reviews
 
     async def get_game_reviews(self, game_id, **kwargs) -> Tuple[str, List[SteamReview]]:
@@ -366,7 +368,7 @@ class GamespotScraper(Scraper):
             if result is None:
                 failed_urls.append(url)
                 continue
-            logger.info(f"api call:{url}\n{' '*30} returned {len(result.results)} reviews")
+            logger.info(f"api call:{url}\n{' ' * 30} returned {len(result.results)} reviews")
             yield [r for r in result.results if r.game is not None]
 
     async def get_game_info(self, game_id: Union[int, str]) -> Optional[SteamAppDetail]:
@@ -423,19 +425,19 @@ class DoupeScraper(Scraper):
     def game_review_formatter(r, review=None) -> Optional[DoupeReview]:
         soup = BeautifulSoup(r.text, "html.parser")
         # all_json_data = soup.find_all('script', attrs={'type':'application/ld+json'})
-        good_container = soup.find("div", {"class": "rating-plus"}) or\
-                         soup.find("ul", {"class": "game-plus"}) or\
+        good_container = soup.find("div", {"class": "rating-plus"}) or \
+                         soup.find("ul", {"class": "game-plus"}) or \
                          soup.find("td", {"bgcolor": "#e2e2e2"})
 
-        bad_container = soup.find("div", {"class": "rating-minus"}) or\
-                        soup.find("ul", {"class": "game-minus"}) or\
+        bad_container = soup.find("div", {"class": "rating-minus"}) or \
+                        soup.find("ul", {"class": "game-minus"}) or \
                         soup.find("td", {"bgcolor": "#ababab"})
 
-        score_container = soup.find("span", {"class": "bigger"})or \
-                soup.find("span", {"class": "rating"}) or \
-                soup.find("strong",
-                          string=lambda t: t in ("Závěrečné hodnocení:",
-                                                 "Celkové hodnocení:"))
+        score_container = soup.find("span", {"class": "bigger"}) or \
+                          soup.find("span", {"class": "rating"}) or \
+                          soup.find("strong",
+                                    string=lambda t: t in ("Závěrečné hodnocení:",
+                                                           "Celkové hodnocení:"))
 
         # text_container = soup.find("div", {"class": "infobox-data"})
         text_container = soup.find("h3", string="Verdikt")
@@ -447,8 +449,8 @@ class DoupeScraper(Scraper):
         if bad_container is not None:
             review.bad = "|".join([x.string for x in bad_container.find_all("li", recursive=True)])
         if score_container is not None:
-            review.score = score_container.string or\
-                           score_container.get("content") or\
+            review.score = score_container.string or \
+                           score_container.get("content") or \
                            score_container.next_sibling.split("/")[0]
         if review.text is None:
             review.text = ""
@@ -464,12 +466,13 @@ class DoupeScraper(Scraper):
                                                   validator=self.html_response_validator,
                                                   formatter=self.game_reviews_formatter)
 
-    async def game_reviews_page_generator(self, max_reviews: int = 100, max_pages: int = MAX_PAGE) -> AsyncGenerator[List[GamespotReview], None]:
+    async def game_reviews_page_generator(self, max_reviews: int = 100, max_pages: int = MAX_PAGE) -> AsyncGenerator[
+        List[GamespotReview], None]:
         params = DoupeReviewsRequestParams(
             pgnum=1
         )
-        if max_pages*MAX_PER_PAGE > int(max_reviews/MAX_PER_PAGE)*2:
-            max_pages = int(max_reviews/MAX_PER_PAGE)*2
+        if max_pages * MAX_PER_PAGE > int(max_reviews / MAX_PER_PAGE) * 2:
+            max_pages = int(max_reviews / MAX_PER_PAGE) * 2
             if max_pages > max_pages:
                 max_pages = max_pages
         tasks = [self.get_reviews_page(params=params.copy(update={"pgnum": page_num}))
@@ -481,10 +484,10 @@ class DoupeScraper(Scraper):
                 failed_urls.append(url)
                 continue
             await self.get_reviews_detail(result)
-            logger.info(f"api call:{url}\n{' '*30} returned {len(result)} reviews")
+            logger.info(f"api call:{url}\n{' ' * 30} returned {len(result)} reviews")
             yield result
 
-    async def get_reviews_detail(self,  reviews: List[DoupeReview]) -> List[DoupeReview]:
+    async def get_reviews_detail(self, reviews: List[DoupeReview]) -> List[DoupeReview]:
         tasks = [self.get_review_detail(review=review)
                  for review in reviews]
         results = await asyncio.gather(*tasks)
@@ -495,7 +498,6 @@ class DoupeScraper(Scraper):
                                         headers=self.headers)
 
         return URL(review.url), self.handle_response(response,
-                                                  validator=self.html_response_validator,
-                                                  formatter=self.game_review_formatter,
-                                                  formatter_params={"review": review})
-
+                                                     validator=self.html_response_validator,
+                                                     formatter=self.game_review_formatter,
+                                                     formatter_params={"review": review})

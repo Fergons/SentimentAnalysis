@@ -2,7 +2,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Optional, Union, List
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, validator, root_validator
 
 
 class SteamApiLanguageCodes(str, Enum):
@@ -107,6 +107,14 @@ class SteamReview(BaseModel):
     steam_purchase: bool
     received_for_free: bool
     written_during_early_access: bool
+    source_reviewer_id: str = ""
+    playtime_at_review: Optional[int] = None
+
+    @root_validator(pre=True)
+    def _set_fields(cls, values: dict) -> dict:
+        values["source_reviewer_id"] = values["author"]["steamid"]
+        values["playtime_at_review"] = values["author"]["playtime_at_review"]
+        return values
 
     class Config:
         use_enum_values = True

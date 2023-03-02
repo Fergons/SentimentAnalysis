@@ -1,11 +1,14 @@
 from enum import Enum
 
-class ScrapingResourceType(str, Enum):
-    alias = "scraping-type"
-    GAME = "game"
-    REVIEW = "review"
-    REVIEWER = "reviewer"
-    SOURCE = "source"
+
+class ScrapingMode(str, Enum):
+    alias = "scraping-mode"
+    REVIEWS_OF_GAME = "reviews_of_game"
+    REVIEWS_FROM_REVIEWER = "reviews_from_reviewer"
+    REVIEWS_FROM_SOURCE = "reviews_from_source"
+    REVIEWERS_OF_GAME = "reviewers_of_game"
+    REVIEWERS_FROM_SOURCE = "reviewers_from_source"
+
 
 class SourceName(str, Enum):
     STEAM = 'steam'
@@ -67,5 +70,3 @@ SOURCES = {
             "list_of_games_url": None,
         },
 }
-
-

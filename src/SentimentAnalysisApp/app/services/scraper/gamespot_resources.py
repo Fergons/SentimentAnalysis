@@ -123,7 +123,7 @@ class GamespotGame(BaseModel):
 
 
 class GamespotReviewer(BaseModel):
-    source_reviewer_id: str = Field(alias="source_reviewer_id")
+    source_reviewer_id: str = Field(alias="source_reviewer_id", default="")
     name: str = ""
 
     class Config:
@@ -132,7 +132,7 @@ class GamespotReviewer(BaseModel):
 
 class GamespotReview(BaseModel):
     id: int = Field(alias="source_review_id")
-    authors: str
+    authors: GamespotReviewer = Field(alias="reviewer")
     lede: str = Field(alias="text")
     language: str = "english"
     publish_date: datetime = Field(alias="created_at")

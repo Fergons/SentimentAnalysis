@@ -85,6 +85,10 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]):
         result = await db.execute(stmt)
         return result.scalars().first()
 
+    async def get_source_game_id(self, db: AsyncSession, *, id: int) -> str:
+        result = await db.scalars(select(GameSource.source_game_id).where(GameSource.game_id == id))
+        return result.first()
+
     async def create_with_categories_by_names(
             self, db: AsyncSession, *, obj_in: GameCreate, names: List[str]
     ) -> Game:

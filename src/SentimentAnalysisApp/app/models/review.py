@@ -6,6 +6,7 @@ from sqlalchemy import Boolean, Column, Integer, String, DateTime, func, Foreign
 from sqlalchemy.orm import relationship
 from sqlalchemy_utils import aggregated
 
+
 class Review(Base):
     id = Column(Integer, primary_key=True, index=True)
     source_review_id = Column(String)  # source platform dependant
@@ -13,6 +14,7 @@ class Review(Base):
     game_id = Column(Integer, ForeignKey('game.id'))
     reviewer_id = Column(Integer, ForeignKey('reviewer.id'))
     source_id = Column(Integer, ForeignKey('source.id'))
+    # url = Column(String)
 
     language = Column(String)
     text = Column(TEXT)
