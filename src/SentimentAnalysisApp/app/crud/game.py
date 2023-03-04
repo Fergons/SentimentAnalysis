@@ -49,17 +49,22 @@ class CRUDCategory(CRUDBase[Category, CategoryCreate, CategoryUpdate]):
         await db.commit()
 
     async def add_categories_for_game(self, db: AsyncSession, *, db_game: Game, names: List[str]):
+        result = await db.execute(select(self.model.name, self.model.id).where(self.model.name.in_(names)))
+        category_ids = result.all()
+        category_ids = {name: id for name, id in category_ids}
+        db_objs_to_add = []
         for name in names:
-            category_id = await self.get_id_by_name(db, name=name)
-            if category_id is None:
+            id = category_ids.get(name)
+            if id is None:
                 db_obj = Category(name=name)  # type: ignore
                 assoc = GameCategory(game=db_game)  # type: ignore
                 db_obj.games.append(assoc)
-                db.add(assoc)
-                db.add(db_obj)
+                db_objs_to_add.append(db_obj)
+                db_objs_to_add.append(db_objs_to_add)
             else:
-                assoc = GameCategory(game=db_game, category_id=category_id)  # type: ignore
-                db.add(assoc)
+                assoc = GameCategory(game=db_game, category_id=id)  # type: ignore
+                db_objs_to_add.append(assoc)
+        db.add_all(db_objs_to_add)
 
 
 class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]):

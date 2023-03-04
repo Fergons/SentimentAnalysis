@@ -9,12 +9,12 @@ import httpx
 from http import HTTPStatus
 from httpx import ConnectTimeout, ConnectError, URL, Response
 from .doupe_resources import DoupeReviewsRequestParams, game_tags, DoupeReview, MAX_PAGE, MAX_PER_PAGE
-from .constants import ContentType, STEAM_API_RATE_LIMIT, SOURCES, SourceName, DEFAULT_RATE_LIMIT
+from .constants import ContentType, STEAM_API_RATE_LIMIT, SOURCES, SourceName, DEFAULT_RATE_LIMIT, ScrapingResource
 from .steam_resources import (SteamAppDetail,
                               SteamAppDetailResponse,
                               SteamAppReviewsResponse,
                               SteamAppListResponse,
-                              SteamApp, SteamReview)
+                              SteamApp, SteamReview, SteamWebApiLanguageCodes)
 
 from .gamespot_resources import (GamespotRequestParams,
                                  GamespotFilterParam,
@@ -32,6 +32,10 @@ logger = logging.getLogger()
 
 
 class Scraper:
+    """
+    Base class for all scrapers
+    """
+
     @staticmethod
     def json_response_validator(r: httpx.Response):
         return r.status_code == HTTPStatus.OK and ContentType.JSON in r.headers.get(ContentType.alias, "")
@@ -44,33 +48,48 @@ class Scraper:
     def html_response_validator(r: httpx.Response):
         return r.status_code == HTTPStatus.OK and ContentType.HTML in r.headers.get(ContentType.alias, "")
 
-    def __init__(self,
-                 url: str = None,
-                 user_reviews_url: Optional[str] = None,
-                 critic_reviews_url: Optional[str] = None,
-                 game_detail_url: Optional[str] = None,
-                 list_of_games_url: Optional[str] = None,
-                 reviewer_detail_url: Optional[str] = None,
-                 list_of_reviewers_url: Optional[str] = None,
-                 content_type: Union[str, ContentType] = None,
-                 endpoints: Optional[dict] = None,
-                 is_api: bool = False,
-                 auth: bool = False,
-                 api_key: Optional[str] = None,
-                 session: Union[httpx.AsyncClient, httpx.Client, None] = None,
-                 rate_limit: dict = DEFAULT_RATE_LIMIT,
-                 **kwargs):
+    def __init__(
+            self,
+            url: str = None,
+            user_reviews_url: Optional[str] = None,
+            critic_reviews_url: Optional[str] = None,
+            game_detail_url: Optional[str] = None,
+            list_of_games_url: Optional[str] = None,
+            reviewer_detail_url: Optional[str] = None,
+            list_of_reviewers_url: Optional[str] = None,
+            content_type: Union[str, ContentType] = None,
+            endpoints: Optional[dict] = None,
+            is_api: bool = False,
+            auth: bool = False,
+            api_key: Optional[str] = None,
+            session: Union[httpx.AsyncClient, None] = None,
+            rate_limit: dict = None,
+            **kwargs):
+        """
+        :param url: Base url of the website
+        :param user_reviews_url: Url for user reviews
+        :param critic_reviews_url: Url for critic reviews
+        :param game_detail_url: Url for game detail
+        :param list_of_games_url: Url for list of games
+        :param reviewer_detail_url: Url for reviewer detail
+        :param list_of_reviewers_url: Url for list of reviewers
+        :param content_type: Content type expected from the response.
+        :param endpoints: Dictionary of endpoints available for the api source
+        :param is_api: Boolean to indicate if the source is an api
+        :param auth: Boolean to indicate if the source requires authentication
+        :param api_key: API key for the source
+        :param session: httpx session
+        :param rate_limit: Rate limit for the source
+        :param kwargs: Additional keyword arguments
+        """
 
         self.url = url
         self.is_api = is_api
         self.content_type = content_type
-
         self.user_reviews_url = user_reviews_url
         self.critic_reviews_url = critic_reviews_url
-
         self.list_of_reviewers_url = list_of_reviewers_url
         self.reviewer_detail_url = reviewer_detail_url
-
         self.game_detail_url = game_detail_url
         self.list_of_games_url = list_of_games_url
 
@@ -78,9 +97,8 @@ class Scraper:
 
         self.auth = auth
         self.api_key = api_key
-        self.session: Union[httpx.AsyncClient, httpx.Client, None] = session
+        self.session: Union[httpx.AsyncClient, None] = session
         self.rate_limit = AsyncLimiter(**rate_limit)
-        self.request_counter = 0
 
         self.default_request_params = {"api_key": self.api_key} if self.api_key is not None else {}
         self.headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0"
@@ -88,20 +106,28 @@ class Scraper:
                         # "Accept":"text/html,application/xhtml+xml,application/xml"
                         }
 
+        self.scraper_task = None
+
     async def __aenter__(self):
-        self.session = httpx.AsyncClient(timeout=None)
+        if self.session is None:
+            self.session = httpx.AsyncClient(timeout=None)
         return self
 
     async def __aexit__(self, *args):
         await self.session.aclose()
 
-    def handle_response(self,
-                        response: httpx.Response,
-                        validator: Callable = lambda r: Scraper.json_response_validator(r),
-                        formatter: Callable = lambda r: r.json(),
-                        validator_params: dict = {},
-                        formatter_params: dict = {},
-                        ) -> Any:
+    def handle_response(
+            self,
+            response: httpx.Response,
+            validator: Callable = lambda r: Scraper.json_response_validator(r),
+            formatter: Callable = lambda r: r.json(),
+            validator_params: dict = None,
+            formatter_params: dict = None,
+    ) -> Any:
+        if validator_params is None:
+            validator_params = {}
+        if formatter_params is None:
+            formatter_params = {}
         if validator(response, **validator_params):
             try:
                 return formatter(response, **formatter_params)
@@ -154,16 +180,19 @@ class Scraper:
     async def get_reviewer_info(self, reviewer_id):
         pass
 
+    async def resource_page_generator(self, resource: ScrapingResource, page_size: int = 100, params: dict = None):
+        pass
+
 
 class SteamScraper(Scraper):
     _source = SOURCES[SourceName.STEAM]
-    _rate_limit = STEAM_API_RATE_LIMIT
 
-    def __init__(self, api_key: str = None, rate_limit: dict = _rate_limit):
+    def __init__(self, api_key: str = None, rate_limit: dict = None):
+        if rate_limit is not None:
+            self._source["rate_limit"] = rate_limit
         super().__init__(content_type=ContentType.JSON,
                          is_api=True,
                          api_key=api_key,
-                         rate_limit=rate_limit,
                          **self._source
                          )
 
@@ -189,7 +218,7 @@ class SteamScraper(Scraper):
     async def get_game_info(self, game_id: Union[int, str]) -> Optional[SteamAppDetail]:
         params = {
             "appids": game_id,
-            "language": "eng"
+            "language": SteamWebApiLanguageCodes.ENGLISH.value,
         }
 
         async with self.rate_limit:
@@ -286,7 +315,7 @@ class SteamScraper(Scraper):
             # ...
             processor = kwargs.get("processor")
             if processor is not None:
-                processor(game_id=game_id, reviews=page)
+                await processor(game_id=game_id, reviews=page)
 
             all_reviews.extend(page)
         return game_id, all_reviews
@@ -309,13 +338,13 @@ class SteamScraper(Scraper):
 
 class GamespotScraper(Scraper):
     _source = SOURCES[SourceName.GAMESPOT]
-    _rate_limit = DEFAULT_RATE_LIMIT
 
-    def __init__(self, api_key: str, rate_limit: dict = _rate_limit):
+    def __init__(self, api_key: str, rate_limit: dict = None):
+        if rate_limit is not None:
+            self._source["rate_limit"] = rate_limit
         super().__init__(content_type=ContentType.JSON,
                          is_api=True,
                          api_key=api_key,
-                         rate_limit=rate_limit,
                          **self._source)
         self.api_key = api_key
 
@@ -395,13 +424,13 @@ class GamespotScraper(Scraper):
 
 class DoupeScraper(Scraper):
     _source = SOURCES[SourceName.DOUPE]
-    _rate_limit = DEFAULT_RATE_LIMIT
 
-    def __init__(self, api_key: str = None, rate_limit: dict = _rate_limit):
+    def __init__(self, api_key: str = None, rate_limit: dict = None):
+        if rate_limit is not None:
+            self._source["rate_limit"] = rate_limit
         super().__init__(content_type=ContentType.JSON,
                          is_api=False,
                          api_key=api_key,
-                         rate_limit=rate_limit,
                          **self._source)
 
     @staticmethod

@@ -2,7 +2,7 @@ import hashlib
 import json
 from ..scraper import SteamScraper
 import pytest
-import asyncio
+
 
 import logging
 
@@ -13,7 +13,7 @@ logging.basicConfig(
 logger = logging.getLogger()
 
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_get_games_info():
     async with SteamScraper() as scraper:
         infos = await scraper.get_games_info([730, 630])
@@ -21,22 +21,22 @@ async def test_get_games_info():
 
 
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_get_game_reviews():
     reviews = []
     async with SteamScraper() as scraper:
-        async for page in scraper.game_reviews_page_generator(730, limit=200):
+        async for page in scraper.game_reviews_page_generator(730, max_reviews=200):
             reviews.extend(page)
     assert len(reviews) > 100
 
 
 # possible errors due to unexpected returns and blocking rate limits
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_get_game_reviews_with_large_limit():
     reviews = []
-    hashes = []
+    max_reviews = 200
     async with SteamScraper() as scraper:
-        async for page in scraper.game_reviews_page_generator(730, language="czech", limit=200):
+        async for page in scraper.game_reviews_page_generator(730, language="czech", max_reviews=max_reviews):
 
             try:
                 assert all(map(lambda x: x.language == "czech", page))
@@ -46,13 +46,14 @@ async def test_get_game_reviews_with_large_limit():
 
             reviews.extend(page)
 
-    assert len(reviews) >= 3000
+    assert len(reviews) > 0
+    assert len(reviews) <= max_reviews
 
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_get_reviews_from_list_of_game_ids():
     async with SteamScraper() as scraper:
-        await scraper.get_games_reviews([730, 620, 578080], [{"language": "czech", "limit": 1000} for x in range(3)])
+        await scraper.get_games_reviews([730, 620, 578080], [{"language": "czech", "max_reviews": 1000} for x in range(3)])
 
 
 

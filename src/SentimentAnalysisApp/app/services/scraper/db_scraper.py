@@ -4,7 +4,7 @@ import logging
 import random
 from typing import List, Optional, Union, TypeVar, Tuple, Literal, Any
 
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
@@ -34,24 +34,9 @@ logging.basicConfig(
 )
 logger = logging.getLogger("scraper_to_db.py")
 
-ScrapedReviewType = TypeVar('ScrapedReviewType', SteamReview, DoupeReview, GamespotReview)
-ScrapedGameType = TypeVar('ScrapedGameType', SteamAppDetail, DoupeGame, GamespotGame)
-ScrapedReviewerType = TypeVar('ScrapedReviewerType', SteamReviewer, DoupeReviewer, GamespotReviewer)
-ScrapedResourceType = Union[ScrapedReviewType, ScrapedGameType, ScrapedReviewerType]
-
-
-class ScrapingReviewsCriteria(BaseModel):
-    game_id: Optional[int] = None
-    reviewer_id: Optional[int] = None
-    source_id: Optional[int] = None
-    language: Optional[SteamApiLanguageCodes] = "czech"
-    day_range: Optional[int] = None
-    polarity: Optional[Literal["positive", "negative", "neutral"]] = None
-
-
 class DBScraper:
     @classmethod
-    async def create(cls, scraper: Scraper, session: AsyncSession):
+    async def create(cls, scraper: Scraper = None, session: AsyncSession = None):
         self = DBScraper()
         self.scraper = scraper
         self.session = session
@@ -128,9 +113,6 @@ class DBScraper:
 
             logger.log(logging.INFO, f"Group {group_counter}/{len(games) // bulk_size} done!")
             group_counter += 1
-
-    async def bulk_insert_scraped_data(self, data: List[ScrapedResourceType], scraping: ScrapingMode):
-        ...
 
     async def scrape_reviews_for_game(
             self,
