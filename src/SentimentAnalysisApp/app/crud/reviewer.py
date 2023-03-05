@@ -1,5 +1,6 @@
 from typing import List, Optional
 from fastapi.encoders import jsonable_encoder
+from sqlalchemy import and_
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
@@ -42,6 +43,15 @@ class CRUDReviewer(CRUDBase[Reviewer, ReviewerCreate, ReviewerUpdate]):
             db_objs.append(db_obj)
         db.add_all(db_objs)
         await db.commit()
+
+    async def get_ids_by_source_reviewer_ids(self, db: AsyncSession, *, source_id: int,
+                                             source_reviewer_ids: List[str]) -> dict:
+        result = await db.execute(
+            select(self.model.source_reviewer_id, self.model.id)
+            .where(
+                and_(self.model.source_id == source_id,
+                     self.model.source_reviewer_id.in_(source_reviewer_ids))))
+        return dict(result.all())
 
 
 crud_reviewer = CRUDReviewer(Reviewer)

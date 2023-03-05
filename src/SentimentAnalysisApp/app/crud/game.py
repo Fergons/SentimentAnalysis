@@ -60,7 +60,7 @@ class CRUDCategory(CRUDBase[Category, CategoryCreate, CategoryUpdate]):
                 assoc = GameCategory(game=db_game)  # type: ignore
                 db_obj.games.append(assoc)
                 db_objs_to_add.append(db_obj)
-                db_objs_to_add.append(db_objs_to_add)
+                db_objs_to_add.append(assoc)
             else:
                 assoc = GameCategory(game=db_game, category_id=id)  # type: ignore
                 db_objs_to_add.append(assoc)
@@ -80,6 +80,15 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]):
         result = await db.execute(select(self.model).where(self.model.id == game_id))
         db_obj = result.scalars().first()
         return db_obj
+
+    async def get_ids_by_source_game_ids(self, db: AsyncSession, source_id: int, source_game_ids: List[str]) -> dict:
+        result = await db.execute(select(GameSource.source_game_id, GameSource.game_id)
+                                  .where(and_(GameSource.source_id == source_id,
+                                              GameSource.source_game_id.in_(source_game_ids))))
+        game_ids = result.all()
+        if game_ids is None:
+            return {}
+        return dict(game_ids)
 
     async def get_by_name(self, db: AsyncSession, *, name: str) -> Optional[Category]:
         ts_query = func.plainto_tsquery(cast("english", RegConfig), name)

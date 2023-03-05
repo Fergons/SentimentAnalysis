@@ -88,6 +88,12 @@ class SteamReviewer(BaseModel):
     playtime_at_review: Optional[int] = None
     last_played: Optional[int] = None
 
+    @validator("steamid", pre=True, always=True)
+    def validate_id(cls, value):
+        if type(value) is not str:
+            return str(value)
+        return value
+
     class Config:
         allow_population_by_field_name = True
 
@@ -128,13 +134,16 @@ class SteamMetacriticReview(BaseModel):
 
 class SteamAppCategory(BaseModel):
     id: int
-    description: str
+    description: str = Field(alias="name")
+
+    class Config:
+        allow_population_by_field_name = True
 
 
 class SteamAppDetail(BaseModel):
     type: str = ""
     name: str = ""
-    steam_appid: int = Field(alias="source_game_id")
+    steam_appid: str = Field(alias="source_game_id")
     supported_languages: Optional[str] = None
     header_image: Optional[str] = Field(alias="image_url", default=None)
     developers: Optional[list] = None
@@ -155,6 +164,18 @@ class SteamAppDetail(BaseModel):
             value["date"],
             "%d %b, %Y"
         )
+
+    @validator("genres", pre=False, always=True)
+    def validate_genres(cls, value, values):
+        values["categories"].extend(value)
+        return value
+
+    @validator("steam_appid", pre=True, always=True)
+    def validate_id(cls, value):
+        if type(value) is not str:
+            return str(value)
+        return value
+
 
 
 class SteamAppReviewsResponse(BaseModel):

@@ -26,13 +26,14 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
 class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
     async def get_with_good_and_bad_by_language_multi(self, db: AsyncSession, *, language: str) -> List[Review]:
         result = await db.execute(
             select(self.model).where(and_(self.model.language == language,
-                                      or_(self.model.good != None, self.model.bad != None)
-                                      )
-                                 )
+                                          or_(self.model.good != None, self.model.bad != None)
+                                          )
+                                     )
         )
 
         return result.scalars().all()
@@ -63,9 +64,11 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
     async def get_multi_by_processed(self, db: AsyncSession, *, processed: bool, limit: int = 100, offset: int = 0) -> \
             List[Review]:
         if processed:
-            result = await db.execute(select(self.model).where(self.model.processed_at != None).limit(limit).offset(offset))
+            result = await db.execute(
+                select(self.model).where(self.model.processed_at != None).limit(limit).offset(offset))
         else:
-            result = await db.execute(select(self.model).where(self.model.processed_at == None).limit(limit).offset(offset))
+            result = await db.execute(
+                select(self.model).where(self.model.processed_at == None).limit(limit).offset(offset))
         return result.scalars().all()
 
     async def get_multi_with_aspects(self, db: AsyncSession, *,
@@ -226,6 +229,13 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
             selectinload(self.model.aspects)
         ))
         return result.scalars().first()
+
+    async def get_ids_by_source_review_ids(self, db: AsyncSession, source_id: int,
+                                           source_review_ids: List[str]) -> dict:
+        result = await db.execute(
+            select(self.model.source_review_id, self.model.id)
+            .where(and_(self.model.source_id == source_id, self.model.source_review_id.in_(source_review_ids))))
+        return dict(result.all())
 
 
 crud_review = CRUDReview(Review)

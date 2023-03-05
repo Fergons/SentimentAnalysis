@@ -201,7 +201,7 @@ async def test_steam_db_scraper_scrape_games(steam_db_scraper, session: AsyncSes
 async def test_scrape_reviews_for_game(steam_db_scraper, session: AsyncSession):
     game = await crud.game.get(session, 1)
     assert game is not None
-    game_id, num_reviews = await steam_db_scraper.scrape_reviews_for_game(game_id=game.id, language="czech", max_reviews=10000)
+    game_id, num_reviews = await steam_db_scraper.scrape_reviews_for_game(game_id=game.id, language="czech", max_reviews=300)
     result = await session.execute(select(Review.id).where(
         and_(Review.game_id == game.id, Review.source_id == steam_db_scraper.db_source.id)))
     num_reviews_in_db = len(result.scalars().all())

@@ -2,17 +2,17 @@ import argparse
 import asyncio
 import logging
 import random
-from typing import List, Optional, Union, TypeVar, Tuple, Literal, Any
+from typing import List, Optional, Union, TypeVar, Tuple, Literal, Any, Dict
 
 from pydantic import BaseModel, validator
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from db.session import async_session
+from app.db.session import async_session
 from app.crud.source import crud_source
 from app.crud.review import crud_review
 from app.schemas.game import GameCreate
-from app.crud.game import crud_game
+from app.crud.game import crud_game, crud_category
 from app.schemas.review import (ReviewCreate)
 from app.schemas.source import GameSourceCreate
 from app.schemas.reviewer import ReviewerCreate
@@ -33,6 +33,7 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s: %(message)s',
 )
 logger = logging.getLogger("scraper_to_db.py")
+
 
 class DBScraper:
     @classmethod
@@ -97,7 +98,6 @@ class DBScraper:
                     **detail.dict(by_alias=True)
                 )
                 categories = [category.description for category in detail.categories]
-                categories.extend([genre.description for genre in detail.genres])
                 logger.debug(f"Creating game {detail.steam_appid} with categories: {categories}")
                 game = await crud_game.create_with_categories_by_names_and_source(
                     self.session, obj_in=obj_in, source_id=self.db_source.id, source_game_id=detail.steam_appid,
@@ -114,6 +114,77 @@ class DBScraper:
             logger.log(logging.INFO, f"Group {group_counter}/{len(games) // bulk_size} done!")
             group_counter += 1
 
+    # async def scrape_games(self, bulk_size: int = 20, end_after: int = 1000) -> List[int]:
+    #     new_games_in_db = []
+    #     async for page in self.scraper.games_page_generator(page_size=bulk_size, max_games=end_after):
+    #         logger.info(f"Adding {len(page)} games to db!")
+    #         db_games = await self.add_games_to_db(page)
+    #         logger.info(f"Added {db_games.keys()} games to db!")
+    #         await self.session.commit()
+    #         new_games_in_db += db_games.keys()
+    #
+    #     return new_games_in_db
+
+    async def add_games_to_db(self, scraped_games: List[BaseModel]) -> Dict[str, models.Game]:
+        data = [game.dict(by_alias=True) for game in scraped_games]
+        source_game_ids = [game.get("source_game_id") for game in data]
+        db_game_ids = await crud_game.get_ids_by_source_game_ids(self.session,
+                                                                 source_id=self.db_source.id,
+                                                                 source_game_ids=source_game_ids)
+        db_games = {}
+        for game in data:
+            source_game_id = game.get("source_game_id")
+            obj_data = GameCreate(**game).dict()
+            db_id = db_game_ids.get(source_game_id)
+            db_game = models.Game(**obj_data)
+            if db_id is None:
+                categories = [category.get("name") for category in game.get("categories")]
+                await crud_category.add_categories_for_game(self.session, names=categories, db_game=db_game)
+            else:
+                db_game.id = db_id
+            db_games[source_game_id] = db_game
+            db_gamesource = models.GameSource(source_id=self.db_source.id, source_game_id=source_game_id, game=db_game)
+            self.session.add(db_gamesource)
+
+        self.session.add_all(db_games.values())
+        return db_games
+
+    async def add_reviews_to_db(self, scraped_reviews: List[BaseModel]) -> Dict[str, models.Review]:
+        data = [review.dict(by_alias=True) for review in scraped_reviews]
+        source_review_ids = [review.get("source_review_id") for review in data]
+        db_review_ids = await crud_review.get_ids_by_source_review_ids(self.session,
+                                                                       source_id=self.db_source.id,
+                                                                       source_review_ids=source_review_ids)
+        db_reviews = {}
+        for review in data:
+            source_review_id = review.get("source_review_id")
+            obj_data = ReviewCreate(**review).dict()
+            db_id = db_review_ids.get(source_review_id, None)
+            db_review = models.Review(**obj_data)
+            db_review.id = db_id
+            db_reviews[source_review_id] = db_review
+
+        self.session.add_all(db_reviews.values())
+        return db_reviews
+
+    async def add_reviewers_to_db(self, scraped_reviewers: List[BaseModel]) -> Dict[str, models.Reviewer]:
+        data = [reviewer.dict(by_alias=True) for reviewer in scraped_reviewers]
+        source_reviewer_ids = [reviewer.get("source_reviewer_id") for reviewer in data]
+        db_reviewer_ids = await crud_reviewer.get_ids_by_source_reviewer_ids(self.session,
+                                                                             source_id=self.db_source.id,
+                                                                             source_reviewer_ids=source_reviewer_ids)
+        db_reviewers = {}
+        for reviewer in data:
+            source_reviewer_id = reviewer.get("source_reviewer_id")
+            obj_data = ReviewerCreate(**reviewer).dict()
+            db_id = db_reviewer_ids.get(source_reviewer_id, None)
+            db_reviewer = models.Reviewer(**obj_data)
+            db_reviewer.id = db_id
+            db_reviewers[source_reviewer_id] = db_reviewer
+
+        self.session.add_all(db_reviewers.values())
+        return db_reviewers
+
     async def scrape_reviews_for_game(
             self,
             game_id: int,
@@ -124,7 +195,12 @@ class DBScraper:
     ) -> Tuple[int, int]:
         num_reviews_scraped = 0
         source_game_id = await crud_game.get_source_game_id(self.session, id=game_id)
-        async for page in self.scraper.game_reviews_page_generator(game_id=source_game_id, language=language, max_reviews=max_reviews, **kwargs):
+        async for page in self.scraper.game_reviews_page_generator(
+                game_id=source_game_id,
+                language=language,
+                day_range=day_range,
+                max_reviews=max_reviews, **kwargs):
+
             num_reviews_scraped += len(page)
             reviews = [reviews.dict(by_alias=True) for reviews in page]
             reviewers = [r.get("reviewer") for r in reviews]
@@ -132,10 +208,10 @@ class DBScraper:
             review_ids = [str(r.get("source_review_id")) for r in reviews]
             reviewer_ids = [str(r.get("source_reviewer_id")) for r in reviewers]
 
-            query_reviews = select(models.Review.id, models.Review.source_review_id)\
+            query_reviews = select(models.Review.id, models.Review.source_review_id) \
                 .where(and_(models.Review.source_id == self.db_source.id,
                             models.Review.source_review_id.in_(review_ids)))
-            query_reviewers = select(models.Reviewer.id, models.Reviewer.source_reviewer_id)\
+            query_reviewers = select(models.Reviewer.id, models.Reviewer.source_reviewer_id) \
                 .where(and_(models.Reviewer.source_id == self.db_source.id,
                             models.Reviewer.source_reviewer_id.in_(reviewer_ids)))
             db_review_ids = await self.session.execute(query_reviews)

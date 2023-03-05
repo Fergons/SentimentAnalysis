@@ -53,7 +53,7 @@ class ScraperTask(BaseModel):
     scraping_resources: List[ScrapingResource]
     scraping_criteria: Optional[ScrapingBaseCriteria] = None
 
-    @root_validator
+    @validator("scraping_mode", pre=True, always=True)
     def validate_scraping_mode(cls, value, values):
         """
         Validate that scraping_mode is not None and that it is an element of the enum ScrapingMode.

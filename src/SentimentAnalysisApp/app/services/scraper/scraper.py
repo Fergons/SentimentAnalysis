@@ -166,22 +166,31 @@ class Scraper:
         return response
 
     async def get_all_reviews(self):
-        pass
+        raise NotImplementedError
 
     async def get_game_reviews(self, game_id):
-        pass
+        raise NotImplementedError
 
     async def get_games(self):
-        pass
+        raise NotImplementedError
 
     async def get_game_info(self, game_id):
-        pass
+        raise NotImplementedError
 
     async def get_reviewer_info(self, reviewer_id):
-        pass
+        raise NotImplementedError
 
     async def resource_page_generator(self, resource: ScrapingResource, page_size: int = 100, params: dict = None):
-        pass
+        raise NotImplementedError
+
+    async def get_review_detail(self, review_id):
+        raise NotImplementedError
+
+    async def get_game_detail(self, game_id):
+        raise NotImplementedError
+
+    async def games_page_generator(self, page_size: int = 100, params: dict = None):
+        raise NotImplementedError
 
 
 class SteamScraper(Scraper):
@@ -243,6 +252,29 @@ class SteamScraper(Scraper):
             counter += 1
         return results
 
+    async def games_page_generator(self, max_games: int = 10, **kwargs) -> AsyncGenerator[List[SteamAppDetail], None]:
+        blacklist = kwargs.get("blacklist", [])
+        page_size = kwargs.get("page_size", 10)
+        games = await self.get_games()
+        if max_games is not None:
+            games = games[:max_games]
+        games = [game.appid for game in games if game.appid not in blacklist]
+        game_pages = [games[i:i + page_size] for i in range(0, len(games), page_size)]
+
+        logger.info("-" * 50)
+        logger.info(f"Number of games to be scraped: {len(games)}")
+        logger.info(f"Number of games per group: {page_size}")
+        logger.info(f"Number of groups: {len(game_pages)}")
+        logger.info("-" * 50)
+
+        counter = 1
+        for page in game_pages:
+            logger.info(f"Processing group {counter}/{len(game_pages) * 100}!")
+            tasks = [self.get_game_info(game) for game in page]
+            result = await asyncio.gather(*tasks)
+            logger.info(f"Group {counter}/{len(game_pages) * 100} processed!")
+            yield result
+
     @staticmethod
     def game_reviews_formatter(r):
         result = r.json()
@@ -261,7 +293,8 @@ class SteamScraper(Scraper):
                                           review_type: Optional[str] = "all",
                                           purchase_type: Optional[str] = "all",
                                           cursor: Optional[str] = "*",
-                                          max_reviews: int = 100) -> AsyncGenerator[SteamReview, None]:
+                                          max_reviews: int = 100,
+                                          **kwargs) -> AsyncGenerator[List[SteamReview], None]:
         reviews_processed = 0
         params = {
             "json": 1,
@@ -400,13 +433,13 @@ class GamespotScraper(Scraper):
             logger.info(f"api call:{url}\n{' ' * 30} returned {len(result.results)} reviews")
             yield [r for r in result.results if r.game is not None]
 
-    async def get_game_info(self, game_id: Union[int, str]) -> Optional[SteamAppDetail]:
+    async def get_game_info(self, game_id: Union[int, str]) -> Optional[GamespotGame]:
         pass
 
     async def get_game_reviews(self, **kwargs):
         pass
 
-    async def get_games_info(self, game_ids: Iterable[Union[str, int]]) -> List[SteamAppDetail]:
+    async def get_games_info(self, game_ids: Iterable[Union[str, int]]) -> List[GamespotGame]:
         pass
 
     async def get_all_reviews(self) -> List[GamespotReview]:
