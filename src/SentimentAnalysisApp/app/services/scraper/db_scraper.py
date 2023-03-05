@@ -25,7 +25,7 @@ from .gamespot_resources import GamespotRequestParams, GamespotReview, GamespotG
 from .doupe_resources import DoupeReview, DoupeGame, DoupeReviewer
 from .steam_resources import SteamAppListResponse, SteamApp, SteamReview, SteamAppDetail, SteamReviewer, \
     SteamApiLanguageCodes
-from .constants import STEAM_REVIEWS_API_RATE_LIMIT, ScrapingMode
+from .constants import STEAM_REVIEWS_API_RATE_LIMIT, STEAM_API_RATE_LIMIT
 from app.core.config import settings
 from sqlalchemy import exc, and_
 
@@ -87,9 +87,17 @@ class DBScraper:
                 if detail.type != "game":
                     try:
                         logger.debug("Creating non-game app...")
-                        await crud_game.create_non_game_app_from_source(
-                            self.session, source_id=self.db_source.id, source_obj_id=detail.steam_appid
-                        )
+                        result = await self.session.execute(select(models.GameSource.id).where(
+                            and_(
+                                models.GameSource.source_id == self.db_source.id,
+                                models.GameSource.source_game_id == detail.steam_appid
+                            )
+                        ))
+                        non_game_app = result.scalars().first()
+                        if non_game_app is None:
+                            await crud_game.create_non_game_app_from_source(
+                                self.session, source_id=self.db_source.id, source_obj_id=detail.steam_appid
+                            )
                     except exc.IntegrityError as e:
                         logger.error(f"Integrity Error: {e}")
                     finally:
@@ -197,14 +205,23 @@ class DBScraper:
 
     async def scrape_reviews_for_game(
             self,
-            game_id: int,
+            game_id: int = None,
+            source_game_id: str = None,
             day_range: int = None,
-            language: str = None,
+            language: str = "czech",
             max_reviews: int = 100,
             **kwargs
     ) -> Tuple[int, int]:
         num_reviews_scraped = 0
-        source_game_id = await crud_game.get_source_game_id(self.session, id=game_id)
+        if source_game_id is None and game_id is None:
+            raise ValueError("Either game_id or source_game_id must be provided!")
+        if game_id is None:
+            game_id = await crud_game.get_ids_by_source_game_ids(self.session,
+                                                                 source_id=self.db_source.id,
+                                                                 source_game_ids=[source_game_id])
+            game_id = game_id.get(source_game_id)
+        if source_game_id is None:
+            source_game_id = await crud_game.get_source_game_id(self.session, id=game_id)
         async for page in self.scraper.game_reviews_page_generator(
                 game_id=source_game_id,
                 language=language,
@@ -240,12 +257,14 @@ class DBScraper:
                 db_review.source_id = self.db_source.id
                 # db_review.source_reviewer_id = source_reviewer_id
                 objects_to_insert.append(db_review)
+                db_review_ids[source_review_id] = None
 
                 if source_reviewer_id not in db_reviewer_ids.keys():
                     db_reviewer = models.Reviewer(**ReviewerCreate(**review.get("reviewer")).dict())
                     db_review.reviewer = db_reviewer
                     db_reviewer.source_id = self.db_source.id
                     objects_to_insert.append(db_reviewer)
+                    db_reviewer_ids[source_reviewer_id] = None
                 else:
                     db_review.reviewer_id = db_reviewer_ids.get(source_reviewer_id)
 
@@ -260,46 +279,12 @@ class DBScraper:
             games = await crud_game.get_all_not_updated_db_games_from_source(self.session, source_id=self.db_source.id)
             game_ids = {game[1]: game[0] for game in games}
 
-        # split game_ids into list containing lists of 10 game_ids
-        _ids = list(game_ids.keys())
-        bulks = [_ids[i:i + 10] for i in range(0, len(_ids), 10)]
-        for bulk in bulks:
-            tasks = [self.scraper.get_game_reviews(source_game_id)
-                     for source_game_id in bulk]
-            counter = 1
-            for future in asyncio.as_completed(tasks):
-                result = await future
-                game_id, reviews = result
-
-                if len(reviews) > 0:
-                    review_create_objs = []
-                    for review in reviews:
-                        review_obj = ReviewCreate(source_id=self.db_source.id,
-                                                  game_id=game_ids[game_id],
-                                                  **review.dict(by_alias=True))
-                        reviewer_obj = ReviewerCreate(source_id=self.db_source.id,
-                                                      **review.author.dict(by_alias=True))
-
-                        logger.debug(f"Checking if reviewer {reviewer_obj.source_reviewer_id} in db.")
-                        db_reviewer_id = await crud_reviewer.get_id_by_source_id(self.session,
-                                                                                 source_id=self.db_source.id,
-                                                                                 source_obj_id=reviewer_obj.source_reviewer_id)
-                        logger.debug(f"Reviewer {reviewer_obj.source_reviewer_id} in db: "
-                                     f"{'FOUND' if db_reviewer_id is not None else 'NOT FOUND'}")
-                        if db_reviewer_id is None:
-                            db_reviewer = await crud_reviewer.create_from_source(self.session, obj_in=reviewer_obj)
-                            db_reviewer_id = db_reviewer.id
-
-                        review_obj.reviewer_id = db_reviewer_id
-                        review_create_objs.append(review_obj)
-
-                    logger.debug(f"Creating {len(review_create_objs)} reviews for game {game_id}...")
-                    await crud_review.create_multi(self.session, objs_in=review_create_objs)
-                    logger.debug(f"Created {len(review_create_objs)} reviews for game {game_id}!")
-
-                logger.log(logging.INFO, f"{counter}. results are from: {game_id} num_reviews: {len(reviews)}!")
-                logger.log(logging.INFO, f"Progress {counter}/{len(tasks)} tasks done!")
-                counter += 1
+        for source_game_id, game_id in game_ids.items():
+            logger.info(f"Scraping for game {source_game_id} started.")
+            _, num_reviews_scraped = await self.scrape_reviews_for_game(game_id=game_id,
+                                                                        source_game_id=source_game_id,
+                                                                        max_reviews=1000000)
+            logger.info(f"Scraping for game {source_game_id} finished. Scraped {num_reviews_scraped} reviews!")
 
     async def scrape_all_reviews(self, max_reviews: int = 100):
         async for page in self.scraper.game_reviews_page_generator(max_reviews=max_reviews):
@@ -364,7 +349,7 @@ async def scrape_doupe_reviews(rate_limit: dict = None):
 async def scrape_steam_games(rate_limit: dict = None):
     """Scrape all games from steam. This method is used to get initial data for system"""
     async with async_session() as session:
-        async with SteamScraper(rate_limit={"max_rate": 2, "time_period": 3}) as scraper:
+        async with SteamScraper(STEAM_API_RATE_LIMIT) as scraper:
             db_scraper = await DBScraper.create(scraper=scraper, session=session)
             await db_scraper.scrape_games(bulk_size=10)
 

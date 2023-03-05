@@ -80,12 +80,12 @@ class SteamReviewQuerySummary(BaseModel):
 
 
 class SteamReviewer(BaseModel):
-    steamid: int = Field(alias="source_reviewer_id")
+    steamid: str = Field(alias="source_reviewer_id")
     num_games_owned: int
     num_reviews: int
     playtime_forever: Optional[int] = None
     playtime_last_two_weeks: Optional[int] = None
-    playtime_at_review: Optional[int] = None
+    playtime_at_review: int = 0
     last_played: Optional[int] = None
 
     @validator("steamid", pre=True, always=True)

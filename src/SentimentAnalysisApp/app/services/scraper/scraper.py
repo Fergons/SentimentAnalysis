@@ -296,6 +296,8 @@ class SteamScraper(Scraper):
                                           max_reviews: int = 100,
                                           **kwargs) -> AsyncGenerator[List[SteamReview], None]:
         reviews_processed = 0
+        if max_reviews is None:
+            max_reviews = 100000000
         params = {
             "json": 1,
             "filter": filter,
@@ -334,6 +336,7 @@ class SteamScraper(Scraper):
 
             params["cursor"] = cursor
             reviews_processed += num_reviews
+
             if reviews_processed >= max_reviews:
                 reviews = reviews[:max_reviews]
                 logger.debug(f"max_reviews StopAsyncIteration")
