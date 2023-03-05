@@ -11,6 +11,7 @@ from sqlalchemy.future import select
 from app.db.session import async_session
 from app.crud.source import crud_source
 from app.crud.review import crud_review
+from app.crud.developer import crud_developer
 from app.schemas.game import GameCreate
 from app.crud.game import crud_game, crud_category
 from app.schemas.review import (ReviewCreate)
@@ -98,11 +99,16 @@ class DBScraper:
                     **detail.dict(by_alias=True)
                 )
                 categories = [category.description for category in detail.categories]
+                developers = detail.developers
                 logger.debug(f"Creating game {detail.steam_appid} with categories: {categories}")
-                game = await crud_game.create_with_categories_by_names_and_source(
-                    self.session, obj_in=obj_in, source_id=self.db_source.id, source_game_id=detail.steam_appid,
-                    names=categories
+
+                game = await crud_game.create_from_source(
+                    self.session, obj_in=obj_in, source_id=self.db_source.id, source_game_id=detail.steam_appid
                 )
+                await crud_category.add_categories_by_name_for_game(self.session, db_game=game, names=categories)
+                await crud_developer.add_developers_by_name_for_game(self.session, db_game=game, names=developers)
+                await self.session.commit()
+
                 logger.debug(f"Game {detail.steam_appid} created!")
                 games_scraped.append(game.id)
                 if len(games_scraped) >= end_after:
@@ -139,7 +145,7 @@ class DBScraper:
             db_game = models.Game(**obj_data)
             if db_id is None:
                 categories = [category.get("name") for category in game.get("categories")]
-                await crud_category.add_categories_for_game(self.session, names=categories, db_game=db_game)
+                await crud_category.add_categories_by_name_for_game(self.session, db_game=db_game, names=categories)
             else:
                 db_game.id = db_id
             db_games[source_game_id] = db_game

@@ -25,10 +25,12 @@ class Game(Base):
     # reviewers = relationship("GameReviewer", back_populates="game", lazy="selectin", cascade="all, delete")
     sources = relationship("GameSource", back_populates="game", lazy="selectin", cascade="all, delete")
     categories = relationship("GameCategory", back_populates="game", lazy="selectin", cascade="all, delete")
+    developers = relationship("GameDeveloper", back_populates="game", lazy="selectin", cascade="all, delete")
 
     __table_args__ = (
         Index("idx_game_name_tsv", name_tsv, postgresql_using="gin"),
     )
+
 
 class Category(Base):
     id = Column(Integer, primary_key=True, index=True)
@@ -45,3 +47,13 @@ class GameCategory(Base):
 
     game = relationship("Game", back_populates="categories", lazy="selectin")
     category = relationship("Category", back_populates="games", lazy="selectin")
+
+
+class GameDeveloper(Base):
+    id = Column(Integer, primary_key=True, index=True)
+
+    game_id = Column(Integer, ForeignKey('game.id'))
+    developer_id = Column(Integer, ForeignKey('developer.id'))
+
+    game = relationship("Game", back_populates="developers", lazy="selectin")
+    developer = relationship("Developer", back_populates="games", lazy="selectin")

@@ -14,6 +14,7 @@ from .reviewer import (Reviewer, ReviewerBase,
 from .aspect import Aspect, AspectBase, AspectCreate, AspectUpdate, AspectInDB, AspectInDBBase
 from .source import Source, SourceBase, SourceCreate, SourceUpdate, SourceInDBBase
 from .source import GameSource, GameSourceUpdate, GameSourceCreate
+from .developer import Developer, DeveloperCreate, DeveloperUpdate, DeveloperInDBBase
 
 Reviewer.update_forward_refs(Review=Review, Source=Source)
 Game.update_forward_refs(Review=Review, Source=Source)

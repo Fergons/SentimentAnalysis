@@ -48,7 +48,7 @@ class CRUDCategory(CRUDBase[Category, CategoryCreate, CategoryUpdate]):
 
         await db.commit()
 
-    async def add_categories_for_game(self, db: AsyncSession, *, db_game: Game, names: List[str]):
+    async def add_categories_by_name_for_game(self, db: AsyncSession, *, db_game: Game, names: List[str]):
         result = await db.execute(select(self.model.name, self.model.id).where(self.model.name.in_(names)))
         category_ids = result.all()
         category_ids = {name: id for name, id in category_ids}
@@ -103,12 +103,26 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]):
         result = await db.scalars(select(GameSource.source_game_id).where(GameSource.game_id == id))
         return result.first()
 
+    async def create_from_source(self, db: AsyncSession, *, obj_in: GameCreate, source_id: int, source_game_id: str) -> Game:
+        db_obj = self.model(**obj_in.dict()) # type: ignore
+
+        assoc = GameSource(
+            game=db_obj,  # type: ignore
+            source_id=source_id,  # type: ignore
+            source_game_id=source_game_id  # type: ignore
+        )
+        db.add_all([assoc, db_obj])
+        await db.commit()
+        await db.refresh(db_obj)
+        return db_obj
+
+
     async def create_with_categories_by_names(
             self, db: AsyncSession, *, obj_in: GameCreate, names: List[str]
     ) -> Game:
         db_obj = self.model(**obj_in.dict(exclude={"source_id", "source_game_id"}))  # type: ignore
         logger.debug(f"creating categories for {obj_in.name}")
-        await crud_category.add_categories_for_game(db, db_game=db_obj, names=names)
+        await crud_category.add_categories_by_name_for_game(db, db_game=db_obj, names=names)
         logger.debug(f"created categories for {obj_in.name}")
         db.add(db_obj)
         await db.commit()
@@ -121,7 +135,7 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]):
         obj_in_data = obj_in.dict()
         game_db_obj = self.model(**obj_in_data)  # type: ignore
         logger.debug(f"creating categories for {obj_in.name}")
-        await crud_category.add_categories_for_game(db, db_game=game_db_obj, names=names)
+        await crud_category.add_categories_by_name_for_game(db, db_game=game_db_obj, names=names)
         logger.debug(f"created categories for {obj_in.name}")
         game_source_db_obj = GameSource(
             game=game_db_obj,  # type: ignore
