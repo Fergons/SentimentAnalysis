@@ -100,13 +100,17 @@ class DBScraper:
                 )
                 categories = [category.description for category in detail.categories]
                 developers = detail.developers
-                logger.debug(f"Creating game {detail.steam_appid} with categories: {categories}")
-
+                logger.debug(f"Creating game {detail.steam_appid}")
                 game = await crud_game.create_from_source(
                     self.session, obj_in=obj_in, source_id=self.db_source.id, source_game_id=detail.steam_appid
                 )
-                await crud_category.add_categories_by_name_for_game(self.session, db_game=game, names=categories)
-                await crud_developer.add_developers_by_name_for_game(self.session, db_game=game, names=developers)
+                logger.debug(f"Game {detail.steam_appid} created!")
+                if len(categories) > 0:
+                    logger.debug(f"Adding categories {categories} to game {detail.steam_appid}")
+                    await crud_category.add_categories_by_name_for_game(self.session, db_game=game, names=categories)
+                if len(developers) > 0:
+                    logger.debug(f"Adding developers {developers} to game {detail.steam_appid}")
+                    await crud_developer.add_developers_by_name_for_game(self.session, db_game=game, names=developers)
                 await self.session.commit()
 
                 logger.debug(f"Game {detail.steam_appid} created!")

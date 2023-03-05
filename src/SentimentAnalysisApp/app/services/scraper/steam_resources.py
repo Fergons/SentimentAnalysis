@@ -146,7 +146,7 @@ class SteamAppDetail(BaseModel):
     steam_appid: str = Field(alias="source_game_id")
     supported_languages: Optional[str] = None
     header_image: Optional[str] = Field(alias="image_url", default=None)
-    developers: Optional[list] = None
+    developers: Optional[list] = []
     publishers: Optional[list] = None
     metacritic: Optional[SteamMetacriticReview] = None
     categories: List[SteamAppCategory] = []

@@ -23,6 +23,6 @@ class RegConfig(UserDefinedType):
     https://www.postgresql.org/docs/current/datatype-oid.html
     #DATATYPE-OID-TABLE
     """
-
+    cache_ok = True
     def get_col_spec(self, **kwargs: Any) -> str:
         return 'regconfig'
