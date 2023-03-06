@@ -230,11 +230,6 @@ class DBScraper:
                 day_range=day_range,
                 max_reviews=max_reviews, **kwargs):
 
-            if len(page) == 0:
-                await crud_game.touch(self.session, obj_id=game_id)
-                await self.session.commit()
-                continue
-
             num_reviews_scraped += len(page)
 
             reviews = [reviews.dict(by_alias=True) for reviews in page]
@@ -278,6 +273,7 @@ class DBScraper:
                     db_review.reviewer_id = db_reviewer_ids.get(source_reviewer_id)
 
             self.session.add_all(objects_to_insert)
+            await crud_game.update_num_reviews(self.session, id=game_id)
             await self.session.commit()
 
         return game_id, num_reviews_scraped

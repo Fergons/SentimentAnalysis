@@ -7,6 +7,7 @@ from sqlalchemy import column, update, func, cast, and_, text, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
+from sqlalchemy.sql.functions import count
 
 from app.crud.base import CRUDBase
 from app.db.session import RegConfig
@@ -16,6 +17,8 @@ from app.models.game import Game, Category, GameCategory
 from app.schemas.game import GameCreate, GameUpdate, GameCreate
 from app.schemas.game import CategoryCreate, CategoryUpdate, CategoryBase
 import logging
+
+from .review import Review
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -212,6 +215,13 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]):
         await db.refresh(db_obj)
         return db_obj
 
+    async def update_num_reviews(self, db: AsyncSession, *, id: int):
+        # update column num_reviews of table Game with id=id by summing up all rows of table Review where game_id=id
+        await db.execute(
+            update(self.model)
+            .where(self.model.id == id)
+            .values(num_reviews=select(func.count(Review.id)).where(Review.game_id == id))
+        )
 
 crud_game = CRUDGame(Game)
 crud_category = CRUDCategory(Category)
