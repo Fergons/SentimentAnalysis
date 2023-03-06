@@ -20,7 +20,7 @@ See https://pydantic-docs.helpmanual.io/usage/settings/
 """
 
 from pathlib import Path
-from typing import Literal, Union
+from typing import Literal, Union, Dict, List
 
 import toml
 from pydantic import AnyHttpUrl, AnyUrl, BaseSettings, EmailStr, validator
@@ -34,7 +34,7 @@ class Settings(BaseSettings):
     SECRET_KEY: str
     ENVIRONMENT: Literal["DEV", "PYTEST", "STAGE", "PRODUCTION"]
     ACCESS_TOKEN_EXPIRE_MINUTES: int
-    BACKEND_CORS_ORIGINS: Union[str, list[AnyHttpUrl]]
+    BACKEND_CORS_ORIGINS: Union[str, List[AnyHttpUrl]]
 
     # PROJECT NAME, VERSION AND DESCRIPTION
     PROJECT_NAME: str = PYPROJECT_CONTENT["name"]
@@ -74,13 +74,13 @@ class Settings(BaseSettings):
 
     # VALIDATORS
     @validator("BACKEND_CORS_ORIGINS")
-    def _assemble_cors_origins(cls, cors_origins: Union[str, list[AnyHttpUrl]]):
+    def _assemble_cors_origins(cls, cors_origins: Union[str, List[AnyHttpUrl]]):
         if isinstance(cors_origins, str):
             return [item.strip() for item in cors_origins.split(",")]
         return cors_origins
 
     @validator("DEFAULT_SQLALCHEMY_DATABASE_URI")
-    def _assemble_default_db_connection(cls, v: str, values: dict[str, str]) -> str:
+    def _assemble_default_db_connection(cls, v: str, values: Dict[str, str]) -> str:
         return AnyUrl.build(
             scheme="postgresql+asyncpg",
             user=values["DEFAULT_DATABASE_USER"],
@@ -91,7 +91,7 @@ class Settings(BaseSettings):
         )
 
     @validator("TEST_SQLALCHEMY_DATABASE_URI")
-    def _assemble_test_db_connection(cls, v: str, values: dict[str, str]) -> str:
+    def _assemble_test_db_connection(cls, v: str, values: Dict[str, str]) -> str:
         return AnyUrl.build(
             scheme="postgresql+asyncpg",
             user=values["TEST_DATABASE_USER"],
@@ -102,7 +102,7 @@ class Settings(BaseSettings):
         )
 
     @validator("PRODUCTION_SQLALCHEMY_DATABASE_URI")
-    def _assemble_production_db_connection(cls, v: str, values: dict[str, str]) -> str:
+    def _assemble_production_db_connection(cls, v: str, values: Dict[str, str]) -> str:
         return AnyUrl.build(
             scheme="postgresql+asyncpg",
             user=values["PRODUCTION_DATABASE_USER"],
