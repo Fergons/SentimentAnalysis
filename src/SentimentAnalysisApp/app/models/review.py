@@ -4,7 +4,6 @@ from app.db.base_class import Base
 from sqlalchemy import Boolean, Column, Integer, String, DateTime, func, ForeignKey, TEXT, UniqueConstraint, Computed, \
     Index, and_
 from sqlalchemy.orm import relationship
-from sqlalchemy_utils import aggregated
 
 
 class Review(Base):
@@ -36,17 +35,9 @@ class Review(Base):
 
     playtime_at_review = Column(Integer)
 
-    @aggregated('aspects', Column(Integer))
-    def num_aspects(self):
-        return func.count('1')
-
-    @aggregated('positive_aspects', Column(Integer))
-    def num_positive_aspects(self):
-        return func.count('1')
-
-    @aggregated('negative_aspects', Column(Integer))
-    def num_negative_aspects(self):
-        return func.count('1')
+    num_aspects = Column(Integer)
+    num_positive_aspects = Column(Integer)
+    num_negative_aspects = Column(Integer)
 
     def num_neutral_aspects(self):
         return self.num_aspects - self.num_positive_aspects - self.num_negative_aspects
