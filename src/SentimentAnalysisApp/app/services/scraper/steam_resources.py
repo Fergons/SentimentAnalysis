@@ -119,7 +119,8 @@ class SteamReview(BaseModel):
     @root_validator(pre=True)
     def _set_fields(cls, values: dict) -> dict:
         values["source_reviewer_id"] = values["author"]["steamid"]
-        values["playtime_at_review"] = values["author"]["playtime_at_review"]
+        playtime_at_review = values["author"].get("playtime_at_review", 0)
+        values["playtime_at_review"] = playtime_at_review
         return values
 
     class Config:

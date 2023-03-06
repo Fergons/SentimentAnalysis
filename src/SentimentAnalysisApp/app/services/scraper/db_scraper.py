@@ -359,7 +359,7 @@ async def scrape_doupe_reviews(rate_limit: dict = None):
 async def scrape_steam_games(rate_limit: dict = None):
     """Scrape all games from steam. This method is used to get initial data for system"""
     async with async_session() as session:
-        async with SteamScraper(STEAM_API_RATE_LIMIT) as scraper:
+        async with SteamScraper(rate_limit=STEAM_API_RATE_LIMIT) as scraper:
             db_scraper = await DBScraper.create(scraper=scraper, session=session)
             await db_scraper.scrape_games(bulk_size=10)
 
