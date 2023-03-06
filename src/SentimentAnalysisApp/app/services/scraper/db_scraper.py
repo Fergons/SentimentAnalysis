@@ -290,6 +290,7 @@ class DBScraper:
                                                                              source_id=self.db_source.id,
                                                                              check_interval=check_interval
                                                                              )
+            random.shuffle(games)
             game_ids = {game[1]: game[0] for game in games}
 
         for source_game_id, game_id in game_ids.items():
@@ -392,8 +393,13 @@ async def main():
 
     if args.steam_games:
         await scrape_steam_games(rate_limit=rate_limit)
+
     elif args.steam_reviews:
-        await scrape_steam_reviews(rate_limit=rate_limit)
+        try:
+            await scrape_steam_reviews(rate_limit=rate_limit)
+        except Exception as e:
+            logger.error(e)
+
     elif args.doupe_reviews:
         await scrape_doupe_reviews(rate_limit=rate_limit)
     elif args.gamespot_reviews:
