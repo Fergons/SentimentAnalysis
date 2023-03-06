@@ -232,6 +232,7 @@ class DBScraper:
 
             if len(page) == 0:
                 await crud_game.touch(self.session, obj_id=game_id)
+                await self.session.commit()
                 continue
 
             num_reviews_scraped += len(page)
