@@ -222,6 +222,7 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]):
             .where(self.model.id == id)
             .values(num_reviews=select(func.count(Review.id)).where(Review.game_id == id))
         )
+        await db.commit()
 
 crud_game = CRUDGame(Game)
 crud_category = CRUDCategory(Category)

@@ -273,7 +273,6 @@ class DBScraper:
                     db_review.reviewer_id = db_reviewer_ids.get(source_reviewer_id)
 
             self.session.add_all(objects_to_insert)
-            await crud_game.update_num_reviews(self.session, id=game_id)
             await self.session.commit()
 
         return game_id, num_reviews_scraped
@@ -294,6 +293,7 @@ class DBScraper:
             _, num_reviews_scraped = await self.scrape_reviews_for_game(game_id=game_id,
                                                                         source_game_id=source_game_id,
                                                                         max_reviews=1000000)
+            await crud_game.update_num_reviews(self.session, id=game_id)
             logger.info(f"Scraping for game {source_game_id} finished. Scraped {num_reviews_scraped} reviews!")
 
     async def scrape_all_reviews(self, max_reviews: int = 100):
