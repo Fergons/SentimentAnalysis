@@ -2,8 +2,7 @@ from app.db.base_class import Base
 from sqlalchemy import Boolean, Column, Integer, String, DateTime, func, ForeignKey, Computed, Index
 from sqlalchemy.orm import relationship
 from sqlalchemy_utils.types.ts_vector import TSVectorType
-from sqlalchemy_utils import aggregated
-from .review import Review
+
 
 class Game(Base):
     id = Column(Integer, primary_key=True, index=True)
