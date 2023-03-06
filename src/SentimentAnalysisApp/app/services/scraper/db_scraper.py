@@ -371,7 +371,7 @@ async def scrape_steam_reviews(rate_limit: dict = None, check_interval: timedelt
     async with async_session() as session:
         async with SteamScraper(rate_limit=rate_limit) as scraper:
             db_scraper = await DBScraper.create(scraper=scraper, session=session)
-            await db_scraper.scrape_all_reviews_for_not_updated_steam_games(check_interval)
+            await db_scraper.scrape_all_reviews_for_not_updated_steam_games(check_interval=check_interval
 
 
 async def main():
