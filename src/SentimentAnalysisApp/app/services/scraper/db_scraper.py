@@ -2,6 +2,7 @@ import argparse
 import asyncio
 import logging
 import random
+from datetime import timedelta
 from typing import List, Optional, Union, TypeVar, Tuple, Literal, Any, Dict
 
 from pydantic import BaseModel, validator
@@ -25,7 +26,7 @@ from .gamespot_resources import GamespotRequestParams, GamespotReview, GamespotG
 from .doupe_resources import DoupeReview, DoupeGame, DoupeReviewer
 from .steam_resources import SteamAppListResponse, SteamApp, SteamReview, SteamAppDetail, SteamReviewer, \
     SteamApiLanguageCodes
-from .constants import STEAM_REVIEWS_API_RATE_LIMIT, STEAM_API_RATE_LIMIT
+from .constants import STEAM_REVIEWS_API_RATE_LIMIT, STEAM_API_RATE_LIMIT, DEFAULT_RATE_LIMIT
 from app.core.config import settings
 from sqlalchemy import exc, and_
 
@@ -222,13 +223,19 @@ class DBScraper:
             game_id = game_id.get(source_game_id)
         if source_game_id is None:
             source_game_id = await crud_game.get_source_game_id(self.session, id=game_id)
+
         async for page in self.scraper.game_reviews_page_generator(
                 game_id=source_game_id,
                 language=language,
                 day_range=day_range,
                 max_reviews=max_reviews, **kwargs):
 
+            if len(page) == 0:
+                await crud_game.touch(self.session, id=game_id)
+                continue
+
             num_reviews_scraped += len(page)
+
             reviews = [reviews.dict(by_alias=True) for reviews in page]
             reviewers = [r.get("reviewer") for r in reviews]
 
@@ -247,6 +254,7 @@ class DBScraper:
             db_reviewer_ids = {source_id: db_id for db_id, source_id in db_reviewer_ids.all()}
 
             objects_to_insert = []
+
             for review in reviews:
                 source_review_id = review.get("source_review_id")
                 source_reviewer_id = review.get("reviewer").get("source_reviewer_id")
@@ -274,9 +282,13 @@ class DBScraper:
         return game_id, num_reviews_scraped
 
     async def scrape_all_reviews_for_not_updated_steam_games(self, game_ids: List[str] = None,
+                                                             check_interval: timedelta = timedelta(days=7),
                                                              max_reviews: int = 100000):
         if game_ids is None:
-            games = await crud_game.get_all_not_updated_db_games_from_source(self.session, source_id=self.db_source.id)
+            games = await crud_game.get_all_not_updated_db_games_from_source(self.session,
+                                                                             source_id=self.db_source.id,
+                                                                             check_interval=check_interval
+                                                                             )
             game_ids = {game[1]: game[0] for game in games}
 
         for source_game_id, game_id in game_ids.items():
@@ -354,12 +366,12 @@ async def scrape_steam_games(rate_limit: dict = None):
             await db_scraper.scrape_games(bulk_size=10)
 
 
-async def scrape_steam_reviews(rate_limit: dict = None):
+async def scrape_steam_reviews(rate_limit: dict = None, check_interval: timedelta = timedelta(days=7)):
     """Scrape all reviews from steam for scraped games. This method is used to get initial data for system"""
     async with async_session() as session:
         async with SteamScraper(rate_limit=rate_limit) as scraper:
             db_scraper = await DBScraper.create(scraper=scraper, session=session)
-            await db_scraper.scrape_all_reviews_for_not_updated_steam_games()
+            await db_scraper.scrape_all_reviews_for_not_updated_steam_games(check_interval)
 
 
 async def main():
@@ -369,6 +381,8 @@ async def main():
     parser.add_argument('--doupe-reviews', action='store_true')
     parser.add_argument('--gamespot-reviews', action='store_true')
     parser.add_argument('--rate-limit', default=None, type=int, help="Use rate limit for scraper in requests/sec")
+    parser.add_argument('--check-interval', default=7, type=int, help="Check interval for scraper in days")
+    parser.add_argument('--max-reviews', default=1000, type=int, help="Max reviews to scrape")
     args = parser.parse_args()
 
     rate_limit = None
@@ -376,19 +390,17 @@ async def main():
         rate_limit = {"max_rate": args.rate_limit, "time_period": 1}
 
     if args.steam_games:
-        if rate_limit is not None:
-            await scrape_steam_games(rate_limit=rate_limit)
+        await scrape_steam_games(rate_limit=rate_limit)
     elif args.steam_reviews:
-        if rate_limit is not None:
-            await scrape_steam_reviews(rate_limit=rate_limit)
+        await scrape_steam_reviews(rate_limit=rate_limit)
     elif args.doupe_reviews:
-        if rate_limit is not None:
-            await scrape_doupe_reviews(rate_limit=rate_limit)
+        await scrape_doupe_reviews(rate_limit=rate_limit)
     elif args.gamespot_reviews:
-        if rate_limit is not None:
-            await scrape_gamespot_reviews(rate_limit=rate_limit)
+        await scrape_gamespot_reviews(rate_limit=rate_limit)
     else:
         parser.print_help()
+
+    logger.info("Finished")
 
 
 if __name__ == "__main__":
