@@ -231,7 +231,7 @@ class DBScraper:
                 max_reviews=max_reviews, **kwargs):
 
             if len(page) == 0:
-                await crud_game.touch(self.session, id=game_id)
+                await crud_game.touch(self.session, obj_id=game_id)
                 continue
 
             num_reviews_scraped += len(page)
