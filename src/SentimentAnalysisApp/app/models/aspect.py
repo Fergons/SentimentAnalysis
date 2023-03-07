@@ -14,4 +14,4 @@ class Aspect(Base):
     model_id = Column(String)
     updated_at = Column(DateTime(timezone=True), default=None, onupdate=func.now())
 
-    review = relationship("Review", back_populates="aspects", lazy="selectin")
+    review = relationship("Review", back_populates="aspects")

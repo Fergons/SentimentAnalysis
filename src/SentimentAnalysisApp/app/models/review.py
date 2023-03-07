@@ -43,11 +43,11 @@ class Review(Base):
         return self.num_aspects - self.num_positive_aspects - self.num_negative_aspects
 
     # one(game) to many(reviews)
-    game = relationship("Game", back_populates="reviews", lazy="selectin")
+    game = relationship("Game", back_populates="reviews")
     # one(user) to many(reviews)
-    reviewer = relationship("Reviewer", back_populates="reviews", lazy="selectin")
+    reviewer = relationship("Reviewer", back_populates="reviews")
     # one(review) to many(aspects)
-    aspects = relationship("Aspect", back_populates="review", lazy="selectin", cascade="all, delete")
+    aspects = relationship("Aspect", back_populates="review", cascade="all, delete")
 
     positive_aspects = relationship("Aspect",
                                     primaryjoin="and_(Aspect.review_id == Review.id, Aspect.polarity == 'positive')",
@@ -56,7 +56,7 @@ class Review(Base):
                                     primaryjoin="and_(Aspect.review_id == Review.id, Aspect.polarity == 'negative')",
                                     viewonly=True)
 
-    source = relationship("Source", back_populates="reviews", lazy="selectin")
+    source = relationship("Source", back_populates="reviews")
     UniqueConstraint(source_review_id, source_id)
 
     __table_args__ = (

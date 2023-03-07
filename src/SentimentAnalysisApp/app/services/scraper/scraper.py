@@ -171,7 +171,7 @@ class Scraper:
     async def get_game_reviews(self, game_id):
         raise NotImplementedError
 
-    async def get_games(self):
+    async def get_games(self) -> List[str]:
         raise NotImplementedError
 
     async def get_game_info(self, game_id):
@@ -205,13 +205,13 @@ class SteamScraper(Scraper):
                          **self._source
                          )
 
-    async def get_games(self) -> List[SteamApp]:
+    async def get_games(self) -> List[str]:
         response = await self.session.get(self.list_of_games_url)
         result = self.handle_response(response,
                                       self.json_response_validator,
                                       lambda r: SteamAppListResponse.parse_obj(r.json()).apps)
         if result is not None:
-            applist = [app for app in result if app.name != ""]
+            applist = [app.appid for app in result if app.name != ""]
             random.shuffle(applist)
             return applist
 
@@ -293,7 +293,7 @@ class SteamScraper(Scraper):
                                           review_type: Optional[str] = "all",
                                           purchase_type: Optional[str] = "all",
                                           cursor: Optional[str] = "*",
-                                          max_reviews: int = 100,
+                                          max_reviews: Optional[int] = 100,
                                           **kwargs) -> AsyncGenerator[List[SteamReview], None]:
         reviews_processed = 0
         if max_reviews is None:
@@ -393,7 +393,7 @@ class GamespotScraper(Scraper):
     def game_info_formatter():
         pass
 
-    async def get_games(self) -> List[SteamApp]:
+    async def get_games(self) -> List[str]:
         pass
 
     async def get_reviews_page(self, params: GamespotRequestParams) -> Tuple[URL, Optional[GamespotApiResponse]]:

@@ -35,7 +35,7 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s: %(message)s',
 )
 logger = logging.getLogger("scraper_to_db.py")
-
+# logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
 class DBScraper:
     @classmethod
@@ -53,21 +53,23 @@ class DBScraper:
         self.session: Optional[AsyncSession] = None
         self.db_source = None
 
-    async def scrape_games(self, bulk_size: int = 20, end_after: int = 1000) -> List[int]:
+    async def scrape_games(self, bulk_size: int = 20, end_after: int = None) -> List[int]:
         db_game_ids = await crud_game.get_all_app_ids_from_source(self.session, source_id=self.db_source.id)
         games_scraped = []
 
-        games: List[SteamApp] = await self.scraper.get_games()
-        random.shuffle(games)
-
+        games = await self.scraper.get_games()
+        if games is None:
+            logger.info(f"No games retrieved from source {self.db_source.name}!")
+            return []
         logger.log(logging.INFO, f"{len(db_game_ids)}/{len(games)} already in db!")
+        games = [game for game in games if game in db_game_ids]
+        games = games[:end_after] if end_after is not None else games
+
         group_counter = 1
         for bulk_start in range(0, len(games), bulk_size):
             tasks = []
-            for game in games[bulk_start:bulk_start + bulk_size]:
-                if str(game.appid) in db_game_ids:
-                    continue
-                tasks.append(self.scraper.get_game_info(game.appid))
+            for game_id in games[bulk_start:bulk_start + bulk_size]:
+                tasks.append(self.scraper.get_game_info(game_id))
 
             counter = 0
             for future in asyncio.as_completed(tasks):
@@ -124,14 +126,13 @@ class DBScraper:
 
                 logger.debug(f"Game {detail.steam_appid} created!")
                 games_scraped.append(game.id)
-                if len(games_scraped) >= end_after:
-                    logger.info(f"Scraped {len(games_scraped)} games, ending...")
-                    return games_scraped
 
                 logger.log(logging.INFO, f"Progress {counter}/{len(tasks)} tasks done!")
 
             logger.log(logging.INFO, f"Group {group_counter}/{len(games) // bulk_size} done!")
             group_counter += 1
+
+        logger.info(f"Scraped {len(games_scraped)} games, ending...")
 
     # async def scrape_games(self, bulk_size: int = 20, end_after: int = 1000) -> List[int]:
     #     new_games_in_db = []
@@ -158,7 +159,11 @@ class DBScraper:
             db_game = models.Game(**obj_data)
             if db_id is None:
                 categories = [category.get("name") for category in game.get("categories")]
-                await crud_category.add_categories_by_name_for_game(self.session, db_game=db_game, names=categories)
+                developers = game.get("developers")
+                if len(categories) > 0:
+                    await crud_category.add_categories_by_name_for_game(self.session, db_game=db_game, names=categories)
+                if len(developers) > 0:
+                    await crud_developer.add_developers_by_name_for_game(self.session, db_game=db_game, names=developers)
             else:
                 db_game.id = db_id
             db_games[source_game_id] = db_game
@@ -210,7 +215,7 @@ class DBScraper:
             source_game_id: str = None,
             day_range: int = None,
             language: str = "czech",
-            max_reviews: int = 100,
+            max_reviews: Optional[int] = 100,
             **kwargs
     ) -> Tuple[int, int]:
         num_reviews_scraped = 0
@@ -358,10 +363,12 @@ async def scrape_doupe_reviews(rate_limit: dict = None):
 
 async def scrape_steam_games(rate_limit: dict = None):
     """Scrape all games from steam. This method is used to get initial data for system"""
+    if rate_limit is None:
+        rate_limit = STEAM_API_RATE_LIMIT
     async with async_session() as session:
-        async with SteamScraper(rate_limit=STEAM_API_RATE_LIMIT) as scraper:
+        async with SteamScraper(rate_limit=rate_limit) as scraper:
             db_scraper = await DBScraper.create(scraper=scraper, session=session)
-            await db_scraper.scrape_games(bulk_size=10)
+            await db_scraper.scrape_games(bulk_size=10, end_after=None)
 
 
 async def scrape_steam_reviews(rate_limit: dict = None, check_interval: timedelta = timedelta(days=7)):
@@ -371,6 +378,18 @@ async def scrape_steam_reviews(rate_limit: dict = None, check_interval: timedelt
             db_scraper = await DBScraper.create(scraper=scraper, session=session)
             await db_scraper.scrape_all_reviews_for_not_updated_steam_games(check_interval=check_interval)
 
+async def scrape_steam_reviews_for_game(rate_limit: dict = None, **kwargs):
+    """Scrape all reviews from steam for specific game. This method is used to get initial data for system"""
+    logger.debug(f"Creating db session: In progress.")
+    async with async_session() as session:
+        logger.debug(f"Creating db session: Done.")
+        logger.debug(f"Creating scraper: In progress.")
+        async with SteamScraper(rate_limit=rate_limit) as scraper:
+            logger.debug(f"Creating scraper: Done.")
+            logger.debug(f"Creating db scraper: In progress.")
+            db_scraper = await DBScraper.create(scraper=scraper, session=session)
+            logger.debug(f"Creating db scraper: Done.")
+            await db_scraper.scrape_reviews_for_game(**kwargs)
 
 async def main():
     parser = argparse.ArgumentParser('dataset.py')
@@ -380,30 +399,39 @@ async def main():
     parser.add_argument('--gamespot-reviews', action='store_true')
     parser.add_argument('--rate-limit', default=None, type=int, help="Use rate limit for scraper in requests/sec")
     parser.add_argument('--check-interval', default=7, type=int, help="Check interval for scraper in days")
-    parser.add_argument('--max-reviews', default=1000, type=int, help="Max reviews to scrape")
+    parser.add_argument('--max-reviews', default=None, type=int, help="Max reviews to scrape")
+    parser.add_argument('--game-id', default=None, type=str, help="Game id to scrape reviews for")
     args = parser.parse_args()
 
     rate_limit = None
     if args.rate_limit:
         rate_limit = {"max_rate": args.rate_limit, "time_period": 1}
+    try:
 
-    if args.steam_games:
-        await scrape_steam_games(rate_limit=rate_limit)
-
-    elif args.steam_reviews:
-        try:
-            await scrape_steam_reviews(rate_limit=rate_limit)
-        except Exception as e:
-            logger.error(e)
-
-    elif args.doupe_reviews:
-        await scrape_doupe_reviews(rate_limit=rate_limit)
-    elif args.gamespot_reviews:
-        await scrape_gamespot_reviews(rate_limit=rate_limit)
-    else:
-        parser.print_help()
-
-    logger.info("Finished")
+        if args.steam_games:
+            logger.info("Started scraping steam games")
+            await scrape_steam_games(rate_limit=rate_limit)
+        elif args.steam_reviews:
+            if args.game_id is not None:
+                logger.info(f"Started scraping steam reviews for game {args.game_id}")
+                await scrape_steam_reviews_for_game(source_game_id=args.game_id,
+                                                    rate_limit=rate_limit,
+                                                    max_reviews=args.max_reviews)
+            else:
+                logger.info("Started scraping steam reviews")
+                await scrape_steam_reviews(rate_limit=rate_limit)
+        elif args.doupe_reviews:
+            logger.info("Started scraping doupe reviews")
+            await scrape_doupe_reviews(rate_limit=rate_limit)
+        elif args.gamespot_reviews:
+            logger.info("Started scraping gamespot reviews")
+            await scrape_gamespot_reviews(rate_limit=rate_limit)
+        else:
+            parser.print_help()
+    except Exception as e:
+        logger.error(e)
+    finally:
+        logger.info("Finished")
 
 
 if __name__ == "__main__":

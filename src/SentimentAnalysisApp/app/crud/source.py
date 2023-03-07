@@ -2,7 +2,8 @@ from typing import List, Optional
 
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
+from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 
 from app.crud.base import CRUDBase
 from app.models.source import Source, GameSource

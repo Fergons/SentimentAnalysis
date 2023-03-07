@@ -7,4 +7,4 @@ class Developer(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
 
-    games = relationship("GameDeveloper", back_populates="developer", lazy="selectin", cascade="all, delete")
+    games = relationship("GameDeveloper", back_populates="developer", cascade="all, delete")

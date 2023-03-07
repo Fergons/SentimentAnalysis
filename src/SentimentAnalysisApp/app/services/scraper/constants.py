@@ -110,7 +110,7 @@ class ContentType(str, Enum):
 
 # 200 calls per 5 mins
 DEFAULT_RATE_LIMIT = {"max_rate": 10, "time_period": 3}
-STEAM_API_RATE_LIMIT = {"max_rate": 2, "time_period": 6}
+STEAM_API_RATE_LIMIT = {"max_rate": 2, "time_period": 4}
 STEAM_REVIEWS_API_RATE_LIMIT = DEFAULT_RATE_LIMIT
 
 SOURCES = {

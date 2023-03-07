@@ -12,9 +12,9 @@ class Reviewer(Base):
     num_games_owned = Column(Integer)
     num_reviews = Column(Integer)
     # one(user) to many(reviews)
-    # games = relationship("GameReviewer", back_populates="reviewer", lazy="selectin", cascade="all, delete")
-    reviews = relationship("Review", back_populates="reviewer", lazy="selectin")
-    source = relationship("Source", back_populates="reviewers", lazy="selectin")
+    # games = relationship("GameReviewer", back_populates="reviewer", cascade="all, delete")
+    reviews = relationship("Review", back_populates="reviewer")
+    source = relationship("Source", back_populates="reviewers")
 
     UniqueConstraint(source_reviewer_id, source_id)
 
@@ -23,5 +23,5 @@ class Reviewer(Base):
 #     id = Column(Integer, primary_key=True, index=True)
 #     game_id = Column(Integer, ForeignKey('game.id'))
 #     reviewer_id = Column(Integer, ForeignKey('reviewer.id'))
-#     reviewer = relationship("Reviewer", back_populates="games", lazy="selectin")
-#     game = relationship("Game", back_populates="reviewers", lazy="selectin")
+#     reviewer = relationship("Reviewer", back_populates="games")
+#     game = relationship("Game", back_populates="reviewers")
