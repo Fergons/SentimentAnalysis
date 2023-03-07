@@ -106,8 +106,9 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]):
         result = await db.scalars(select(GameSource.source_game_id).where(GameSource.game_id == id))
         return result.first()
 
-    async def create_from_source(self, db: AsyncSession, *, obj_in: GameCreate, source_id: int, source_game_id: str) -> Game:
-        db_obj = self.model(**obj_in.dict()) # type: ignore
+    async def create_from_source(self, db: AsyncSession, *, obj_in: GameCreate, source_id: int,
+                                 source_game_id: str) -> Game:
+        db_obj = self.model(**obj_in.dict())  # type: ignore
 
         assoc = GameSource(
             game=db_obj,  # type: ignore
@@ -118,7 +119,6 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]):
         await db.commit()
         await db.refresh(db_obj)
         return db_obj
-
 
     async def create_with_categories_by_names(
             self, db: AsyncSession, *, obj_in: GameCreate, names: List[str]
@@ -176,6 +176,27 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]):
         )
         return result.all()
 
+    async def get_ids_and_source_ids_for_reviews_scraping_from_source(
+            self, db: AsyncSession, *,
+            source_id: int,
+            check_interval: timedelta = None
+    ) -> List[Tuple[id, str]]:
+        """Get all games from source that need to be scraped for reviews determined by check_interval
+        or if they have never been scraped before.
+        """
+        if check_interval is None:
+            check_interval = timedelta(days=1)
+        check_time = datetime.now() - check_interval
+        result = await db.execute(
+            select(GameSource.game_id, GameSource.source_game_id)
+            .where(
+                (GameSource.game_id != None) &
+                (GameSource.source_id == source_id) &
+                or_(GameSource.reviews_scraped_at == None, GameSource.reviews_scraped_at <= check_time)
+            )
+        )
+        return result.all()
+
     async def get_all_app_ids_from_source(self, db: AsyncSession, *, source_id: int) -> List[int]:
         result = await db.execute(select(GameSource.source_game_id).where(GameSource.source_id == source_id))
         return result.scalars().all()
@@ -190,9 +211,9 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]):
         await db.commit()
 
     async def _create_from_source(self, db: AsyncSession, *,
-                                 obj_in: GameCreate,
-                                 source_id: int,
-                                 source_game_id: Any) -> Optional[Game]:
+                                  obj_in: GameCreate,
+                                  source_id: int,
+                                  source_game_id: Any) -> Optional[Game]:
         db_obj = await self.get_by_source_id(db,
                                              source_id=source_id,
                                              source_game_id=source_game_id)
@@ -223,6 +244,31 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]):
             .values(num_reviews=select(func.count(Review.id)).where(Review.game_id == id))
         )
         await db.commit()
+
+    async def update_after_reviews_scrape(
+            self, db: AsyncSession, *,
+            source_id: int,
+            game_id: Optional[int] = None,
+            source_game_id: Optional[str] = None
+    ):
+        if game_id is None and source_game_id is None:
+            raise ValueError("game_id or source_game_id must be provided")
+        if game_id is not None:
+            db_obj = await db.scalar(
+                select(GameSource)
+                .where((GameSource.game_id == game_id) & (GameSource.source_id == source_id)))
+        else:
+            db_obj = await db.scalar(
+                select(GameSource)
+                .where((GameSource.source_game_id == source_game_id) & (GameSource.source_id == source_id)))
+        if db_obj is None:
+            return
+        num_reviews = await db.scalar(select(func.count(Review.id))
+                                      .where((Review.game_id == db_obj.game_id) & (Review.source_id == source_id)))
+        db_obj.reviews_scraped_at = datetime.now()
+        db_obj.num_reviews = num_reviews
+        await db.commit()
+
 
 crud_game = CRUDGame(Game)
 crud_category = CRUDCategory(Category)

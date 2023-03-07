@@ -35,6 +35,8 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s: %(message)s',
 )
 logger = logging.getLogger("scraper_to_db.py")
+
+
 # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
 class DBScraper:
@@ -163,7 +165,8 @@ class DBScraper:
                 if len(categories) > 0:
                     await crud_category.add_categories_by_name_for_game(self.session, db_game=db_game, names=categories)
                 if len(developers) > 0:
-                    await crud_developer.add_developers_by_name_for_game(self.session, db_game=db_game, names=developers)
+                    await crud_developer.add_developers_by_name_for_game(self.session, db_game=db_game,
+                                                                         names=developers)
             else:
                 db_game.id = db_id
             db_games[source_game_id] = db_game
@@ -222,10 +225,11 @@ class DBScraper:
         if source_game_id is None and game_id is None:
             raise ValueError("Either game_id or source_game_id must be provided!")
         if game_id is None:
-            game_id = await crud_game.get_ids_by_source_game_ids(self.session,
+            ids = await crud_game.get_ids_by_source_game_ids(self.session,
                                                                  source_id=self.db_source.id,
                                                                  source_game_ids=[source_game_id])
-            game_id = game_id.get(source_game_id)
+            game_id = ids.get(source_game_id)
+            logger.debug(f"game_id: {ids}")
         if source_game_id is None:
             source_game_id = await crud_game.get_source_game_id(self.session, id=game_id)
 
@@ -280,17 +284,18 @@ class DBScraper:
             self.session.add_all(objects_to_insert)
             await self.session.commit()
 
-        await crud_game.update_num_reviews(self.session, id=game_id)
+        await crud_game.update_after_reviews_scrape(self.session, source_id=self.db_source.id, game_id=game_id)
         return game_id, num_reviews_scraped
 
     async def scrape_all_reviews_for_not_updated_steam_games(self, game_ids: List[str] = None,
-                                                             check_interval: timedelta = timedelta(days=7),
+                                                             check_interval: timedelta = None,
                                                              max_reviews: int = 100000):
         if game_ids is None:
-            games = await crud_game.get_all_not_updated_db_games_from_source(self.session,
-                                                                             source_id=self.db_source.id,
-                                                                             check_interval=check_interval
-                                                                             )
+            games = await crud_game.get_ids_and_source_ids_for_reviews_scraping_from_source(
+                self.session,
+                source_id=self.db_source.id,
+                check_interval=check_interval
+            )
             random.shuffle(games)
             game_ids = {game[1]: game[0] for game in games}
 
@@ -378,6 +383,7 @@ async def scrape_steam_reviews(rate_limit: dict = None, check_interval: timedelt
             db_scraper = await DBScraper.create(scraper=scraper, session=session)
             await db_scraper.scrape_all_reviews_for_not_updated_steam_games(check_interval=check_interval)
 
+
 async def scrape_steam_reviews_for_game(rate_limit: dict = None, **kwargs):
     """Scrape all reviews from steam for specific game. This method is used to get initial data for system"""
     logger.debug(f"Creating db session: In progress.")
@@ -390,6 +396,7 @@ async def scrape_steam_reviews_for_game(rate_limit: dict = None, **kwargs):
             db_scraper = await DBScraper.create(scraper=scraper, session=session)
             logger.debug(f"Creating db scraper: Done.")
             await db_scraper.scrape_reviews_for_game(**kwargs)
+
 
 async def main():
     parser = argparse.ArgumentParser('dataset.py')

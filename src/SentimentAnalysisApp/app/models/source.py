@@ -37,5 +37,8 @@ class GameSource(Base):
     source_game_id = Column(String, index=True, unique=True)
     updated_at = Column(DateTime(timezone=True), default=None, onupdate=func.now())
 
+    reviews_scraped_at = Column(DateTime(timezone=True), default=None)
+    num_reviews = Column(Integer, default=0)
+
     game = relationship("Game", back_populates="sources")
     source = relationship("Source", back_populates="games")
