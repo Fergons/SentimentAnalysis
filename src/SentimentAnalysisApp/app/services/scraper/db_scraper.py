@@ -53,7 +53,7 @@ class DBScraper:
         self.session: Optional[AsyncSession] = None
         self.db_source = None
 
-    async def scrape_games(self, bulk_size: int = 20, end_after: int = None) -> List[int]:
+    async def scrape_games(self, bulk_size: int = 20, end_after: Optional[int] = None) -> List[int]:
         db_game_ids = await crud_game.get_all_app_ids_from_source(self.session, source_id=self.db_source.id)
         games_scraped = []
 
@@ -62,7 +62,7 @@ class DBScraper:
             logger.info(f"No games retrieved from source {self.db_source.name}!")
             return []
         logger.log(logging.INFO, f"{len(db_game_ids)}/{len(games)} already in db!")
-        games = [game for game in games if game in db_game_ids]
+        games = list(set(games) - set(db_game_ids))
         games = games[:end_after] if end_after is not None else games
 
         group_counter = 1
@@ -109,7 +109,7 @@ class DBScraper:
                 obj_in = GameCreate(
                     **detail.dict(by_alias=True)
                 )
-                categories = [category.description for category in detail.categories]
+                categories = detail.categories
                 developers = detail.developers
                 logger.debug(f"Creating game {detail.steam_appid}")
                 game = await crud_game.create_from_source(
@@ -280,6 +280,7 @@ class DBScraper:
             self.session.add_all(objects_to_insert)
             await self.session.commit()
 
+        await crud_game.update_num_reviews(self.session, id=game_id)
         return game_id, num_reviews_scraped
 
     async def scrape_all_reviews_for_not_updated_steam_games(self, game_ids: List[str] = None,
@@ -298,7 +299,6 @@ class DBScraper:
             _, num_reviews_scraped = await self.scrape_reviews_for_game(game_id=game_id,
                                                                         source_game_id=source_game_id,
                                                                         max_reviews=1000000)
-            await crud_game.update_num_reviews(self.session, id=game_id)
             logger.info(f"Scraping for game {source_game_id} finished. Scraped {num_reviews_scraped} reviews!")
 
     async def scrape_all_reviews(self, max_reviews: int = 100):

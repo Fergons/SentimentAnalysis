@@ -147,15 +147,21 @@ class SteamAppDetail(BaseModel):
     steam_appid: str = Field(alias="source_game_id")
     supported_languages: Optional[str] = None
     header_image: Optional[str] = Field(alias="image_url", default=None)
-    developers: Optional[list] = []
+    developers: Optional[List[str]] = []
     publishers: Optional[list] = None
     metacritic: Optional[SteamMetacriticReview] = None
-    categories: List[SteamAppCategory] = []
-    genres: List[SteamAppCategory] = []
+    categories: List[str] = []
     release_date: Optional[datetime]
 
     class Config:
         allow_population_by_field_name = True
+
+    @root_validator(pre=True)
+    def create_categories(cls, values):
+        _categories = [x.get("description") for x in values.get("categories", [])]
+        _genres = [x.get("description") for x in values.get("genres", [])]
+        values["categories"] = [*_categories, *_genres]
+        return values
 
     @validator("release_date", pre=True)
     def parse_date(cls, value):
@@ -166,17 +172,11 @@ class SteamAppDetail(BaseModel):
             "%d %b, %Y"
         )
 
-    @validator("genres", pre=False, always=True)
-    def validate_genres(cls, value, values):
-        values["categories"].extend(value)
-        return value
-
     @validator("steam_appid", pre=True, always=True)
     def validate_id(cls, value):
         if type(value) is not str:
             return str(value)
         return value
-
 
 
 class SteamAppReviewsResponse(BaseModel):
@@ -209,7 +209,13 @@ class SteamAppDetailResponse(BaseModel):
 
 class SteamApp(BaseModel):
     name: str
-    appid: int
+    appid: str
+
+    @validator("appid", pre=True, always=True)
+    def validate_id(cls, value):
+        if type(value) is not str:
+            return str(value)
+        return value
 
 
 class SteamAppListResponse(BaseModel):

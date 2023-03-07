@@ -84,7 +84,7 @@ async def test_create_db_games(session: AsyncSession):
     for detail in result:
         logger.log(logging.DEBUG, detail.dict(by_alias=True))
         detail_dict = detail.dict(by_alias=True)
-        categories_names = [category.description for category in detail.categories]
+        categories_names = detail.categories
         obj_in = GameCreate(source_id=steam.id, **detail_dict)
         logger.log(logging.DEBUG, obj_in.dict())
         game = await crud.game.create_with_categories_by_names_and_source(session,
