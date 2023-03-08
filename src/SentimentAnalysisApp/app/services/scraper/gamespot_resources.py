@@ -117,6 +117,7 @@ class GamespotGame(BaseModel):
     videos_api_url: Optional[AnyHttpUrl] = None
     releases_api_url: Optional[AnyHttpUrl] = None
     site_detail_url: Optional[AnyHttpUrl] = None
+    type: str = "game"
 
     class Config:
         allow_population_by_field_name = True

@@ -246,27 +246,24 @@ class SteamScraper(Scraper):
             counter += 1
         return results
 
-    async def games_page_generator(self, max_games: int = 10, **kwargs) -> AsyncGenerator[List[SteamAppDetail], None]:
+    async def games_page_generator(self, page_size: int = 10, **kwargs) -> AsyncGenerator[List[SteamAppDetail], None]:
         blacklist = kwargs.get("blacklist", [])
-        page_size = kwargs.get("page_size", 10)
         games = await self.get_games()
-        if max_games is not None:
-            games = games[:max_games]
-        games = [game.appid for game in games if game.appid not in blacklist]
+        games = list(set(games)-set(blacklist))
         game_pages = [games[i:i + page_size] for i in range(0, len(games), page_size)]
 
         logger.info("-" * 50)
         logger.info(f"Number of games to be scraped: {len(games)}")
-        logger.info(f"Number of games per group: {page_size}")
-        logger.info(f"Number of groups: {len(game_pages)}")
+        logger.info(f"Number of games per page: {page_size}")
+        logger.info(f"Number of pages: {len(game_pages)}")
         logger.info("-" * 50)
 
         counter = 1
         for page in game_pages:
-            logger.info(f"Processing group {counter}/{len(game_pages) * 100}!")
+            logger.info(f"Getting page {counter}/{len(game_pages) * 100}!")
             tasks = [self.get_game_info(game) for game in page]
             result = await asyncio.gather(*tasks)
-            logger.info(f"Group {counter}/{len(game_pages) * 100} processed!")
+            logger.info(f"Page {counter}/{len(game_pages) * 100} processed!")
             yield result
 
     @staticmethod

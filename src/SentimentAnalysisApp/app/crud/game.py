@@ -1,6 +1,6 @@
 import logging
 from datetime import timedelta, datetime
-from typing import List, Optional, Any, Tuple
+from typing import List, Optional, Any, Tuple, Dict
 
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy import column, update, func, cast, and_, text, or_
@@ -51,7 +51,7 @@ class CRUDCategory(CRUDBase[Category, CategoryCreate, CategoryUpdate]):
 
         await db.commit()
 
-    async def add_categories_by_name_for_game(self, db: AsyncSession, *, db_game: Game, names: List[str]):
+    async def _add_categories_by_name_for_game(self, db: AsyncSession, *, db_game: Game, names: List[str]):
         result = await db.execute(select(self.model.name, self.model.id).where(self.model.name.in_(names)))
         category_ids = result.all()
         category_ids = {name: id for name, id in category_ids}
@@ -84,14 +84,13 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]):
         db_obj = result.scalars().first()
         return db_obj
 
-    async def get_ids_by_source_game_ids(self, db: AsyncSession, source_id: int, source_game_ids: List[str]) -> dict:
+    async def get_ids_by_source_game_ids(
+            self, db: AsyncSession, source_id: int, source_game_ids: List[str]
+    ) -> Dict[str, int]:
         result = await db.execute(select(GameSource.source_game_id, GameSource.game_id)
                                   .where(and_(GameSource.source_id == source_id,
                                               GameSource.source_game_id.in_(source_game_ids))))
-        game_ids = result.all()
-        if game_ids is None:
-            return {}
-        return dict(game_ids)
+        return dict(result.all())
 
     async def get_by_name(self, db: AsyncSession, *, name: str) -> Optional[Category]:
         ts_query = func.plainto_tsquery(cast("english", RegConfig), name)
@@ -125,7 +124,7 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]):
     ) -> Game:
         db_obj = self.model(**obj_in.dict(exclude={"source_id", "source_game_id"}))  # type: ignore
         logger.debug(f"creating categories for {obj_in.name}")
-        await crud_category.add_categories_by_name_for_game(db, db_game=db_obj, names=names)
+        await crud_category._add_categories_by_name_for_game(db, db_game=db_obj, names=names)
         logger.debug(f"created categories for {obj_in.name}")
         db.add(db_obj)
         await db.commit()
@@ -138,7 +137,7 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]):
         obj_in_data = obj_in.dict()
         game_db_obj = self.model(**obj_in_data)  # type: ignore
         logger.debug(f"creating categories for {obj_in.name}")
-        await crud_category.add_categories_by_name_for_game(db, db_game=game_db_obj, names=names)
+        await crud_category._add_categories_by_name_for_game(db, db_game=game_db_obj, names=names)
         logger.debug(f"created categories for {obj_in.name}")
         game_source_db_obj = GameSource(
             game=game_db_obj,  # type: ignore

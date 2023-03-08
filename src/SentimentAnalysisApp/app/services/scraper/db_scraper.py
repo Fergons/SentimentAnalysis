@@ -120,10 +120,10 @@ class DBScraper:
                 logger.debug(f"Game {detail.steam_appid} created!")
                 if len(categories) > 0:
                     logger.debug(f"Adding categories {categories} to game {detail.steam_appid}")
-                    await crud_category.add_categories_by_name_for_game(self.session, db_game=game, names=categories)
+                    await crud_category._add_categories_by_name_for_game(self.session, db_game=game, names=categories)
                 if len(developers) > 0:
                     logger.debug(f"Adding developers {developers} to game {detail.steam_appid}")
-                    await crud_developer.add_developers_by_name_for_game(self.session, db_game=game, names=developers)
+                    await crud_developer._add_developers_by_name_for_game(self.session, db_game=game, names=developers)
                 await self.session.commit()
 
                 logger.debug(f"Game {detail.steam_appid} created!")
@@ -136,17 +136,18 @@ class DBScraper:
 
         logger.info(f"Scraped {len(games_scraped)} games, ending...")
 
-    # async def scrape_games(self, bulk_size: int = 20, end_after: int = 1000) -> List[int]:
+    # async def scrape_games(self, num_games: int = 1000, **kwargs) -> List[str]:
     #     new_games_in_db = []
-    #     async for page in self.scraper.games_page_generator(page_size=bulk_size, max_games=end_after):
+    #     async for page in self.scraper.games_page_generator(page_size=100):
     #         logger.info(f"Adding {len(page)} games to db!")
     #         db_games = await self.add_games_to_db(page)
     #         logger.info(f"Added {db_games.keys()} games to db!")
     #         await self.session.commit()
     #         new_games_in_db += db_games.keys()
+    #         if len(new_games_in_db) >= num_games:
+    #             break
     #
     #     return new_games_in_db
-
     async def add_games_to_db(self, scraped_games: List[BaseModel]) -> Dict[str, models.Game]:
         data = [game.dict(by_alias=True) for game in scraped_games]
         source_game_ids = [game.get("source_game_id") for game in data]
@@ -160,13 +161,14 @@ class DBScraper:
             db_id = db_game_ids.get(source_game_id)
             db_game = models.Game(**obj_data)
             if db_id is None:
-                categories = [category.get("name") for category in game.get("categories")]
-                developers = game.get("developers")
+                categories = game.get("categories", [])
+                developers = game.get("developers", [])
                 if len(categories) > 0:
-                    await crud_category.add_categories_by_name_for_game(self.session, db_game=db_game, names=categories)
+                    await crud_category._add_categories_by_name_for_game(self.session, db_game=db_game,
+                                                                         names=categories)
                 if len(developers) > 0:
-                    await crud_developer.add_developers_by_name_for_game(self.session, db_game=db_game,
-                                                                         names=developers)
+                    await crud_developer._add_developers_by_name_for_game(self.session, db_game=db_game,
+                                                                          names=developers)
             else:
                 db_game.id = db_id
             db_games[source_game_id] = db_game

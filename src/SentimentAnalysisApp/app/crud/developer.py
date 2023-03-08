@@ -19,7 +19,7 @@ class CRUDDeveloper(CRUDBase[Developer, DeveloperCreate, DeveloperUpdate]):
         result = await db.scalars(select(self.model.id).where(self.model.name == name))
         return result.first()
 
-    async def add_developers_by_name_for_game(self, db: AsyncSession, *, db_game: Game, names: List[str]):
+    async def _add_developers_by_name_for_game(self, db: AsyncSession, *, db_game: Game, names: List[str]):
         result = await db.execute(select(self.model.name, self.model.id).where(self.model.name.in_(names)))
         developers_ids = result.all()
         developers_ids = {name: id for name, id in developers_ids}
