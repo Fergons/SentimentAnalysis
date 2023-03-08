@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 from enum import Enum
 from typing import Optional, Union, List, Any, Literal, Iterable, Tuple, TypeVar
-from pydantic import BaseModel, Field, validator, AnyHttpUrl
+from pydantic import BaseModel, Field, validator, AnyHttpUrl, root_validator
 
 GAMESPOT_DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
@@ -94,6 +94,13 @@ class GamespotFranchise(BaseModel):
     name: str
 
 
+game_tags = {
+    "Driving/Racing": "Racing",
+    "Shooter": "FPS",
+    "Role-Playing": "RPG",
+}
+
+
 class GamespotGame(BaseModel):
     id: int = Field(alias="source_game_id")
     name: str
@@ -101,7 +108,7 @@ class GamespotGame(BaseModel):
     release_date: Optional[datetime] = None
     deck: Optional[str] = None
     image: Optional[GamespotImage] = None
-    genres: Optional[List[GamespotGenre]] = []
+    categories: List[str] = []
     themes: Optional[List[GamespotTheme]] = []
     franchises: Optional[List[GamespotFranchise]] = None
     images_api_url: Optional[AnyHttpUrl] = None
@@ -113,6 +120,20 @@ class GamespotGame(BaseModel):
 
     class Config:
         allow_population_by_field_name = True
+
+    @root_validator(pre=True)
+    def create_categories(cls, values):
+        categories = []
+        for genre in values.get("genres", []):
+            genre_name = genre.get("name")
+            if genre_name is None:
+                continue
+            if genre_name in game_tags:
+                categories.append(game_tags[genre_name])
+            else:
+                categories.append(genre_name)
+        values["categories"] = categories
+        return values
 
     @validator("release_date", pre=True)
     def parse_dates(cls, value):

@@ -180,13 +180,7 @@ class Scraper:
     async def get_reviewer_info(self, reviewer_id):
         raise NotImplementedError
 
-    async def resource_page_generator(self, resource: ScrapingResource, page_size: int = 100, params: dict = None):
-        raise NotImplementedError
-
     async def get_review_detail(self, review_id):
-        raise NotImplementedError
-
-    async def get_game_detail(self, game_id):
         raise NotImplementedError
 
     async def games_page_generator(self, page_size: int = 100, params: dict = None):
