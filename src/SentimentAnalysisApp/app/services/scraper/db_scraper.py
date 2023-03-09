@@ -55,127 +55,133 @@ class DBScraper:
         self.session: Optional[AsyncSession] = None
         self.db_source = None
 
-    async def scrape_games(self, bulk_size: int = 20, end_after: Optional[int] = None) -> List[int]:
-        db_game_ids = await crud_game.get_all_app_ids_from_source(self.session, source_id=self.db_source.id)
-        games_scraped = []
-
-        games = await self.scraper.get_games()
-        if games is None:
-            logger.info(f"No games retrieved from source {self.db_source.name}!")
-            return []
-        logger.log(logging.INFO, f"{len(db_game_ids)}/{len(games)} already in db!")
-        games = list(set(games) - set(db_game_ids))
-        games = games[:end_after] if end_after is not None else games
-
-        group_counter = 1
-        for bulk_start in range(0, len(games), bulk_size):
-            tasks = []
-            for game_id in games[bulk_start:bulk_start + bulk_size]:
-                tasks.append(self.scraper.get_game_info(game_id))
-
-            counter = 0
-            for future in asyncio.as_completed(tasks):
-                counter += 1
-                detail: Optional[SteamAppDetail] = await future
-
-                if detail is None:
-                    continue
-                logger.log(logging.DEBUG, f"{type(detail)}: {detail}")
-
-                db_game = await crud_game.get_by_source_id(
-                    self.session, source_id=self.db_source.id, source_game_id=detail.steam_appid)
-                logger.debug(
-                    f"App {detail.steam_appid} checked if in db: {db_game.id if db_game is not None else 'Not found'}")
-                if db_game is not None:
-                    continue
-
-                if detail.type != "game":
-                    try:
-                        logger.debug("Creating non-game app...")
-                        result = await self.session.execute(select(models.GameSource.id).where(
-                            and_(
-                                models.GameSource.source_id == self.db_source.id,
-                                models.GameSource.source_game_id == detail.steam_appid
-                            )
-                        ))
-                        non_game_app = result.scalars().first()
-                        if non_game_app is None:
-                            await crud_game.create_non_game_app_from_source(
-                                self.session, source_id=self.db_source.id, source_obj_id=detail.steam_appid
-                            )
-                    except exc.IntegrityError as e:
-                        logger.error(f"Integrity Error: {e}")
-                    finally:
-                        continue
-
-                obj_in = GameCreate(
-                    **detail.dict(by_alias=True)
-                )
-                categories = detail.categories
-                developers = detail.developers
-                logger.debug(f"Creating game {detail.steam_appid}")
-                game = await crud_game.create_from_source(
-                    self.session, obj_in=obj_in, source_id=self.db_source.id, source_game_id=detail.steam_appid
-                )
-                logger.debug(f"Game {detail.steam_appid} created!")
-                if len(categories) > 0:
-                    logger.debug(f"Adding categories {categories} to game {detail.steam_appid}")
-                    await crud_category._add_categories_by_name_for_game(self.session, db_game=game, names=categories)
-                if len(developers) > 0:
-                    logger.debug(f"Adding developers {developers} to game {detail.steam_appid}")
-                    await crud_developer._add_developers_by_name_for_game(self.session, db_game=game, names=developers)
-                await self.session.commit()
-
-                logger.debug(f"Game {detail.steam_appid} created!")
-                games_scraped.append(game.id)
-
-                logger.log(logging.INFO, f"Progress {counter}/{len(tasks)} tasks done!")
-
-            logger.log(logging.INFO, f"Group {group_counter}/{len(games) // bulk_size} done!")
-            group_counter += 1
-
-        logger.info(f"Scraped {len(games_scraped)} games, ending...")
-
-    # async def scrape_games(self, num_games: int = 1000, **kwargs) -> List[str]:
-    #     new_games_in_db = []
-    #     async for page in self.scraper.games_page_generator(page_size=100):
-    #         logger.info(f"Adding {len(page)} games to db!")
-    #         db_games = await self.add_games_to_db(page)
-    #         logger.info(f"Added {db_games.keys()} games to db!")
-    #         await self.session.commit()
-    #         new_games_in_db += db_games.keys()
-    #         if len(new_games_in_db) >= num_games:
-    #             break
+    # async def scrape_games(self, bulk_size: int = 20, end_after: Optional[int] = None) -> List[int]:
+    #     db_game_ids = await crud_game.get_all_app_ids_from_source(self.session, source_id=self.db_source.id)
+    #     games_scraped = []
     #
-    #     return new_games_in_db
+    #     games = await self.scraper.get_games()
+    #     if games is None:
+    #         logger.info(f"No games retrieved from source {self.db_source.name}!")
+    #         return []
+    #     logger.log(logging.INFO, f"{len(db_game_ids)}/{len(games)} already in db!")
+    #     games = list(set(games) - set(db_game_ids))
+    #     games = games[:end_after] if end_after is not None else games
+    #
+    #     group_counter = 1
+    #     for bulk_start in range(0, len(games), bulk_size):
+    #         tasks = []
+    #         for game_id in games[bulk_start:bulk_start + bulk_size]:
+    #             tasks.append(self.scraper.get_game_info(game_id))
+    #
+    #         counter = 0
+    #         for future in asyncio.as_completed(tasks):
+    #             counter += 1
+    #             detail: Optional[SteamAppDetail] = await future
+    #
+    #             if detail is None:
+    #                 continue
+    #             logger.log(logging.DEBUG, f"{type(detail)}: {detail}")
+    #
+    #             db_game = await crud_game.get_by_source_id(
+    #                 self.session, source_id=self.db_source.id, source_game_id=detail.steam_appid)
+    #             logger.debug(
+    #                 f"App {detail.steam_appid} checked if in db: {db_game.id if db_game is not None else 'Not found'}")
+    #             if db_game is not None:
+    #                 continue
+    #
+    #             if detail.type != "game":
+    #                 try:
+    #                     logger.debug("Creating non-game app...")
+    #                     result = await self.session.execute(select(models.GameSource.id).where(
+    #                         and_(
+    #                             models.GameSource.source_id == self.db_source.id,
+    #                             models.GameSource.source_game_id == detail.steam_appid
+    #                         )
+    #                     ))
+    #                     non_game_app = result.scalars().first()
+    #                     if non_game_app is None:
+    #                         await crud_game.create_non_game_app_from_source(
+    #                             self.session, source_id=self.db_source.id, source_obj_id=detail.steam_appid
+    #                         )
+    #                 except exc.IntegrityError as e:
+    #                     logger.error(f"Integrity Error: {e}")
+    #                 finally:
+    #                     continue
+    #
+    #             obj_in = GameCreate(
+    #                 **detail.dict(by_alias=True)
+    #             )
+    #             categories = detail.categories
+    #             developers = detail.developers
+    #             logger.debug(f"Creating game {detail.steam_appid}")
+    #             game = await crud_game.create_from_source(
+    #                 self.session, obj_in=obj_in, source_id=self.db_source.id, source_game_id=detail.steam_appid
+    #             )
+    #             logger.debug(f"Game {detail.steam_appid} created!")
+    #             if len(categories) > 0:
+    #                 logger.debug(f"Adding categories {categories} to game {detail.steam_appid}")
+    #                 await crud_category._add_categories_by_name_for_game(self.session, db_game=game, names=categories)
+    #             if len(developers) > 0:
+    #                 logger.debug(f"Adding developers {developers} to game {detail.steam_appid}")
+    #                 await crud_developer._add_developers_by_name_for_game(self.session, db_game=game, names=developers)
+    #             await self.session.commit()
+    #
+    #             logger.debug(f"Game {detail.steam_appid} created!")
+    #             games_scraped.append(game.id)
+    #
+    #             logger.log(logging.INFO, f"Progress {counter}/{len(tasks)} tasks done!")
+    #
+    #         logger.log(logging.INFO, f"Group {group_counter}/{len(games) // bulk_size} done!")
+    #         group_counter += 1
+    #
+    #     logger.info(f"Scraped {len(games_scraped)} games, ending...")
+
+    async def scrape_games(self, num_games: Optional[int] = 1000, **kwargs) -> List[str]:
+        blacklist = await crud_game.get_all_app_ids_from_source(self.session, source_id=self.db_source.id)
+        new_games_in_db = []
+        async for page in self.scraper.games_page_generator(page_size=kwargs.get("page_size", 100), blacklist=blacklist):
+            db_games = await self.add_games_to_db(page)
+            await self.session.commit()
+            logger.info(f"Added {list(db_games.keys())} games to db!")
+            new_games_in_db += db_games.keys()
+            if num_games is not None and len(new_games_in_db) >= num_games:
+                break
+
+        return new_games_in_db
+
     async def add_games_to_db(self, scraped_games: List[BaseModel]) -> Dict[str, models.Game]:
-        data = [game.dict(by_alias=True) for game in scraped_games]
+        data = [game.dict(by_alias=True) for game in scraped_games if game is not None]
         source_game_ids = [game.get("source_game_id") for game in data]
-        db_game_ids = await crud_game.get_ids_by_source_game_ids(self.session,
-                                                                 source_id=self.db_source.id,
-                                                                 source_game_ids=source_game_ids)
-        db_games = {}
+        db_games = await crud_game.get_by_source_game_ids(self.session,
+                                                          source_id=self.db_source.id,
+                                                          source_game_ids=source_game_ids)
+        logger.debug(f"Found {list(db_games.keys())} games in db!")
         for game in data:
             source_game_id = game.get("source_game_id")
+            in_db = source_game_id in db_games
+            if in_db:
+                continue
+            if game.get("type", "not_game") != "game":
+                # add non-game app to db if not already there (only steam has non-game apps mixed with games)
+                db_gamesource = models.GameSource(source_id=self.db_source.id, source_game_id=source_game_id)
+                self.session.add(db_gamesource)
+                continue
             obj_data = GameCreate(**game).dict()
-            db_id = db_game_ids.get(source_game_id)
             db_game = models.Game(**obj_data)
-            if db_id is None:
-                categories = game.get("categories", [])
-                developers = game.get("developers", [])
-                if len(categories) > 0:
-                    await crud_category._add_categories_by_name_for_game(self.session, db_game=db_game,
-                                                                         names=categories)
-                if len(developers) > 0:
-                    await crud_developer._add_developers_by_name_for_game(self.session, db_game=db_game,
-                                                                          names=developers)
-            else:
-                db_game.id = db_id
             db_games[source_game_id] = db_game
-            db_gamesource = models.GameSource(source_id=self.db_source.id, source_game_id=source_game_id, game=db_game)
+            db_gamesource = models.GameSource(source_id=self.db_source.id, source_game_id=source_game_id)
+            db_gamesource.game = db_game
+            categories = game.get("categories", [])
+            developers = game.get("developers", [])
+            if len(categories) > 0:
+                await crud_category._add_categories_by_name_for_game(
+                    self.session, db_game=db_game, names=categories)
+            if len(developers) > 0:
+                await crud_developer._add_developers_by_name_for_game(
+                    self.session, db_game=db_game, names=developers)
+            self.session.add(db_game)
             self.session.add(db_gamesource)
 
-        self.session.add_all(db_games.values())
         return db_games
 
     async def add_reviews_to_db(self, scraped_reviews: List[BaseModel]) -> Dict[str, models.Review]:
@@ -228,8 +234,8 @@ class DBScraper:
             raise ValueError("Either game_id or source_game_id must be provided!")
         if game_id is None:
             ids = await crud_game.get_ids_by_source_game_ids(self.session,
-                                                                 source_id=self.db_source.id,
-                                                                 source_game_ids=[source_game_id])
+                                                             source_id=self.db_source.id,
+                                                             source_game_ids=[source_game_id])
             game_id = ids.get(source_game_id)
             logger.debug(f"game_id: {ids}")
         if source_game_id is None:
@@ -375,7 +381,7 @@ async def scrape_steam_games(rate_limit: dict = None):
     async with async_session() as session:
         async with SteamScraper(rate_limit=rate_limit) as scraper:
             db_scraper = await DBScraper.create(scraper=scraper, session=session)
-            await db_scraper.scrape_games(bulk_size=10, end_after=None)
+            await db_scraper.scrape_games(page_size=10, num_games=None)
 
 
 async def scrape_steam_reviews(rate_limit: dict = None, check_interval: timedelta = timedelta(days=7)):

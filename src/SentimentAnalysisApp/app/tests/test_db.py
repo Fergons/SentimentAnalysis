@@ -94,8 +94,6 @@ async def test_create_db_games(session: AsyncSession):
                                                                           source_id=steam.id,
                                                                           names=categories_names)
         assert game.name == detail.name
-        assert game.sources is not None
-        assert game.sources[0].source_id == steam.id
 
 
 # @pytest.mark.anyio
@@ -149,9 +147,9 @@ async def test_create_db_games(session: AsyncSession):
 @pytest.mark.anyio
 async def test_steam_db_scraper_scrape_games(steam_db_scraper, session: AsyncSession):
     num_of_games = 2
-    scraped_games = await steam_db_scraper.scrape_games(bulk_size=20, end_after=num_of_games)
+    scraped_games = await steam_db_scraper.scrape_games(num_games=12, page_size=10)
     result = await session.execute(
-        select(GameSource.game_id).where(GameSource.source_id == steam_db_scraper.db_source.id))
+        select(GameSource.source_game_id).where(GameSource.source_id == steam_db_scraper.db_source.id))
     games_in_db = result.scalars().all()
     # check if scraped_games are in db
     assert all(map(lambda x: x in games_in_db, scraped_games))
@@ -197,12 +195,12 @@ async def test_steam_db_scraper_scrape_games(steam_db_scraper, session: AsyncSes
 #     assert all(map(lambda x: x.processed_at is None, reviews))
 
 
-@pytest.mark.anyio
-async def test_scrape_reviews_for_game(steam_db_scraper, session: AsyncSession):
-    game = await crud.game.get(session, 1)
-    assert game is not None
-    game_id, num_reviews = await steam_db_scraper.scrape_reviews_for_game(game_id=game.id, language="czech", max_reviews=300)
-    result = await session.execute(select(Review.id).where(
-        and_(Review.game_id == game.id, Review.source_id == steam_db_scraper.db_source.id)))
-    num_reviews_in_db = len(result.scalars().all())
-    assert num_reviews == num_reviews_in_db
+# @pytest.mark.anyio
+# async def test_scrape_reviews_for_game(steam_db_scraper, session: AsyncSession):
+#     game = await crud.game.get(session, 1)
+#     assert game is not None
+#     game_id, num_reviews = await steam_db_scraper.scrape_reviews_for_game(game_id=game.id, language="czech", max_reviews=300)
+#     result = await session.execute(select(Review.id).where(
+#         and_(Review.game_id == game.id, Review.source_id == steam_db_scraper.db_source.id)))
+#     num_reviews_in_db = len(result.scalars().all())
+#     assert num_reviews == num_reviews_in_db

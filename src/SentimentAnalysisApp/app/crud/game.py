@@ -92,6 +92,15 @@ class CRUDGame(CRUDBase[Game, GameCreate, GameUpdate]):
                                               GameSource.source_game_id.in_(source_game_ids))))
         return dict(result.all())
 
+    async def get_by_source_game_ids(
+            self, db: AsyncSession, source_id: int, source_game_ids: List[str]
+    ) -> Dict[str, Game]:
+        result = await db.scalars(select(GameSource)
+                                  .where(and_(GameSource.source_id == source_id,
+                                              GameSource.source_game_id.in_(source_game_ids)))
+                                  .options(selectinload(GameSource.game)))
+        return {gs.source_game_id: gs.game for gs in result.all()}
+
     async def get_by_name(self, db: AsyncSession, *, name: str) -> Optional[Category]:
         ts_query = func.plainto_tsquery(cast("english", RegConfig), name)
         stmt = select(self.model).where(

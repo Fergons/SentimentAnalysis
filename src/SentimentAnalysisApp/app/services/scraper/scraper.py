@@ -260,10 +260,11 @@ class SteamScraper(Scraper):
 
         counter = 1
         for page in game_pages:
-            logger.info(f"Getting page {counter}/{len(game_pages) * 100}!")
+            logger.info(f"Getting page {counter}/{len(game_pages)}!")
             tasks = [self.get_game_info(game) for game in page]
             result = await asyncio.gather(*tasks)
-            logger.info(f"Page {counter}/{len(game_pages) * 100} processed!")
+            logger.info(f"Page {counter}/{len(game_pages)} processed!")
+            counter += 1
             yield result
 
     @staticmethod
