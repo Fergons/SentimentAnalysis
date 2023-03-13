@@ -129,6 +129,13 @@
                             "category": "violence",
                             "from": 0,
                             "to": 0
+                        },
+                        {
+                            "term": "",
+                            "polarity": "positive",
+                            "category": "overall",
+                            "from": 0,
+                            "to": 0
                         }
                     ],
                     "aspectCategories": [
@@ -194,6 +201,13 @@
                             "category": "game mode",
                             "from": 75,
                             "to": 84
+                        },
+                        {
+                            "term": "",
+                            "polarity": "positive",
+                            "category": "overall",
+                            "from": 0,
+                            "to": 0
                         }
                     ],
                     "aspectCategories": [
@@ -254,6 +268,13 @@
                             "category": "price",
                             "from": 25,
                             "to": 29
+                        },
+                        {
+                            "term": "",
+                            "polarity": "positive",
+                            "category": "overall",
+                            "from": 0,
+                            "to": 0
                         }
                     ],
                     "aspectCategories": [
@@ -8400,7 +8421,7 @@
                     "text": "opravdu kvalitní hra která mi nejde zapnout",
                     "aspectTerms": [
                         {
-                            "term": "hra",
+                            "term": "",
                             "category": "sarcasm",
                             "polarity": "negative",
                             "from": 0,
@@ -10002,26 +10023,196 @@
                     ]
                 },
                 {
-                  "reviewId":0,
-                   "text": "Trošičku to ještě chce poladit, ale jinak premiový titul",
-                   "aspectTerms":[
+                    "reviewId": 0,
+                    "text": "Trošičku to ještě chce poladit, ale jinak premiový titul",
+                    "aspectTerms": [
                         {
-                             "term":"",
-                             "category":"performance_bugs",
-                             "polarity":"negative",
-                             "from":0,
-                             "to":0
+                            "term": "",
+                            "category": "performance_bugs",
+                            "polarity": "negative",
+                            "from": 0,
+                            "to": 0
                         },
                         {
-                             "term":"",
-                             "category":"overall",
-                             "polarity":"positive",
-                             "from":0,
-                             "to":0
+                            "term": "",
+                            "category": "overall",
+                            "polarity": "positive",
+                            "from": 0,
+                            "to": 0
                         }
-                   ],
-                   "aspectCategories":[
-                   ]
+                    ],
+                    "aspectCategories": [
+                    ]
+                }
+            ]
+        }
+        {
+            "category": "overall",
+            "reviews": [
+                {
+                    "reviewId": 0,
+                    "text": "Super hra.",
+                    "aspectTerms": [
+                        {
+                            "term": "",
+                            "category": "overall",
+                            "polarity": "positive",
+                            "from": 0,
+                            "to": 0
+                        }
+                    ],
+                    "aspectCategories": [
+                    ]
+                },
+                {
+                    "reviewId": 0,
+                    "text": "Hra je super, ale ještě by měla být lepší.",
+                    "aspectTerms": [
+                        {
+                            "term": "",
+                            "category": "overall",
+                            "polarity": "positive",
+                            "from": 0,
+                            "to": 0
+                        }
+                    ],
+                    "aspectCategories": [
+                    ]
+                },
+                {
+                    "reviewId": 0,
+                    "text": "Parada.",
+                    "aspectTerms": [
+                        {
+                            "term": "",
+                            "category": "overall",
+                            "polarity": "positive",
+                            "from": 0,
+                            "to": 0
+                        }
+                    ],
+                    "aspectCategories": [
+                    ]
+                },
+                {
+                    "reviewId": 0,
+                    "text": "Super",
+                    "aspectTerms": [
+                        {
+                            "term": "",
+                            "category": "overall",
+                            "polarity": "positive",
+                            "from": 0,
+                            "to": 0
+                        }
+                    ],
+                    "aspectCategories": [
+                    ]
+                },
+                {
+                    "reviewId": 0,
+                    "text": "nemám co vytknout",
+                    "aspectTerms": [
+                        {
+                            "term": "",
+                            "category": "overall",
+                            "polarity": "positive",
+                            "from": 0,
+                            "to": 0
+                        }
+                    ],
+                    "aspectCategories": [
+                    ]
+                },
+                {
+                    "reviewId": 0,
+                    "text": "Splňuje očekávání",
+                    "aspectTerms": [
+                        {
+                            "term": "",
+                            "category": "overall",
+                            "polarity": "positive",
+                            "from": 0,
+                            "to": 0
+                        }
+                    ],
+                    "aspectCategories": [
+                    ]
+                },
+                {
+                    "reviewId": 0,
+                    "text": "Úplnej odpad, nic nefunguje",
+                    "aspectTerms": [
+                        {
+                            "term": "",
+                            "category": "overall",
+                            "polarity": "negative",
+                            "from": 0,
+                            "to": 0
+                        }
+                    ],
+                    "aspectCategories": [
+                    ]
+                },
+                {
+                    "reviewId": 0,
+                    "text": "Nejnudnejší hra na světě",
+                    "aspectTerms": [
+                        {
+                            "term": "",
+                            "category": "overall",
+                            "polarity": "negative",
+                            "from": 0,
+                            "to": 0
+                        }
+                    ],
+                    "aspectCategories": [
+                    ]
+                },
+                {
+                    "reviewId": 0,
+                    "text": "Hra není úplne k zahození, ale nejde o žádnou hru, která by byla nějakým zázrakem.",
+                    "aspectTerms": [
+                        {
+                            "term": "",
+                            "category": "overall",
+                            "polarity": "neutral",
+                            "from": 0,
+                            "to": 0
+                        }
+                    ],
+                    "aspectCategories": [
+                    ]
+                },
+                {
+                    "reviewId": 0,
+                    "text": "hra je ok, ale mohla by být lepší",
+                    "aspectTerms": [
+                        {
+                            "term": "",
+                            "category": "overall",
+                            "polarity": "neutral",
+                            "from": 0,
+                            "to": 0
+                        }
+                    ],
+                    "aspectCategories": [
+                    ]
+                },
+                {
+                    "reviewId": 0,
+                    "text": "odpad",
+                    "aspectTerms": [
+                        {
+                            "term": "",
+                            "category": "overall",
+                            "polarity": "negative",
+                            "from": 0,
+                            "to": 0
+                        }
+                    ],
+                    "aspectCategories": [
+                    ]
                 }
             ]
         }
