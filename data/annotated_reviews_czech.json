@@ -9882,7 +9882,7 @@
                     ],
                     "aspectCategories": [
                     ]
-                }
+                },
                 {
                     "reviewId": 0,
                     "text": "Skvělé pokračování této hry jak po grafické stránce tak po herní.",
@@ -10045,9 +10045,9 @@
                     ]
                 }
             ]
-        }
+        },
         {
-            "category": "overall",
+            "category": ["overall"],
             "reviews": [
                 {
                     "reviewId": 0,
@@ -10213,6 +10213,59 @@
                     ],
                     "aspectCategories": [
                     ]
+                }
+            ]
+        },
+        {
+            "category": ["noaspect"],
+            "reviews":[
+                {
+                  "reviewId":0,
+                   "text": "Vždycky jsem si myslel, že je to jenom hra, ale když jsem si ji zahrál, tak jsem si uvědomil, že je to spíš životní styl.",
+                   "aspectTerms":[
+                   ],
+                   "aspectCategories":[
+                   ]
+                },
+                {
+                  "reviewId":0,
+                   "text": "Nikdy jsem nehrál takovou hru.",
+                   "aspectTerms":[
+                   ],
+                   "aspectCategories":[
+                   ]
+                },
+                {
+                  "reviewId":0,
+                   "text": "I přesto, že si po každém kole říkám proč jsem tak neschopný a zbytečný člověk, a proč mají ostatní takové štěstí ve hře a dokážou v životě vůbec něco udělat a něčeho dosáhnout.",
+                   "aspectTerms":[
+                   ],
+                   "aspectCategories":[
+                   ]
+                },
+                {
+                  "reviewId":0,
+                   "text": "Hraju to jenom z toho důvodu, že jsem zvyklý na to, že se vždycky snažím být nejlepší.",
+                   "aspectTerms":[
+                   ],
+                   "aspectCategories":[
+                   ]
+                },
+                {
+                  "reviewId":0,
+                   "text": "Hra je taková, že se vždycky cítím, jako bych byl v nějakém filmu.",
+                   "aspectTerms":[
+                   ],
+                   "aspectCategories":[
+                   ]
+                },
+                {
+                  "reviewId":0,
+                   "text": "Ten pocit, když se vám podaří něco udělat, je úžasný.",
+                   "aspectTerms":[
+                   ],
+                   "aspectCategories":[
+                   ]
                 }
             ]
         }

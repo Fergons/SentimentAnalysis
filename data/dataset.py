@@ -21,6 +21,7 @@ def get_annotated_reviews():
     """Gets annotated reviews from the dataset."""
     return get_all_reviews_from_dataset(get_my_dataset())
 
+
 def fill_in_missing_data(data):
     """
     Assigns ids to reviews.
@@ -70,6 +71,7 @@ def duplicate_reviews_with_neutral_terms(dataset):
     reviews.extend(new_reviews)
     return reviews
 
+
 def remove_reviews_with_neutral_terms(dataset):
     reviews = get_all_reviews_from_dataset(dataset)
     new_reviews = []
@@ -84,6 +86,7 @@ def remove_reviews_with_neutral_terms(dataset):
             new_reviews.append(review)
     return new_reviews
 
+
 def replace_subgroup_names_with_parent_group_name(dataset):
     """
     Replaces subgroup names with parent group name
@@ -96,8 +99,8 @@ def replace_subgroup_names_with_parent_group_name(dataset):
                      'controls', 'tutorial', 'quality', 'gun play',
                      'game environment', 'game design', 'difficulty', 'content'],
         'price': ['price'],
-        'audio_visuals': ['audio_visuals','visuals', 'sounds', 'game environment', 'game design'],
-        'performance_bugs': ['performance_bugs' ,'bugs','performance', 'saves', 'developers', 'updates', 'anticheat'],
+        'audio_visuals': ['audio_visuals', 'visuals', 'sounds', 'game environment', 'game design'],
+        'performance_bugs': ['performance_bugs', 'bugs', 'performance', 'saves', 'developers', 'updates', 'anticheat'],
         'community': ['languages', 'reviews', 'community', 'comparison'],
         'overall': ['overall']
     }
@@ -117,6 +120,7 @@ def replace_subgroup_names_with_parent_group_name(dataset):
 
     return dataset
 
+
 def create_train_test(dataset, train=0.8):
     reviews = dataset
     new_reviews = reviews
@@ -126,6 +130,7 @@ def create_train_test(dataset, train=0.8):
     train = new_reviews[:train_size]
     test = new_reviews[train_size:]
     return train, test
+
 
 def remove_emoticons(text):
     emoticon_string = r"(?:[<>]?[:;=8][\-o\*\']?[\)\]\(\[dDpP\/\:\}\{@\|\\]|[\)\]\(\[dDpP\/\:\}\{@\|\\][\-o\*\']?[:;=8][<>]?)"
@@ -144,7 +149,7 @@ def clean_text(text):
     # remove textual emoji
     text = remove_emoticons(text)
 
-    #remove # and @
+    # remove # and @
     for punc in '"#$%&\'()*+-/:;<=>@[\\]^_`{|}~':
         text = text.replace(punc, '')
 
@@ -190,10 +195,10 @@ def dataset_to_df(dataset) -> pd.DataFrame:
     """
     data_new = {idx: dict_of_reviews["reviews"] for idx, dict_of_reviews in enumerate(dataset["dataset"])}
     data_restructured = {(i, review["text"], term_id): term
-         for i in data_new.keys()  # for each list of reviews
-         for review in data_new[i]  # for each review in the list of reviews
-         for term_id, term in enumerate(review["aspectTerms"])
-         }
+                         for i in data_new.keys()  # for each list of reviews
+                         for review in data_new[i]  # for each review in the list of reviews
+                         for term_id, term in enumerate(review["aspectTerms"])
+                         }
     df = pd.DataFrame.from_dict(
         data_restructured,
         orient='index')
@@ -248,7 +253,7 @@ def dataset_to_conll(dataset):
         if text != "":
             words = tokenize.word_tokenize(text, language="czech")
             terms = review["aspectTerms"]
-            labels = ["O"]*len(words)
+            labels = ["O"] * len(words)
             for term in terms:
                 term_words = term["term"].split(" ")
                 num_term_words = len(term_words)
@@ -257,8 +262,8 @@ def dataset_to_conll(dataset):
                 for word_pos, word in enumerate(words):
                     if word == term_head:
                         labels[word_pos] = "B-A"
-                        for i in range(num_term_words-1):
-                            labels[word_pos+i+1] = "I-A"
+                        for i in range(num_term_words - 1):
+                            labels[word_pos + i + 1] = "I-A"
 
             conll_dataset.append((words, labels))
 
@@ -274,6 +279,7 @@ def load_json_data(file):
         raise
     else:
         return data
+
 
 def load_txt_data(file):
     try:
@@ -313,7 +319,7 @@ def save_conll_data(file, dataset):
     try:
         with open(file, "w", encoding="utf-8") as fopen:
             for words, labels in dataset:
-                for word, label in zip(words,labels):
+                for word, label in zip(words, labels):
                     fopen.writelines(f"{word} {label}\n")
                 fopen.write("\n")
     except (FileNotFoundError, ValueError) as err:
@@ -325,6 +331,49 @@ def save_conll_data(file, dataset):
 
 def get_all_reviews_from_dataset(dataset):
     return [review for dict_of_reviews in dataset["dataset"] for review in dict_of_reviews["reviews"]]
+
+
+def create_instructABSA_train_test_split(dataset):
+    """
+    Creates instructABSA train/test split
+    :param dataset: dataset as json object
+    :return: train/test split of dataset
+    """
+    dataset = replace_subgroup_names_with_parent_group_name(dataset)
+    reviews = get_all_reviews_from_dataset(dataset)
+    random.shuffle(reviews)
+    train_reviews = reviews[:int(len(reviews) * 0.8)]
+    test_reviews = reviews[int(len(reviews) * 0.8):]
+    save_instructABSA(train_reviews, "instructABSA_ACSA_train.csv")
+    save_instructABSA(test_reviews, "instructABSA_ACSA_test.csv")
+    return train_reviews, test_reviews
+
+
+def save_instructABSA(reviews, file):
+    """
+    Saves reviews in instructABSA format
+    raw_text,aspectTerms
+    "The ambience was exceptional, but there were limitied menu options","[{'term':'ambience', 'polarity':'positive'}, {'term':'menu', 'polarity':'positive'}]"
+    "The car has great mileage, but the upholsrtery wasn't classy.","[{'term':'car', 'polarity':'positive'}, {'term':'upholstery', 'polarity':'negative'}]"
+    "The doctors were great, but the radiologists did a bad job with my MRI.","[{'term':'doctors', 'polarity':'positive'}, {'term':'radiologists', 'polarity':'positive'}]"
+    "The shop had several laptop options","[{'term':'noaspectterm', 'polarity':'none'}]"
+    :param reviews: reviews as json object
+    :param file: file to save
+    """
+    with open(file, "w", encoding="utf-8") as fopen:
+        fopen.write("raw_text,aspectTerms\n")
+        for review in reviews:
+            text = review["text"]
+            terms = review["aspectTerms"]
+            if len(terms) == 0:
+                terms = [{"term": "noaspectterm", "category":"none", "polarity": "none"}]
+            for term in terms:
+                if term == "":
+                    term["term"] = "noaspectterm"
+                else:
+                    term["term"] = term["term"].lower()
+            stringified_terms = json.dumps(terms)
+            fopen.write(f"\"{text}\",\"{stringified_terms}\"\n")
 
 
 def main():
@@ -339,6 +388,7 @@ def main():
     parser.add_argument('--clean', action="store_true", help='clean reviews from input file')
     parser.add_argument('--fill_missing', action="store_true", help='fill in missing values')
     parser.add_argument('--rename_categories', action="store_true", help='renames subgroup categories to main group')
+    parser.add_argument('--to_instructABSA', action="store_true", help='transform to instructABSA format and save train test split')
 
     args = parser.parse_args()
 
@@ -434,6 +484,18 @@ def main():
         dataset = load_json_data(args.input)
         grouped = replace_subgroup_names_with_parent_group_name(dataset)
         save_json_data(args.output, grouped)
+
+    elif args.to_instructABSA:
+        if args.input == "":
+            args.input = "annotated_reviews_czech.json"
+        else:
+            if args.input.split(".")[-1] != "json":
+                raise ValueError("File doesn't seem to be a json file.")
+        if args.output == "":
+            args.output = args.input.split(".")[0].join(["instructABSA_", ".json"])
+        dataset = load_json_data(args.input)
+        create_instructABSA_train_test_split(dataset)
+
 
 
 if __name__ == "__main__":
