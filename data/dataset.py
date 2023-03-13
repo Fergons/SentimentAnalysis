@@ -366,13 +366,13 @@ def save_instructABSA(reviews, file):
             text = review["text"]
             terms = review["aspectTerms"]
             if len(terms) == 0:
-                terms = [{"term": "noaspectterm", "category":"none", "polarity": "none"}]
+                terms = [{"term": "noaspectterm", "category": "none", "polarity": "none"}]
             for term in terms:
                 if term == "":
                     term["term"] = "noaspectterm"
                 else:
                     term["term"] = term["term"].lower()
-            stringified_terms = json.dumps(terms)
+            stringified_terms = json.dumps(terms, ensure_ascii=False)
             fopen.write(f"\"{text}\",\"{stringified_terms}\"\n")
 
 
