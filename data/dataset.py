@@ -361,7 +361,7 @@ def save_instructABSA(reviews, file):
     :param file: file to save
     """
     with open(file, "w", encoding="utf-8") as fopen:
-        fopen.write("raw_text,aspectTerms\n")
+        fopen.write("raw_text\taspectTerms\n")
         for review in reviews:
             text = review["text"]
             terms = review["aspectTerms"]
@@ -372,8 +372,12 @@ def save_instructABSA(reviews, file):
                     term["term"] = "noaspectterm"
                 else:
                     term["term"] = term["term"].lower()
+                if "from" in term:
+                    term.pop("from")
+                if "to" in term:
+                    term.pop("to")
             stringified_terms = json.dumps(terms, ensure_ascii=False)
-            fopen.write(f"\"{text}\",\"{stringified_terms}\"\n")
+            fopen.write(f"\"{text}\"\t\"{stringified_terms}\"\n")
 
 
 def main():
