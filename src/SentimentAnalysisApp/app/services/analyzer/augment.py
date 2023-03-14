@@ -9,6 +9,7 @@ from app.services.analyzer.utils import clean
 from app.db.session import async_session
 from app.crud.review import crud_review
 from data.dataset import get_my_dataset, dataset_to_df, get_all_reviews_from_dataset, save_pyabsa_data, dataset_to_pyabsa
+from data.dataset import save_instructABSA
 
 
 logging.basicConfig(
@@ -141,7 +142,7 @@ async def augment_my_dataset():
 
             old_terms = []
             new_terms = []
-            num = random.randint(0, len(aspects))
+            num = random.randint(1, len(aspects))
 
             for _ in range(num):
                 idx = random.randint(0, len(aspects)-1)
@@ -155,14 +156,13 @@ async def augment_my_dataset():
                 new_term = term
                 if len(neutral) > 0:
                     new_term = neutral.pop()
-
-                elif polarity == "positive":
-                    if len(positive) > 0:
-                        new_term = positive.pop()
-
-                elif polarity == "negative":
-                    if len(negative) > 0:
-                        new_term = negative.pop()
+                # elif polarity == "positive":
+                #     if len(positive) > 0:
+                #         new_term = positive.pop()
+                #
+                # elif polarity == "negative":
+                #     if len(negative) > 0:
+                #         new_term = negative.pop()
 
                 elif polarity == "neutral":
                     if len(neutral2) > 0:
@@ -173,7 +173,7 @@ async def augment_my_dataset():
 
             review["text"] = substitute_review_aspects(review.get("text"), old_terms, new_terms)
             new_reviews.append(review)
-    return new_reviews
+    return new_reviews.extend(reviews)
 
 
 async def main():
@@ -182,10 +182,15 @@ async def main():
     train = dataset[:int(len(dataset) * 0.7)]
     valid = dataset[int(len(dataset) * 0.7):int(len(dataset) * 0.85)]
     test = dataset[int(len(dataset) * 0.85):]
-
     save_pyabsa_data("pyabsa_augmented_train.txt", dataset_to_pyabsa(train))
     save_pyabsa_data("pyabsa_augmented_valid.txt", dataset_to_pyabsa(valid))
     save_pyabsa_data("pyabsa_augmented_test.txt", dataset_to_pyabsa(test))
+
+    # train = dataset[:int(len(dataset) * 0.7)]
+    # test = dataset[int(len(dataset) * 0.7):]
+    # save_instructABSA("augmented_train.csv", train)
+    # save_instructABSA("augmented_train.csv", test)
+
 
 
 if __name__ == "__main__":

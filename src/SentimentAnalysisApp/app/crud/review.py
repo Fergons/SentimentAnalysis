@@ -1,7 +1,7 @@
 import asyncio
 import logging
 from datetime import datetime, timedelta
-from typing import List, Optional, Literal
+from typing import List, Optional, Literal, Tuple
 
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy import select, and_, or_, func, case, literal_column
@@ -237,5 +237,11 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
             .where(and_(self.model.source_id == source_id, self.model.source_review_id.in_(source_review_ids))))
         return dict(result.all())
 
+    async def get_ids_and_text(self, db: AsyncSession, *, source_id: int, offset: int = 0,  limit: int = 100) -> List[Tuple[int, str]]:
+        result = await db.scalars(
+            select(self.model.id, self.model.text)
+            .where(self.model.source_id == source_id)
+            .order_by(self.model.id).limit(1000))
+        return result.all()
 
 crud_review = CRUDReview(Review)
