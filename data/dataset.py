@@ -368,15 +368,17 @@ def save_instructABSA(reviews, file):
             if len(terms) == 0:
                 terms = [{"term": "noaspectterm", "category": "none", "polarity": "none"}]
             for term in terms:
-                if term == "":
+                if term["term"] == "":
                     term["term"] = "noaspectterm"
                 else:
-                    term["term"] = term["term"].lower()
+                    term["term"] = term["term"].lower().strip()
+                term["polarity"] = term["polarity"].strip()
+                term["category"] = term["category"].strip()
                 if "from" in term:
                     term.pop("from")
                 if "to" in term:
                     term.pop("to")
-            stringified_terms = json.dumps(terms, ensure_ascii=False)
+            stringified_terms = json.dumps(terms, ensure_ascii=False).replace("\"", "'").replace(": ", ":")
             fopen.write(f"\"{text}\"\t\"{stringified_terms}\"\n")
 
 
@@ -492,11 +494,6 @@ def main():
     elif args.to_instructABSA:
         if args.input == "":
             args.input = "annotated_reviews_czech.json"
-        else:
-            if args.input.split(".")[-1] != "json":
-                raise ValueError("File doesn't seem to be a json file.")
-        if args.output == "":
-            args.output = args.input.split(".")[0].join(["instructABSA_", ".json"])
         dataset = load_json_data(args.input)
         create_instructABSA_train_test_split(dataset)
 
