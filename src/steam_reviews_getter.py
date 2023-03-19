@@ -1,3 +1,5 @@
+import os
+
 import requests as re
 import json
 from enum import Enum
@@ -8,6 +10,7 @@ from functools import partial
 from dateutil import parser as date_parser
 from bs4 import BeautifulSoup
 from pydantic import BaseModel
+from dataset import clean_text
 
 class ReviewSource(Enum):
     STEAM = 'steam'
@@ -41,6 +44,14 @@ def download_json(appid, language="czech", day_range=10000):
 
     reviews = []
     filename = f"../data/appid_{appid}_{language}.json"
+    # ask user if he wants to re-download the reviews
+    if os.path.exists(filename):
+        print(f"File {filename} already exists. Do you want to re-download the reviews? [Y/n]")
+        answer = input()
+        if answer.lower() == "n":
+            return
+
+
     with open(filename, "w", encoding="utf-8") as fopen:
         while True:
             response = re.get(f"https://store.steampowered.com/appreviews/{appid}?json=1", params=params)
@@ -48,7 +59,7 @@ def download_json(appid, language="czech", day_range=10000):
             query_summary = response_json.get("query_summary")
             success = response_json.get("success", 0)
             print(f"Reponse summary: {query_summary}")
-            reviews += [review.get("review", "").encode("utf-8").decode("utf-8") for review in
+            reviews += [clean_text(review.get("review", "").encode("utf-8").decode("utf-8")) for review in
                         response_json.get("reviews", {})]  # if review.get("voted_up")]
             params["cursor"] = response_json.get("cursor")
             if success == 1:
@@ -66,13 +77,16 @@ def download_json(appid, language="czech", day_range=10000):
 
 
 def process_json(appid, language):
-    with open(f"../data/appid_{appid}_{language}.json", "r") as fopen:
+    with open(f"../data/appid_{appid}_{language}.json", "r", encoding="utf8") as fopen:
         review_list = json.load(fopen)
 
     with open(f"../data/appid_{appid}_{language}.txt", "w", encoding="utf8") as fopen:
         for review in review_list:
-            fopen.write(" ".join(review.split()))
-            fopen.write("\n")
+            if len(review) < 10 or len(review) > 200:
+                continue
+
+            fopen.write(" ".join(review.strip().split()))
+            fopen.write(" ,")
 
 
 # get all app ids on steam at https://api.steampowered.com/ISteamApps/GetAppList/v2/
@@ -145,7 +159,6 @@ async def get_metacritic_reviews(session=None, *args, **kwargs):
 # set because of psycopg3 that can not run in default asyncio Event Loop
 # asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 # self.loop = asyncio.get_event_loop()
-
 
 class MainSystem:
     def __init__(self):
@@ -350,31 +363,6 @@ def get_meta():
     print(r.content)
 
 
-def main():
-    download_json(appid="1938090", language="czech", day_range=20000)
-    # async with aiohttp.ClientSession() as session:
-
-    #     db = DatabaseHandler()
-    #     getter = GamesInfoGetter(session=session)
-    #     getter.load_config()
-    #     apps_list = await getter.get_steam_app_ids(session)
-    #     games_info = await getter.get_steam_games_info(530, 730, *map(lambda x: x["appid"], sample(apps_list, 1000)))
-    #     if apps_list is not None:
-    #         print(f"Number of apps retrieved: {len(apps_list)}.")
-    #     else:
-    #         print("No apps retrieved.")
-    #     if games_info is None:
-    #         print("No info retrieved")
-    #     else:
-    #         for info in games_info:
-    #             if info is not None:
-    #                 inserted = await db.update_game(**info)
-    #                 if inserted:
-    #                     getter.steam_blacklist_app_ids.update([info["steam_app_id"]])
-    #         print(games_info)
-    #     getter.save_config()
-
-
 def get_languages_in_dict():
     language = {
         "english_name": "",
@@ -436,7 +424,30 @@ def base_model_from_json_response():
         print("request failed")
 
 
+def main():
+    download_json(appid="1426210", language="czech", day_range=20000)
+    process_json(appid="1426210", language="czech")
+    # async with aiohttp.ClientSession() as session:
 
+    #     db = DatabaseHandler()
+    #     getter = GamesInfoGetter(session=session)
+    #     getter.load_config()
+    #     apps_list = await getter.get_steam_app_ids(session)
+    #     games_info = await getter.get_steam_games_info(530, 730, *map(lambda x: x["appid"], sample(apps_list, 1000)))
+    #     if apps_list is not None:
+    #         print(f"Number of apps retrieved: {len(apps_list)}.")
+    #     else:
+    #         print("No apps retrieved.")
+    #     if games_info is None:
+    #         print("No info retrieved")
+    #     else:
+    #         for info in games_info:
+    #             if info is not None:
+    #                 inserted = await db.update_game(**info)
+    #                 if inserted:
+    #                     getter.steam_blacklist_app_ids.update([info["steam_app_id"]])
+    #         print(games_info)
+    #     getter.save_config()
 
 
 

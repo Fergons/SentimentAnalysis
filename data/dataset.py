@@ -1,6 +1,8 @@
 import json
 import os
 import re
+from typing import List, Union
+
 import emoji
 import pandas as pd
 import sys
@@ -8,18 +10,112 @@ import random
 import string
 import argparse
 from nltk import tokenize
+from pydantic import BaseModel
 
-MY_DATASET = "E://PythonProjects//SentimentAnalysis//data//filled_annotated_reviews_czech.json"
+MY_DATASET = "D://PythonProjects//SentimentAnalysis//data//filled_annotated_reviews_czech.json"
 
 
-def get_my_dataset():
+class AspectTerm(BaseModel):
+    term: str
+    category: str
+    polarity: str
+
+    def has_term(self):
+        return self.term != ""
+
+    def __str__(self):
+        term = self.term
+        if term == "":
+            term = "noterm"
+        return f"{term}:{self.category}:{self.polarity}"
+
+class AspectCategory(BaseModel):
+    category: str
+    polarity: str
+
+
+class Review(BaseModel):
+    reviewId: int
+    text: str
+    aspectTerms: List[AspectTerm]
+    aspectCategories: List[AspectCategory]
+
+    def num_aspect_terms(self):
+        return len(self.aspectTerms)
+
+    def num_aspect_categories(self):
+        return len(self.aspectCategories)
+
+    def talks_about_category(self, category):
+        if type(category) == str:
+            return category in [term.category for term in self.aspectTerms]
+        elif type(category) == list:
+            return any(c in [term.category for term in self.aspectTerms] for c in category)
+        else:
+            raise TypeError("Category must be of type str or list")
+
+    def has_only_aspects_with_polarity(self, polarity):
+        return all(term.polarity == polarity for term in self.aspectTerms)
+
+    def get_string_from_aspect_terms(self):
+        if self.num_aspect_terms() == 0:
+            return "noaspects:none:none"
+        return ", ".join([str(term) for term in self.aspectTerms])
+
+class Dataset(BaseModel):
+    category: List[str]
+    reviews: List[Review]
+
+    def num_reviews(self):
+        return len(self.reviews)
+
+    def has_category(self, category):
+        if type(category) == str:
+            return category in self.category
+        elif type(category) == list:
+            return any(c in self.category for c in category)
+        else:
+            raise TypeError("Category must be of type str or list")
+
+    def only_reviews_of_polarity(self, polarity):
+        return [review for review in self.reviews
+                if review.has_only_aspects_with_polarity(polarity) and review.num_aspect_terms() > 0]
+
+
+class Data(BaseModel):
+    dataset: List[Dataset]
+
+    def num_datasets(self):
+        return len(self.dataset)
+
+    def get_all_reviews(self):
+        return [review for dataset in self.dataset for review in dataset.reviews]
+
+    def get_positive_reviews(self):
+        return [review for dataset in self.dataset for review in dataset.only_reviews_of_polarity("positive")]
+
+    def get_negative_reviews(self):
+        return [review for dataset in self.dataset for review in dataset.only_reviews_of_polarity("negative")]
+
+    def get_neutral_reviews(self):
+        return [review for dataset in self.dataset for review in dataset.only_reviews_of_polarity("neutral")]
+
+    def get_reviews_with_no_aspect(self):
+        return [review for dataset in self.dataset for review in dataset.reviews if review.num_aspect_terms() == 0]
+
+    def get_reviews_for_category(self, category: Union[str, list]):
+        return [review for dataset in self.dataset for review in dataset.reviews if dataset.has_category(category)]
+
+
+def get_my_dataset() -> Data:
     """Gets my dataset."""
-    return load_json_data(file=MY_DATASET)
+    dataset = load_json_data(file=MY_DATASET)
+    return Data(**dataset)
 
 
 def get_annotated_reviews():
     """Gets annotated reviews from the dataset."""
-    return get_all_reviews_from_dataset(get_my_dataset())
+    return get_all_reviews_from_dataset(get_my_dataset().dict())
 
 
 def fill_in_missing_data(data):
@@ -149,12 +245,19 @@ def clean_text(text):
     # remove textual emoji
     text = remove_emoticons(text)
 
+    #remove links
+    text = re.sub(r'https?\S+', '', text)
+
+    #remove markup tags
+    text = re.sub(r'<[^>]+>', '', text)
+
+
     # remove # and @
-    for punc in '"#$%&\'()*+-/:;<=>@[\\]^_`{|}~':
+    for punc in '"#%&\'*<=>@[\\]^_`{|}~':
         text = text.replace(punc, '')
 
     # duplicit punctioation
-    text = re.sub(r'([!?.,]){2,}', r'\1', text)
+    text = re.sub(r'([!?.,:;-]){2,}', r'\1', text)
     return text
 
 
@@ -394,7 +497,8 @@ def main():
     parser.add_argument('--clean', action="store_true", help='clean reviews from input file')
     parser.add_argument('--fill_missing', action="store_true", help='fill in missing values')
     parser.add_argument('--rename_categories', action="store_true", help='renames subgroup categories to main group')
-    parser.add_argument('--to_instructABSA', action="store_true", help='transform to instructABSA format and save train test split')
+    parser.add_argument('--to_instructABSA', action="store_true",
+                        help='transform to instructABSA format and save train test split')
 
     args = parser.parse_args()
 
@@ -496,7 +600,6 @@ def main():
             args.input = "annotated_reviews_czech.json"
         dataset = load_json_data(args.input)
         create_instructABSA_train_test_split(dataset)
-
 
 
 if __name__ == "__main__":

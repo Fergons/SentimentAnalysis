@@ -7701,10 +7701,8 @@
                             "polarity": "positive"
                         },
                         {
-                            "term": "content",
-                            "polarity": "positive",
-                            "from": 0,
-                            "to": 0
+                            "category": "content",
+                            "polarity": "positive"
                         },
                         {
                             "category": "character design",
@@ -8031,10 +8029,8 @@
                             "polarity": "positive"
                         },
                         {
-                            "term": "gameplay",
-                            "polarity": "positive",
-                            "from": 0,
-                            "to": 0
+                            "category": "gameplay",
+                            "polarity": "positive"
                         },
                         {
                             "category": "overall",
@@ -9553,7 +9549,7 @@
                             "to": 0
                         },
                         {
-                            "term": "battlepass",
+                            "term": "Battlepass",
                             "category": "gameplay",
                             "polarity": "positive",
                             "from": 0,
