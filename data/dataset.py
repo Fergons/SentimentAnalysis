@@ -29,6 +29,7 @@ class AspectTerm(BaseModel):
             term = "noterm"
         return f"{term}:{self.category}:{self.polarity}"
 
+
 class AspectCategory(BaseModel):
     category: str
     polarity: str
@@ -61,6 +62,7 @@ class Review(BaseModel):
         if self.num_aspect_terms() == 0:
             return "noaspects:none:none"
         return ", ".join([str(term) for term in self.aspectTerms])
+
 
 class Dataset(BaseModel):
     category: List[str]
@@ -147,6 +149,74 @@ def fill_in_missing_data(data):
                             term["from"] = span[0]
                             term["to"] = span[1]
     return data
+
+
+def instruct2pyabsa(file_in="validation/FPS_generated_data.txt", file_out="validation/FPS_generated_data_pyabsa.txt"):
+    """transforms the data into the format of PyABSA"""
+    with open(file_in, "r", encoding="utf-8") as f:
+        lines = f.readlines()
+    with open(file_out, "w", encoding="utf-8") as f:
+        print("Converting data to PyABSA format...")
+        for line in lines:
+            if line.startswith("Input: "):
+                text = line[7:].strip()
+            elif line.startswith("Output: "):
+                aspects_str = line[8:]
+                aspects = aspects_str.split(",")
+                for aspect in aspects:
+                    aspect = aspect.strip().split(":")
+                    term = aspect[0]
+                    if term in ("noaspects", "none", "noterm"):
+                        continue
+                    category = aspect[1]
+                    polarity = aspect[2]
+                    if len(aspect) > 3:
+                        opinion = aspect[3]
+                    text_with_placeholder = text.replace(term, "$T$")
+                    if text_with_placeholder == text:
+                        print("Term not found in text: ", term, " ", text)
+                        continue
+                    # # find the term in the text
+                    # num_words_of_term = len(term.split(" "))
+                    # # create a list of all sequences of words of length num_words_of_term in text
+                    # text_words = text.split(" ")
+                    # # clean text words from punctuation
+                    # text_words = [word.strip(string.punctuation) for word in text_words]
+                    # if num_words_of_term > 1:
+                    #     text_sequences = [" ".join(text_words[i:i + num_words_of_term]) for i in range(len(text_words) - num_words_of_term + 1)]
+                    # else:
+                    #     text_sequences = text_words
+                    # print(text_sequences)
+                    # # find the sequence that matches the term
+                    # seq, score = process.extractOne(term, text_sequences)
+                    # print(term, " ", seq, " ", score)
+                    # # index of the sequence in the list of sequences
+                    # # regex replace
+                    # text_with_placeholder = text.replace(seq, "$T$", 1)
+                    # # text_replaced_aspect = text.replace(term, "$T$", 1)
+                    if aspect != "":
+                        f.write(text_with_placeholder)
+                        f.write("\n")
+                        f.write(term)
+                        f.write("\n")
+                        f.write(polarity.capitalize())
+                        f.write("\n")
+    print("Saved to ", file_out)
+
+
+def instruct2sentences(file_in="validation/FPS_generated_data.txt",
+                       file_out="validation/FPS_generated_data_sentence.txt"):
+    """transforms the data into the format of PyABSA"""
+    with open(file_in, "r", encoding="utf-8") as f:
+        lines = f.readlines()
+    with open(file_out, "w", encoding="utf-8") as f:
+        print("Converting data to list of sentences...")
+        for line in lines:
+            if line.startswith("Input: "):
+                text = line[7:].strip()
+                f.write(text)
+                f.write("\n")
+        print("Saved to ", file_out)
 
 
 def duplicate_reviews_with_neutral_terms(dataset):
@@ -245,12 +315,11 @@ def clean_text(text):
     # remove textual emoji
     text = remove_emoticons(text)
 
-    #remove links
+    # remove links
     text = re.sub(r'https?\S+', '', text)
 
-    #remove markup tags
+    # remove markup tags
     text = re.sub(r'<[^>]+>', '', text)
-
 
     # remove # and @
     for punc in '"#%&\'*<=>@[\\]^_`{|}~':
@@ -499,6 +568,8 @@ def main():
     parser.add_argument('--rename_categories', action="store_true", help='renames subgroup categories to main group')
     parser.add_argument('--to_instructABSA', action="store_true",
                         help='transform to instructABSA format and save train test split')
+    parser.add_argument('--instruct2pyabsa', action="store_true", help="transform instructABSA to pyabsa format")
+    parser.add_argument('--instruct2sentences', action="store_true", help="transform instructABSA to list sentences")
 
     args = parser.parse_args()
 
@@ -600,6 +671,22 @@ def main():
             args.input = "annotated_reviews_czech.json"
         dataset = load_json_data(args.input)
         create_instructABSA_train_test_split(dataset)
+
+    elif args.instruct2pyabsa:
+        if args.input == "":
+            print("No input file chosen. --input filename")
+            return
+        if args.output == "":
+            args.output = args.input.split(".")[0].join(["pyabsa_", ".txt"])
+        instruct2pyabsa(args.input, args.output)
+
+    elif args.instruct2sentences:
+        if args.input == "":
+            print("No input file chosen. --input filename")
+            return
+        if args.output == "":
+            args.output = args.input.split(".")[0].join(["sentences_", ".txt"])
+        instruct2sentences(args.input, args.output)
 
 
 if __name__ == "__main__":
