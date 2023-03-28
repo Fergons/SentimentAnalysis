@@ -219,6 +219,86 @@ def instruct2sentences(file_in="validation/FPS_generated_data.txt",
         print("Saved to ", file_out)
 
 
+def instruct_sample2dict(input, output):
+    """transforms the sample of instruct dataset into the dictionary with keys text and labels for input/output pair"""
+    labels = []
+    for phrase in output.split(","):
+        print(phrase)
+        aspect, category, polarity, opinion = phrase.strip().split(":")
+        if aspect == "noaspects":
+            aspect, category, polarity, opinion = "NULL", "NULL", "NULL", "NULL"
+        if aspect is None or aspect == "" or aspect == "noterm":
+            aspect = "NULL"
+
+        labels.append({
+            "aspect": aspect,
+            "category": category,
+            "polarity": polarity,
+            "opinion": opinion
+        })
+
+    return {
+        "text": input,
+        "labels": labels
+    }
+
+
+def instruct2json(file_in, file_out):
+    """
+    Transforms the dataset from text Input:... Output:... format to json format.
+    """
+    if not file_out.endswith(".jsonl"):
+        file_out += ".jsonl"
+
+    with open(file_in, "r", encoding="utf-8") as f:
+        lines = f.readlines()
+    data = []
+    for i in range(0, len(lines), 2):
+        input = lines[i].strip()[7:]
+        output = lines[i + 1].strip()[8:]
+        data.append(instruct_sample2dict(input, output))
+
+    with open(file_out, "w", encoding="utf-8") as f:
+        for sample in data:
+            json.dump(sample, f, ensure_ascii=False)
+            f.write("\n")
+
+
+def mydataset2acos(file_in, file_out):
+    """
+    Transforms the dataset from json format to acos format.
+    """
+    if not file_out.endswith(".jsonl"):
+        file_out += ".jsonl"
+
+    data = load_json_data(file_in)
+    dataset = Data(**data)
+
+    reviews = dataset.get_all_reviews()
+    random.shuffle(reviews)
+
+    with open(file_out, "w", encoding="utf-8") as f:
+        for review in reviews:
+            text = review.text
+            aspects = review.aspectTerms
+            labels = []
+            for aspect in aspects:
+                term = aspect.term
+                polarity = aspect.polarity
+                category = aspect.category
+                opinion = "NULL"
+                if term == "" or term is None:
+                    term = "NULL"
+                if category is None or category == "":
+                    category = "NULL"
+                if polarity is None or polarity == "":
+                    polarity = "NULL"
+                labels.append({"aspect": term, "category": category, "polarity": polarity, "opinion": opinion})
+            sample = {"text": text, "labels": labels}
+            json.dump(sample, f, ensure_ascii=False)
+            f.write("\n")
+
+
 def duplicate_reviews_with_neutral_terms(dataset):
     """
     Duplicates reviews that contain aspect terms with neutral polarity.
@@ -570,6 +650,8 @@ def main():
                         help='transform to instructABSA format and save train test split')
     parser.add_argument('--instruct2pyabsa', action="store_true", help="transform instructABSA to pyabsa format")
     parser.add_argument('--instruct2sentences', action="store_true", help="transform instructABSA to list sentences")
+    parser.add_argument('--instruct2json', action="store_true", help="transform instructABSA to pyabsa acos format")
+    parser.add_argument('--mydataset2acos', action="store_true", help="transform my dataset to pyabsa acos format")
 
     args = parser.parse_args()
 
@@ -582,7 +664,7 @@ def main():
         dataset = load_json_data(args.input)
         conll = dataset_to_conll(dataset)
         if args.output == "":
-            args.output = args.input.split(".")[0].join(".conll")
+            args.output = args.input.rsplit(".", 1)[0].join(".conll")
         save_conll_data(args.output, conll)
     elif args.fill_missing:
         if args.input == "":
@@ -592,7 +674,7 @@ def main():
                 raise ValueError("File doesn't seem to be a json file.")
 
         if args.output == "":
-            args.output = args.input.split(".")[0].join(["filled_", ".json"])
+            args.output = args.input.rsplit(".", 1)[0].join(["filled_", ".json"])
 
         dataset = fill_in_missing_data(load_json_data(args.input))
         save_json_data(args.output, dataset)
@@ -609,7 +691,7 @@ def main():
                 raise ValueError("File doesn't seem to be a json file.")
 
         if args.output == "":
-            args.output = args.input.split(".")[0].join(["pyabsa_", ".txt"])
+            args.output = args.input.rsplit(".", 1)[0].join(["pyabsa_", ".txt"])
 
         dataset = dataset_to_pyabsa(load_json_data(args.input))
         save_pyabsa_data(args.output, dataset)
@@ -619,7 +701,7 @@ def main():
             raise ValueError("No input file chosen. --input filename")
 
         if args.output == "":
-            args.output = args.input.split(".")[0].join(["cleaned_", ".txt"])
+            args.output = args.input.rsplit(".", 1)[0].join(["cleaned_", ".txt"])
 
         if ".json" in args.input:
             list_of_reviews = load_json_data(args.input)
@@ -639,11 +721,11 @@ def main():
                 raise ValueError("File doesn't seem to be a json file.")
 
         if args.output == "":
-            train_output = args.input.split(".")[0].join(["train_", ".apc.txt"])
-            test_output = args.input.split(".")[0].join(["test_", ".apc.txt"])
+            train_output = args.input.rsplit(".", 1)[0].join(["train_", ".apc.txt"])
+            test_output = args.input.rsplit(".", 1)[0].join(["test_", ".apc.txt"])
         else:
-            train_output = args.output.split(".")[0].join(["train_", ".apc.txt"])
-            test_output = args.output.split(".")[0].join(["test_", ".apc.txt"])
+            train_output = args.input.rsplit(".", 1)[0].join(["train_", ".apc.txt"])
+            test_output = args.input.rsplit(".", 1)[0].join(["test_", ".apc.txt"])
 
         train, test = create_train_test(get_all_reviews_from_dataset(load_json_data(args.input)),
                                         train=args.train_test_ratio)
@@ -660,7 +742,7 @@ def main():
                 raise ValueError("File doesn't seem to be a json file.")
 
         if args.output == "":
-            args.output = args.input.split(".")[0].join(["renamed_subgroups_", ".json"])
+            args.output = args.input.rsplit(".", 1)[0].join(["renamed_subgroups_", ".json"])
 
         dataset = load_json_data(args.input)
         grouped = replace_subgroup_names_with_parent_group_name(dataset)
@@ -677,7 +759,7 @@ def main():
             print("No input file chosen. --input filename")
             return
         if args.output == "":
-            args.output = args.input.split(".")[0].join(["pyabsa_", ".txt"])
+            args.output = args.input.rsplit(".", 1)[0].join(["pyabsa_", ".txt"])
         instruct2pyabsa(args.input, args.output)
 
     elif args.instruct2sentences:
@@ -685,9 +767,21 @@ def main():
             print("No input file chosen. --input filename")
             return
         if args.output == "":
-            args.output = args.input.split(".")[0].join(["sentences_", ".txt"])
+            args.output = args.input.rsplit(".", 1)[0].join(["sentences_", ".txt"])
         instruct2sentences(args.input, args.output)
 
+    elif args.instruct2json:
+        if args.input == "":
+            print("No input file chosen. --input filename")
+            return
+        if args.output == "":
+            args.output = args.input.rsplit(".", 1)[0]
+        instruct2json(args.input, args.output)
+
+    elif args.mydataset2acos:
+        if args.output == "":
+            args.output = args.input.rsplit(".", 1)[0]
+        mydataset2acos(args.input, args.output)
 
 if __name__ == "__main__":
     main()
