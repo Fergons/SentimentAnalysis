@@ -44,7 +44,7 @@ if loader.test_df_id is not None:
     loader.test_df_id = loader.prepare_instruction_dataloader(loader.test_df_id, task=task)
 
 # Create T5 utils object
-t5_exp = absa_instruction.model.T5Generator(model_checkpoint)
+t5_exp = absa_instruction.model.ABSAGenerator(model_checkpoint)
 
 # Tokenize Dataset
 id_ds, id_tokenized_ds, ood_ds, ood_tokenzed_ds = loader.create_datasets(

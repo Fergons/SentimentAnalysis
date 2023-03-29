@@ -1,8 +1,6 @@
-from itertools import zip_longest
 import json
 import findfile
 import tqdm
-from sklearn.metrics import classification_report
 from Levenshtein import distance as levenshtein_distance
 
 task = "joint-aspect-sentiment"
