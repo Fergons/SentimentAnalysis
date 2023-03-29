@@ -86,7 +86,7 @@ def process_json(appid, language):
                 continue
 
             fopen.write(" ".join(review.strip().split()))
-            fopen.write(" ,")
+            fopen.write("\n")
 
 
 # get all app ids on steam at https://api.steampowered.com/ISteamApps/GetAppList/v2/

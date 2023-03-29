@@ -4,7 +4,7 @@ import tqdm
 from Levenshtein import distance as levenshtein_distance
 
 task = "joint-aspect-sentiment"
-model = "checkpoint-750"
+model = "checkpoint-1400"
 
 
 def find_most_similar_word(word, word_list, label="aspect"):
@@ -43,14 +43,22 @@ def evaluate_labels(true_quadruples, pred_quadruples, labels=None):
 
     for i, trues in true_quadruples.items():
         _pred_quads = pred_quadruples[i]
+        trues_str = "|".join(
+            [f"{true['aspect']}:{true['category']}:{true['opinion']}:{true['polarity']}" for true in trues])
+        pred_quads_str = "|".join(
+            [f"{pred['aspect']}:{pred['category']}:{pred['opinion']}:{pred['polarity']}" for pred in _pred_quads])
+        print(f"True: {trues_str}")
+        print(f"Pred: {pred_quads_str}")
         for true in trues:
-
-            pred = find_most_similar_word(true, _pred_quads, label="aspect")
+            if true["aspect"] != "NULL":
+                pred = find_most_similar_word(true, _pred_quads, label="aspect")
+            else:
+                pred = find_most_similar_word(true, _pred_quads, label="category")
             if pred == "":
                 continue
             eval_result["joint"]["total"] += 1
-            print(
-                f"Matched aspects: {':'.join([true['aspect'], true['category'], true['opinion'], true['polarity']])}, {':'.join([pred['aspect'], pred['category'], pred['opinion'], pred['polarity']])}")
+            # print(
+            #     f"Matched aspects: {':'.join([true['aspect'], true['category'], true['opinion'], true['polarity']])}, {':'.join([pred['aspect'], pred['category'], pred['opinion'], pred['polarity']])}")
             num_correct_labels = 0
             for label in labels:
                 if label == "opinion" and true[label] == "NULL":
@@ -118,6 +126,7 @@ if __name__ == "__main__":
 
         for line in tqdm.tqdm(lines):
             result = generator.predict(line["text"], task=task)
+            print(result["Quadruples"])
             true_quadruples[line_num] = line["labels"]
             pred_quadruples[line_num] = result["Quadruples"]
 

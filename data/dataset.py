@@ -363,7 +363,7 @@ def map_category_to_main_category(category):
                              'update', 'patch', 'bug', 'crash', 'lag', 'performance', 'server', 'servers',
                              'server issues', 'server performance'],
         'community': ['languages', 'reviews', 'community', 'comparison'],
-        'overall': ['overall', 'genre', 'platform', 'game'],
+        'overall': ['overall', 'genre', 'platform', 'game', 'game#overall'],
         'NULL': ['NULL', 'none', None, 'null', '', 'noterm']
     }
     for main_category, subcategories in category_map.items():
