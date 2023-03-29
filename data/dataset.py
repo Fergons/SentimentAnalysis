@@ -224,7 +224,7 @@ def instruct_sample2dict(input, output):
     labels = []
     for phrase in output.split(","):
         print(phrase)
-        aspect, category, polarity, opinion = phrase.strip().split(":")
+        aspect, category, polarity, opinion, *_ = [*phrase.strip().split(":"), 'NULL', 'NULL', 'NULL', 'NULL']
         if aspect == "noaspects":
             aspect, category, polarity, opinion = "NULL", "NULL", "NULL", "NULL"
         if aspect is None or aspect == "" or aspect == "noterm":
@@ -339,32 +339,65 @@ def replace_subgroup_names_with_parent_group_name(dataset):
     :param dataset: dataset in json format
     :return: dataset with replaced subgroup names
     """
-    category_map = {
-        'gameplay': ['gameplay', 'game mode', 'story', 'level design',
-                     'multiplayer', 'violence', 'character design',
-                     'controls', 'tutorial', 'quality', 'gun play',
-                     'game environment', 'game design', 'difficulty', 'content'],
-        'price': ['price'],
-        'audio_visuals': ['audio_visuals', 'visuals', 'sounds', 'game environment', 'game design'],
-        'performance_bugs': ['performance_bugs', 'bugs', 'performance', 'saves', 'developers', 'updates', 'anticheat'],
-        'community': ['languages', 'reviews', 'community', 'comparison'],
-        'overall': ['overall']
-    }
     reviews = get_all_reviews_from_dataset(dataset)
     for review in reviews:
         terms = review.get("aspectTerms", [])
         for term in terms:
-            replaced = False
-            for category, subgroups in category_map.items():
-                if term.get("category", term["term"]) in subgroups:
-                    term["category"] = category
-                    replaced = True
-                    break
-
-            if not replaced:
-                term["category"] = "other"
-
+            main_category = map_category_to_main_category(term["category"])
+            term["category"] = main_category
     return dataset
+
+
+def map_category_to_main_category(category):
+    category_map = {
+        'gameplay': ['gameplay', 'game mode', 'story', 'level design',
+                     'multiplayer', 'violence', 'character design',
+                     'controls', 'tutorial', 'quality', 'gun play', 'gunplay', 'environment', 'gameplay mechanics',
+                     'world',
+                     'game environment', 'game design', 'difficulty', 'content', 'cosmetic content', 'in-game content',
+                     'options', 'user interface','UI', 'interface', 'gameplay', 'game modes', 'gameplay features', 'monetization'],
+        'price': ['price'],
+        'audio_visuals': ['audio_visuals', 'visuals', 'sounds', 'game environment', 'game design', 'visual', 'sound',
+                          'audio_visuals', 'graphics', 'music', 'soundtrack', 'sound effects', 'audio'],
+        'performance_bugs': ['performance_bugs', 'bugs', 'performance', 'saves', 'developers', 'updates', 'anticheat',
+                             'update', 'patch', 'bug', 'crash', 'lag', 'performance', 'server', 'servers',
+                             'server issues', 'server performance'],
+        'community': ['languages', 'reviews', 'community', 'comparison'],
+        'overall': ['overall', 'genre', 'platform', 'game'],
+        'NULL': ['NULL', 'none', None, 'null', '', 'noterm']
+    }
+    for main_category, subcategories in category_map.items():
+        if category in subcategories:
+            return main_category
+    return 'other'
+
+
+def reduce_categories(file_in, file_out, label="labels"):
+    """
+    Reduces the number of categories by grouping similar categories together.
+    :param file_in: path to input json file
+    :param file_out: path to output json file
+    """
+    with open(file_in, "r", encoding="utf-8") as f:
+        lines = f.readlines()
+        data = [json.loads(line) for line in lines]
+
+    if data[0].get(label) is not None:
+        pass
+    elif data[0].get("labels") is not None:
+        label = "labels"
+    elif data[0].get("aspectTerms") is not None:
+        label = "aspectTerms"
+    else:
+        raise ValueError(f"No known labels found in dataset and the specified label (\"{label}\") is not valid.")
+
+    with open(file_out, "w", encoding="utf-8") as f:
+        for sample in data:
+            aspects = sample.get(label)
+            for aspect in aspects:
+                aspect["category"] = map_category_to_main_category(aspect["category"])
+            json.dump(sample, f, ensure_ascii=False)
+            f.write("\n")
 
 
 def create_train_test(dataset, train=0.8):
@@ -652,6 +685,7 @@ def main():
     parser.add_argument('--instruct2sentences', action="store_true", help="transform instructABSA to list sentences")
     parser.add_argument('--instruct2json', action="store_true", help="transform instructABSA to pyabsa acos format")
     parser.add_argument('--mydataset2acos', action="store_true", help="transform my dataset to pyabsa acos format")
+    parser.add_argument('--reduce_categories', action="store_true", help="translate subcategories to main categories")
 
     args = parser.parse_args()
 
@@ -782,6 +816,15 @@ def main():
         if args.output == "":
             args.output = args.input.rsplit(".", 1)[0]
         mydataset2acos(args.input, args.output)
+
+    elif args.reduce_categories:
+        if args.input == "":
+            print("No input file chosen. --input filename")
+            return
+        if args.output == "":
+            args.output = f"{args.input.rsplit('.', 1)[0]}.main_categories.jsonl"
+        reduce_categories(args.input, args.output)
+
 
 if __name__ == "__main__":
     main()
