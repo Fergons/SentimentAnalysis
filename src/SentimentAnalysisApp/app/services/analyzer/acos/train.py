@@ -7,21 +7,22 @@ import pandas as pd
 
 
 task_name = "multitask"
-experiment_name = "joint"
+experiment_name = "acs-after-acos"
 task = "joint-aspect-category-sentiment"
-train_dataset_name = "1337.GamesCzechEng"
-test_dataset_name = "1337.GamesCzechEng"
+train_dataset_name = "1336.Games"
+test_dataset_name = "1336.Games"
 # model_checkpoint = 'allenai/tk-instruct-base-def-pos'
 # model_checkpoint = "kevinscaria/ate_tk-instruct-base-def-pos-neg-neut-combined"
 # model_checkpoint = 'allenai/tk-instruct-large-def-pos'
 # model_checkpoint = 'allenai/tk-instruct-3b-def-pos'
 from_checkpoint = True
-model_checkpoint = 'checkpoints/multitask/joint-aspect-category-sentiment-1337.GamesCzechEng/checkpoint-last'
-
+# model_checkpoint = 'checkpoints/multitask/joint-aspect-category-sentiment-1337.GamesCzechEng/checkpoint-last'
+# model_checkpoint = 'checkpoints/multitask/joint-aspect-category-sentiment-1336.Games/checkpoint-760'
+model_checkpoint = 'checkpoints/multitask/joint-acos-1335.GamesACOS/checkpoint-1000'
 print("Experiment Name: ", experiment_name)
 model_out_path = "checkpoints"
 model_out_path = os.path.join(
-    model_out_path, task_name, f"{task}-{train_dataset_name}"
+    model_out_path, task_name, f"{task}-{train_dataset_name}-{experiment_name}"
 )
 print("Model output path: ", model_out_path)
 
@@ -30,8 +31,8 @@ id_train_file_path = f"../../../../integrated_datasets/acos_datasets/{train_data
 id_test_file_path = f"../../../../integrated_datasets/acos_datasets/{test_dataset_name}"
 
 
-id_tr_df = absa_instruction.data_utils.read_json(id_train_file_path, "train")
-id_te_df = absa_instruction.data_utils.read_json(id_test_file_path, "test")
+id_tr_df = absa_instruction.data_utils.read_json(id_train_file_path, "train.main_categories")
+id_te_df = absa_instruction.data_utils.read_json(id_test_file_path, "test.main_categories")
 
 id_tr_df = pd.DataFrame(id_tr_df)
 id_te_df = pd.DataFrame(id_te_df)
@@ -55,7 +56,7 @@ id_ds, id_tokenized_ds, ood_ds, ood_tokenzed_ds = loader.create_datasets(
 training_args = {
     "output_dir": model_out_path,
     "evaluation_strategy": "epoch",
-    "resume_from_checkpoint": True,
+    "resume_from_checkpoint": False,
     "save_strategy": "epoch",
     "learning_rate": 5e-5,
     "per_device_train_batch_size": 6,

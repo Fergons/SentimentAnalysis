@@ -3,9 +3,17 @@ import findfile
 import tqdm
 from Levenshtein import distance as levenshtein_distance
 
-task = "joint-aspect-sentiment"
-model = "checkpoint-1400"
+task = "joint-aspect-category-sentiment"
+# task = "joint-aspect-sentiment"
+# task = "joint-aspect-category"
 
+# task = "joint-acos"
+model = "joint-aspect-category-sentiment-1336.Games-acs-after-acos\checkpoint-608"
+# model = "checkpoint-750"
+
+test_files = ["D:/PythonProjects/SentimentAnalysis/data/validation/STRATEGY_data.main_categories.jsonl",
+              "D:/PythonProjects/SentimentAnalysis/data/validation/PUZZLE_generated_data.main_categories.jsonl",
+              "D:/PythonProjects/SentimentAnalysis/data/validation/FPS_generated_data.main_categories.jsonl"]
 
 def find_most_similar_word(word, word_list, label="aspect"):
     """
@@ -85,9 +93,9 @@ if __name__ == "__main__":
     #     ["integrated_datasets", "acos_datasets", "restaurant", "test"],
     #     exclude_key=[".ignore", ".txt", ".xlsx"],
     # )
-    test_files = ["D:/PythonProjects/SentimentAnalysis/data/validation/STRATEGY_data.main_categories.jsonl"]
+    save_model_name = model.replace('\\', '-')
     for f in test_files:
-        save_filename = f"evaluation_data-{model}-{'-'.join(f.rsplit('/', 2)[-2:])}"
+        save_filename = f"evaluation_data-{save_model_name}-{'-'.join(f.rsplit('/', 2)[-2:])}"
         save_file = findfile.find_cwd_file(save_filename)
         print("Predicting on {}".format(f))
         if save_file:

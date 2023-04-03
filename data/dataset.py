@@ -253,10 +253,23 @@ def instruct2json(file_in, file_out):
     with open(file_in, "r", encoding="utf-8") as f:
         lines = f.readlines()
     data = []
+    if len(lines) % 2 != 0:
+        print("Number of lines is not even!")
+        for i in range(0, len(lines), 2):
+            if lines[i].startswith("Input: ") and lines[i + 1].startswith("Input: "):
+                print("Found two inputs in a row at line: ", i)
+            elif lines[i].startswith("Output: ") and lines[i + 1].startswith("Output: "):
+                print("Found two outputs in a row at line: ", i)
+        return
+
     for i in range(0, len(lines), 2):
         input = lines[i].strip()[7:]
-        output = lines[i + 1].strip()[8:]
-        data.append(instruct_sample2dict(input, output))
+        try:
+            output = lines[i + 1].strip()[8:]
+        except IndexError:
+            print("IndexError: ", i, " ", len(lines))
+        else:
+            data.append(instruct_sample2dict(input, output))
 
     with open(file_out, "w", encoding="utf-8") as f:
         for sample in data:
@@ -353,15 +366,16 @@ def map_category_to_main_category(category):
         'gameplay': ['gameplay', 'game mode', 'story', 'level design',
                      'multiplayer', 'violence', 'character design',
                      'controls', 'tutorial', 'quality', 'gun play', 'gunplay', 'environment', 'gameplay mechanics',
-                     'world',
+                     'world', 'online', 'single player', 'singleplayer', 'multiplayer', 'multi player', 'story',
                      'game environment', 'game design', 'difficulty', 'content', 'cosmetic content', 'in-game content',
-                     'options', 'user interface','UI', 'interface', 'gameplay', 'game modes', 'gameplay features', 'monetization'],
-        'price': ['price'],
+                     'options', 'user interface', 'UI', 'interface', 'gameplay', 'game modes', 'gameplay features',
+                     'monetization', 'development stage', 'gameplay features', 'gameplay mechanics', 'options', 'game length', 'gameplay length'],
+        'price': ['price', 'value'],
         'audio_visuals': ['audio_visuals', 'visuals', 'sounds', 'game environment', 'game design', 'visual', 'sound',
                           'audio_visuals', 'graphics', 'music', 'soundtrack', 'sound effects', 'audio'],
         'performance_bugs': ['performance_bugs', 'bugs', 'performance', 'saves', 'developers', 'updates', 'anticheat',
                              'update', 'patch', 'bug', 'crash', 'lag', 'performance', 'server', 'servers',
-                             'server issues', 'server performance'],
+                             'server issues', 'server performance', 'hardware', 'optimization', 'optimizations'],
         'community': ['languages', 'reviews', 'community', 'comparison'],
         'overall': ['overall', 'genre', 'platform', 'game', 'game#overall'],
         'NULL': ['NULL', 'none', None, 'null', '', 'noterm']
@@ -427,12 +441,12 @@ def clean_text(text):
     text = emoji.replace_emoji(text)
     # remove textual emoji
     text = remove_emoticons(text)
-
     # remove links
     text = re.sub(r'https?\S+', '', text)
-
-    # remove markup tags
-    text = re.sub(r'<[^>]+>', '', text)
+    # remove formatting
+    # input: [h1] lorem ipsum [\h1]
+    # output: lorem ipsum
+    text = re.sub(r'\[[^]]*?]', '', text)
 
     # remove # and @
     for punc in '"#%&\'*<=>@[\\]^_`{|}~':
