@@ -22,10 +22,10 @@ config.show_metric = True
 config.index_to_IOB_label = {1: 'B-ASP', 2: 'I-ASP', 3: 'O'}
 config.IOB_label_to_index = {'B-ASP': 1, 'I-ASP': 2, 'O': 3}
 
-dataset = DatasetItem("1110.game_reviews")
+dataset = DatasetItem("./integrated_datasets/1113.game_aug")
 
 trainer = ATEPC.ATEPCTrainer(config=config,
-                             from_checkpoint='',
+                             from_checkpoint='fast_lcf_atepc_1110.game_reviews_cdw_apcacc_90.89_apcf1_88.99_atef1_81.54',
                              dataset=dataset,
                              checkpoint_save_mode=ModelSaveOption.SAVE_MODEL_STATE_DICT,
                              auto_device=True,

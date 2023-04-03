@@ -25,6 +25,7 @@ from .instruction import (
     CategoryInstruction,
     JointAspectCategorySentimentInstruction,
     JointAspectSentimentInstruction,
+    JointACOSInstruction
 )
 
 
@@ -157,14 +158,13 @@ class T5Generator:
         print(ensemble_result)
         return ensemble_result
 
-
     def get_labels(
-        self,
-        tokenized_dataset,
-        trained_model_path=None,
-        predictor=None,
-        batch_size=4,
-        sample_set="train",
+            self,
+            tokenized_dataset,
+            trained_model_path=None,
+            predictor=None,
+            batch_size=4,
+            sample_set="train",
     ):
         """
         Get the predictions from the trained model.
@@ -320,7 +320,7 @@ class T5Classifier:
         return trainer
 
     def get_labels(
-        self, tokenized_dataset, predictor=None, batch_size=4, sample_set="train"
+            self, tokenized_dataset, predictor=None, batch_size=4, sample_set="train"
     ):
         """
         Get the predictions from the trained model.
@@ -386,11 +386,16 @@ class ABSAGenerator(T5Generator):
             instructor = ATEInstruction()
         elif task == "joint-aspect-sentiment":
             instructor = JointAspectSentimentInstruction()
-        elif task == "joint-aspect-sentiment-category":
+        elif task == "joint-aspect-category-sentiment":
             instructor = JointAspectCategorySentimentInstruction()
+        elif task == "joint-acos":
+            instructor = JointACOSInstruction()
+        else:
+            raise ValueError("Task not supported")
         result = {
             "text": text,
         }
+
         # inference
         inputs = self.tokenizer(
             instructor.prepare_input(text, []), truncation=True, return_tensors="pt"
@@ -401,22 +406,36 @@ class ABSAGenerator(T5Generator):
         )[0]
         result[task] = [asp.strip() for asp in outputs.split("|")]
         # print(result[task])
+        quads = []
         for asp in result[task]:
             n_gram = asp.split(":")
             n = len(n_gram)
-            aspect, category, opinion, polarity, *_ = [*n_gram, "NULL", "NULL", "NULL", "NULL"]
-
-        ensemble_result = {
-            "text": text,
-            "Quadruples": [
+            if task == "joint-aspect-sentiment":
+                aspect, polarity, *_ = n_gram
+                category = "NULL"
+                opinion = "NULL"
+            elif task == "joint-aspect-category-sentiment":
+                aspect, category, polarity, *_ = n_gram
+                opinion = "NULL"
+            elif task == "joint-acos":
+                if n >= 4:
+                    aspect, category, opinion, polarity, *_ = n_gram
+                else:
+                    aspect, category, opinion, *_ = [*n_gram, "NULL", "NULL", "NULL", "NULL", "NULL"]
+            else:
+                raise ValueError("Task not supported")
+            quads.append(
                 {
                     "aspect": aspect,
                     "category": category,
                     "opinion": opinion,
-                    "polarity": polarity,
-
+                    "polarity": polarity
                 }
+            )
 
-            ],
+        ensemble_result = {
+            "text": text,
+            "Quadruples": quads
         }
+
         return ensemble_result

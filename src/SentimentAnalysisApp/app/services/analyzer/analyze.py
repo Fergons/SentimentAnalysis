@@ -60,4 +60,4 @@ if __name__ == '__main__':
     # analyze_text_bulk(atepc_examples, language='czech')
     ex = get_extractor(checkpoint_name="fast_lcf_atepc_1110.game_reviews_cdw_apcacc_90.36_apcf1_86.18_atef1_84.1")
     # extract_aspects("the game is good but has really bad  mechanics and lots of bugs.", extractor=ex)
-    ex.batch_predict([clean(x) for x in atepc_examples], pred_sentiment=True, print_result=True, save_to_file=False)
+    ex.batch_predict("D:\PythonProjects\SentimentAnalysis\data\sentences_.txt", pred_sentiment=True, print_result=True, save_to_file=True)

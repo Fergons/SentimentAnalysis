@@ -7,6 +7,7 @@
 # google scholar: https://scholar.google.com/citations?user=NPq5a_0AAAAJ&hl=en
 # Copyright (C) 2021. All Rights Reserved.
 # modified by Fergons for joint task training
+
 import json
 
 import findfile
@@ -19,18 +20,19 @@ from .instruction import (
     OpinionInstruction,
     APCInstruction,
     JointAspectCategorySentimentInstruction,
-    JointAspectSentimentInstruction
+    JointAspectSentimentInstruction,
+    JointACOSInstruction
 )
 
 
 class InstructDatasetLoader:
     def __init__(
-        self,
-        train_df_id,
-        test_df_id,
-        train_df_ood=None,
-        test_df_ood=None,
-        sample_size=1,
+            self,
+            train_df_id,
+            test_df_id,
+            train_df_ood=None,
+            test_df_ood=None,
+            sample_size=1,
     ):
         self.train_df_id = train_df_id.sample(frac=sample_size, random_state=1999)
         self.test_df_id = test_df_id
@@ -50,10 +52,11 @@ class InstructDatasetLoader:
         cat_instructor = CategoryInstruction()
         aspect_category_sentiment_instructor = JointAspectCategorySentimentInstruction()
         aspect_sentiment_instructor = JointAspectSentimentInstruction()
+        jointACOS_instructor = JointACOSInstruction()
 
         alldata = []
         for i, data in df.iterrows():
-            _aspects = [label["aspect"] for label in data["labels"]]
+            _aspects = [label.get("aspect","NULL") for label in data["labels"]]
             aspects = []
             for asp in _aspects:
                 if asp.strip() not in aspects:
@@ -62,7 +65,7 @@ class InstructDatasetLoader:
 
             polarities = []
             _polarities = [
-                "{}:{}".format(label["aspect"], label["polarity"])
+                "{}:{}".format(label.get("aspect","NULL"), label.get("polarity","NULL"))
                 for label in data["labels"]
             ]
             for pol in _polarities:
@@ -72,14 +75,14 @@ class InstructDatasetLoader:
 
             opinions = "|".join(
                 [
-                    "{}:{}".format(label["aspect"], label["opinion"])
+                    "{}:{}".format(label.get("aspect","NULL"), label.get("opinion","NULL"))
                     for label in data["labels"]
                 ]
             )
 
             categories = "|".join(
                 [
-                    "{}:{}".format(label["aspect"], label["category"])
+                    "{}:{}".format(label.get("aspect","NULL"), label.get("category","NULL"))
                     for label in data["labels"]
                 ]
             )
@@ -112,18 +115,32 @@ class InstructDatasetLoader:
                         "labels": categories,
                     }
                 )
+            elif task == "joint-acos":
+                alldata.append(
+                    {
+                        "text": aspect_category_sentiment_instructor.prepare_input(data["text"], aspects=aspects),
+                        "labels": joint
+                    }
+                )
+
             elif task == "joint-aspect-category-sentiment":
                 alldata.append(
                     {
                         "text": aspect_category_sentiment_instructor.prepare_input(data["text"], aspects=aspects),
-                        "labels": joint,
+                        "labels": "|".join([
+                            f"{label.get('aspect', 'NULL')}:{label.get('category', 'NULL')}:{label.get('polarity', 'NULL')}"
+                            for label in data["labels"]
+                        ]),
                     }
                 )
             elif task == "joint-aspect-sentiment":
                 alldata.append(
                     {
                         "text": aspect_sentiment_instructor.prepare_input(data["text"], aspects=aspects),
-                        "labels": joint,
+                        "labels": "|".join([
+                            f"{label.get('aspect', 'NULL')}:{label.get('polarity', 'NULL')}"
+                            for label in data["labels"]
+                        ]),
                     }
                 )
 
