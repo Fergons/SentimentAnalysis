@@ -18,7 +18,7 @@ from transformers import (
     Seq2SeqTrainer,
 )
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-from .instruction import (
+from instruction import (
     ATEInstruction,
     APCInstruction,
     OpinionInstruction,
@@ -214,45 +214,6 @@ class T5Generator:
         aspect_f1 = f1_score(true_aspects, pred_aspects, average="macro")
         return aspect_p, aspect_r, aspect_f1
 
-    # def get_classic_metrics(self, y_true, y_pred):
-    #     valid_gts = []
-    #     valid_preds = []
-    #     for gt, pred in zip(y_true, y_pred):
-    #         gt_list = gt.split("|")
-    #         pred_list = pred.split("|")
-    #         while gt_list:
-    #             gt_val = gt_list[-1].strip().lower()
-    #             for pred_val in pred_list:
-    #                 pred_val = pred_val.strip().lower()
-    #                 gt_key, _, gt_label = gt_val.partition(":")
-    #                 pred_key, _, pred_label = pred_val.partition(":")
-    #                 if gt_key.startswith(pred_key):
-    #                     if gt_label:
-    #                         valid_gts.append(gt_label)
-    #                     else:
-    #                         break
-    #                     if pred_label:
-    #                         valid_preds.append(pred_label)
-    #                     else:
-    #                         valid_preds.append("")
-    #                     break
-    #
-    #             gt_list.pop()
-    #
-    #     report = sklearn.metrics.classification_report(valid_gts, valid_preds)
-    #     print(report)
-    #     accuracy = sklearn.metrics.accuracy_score(valid_gts, valid_preds)
-    #     precision = precision_score(valid_gts, valid_preds, average="macro")
-    #     recall = recall_score(valid_gts, valid_preds, average="macro")
-    #     f1 = f1_score(valid_gts, valid_preds, average="macro")
-    #
-    #     return {
-    #         "accuracy": accuracy,
-    #         "precision": precision,
-    #         "recall": recall,
-    #         "f1": f1,
-    #     }
-
     def get_classic_metrics(self, y_true, y_pred):
         for i in range(len(y_true)):
             y_true[i] = y_true[i].replace(" ", "")
@@ -411,17 +372,23 @@ class ABSAGenerator(T5Generator):
             n_gram = asp.split(":")
             n = len(n_gram)
             if task == "joint-aspect-sentiment":
-                aspect, polarity, *_ = n_gram
-                category = "NULL"
-                opinion = "NULL"
+                if n >= 2:
+                    aspect, polarity, *_ = n_gram
+                    category = "NULL"
+                    opinion = "NULL"
+                else:
+                    aspect, category, opinion, polarity = ["NULL", "NULL", "NULL", "NULL"]
             elif task == "joint-aspect-category-sentiment":
-                aspect, category, polarity, *_ = n_gram
-                opinion = "NULL"
+                if n >= 3:
+                    aspect, category, polarity, *_ = n_gram
+                    opinion = "NULL"
+                else:
+                    aspect, category, opinion, polarity = ["NULL", "NULL", "NULL", "NULL"]
             elif task == "joint-acos":
                 if n >= 4:
                     aspect, category, opinion, polarity, *_ = n_gram
                 else:
-                    aspect, category, opinion, *_ = [*n_gram, "NULL", "NULL", "NULL", "NULL", "NULL"]
+                    aspect, category, opinion, polarity, *_ = [*n_gram, "NULL", "NULL", "NULL", "NULL", "NULL"]
             else:
                 raise ValueError("Task not supported")
             quads.append(
@@ -439,3 +406,5 @@ class ABSAGenerator(T5Generator):
         }
 
         return ensemble_result
+
+

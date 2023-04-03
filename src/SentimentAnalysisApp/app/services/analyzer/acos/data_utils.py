@@ -14,7 +14,7 @@ import findfile
 import pandas as pd
 from datasets import DatasetDict, Dataset
 
-from .instruction import (
+from instruction import (
     ATEInstruction,
     CategoryInstruction,
     OpinionInstruction,
@@ -118,7 +118,7 @@ class InstructDatasetLoader:
             elif task == "joint-acos":
                 alldata.append(
                     {
-                        "text": aspect_category_sentiment_instructor.prepare_input(data["text"], aspects=aspects),
+                        "text": jointACOS_instructor.prepare_input(data["text"], aspects=aspects),
                         "labels": joint
                     }
                 )
@@ -213,3 +213,20 @@ def read_json(data_path, data_type="train"):
             for line in fin:
                 data.append(json.loads(line))
     return data
+
+def create_task_output_string(task, *, outputs):
+    """
+    Create a string representation of the task output
+    :param task: task name
+    :param outputs: task outputs
+    :return: string representation of the task output
+    """
+    if task == "joint-aspect-category-sentiment":
+        return "|".join([f"{output['aspect']}:{output['category']}:{output['polarity']}" for output in outputs])
+    elif task == "joint-aspect-category":
+        return "|".join([f"{output['aspect']}:{output['category']}" for output in outputs])
+    elif task == "joint-aspect-sentiment":
+        return "|".join([f"{output['aspect']}:{output['polarity']}" for output in outputs])
+    elif task == "joint-acos":
+        return "|".join(
+            [f"{output['aspect']}:{output['category']}:{output['opinion']}:{output['polarity']}" for output in outputs])

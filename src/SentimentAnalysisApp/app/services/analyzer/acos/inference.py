@@ -1,13 +1,14 @@
 import json
 import findfile
-
-task = "joint-aspect-sentiment-category"
-model = "checkpoint-1400"
+import re
+from data_utils import create_task_output_string
+task = "joint-acos"
+model = "checkpoints\multitask\joint-aspect-category-sentiment-1336.Games-acs-after-acos\checkpoint-608"
 
 
 def run_inference_on_file(model, file, save_result=True):
-
-    save_filename = f"output-{model}-{'-'.join(file.rsplit('/', 2)[-2:])}.jsonl"
+    save_model = re.sub(r'\\+', '/', model)
+    save_filename = f"output-{'-'.join(save_model.rsplit('/', 2)[-2:])}.jsonl"
     save_file = findfile.find_cwd_file(save_filename)
     if save_file:
         with open(save_file, "r", encoding="utf-8") as f:
@@ -15,10 +16,13 @@ def run_inference_on_file(model, file, save_result=True):
             return results
 
     import tqdm
-    from pyabsa import ABSAInstruction, meta_load
-    generator = ABSAInstruction.ABSAGenerator(
+    from pyabsa import meta_load
+    from model import ABSAGenerator
+
+    generator = ABSAGenerator(
         findfile.find_cwd_dir(model)
     )
+
     lines = meta_load(file)
     results = []
     for line in tqdm.tqdm(lines):
@@ -33,14 +37,14 @@ def run_inference_on_file(model, file, save_result=True):
 
 
 def main():
-    inference_files = ["D:/PythonProjects/SentimentAnalysis/data/appid_1426210_czech.txt"]
+    inference_files = ["D:/PythonProjects/SentimentAnalysis/data/appid_730_czech.txt"]
 
     for f in inference_files:
         results = run_inference_on_file(model=model, file=f)
         print(f"Results for file {f}:")
         for result in results:
             print(result["text"])
-            quad = "|".join([f"{q['aspect']}:{q['category']}:{q['opinion']}:{q['polarity']}" for q in result["Quadruples"]])
+            quad = create_task_output_string(task, outputs=result["Quadruples"])
             print(quad)
 
 if __name__ == "__main__":

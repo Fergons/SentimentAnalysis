@@ -1,0 +1,184 @@
+Input: Hra má skvělé ovládání a perfektní grafiku, ale některé levely jsou příliš těžké.
+Output: ovládání:controls:positive, grafika:visuals:positive, těžké levely:level design:negative
+Input: Tato hra má krásné prostředí a fascinující příběh, ale některé mise jsou velmi repetitivní.
+Output: prostředí:game environment:positive, příběh:story:positive, repetitivní mise:gameplay:negative
+Input: Hra má zajímavý multiplayer a skvělé soundtracky, ale některé zbraně jsou příliš slabé.
+Output: multiplayer:game mode:positive, soundtracky:audio:positive, slabé zbraně:gameplay:negative
+Input: Hra má rozmanitou výbavu a zajímavé postavy, ale některé úkoly jsou velmi matoucí.
+Output: výbava:gameplay:positive, postavy:character design:positive, matoucí úkoly:gameplay:negative
+Input: Tato hra má skvělý design a dokonalé ovládání, ale nedostatečný počet levelů.
+Output: design:visuals:positive, ovládání:controls:positive, nedostatečný počet levelů:level design:negative
+Input: Hra má velmi dobrou atmosféru a poutavý příběh, ale některé dialogy jsou příliš dlouhé.
+Output: atmosféra:game environment:positive, poutavý příběh:story:positive, dlouhé dialogy:gameplay:negative
+Input: Tato hra má skvělé questy a pestré prostředí, ale některé nepřátele jsou příliš opakující se.
+Output: questy:gameplay:positive, pestré prostředí:game environment:positive, opakující se nepřátelé:gameplay:negative
+Input: Hra má skvělý zvukový design a detailní grafiku, ale některé úkoly jsou příliš snadné.
+Output: zvukový design:audio:positive, detailní grafika:visuals:positive, snadné úkoly:gameplay:negative
+Input: Tato hra má skvělý multiplayer a velké množství herních módů, ale některé mody jsou velmi nepovedené.
+Output: multiplayer:game mode:positive, herní módy:game mode:positive, nepovedené módy:gameplay:negative
+Input: Hra má zajímavé postavy a dobře napsaný příběh, ale některé bugy znehodnocují celkový zážitek.
+Output: postavy:character design:positive
+Input: Hra má vynikající audio a vizuální stránku, ale obtížnost je příliš vysoká.
+Output: audio:audio:positive, vizuální stránka:visuals:positive, obtížnost:gameplay:negative
+Input: Příběh hry je velmi zajímavý a emotivní, ale hratelnost je pomalá a nudná.
+Output: Příběh:story:positive, hratelnost:gameplay:negative
+Input: Multiplayer nabízí mnoho zábavy, ale komunita je velmi toxicita.
+Output: Multiplayer:game mode:positive, komunita:community:negative
+Input: Hra má skvělý gameplay a hratelnost, ale grafika je zastaralá.
+Output: gameplay:gameplay:positive, grafika:visuals:negative
+Input: I když hra není úplně dokonalá, stále je to velmi zábavné.
+Output: noterm:overall:positive
+Input: Vývojáři opravili většinu bugů, ale stále jsou tam některé drobné problémy.
+Output: bugy:performance_bugs:positive, drobné problémy:performance_bugs:negative
+Input: Hra je příliš krátká a lineární, ale přesto jsem si ji užil.
+Output: hratelnost:gameplay:negative
+Input: Hra má velký potenciál, ale momentálně trpí nedostatečnou optimalizací.
+Output: potenciál hry:overall:positive, nedostatečná optimalizace:performance_bugs:negative
+Input: Hra je příliš jednoduchá a nevyzývavá, ale grafika je opravdu nádherná.
+Output: jednoduchost hry:gameplay:negative, grafika:visuals:positive
+Input: Tato hra je skutečným uměleckým dílem, ale bohužel trpí nedostatečným množstvím obsahu.
+Output: umělecké dílo:overall:positive, nedostatečné množství obsahu:gameplay:negative
+Input: Ta hra má skvělé ovládání a perfektní grafiku ale některé levely jsou příliš těžké
+Output: ovládání:controls:positive, grafiku:visuals:positive, levely:level design:negative
+Input: Hra má zajímavé postavy a dobře napsaný příběh ale některé bugy znehodnocují celkový zážitek
+Output: postavy:character design:positive, příběh:story:positive, bugy:performance_bugs:negative
+Input: Multiplayer nabízí mnoho zábavy ale komunita je velmi toxicita
+Output: Multiplayer:game mode:positive, komunita:community:negative
+Input: Tato hra má rozmanitou výbavu a zajímavé postavy ale některé úkoly jsou velmi matoucí
+Output: výbavu:gameplay:positive, postavy:character design:positive, úkoly:gameplay:negative
+Input: Hra má skvělý zvukový design a detailní grafiku ale některé úkoly jsou příliš snadné
+Output: zvukový design:audio:positive, grafiku:visuals:positive, úkoly:gameplay:negative
+Input: Tato hra má krásné prostředí a fascinující příběh ale některé mise jsou velmi repetitivní
+Output: prostředí:game environment:positive, příběh:story:positive, mise:gameplay:negative
+Input: Hra má velmi dobrý soundtrack a vynikající hratelnost ale obtížnost je příliš vysoká
+Output: soundtrack:audio:positive, hratelnost:gameplay:positive, obtížnost:gameplay:negative
+Input: Tato hra má skvělý multiplayer a velké množství herních módů ale některé mody jsou velmi nepovedené
+Output: multiplayer:game mode:positive, herní módů:game mode:positive, mody:gameplay:negative
+Input: Hra má rozmanitý obsah a poutavý příběh ale některé dialogy jsou příliš dlouhé
+Output: obsah:gameplay:positive, příběh:story:positive, dialogy:gameplay:negative
+Input: Ta hra má skvělé prostředí a velmi dobrý design postav ale některé úkoly jsou příliš nudné
+Output: prostředí:game environment:positive, design postav:character design:positive, úkoly:gameplay:negative
+Input: Hra má vynikající audio a vizuální stránku ale nedostatečný počet levelů
+Output: audio:audio:positive, vizuální stránku:visuals:positive, počet levelů:gameplay:negative
+Input: Ta hra má dobrou fyziku, vynikající soundtracky, ale grafika je příšerná.
+Output: fyzika:gameplay:positive, soundtracky:audio:positive, grafika:visuals:negative
+Input: Multiplayer je fakt skvělej, ale někdy to fakt lagej.
+Output: Multiplayer:game mode:positive, lag:performance_bugs:negative
+Input: Ta hra je zasraně špatně optimalizovaná, ale hratelnost je fakt dobrá.
+Output: optimalizace:performance_bugs:negative, hratelnost:gameplay:positive
+Input: Příběh je sice někdy směšnější než naši politici, ale herní mód je opravdu zábavný.
+Output: příběh:story:neutral, herní mód:game mode:positive
+Input: Ta hra má fakt sračky ovládání, ale když si na to zvykneš, tak je to docela zábava.
+Output: ovládání:controls:negative, zábava:gameplay:positive
+Input: Hra je tak moc buglí, že by to mohlo být považováno za novou herní funkci.
+Output: buglí:performance_bugs:negative
+Input: Vizáž postav je opravdu hnusná, ale prostředí vypadá fakt dobře.
+Output: vizáž postav:character design:negative, prostředí:game environment:positive
+Input: Ta hra je naprosto sick, ale někdy to fakt glitchuje.
+Output: noterm:overall:positive, glitchuje:performance_bugs:negative
+Input: Multiplayer nabízí mnoho zábavy, ale některé hrdiny jsou fakt op a potřebují nějaký nerf.
+Output: Multiplayer:game mode:positive, op hrdiny:character design:negative, nerf:gameplay:negative
+Input: Ta hra má fakt bombastickou grafiku, ale některé úkoly jsou tak blbý, že vás to může znechutit.
+Output: grafika:visuals:positive, blbý úkoly:gameplay:negative
+Input: Multiplayer je veeeeeeeeery guttttttttt, ale někdy to fakt laguje.
+Output: Multiplayer:game mode:positive, laguje:performance_bugs:negative
+Input: Tato hra je very gut vetr, ale některé úkoly jsou opravdu náročné.
+Output: noterm:overall:positive, úkoly:gameplay:negative
+Input: STUPID GAME!!!!!!!i just have killed the yellow scientist and gto out of the zone but then my brother got disconected and i died bc of the bug that i just ran for my life and died bc 200 latency :D
+Output: yellow scientist:gameplay:positive, bug:performance_bugs:negative, disconected:performance_bugs:negative, latency:performance_bugs:negative
+Input: Hra je pro upocence, ale multiplayer je docela zábavný.
+Output: noterm:overall:neutral, Multiplayer:game mode:positive
+Input: Koupil jsem to jen kvůli expení zbraňí.
+Output: noterm:overall:neutral, expení zbraňí:gameplay:positive
+Input: Vypada dobre, dost podobne jako predesle warzone, nicmene lepsi co se tyce uspory uloziste na pocitaci, staci stahnout necelych 25 gb a uz lze hrat.
+Output: vizuální stránka:visuals:positive, uložiště:performance_bugs:positive, Warzone:game mode:positive
+Input: OK
+Output: noaspects:none:none
+Input: Vylepšená 2019 čo dodať .... proste SUPER po všetkých stránkach!SKVELA optimalizácia šlape jak hodinky aj nastaršom PC za cca 100 hodin ani jeden Eror , crach ani nic podobne , SUPER !
+Output: noterm:overall:positive, optimalizace:performance_bugs:positive
+Input: 74185269
+Output: noaspects:none:none
+Input: fffffffffff
+Output: noaspects:none:none
+Input: <3
+Output: noaspects:none:none
+Input: Tohle se fakt nedá, hratelnost je podprůměrná.
+Output: noterm:overall:negative, hratelnost:gameplay:negative
+Input: Veri gud gejm, ale grafika je dost čudná.
+Output: noterm:overall:positive, grafika:visuals:negative
+Input: Tučný, parkov mod taky hodně tučný, ale zábavný.
+Output: noterm:overall:neutral, parkov mod:game mode:positive
+Input: Pecka, odporúčam, ale některé úkoly jsou příliš snadné.
+Output: noterm:overall:positive, úkoly:gameplay:negative
+Input: Don't go for orion camo otherwise you'll go insane.
+Output: orion camo:visuals:negative
+Input: xd, grafika je dobrá, ale ovládání je hrozné.
+Output: grafika:visuals:positive, ovládání:controls:negative
+Input: Lepšie, zábavnejšie ale rovnako neprehľadné, kde, čo na začiatok v menu. Na oddych, na pohodu. 8/10.
+Output: noterm:overall:positive, menu:gameplay:negative
+Input: S hrou jsem spokojen, ale ten příběh je fakt špatný, kvalita hry je ale vynikající.
+Output: noterm:overall:positive, příběh:story:negative, kvalita hry:performance_bugs:positive
+Input: Multiplayer je po letech zase pořádná sranda a řežba, ale co se WZ týče, tak to je totální zalagovanej trash.
+Output: Multiplayer:game mode:positive, WZ:game mode:negative, lagování:performance_bugs:negative
+Input: Warzone 2.0 looks nice, but it is not a movie, but a game. The gameplay is real nonsense. Damage of guns does not make sense. TTK is incredibly long. You can shoot someone 4 times as first one, but enemy will kill you because he has fastergun. This game is broken. 2 melee atacks kill but headshot with sniper rifle does not. This game is full of toxic kids.
+Output: Warzone:game mode:neutral, noterm:gameplay:negative, guns:gameplay:negative, TTK:gameplay:negative, toxic kids:community:negative
+Input: Opravdu kvalitní hra, která mi nejde zapnout.
+Output: noterm:overall:positive, zapnutí hry:performance_bugs:negative
+Input: xdd, ta hra je fakt zábava, ale některé chyby jsou vážně šílené.
+Output: noterm:overall:positive, chyby:performance_bugs:negative
+Input: Vypadá to jako dobrá hra, ale multiplayer je příliš grindový.
+Output: noterm:overall:neutral, multiplayer:game mode:negative
+Input: Hra je takový normální průměr, ale grafika je fakt super.
+Output: noterm:overall:neutral, grafika:visuals:positive
+Input: Ta hra je vážně sick, ale někdy to fakt zlobí.
+Output: noterm:overall:positive, zlobí:performance_bugs:negative
+Input: Tohle je největší sranda od doby, co jsem hrál GTA, ale některé úkoly jsou fakt nesmyslné.
+Output: noterm:overall:positive, úkoly:gameplay:negative
+Input: Nechápu, jak se někomu může líbit tahle hra, vůbec mi to nedává smysl.
+Output: noterm:overall:negative
+Input: Ztrácel jsem naději, ale nakonec jsem si zamiloval tento multiplayer, ale úrovně jsou někdy opravdu nespravedlivé.
+Output: Multiplayer:game mode:positive, úrovně:level design:negative
+Input: Ta hra je pro malé děti, ale multiplayer je fakt zábavný.
+Output: noterm:overall:neutral, Multiplayer:game mode:positive
+Input: Ta hra je fakt epic, ale když se dostanete do end game, tak už to není tak zábavné.
+Output: noterm:overall:positive, end game:gameplay:negative
+Input: Hra je pro mě dost těžká, ale grafika je naprosto úchvatná.
+Output: noterm:overall:negative, grafika:visuals:positive
+Input: Opravdu kvalitní hra, která mi nejde zapnout.
+Output: noterm:overall:positive, zapnutí hry:performance_bugs:negative
+Input: Hra je docela fajn, ale audio efekty nejsou moc dobré.
+Output: noterm:overall:positive, audio efekty:audio:negative
+Input: Konečně jsem našel hru, která mi vyhovuje. Jenom je tam pár bugů, které mi kazí zážitek.
+Output: noterm:overall:positive, bugy:performance_bugs:negative
+Input: Konečně se mi podařilo dokončit tuto hru. Bohužel, obtížnost byla příliš náročná.
+Output: noterm:overall:negative, obtížnost:gameplay:negative
+Input: Hra je prostě bomba, ale nedokážu se v tom orientovat.
+Output: noterm:overall:positive, orientace:gameplay:negative
+Input: Jedna z nejhorších her, jaké jsem kdy hrál. Grafika je hrozná a audio efekty jsou směšné.
+Output: noterm:overall:negative, grafika:visuals:negative, audio efekty:audio:negative
+Input: Představoval jsem si, že tato hra bude lepší. Bohužel, mnoho lidí si stěžuje na přílišné lagy.
+Output: noterm:overall:negative, lag:performance_bugs:negative
+Input: Hra je sice zábavná, ale občas se vyskytnou chyby, které mi kazí zážitek.
+Output: noterm:overall:positive, chyby:performance_bugs:negative
+Input: Všechno v této hře je naprosto dokonalé. Jedinou nevýhodou je, že hra vyžaduje velké množství paměti.
+Output: noterm:overall:positive, paměť:performance_bugs:negative
+Input: opravdu kvalitní hra, která mi nejde zapnout.
+Output: noterm:overall:positive, zapnout:performance_bugs:negative
+Input: Grafika vypadá super, ale výkon na mém starším PC je katastrofální.
+Output: vizuální stránka:visuals:positive, výkon:performance_bugs:negative
+Input: Při hraní téhle hry jsem měl pocit, že ztrácím čas, ale multiplayer je docela zábavný.
+Output: noterm:overall:negative, Multiplayer:game mode:positive
+Input: Z tohoto hlediska je hra celkem dobrá, ale zase si myslím, že audio bylo příliš tiché.
+Output: noterm:overall:positive, audio:audio:negative
+Input: Hra je docela zábavná, ale příliš mnoho bugů to kazí.
+Output: noterm:overall:positive, bugy:performance_bugs:negative
+Input: Při hraní téhle hry jsem měl pocit, že se dívám na film, ale zase si myslím, že ovládání bylo příliš komplikované.
+Output: noterm:overall:positive, ovládání:controls:negative
+Input: Tato hra je super, ale multiplayer je také super zdroj frustrace.
+Output: noterm:overall:positive, Multiplayer:game mode:negative
+Input: Je to fakt dobrá hra, ale některé úkoly jsou fakt těžké.
+Output: noterm:overall:positive, úkoly:gameplay:negative
+Input: Tento herní režim je super zábava, ale cena hry je příliš vysoká.
+Output: cena:price:negative, herní režim:game mode:positive
+Input: Když si to vezmete celkově, hra je docela zábavná, ale mnoho zbraní má opravdu nízký poškození.
+Output: noterm:overall:positive, zbraně:gameplay:negative

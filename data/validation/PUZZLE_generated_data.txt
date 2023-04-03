@@ -1,0 +1,122 @@
+Input: Ještě jsem to nedohrál protože čekám na druhou polovičku ale zatím jsem nadchnutý. Příběh, hratelnost, postavy, grafika, obtížnost, provedení a originalita vše 1010. Hra se neustálé mění a překvapí. Příběh zaujme a chcete malou Rose šťastnou. Další úžasná věc je remote play a friends pass. Umožní to hrát hru s druhým aniž by to měl stáhnuté nebo koupené. Takže stačí že to má koupené jeden. Poslední věc je cena. Je akorát a stojí to za to. Takže doporučuji 1110 a těším se až budu moci hrát dále.
+Output: Příběh:story:positive, postavy:character design:positive, grafika:visuals:positive, hratelnost:gameplay:positive, obtížnost:gameplay:neutral, provedení:overall:positive, originalita:overall:positive, remote play:multiplayer:positive, friends pass:multiplayer:positive, cena:price:positive.
+Input: Tohle je neuvěřitelně zábavná a inovativní hra, která mě dostala. Hratelnost je fantastická a příběh je silný a emotivní. Grafika je nádherná a soundtrack je božský. Jedinou věcí, která mi vadila, byly některé technické problémy. Celkově ale velký palec nahoru.
+Output: hratelnost:gameplay:positive, příběh:story:positive, grafika:visuals:positive, soundtrack:audio:positive, technické problémy:performance_bugs:negative, noterm:overall:positive
+Input: Tato hra je opravdu těžká, ale to mi vůbec nevadí. Hra nabízí vynikající výzvu a skvělou hratelnost. Grafika je sice trochu zastaralá, ale to nevadí, protože hra stále stojí za to. Příběh je sice trochu neuvěřitelný, ale to je v pořádku, protože to je jen zábava. Celkově velmi dobrá hra.
+Output: hratelnost:gameplay:positive, těžká obtížnost:gameplay:positive, grafika:visuals:negative, příběh:story:neutral, noterm:overall:positive
+Input: Tuto hru jsem hrál s mým přítelem a musím říct, že jsme se náramně bavili. Hra je velmi dobře navržená pro kooperativní hraní a nabízí spoustu vtipných momentů. Grafika je krásná a hratelnost je plynulá. Jedinou věcí, která mi vadila, byl někdy nepřesný pohyb postav. Ale jinak velmi dobrá hra.
+Output: kooperativní hraní:multiplayer:positive, vtipné momenty:gameplay:positive, grafika:visuals:positive, hratelnost:gameplay:positive, nepřesný pohyb postav:controls:negative, noterm:overall:positive
+Input: Tato hra je dobrá, ale nechápu, proč tolik lidí ji tolik chválí. Příběh je průměrný a grafika je nic moc. Hratelnost je solidní, ale nic zvláštního. Jedinou výjimkou jsou soundtrack a zvukové efekty, které jsou fantastické. Celkově ale nic, co by mě opravdu uchvátilo.
+Output: příběh:story:neutral, grafika:visuals:negative, hratelnost:gameplay:neutral, soundtrack:audio:positive, zvukové efekty:audio:positive, noterm:overall:neutral
+Input: Ta hra má fakt dobrý level design a skvělý příběh. Doporučuji ji všem, kteří hledají něco nového a originálního.
+Output: level design:level design:positive, příběh:story:positive, noterm:overall:positive
+Input: Hra nabízí opravdu nápadité herní mechaniky a Pixar level příběh. Všechno plyne velmi svižně a nikdy vás to nenudí. Ale pozor, hra není úplně jednoduchá. Doporučuji ji hrát s kamarádem, který má stejnou úroveň herních schopností.
+Output: herní mechaniky:gameplay:positive, příběh:story:positive, noterm:overall:positive
+Input: Dokonalá hra, dlouhá a neopakovatelná.
+Output: noterm:overall:positive
+Input: Když jsem hrál tuhle hru, tak jsem se cítil jako někdo, kdo dostal šíp do kolena.
+Output: noaspects:none:none
+Input: Hra má naprosto parádní grafiku a příběh. Určitě ji doporučuji.
+Output: grafiku:visuals:positive, příběh:story:positive, noterm:overall:positive
+Input: Tato hra je úžasná, ale ty split screny jsou fakt debilní.
+Output: noterm:overall:positive, split screny:visuals:negative
+Input: Tato hra je naprostý mistrovský kus.
+Output: noterm:overall:positive
+Input: Vyborná hra pro kooperativní hraní.
+Output: noterm:game mode:positive
+Input: Ta hra je fakt dobrá.
+Output: noterm:overall:positive
+Input: Byla to popičovka. Ale ten čmelák byl fakt svině!
+Output: noterm:overall:negative, čmelák:character design:negative
+Input: Tato adventura je naprosto úžasná. Hodně se u toho nasmějete a není to nic lehkého. Určitě ji doporučuji, ale je dobré mít kamaráda s podobnou úrovní herních schopností.
+Output: adventura:game mode:positive, noterm:difficulty:negative, noterm:overall:positive
+Input: Tato hra je skvělá pro hraní ve dvou. Společně s A Way Out a Portal 2 je to nejlepší kooperativní hra.
+Output: noterm:game mode:positive, A Way Out:game mode:positive, Portal 2:game mode:positive, noterm:overall:positive
+Input: Ta hra je vážně velká lahůdka pro všechny, kteří hledají něco nového a nápaditého. Level design je úžasný a příběh plný zábavy a překvapení. Hru můžete hrát i v kooperaci, ale dejte si pozor, aby vaši kamarádi byli schopni držet krok.
+Output: level design:level design:positive, příběh:story:positive, kooperace:game mode:positive
+Input: Ta hra je dokonalá - dlouhá, neopakující se a naprosto úžasná. A ještě k tomu máte na výběr spoustu možností a zábavy.
+Output: noterm:overall:positive, možnosti:gameplay:positive
+Input: Dřív jsem byl jako ty - a pak jsem dostal šíp do kolena. Ale tahle hra je naštěstí bez šípu a plná zábavy.
+Output: noterm:overall:positive
+Input: Hra je parádní - má mega dobrou grafiku a skvělý příběh. Rozhodně doporučuji.
+Output: grafiku:visuals:positive, příběh:story:positive
+Input: Ta hra je naprosto úžasná, ale má hloupý split screen. I tak ale stojí za to ji zkusit.
+Output: noterm:overall:positive, split screen:visuals:negative
+Input: Tahle hra je mistrovské dílo. Prostě a jednoduše úžasná.
+Output: noterm:overall:positive
+Input: Vyborná coop hra pro všechny, kteří chtějí hrát s přáteli. Není to ale pro každého - pořádně si vyberte svého herního partnera.
+Output: kooperace:game mode:positive, herní partner:community:negative
+Input: Tahle hra je fakt dobrá. Stojí za to ji vyzkoušet.
+Output: noterm:overall:positive
+Input: Popičovka. Ale čmelák byl svině! Nicméně hra stojí za to, když se přes ty zádrhely dokážete dostat.
+Output: noterm:overall:positive, zádrhely:gameplay:neutral
+Input: Tahle adventura je naprosto úžasná. Bude vás bavit a rozhodně to nebude jednoduché. Doporučuji si najít kamaráda, abyste se společně bavili.
+Output: adventura:game mode:positive, kamarád:community:positive
+Input: Ta hra stojí docela dost, ale když na to přijde, je to opravdu dobrá investice do zábavy.
+Output: noterm:overall:positive, noterm:price:negative
+Input: Cena téhle hry je dost vysoká, ale když si ji koupíte, určitě toho nebudete litovat.
+Output: noterm:overall:positive, noterm:price:negative
+Input: Ta hra je sice trochu dražší, ale stojí to za to. Určitě doporučuji.
+Output: noterm:overall:positive, noterm:price:negative
+Input: Cena téhle hry není úplně nízká, ale rozhodně to stojí za to, když hledáte kvalitní zábavu.
+Output: noterm:overall:positive, noterm:price:negative
+Input: Ta hra není nejlevnější, ale když na to přijde, je to opravdu dobrý nákup.
+Output: noterm:overall:positive, noterm:price:negative
+Input: Ta hra je opravdu super. Hraju ji už nějakou dobu a stále mě baví. Pokud hledáte něco na dlouhou dobu, určitě ji zkuste.
+Output: noterm:overall:positive
+Input: Tahle hra není vůbec špatná, ale mohla by být lepší. Pokud máte chuť na něco nového, stojí za to ji vyzkoušet.
+Output: noterm:overall:neutral
+Input: Hra mě velice zklamala. Očekával jsem mnohem víc, ale nakonec jsem byl zklamaný. Bohužel tuto hru nemohu doporučit.
+Output: noterm:overall:negative
+Input: Ta hra není špatná, ale je to spíš pro casual hráče. Pokud hledáte něco náročnějšího, nejspíš si najdete lepší hru.
+Output: noterm:gameplay:neutral
+Input: Hra mě fakt zaujala. Grafika je úžasná a hratelnost je naprosto skvělá. Doporučuji ji vyzkoušet.
+Output: noterm:visuals:positive, hratelnost:gameplay:positive
+Input: Ta hra není špatná, ale některé prvky jsou opravdu zklamáním. Zkuste raději něco jiného.
+Output: noterm:overall:neutral, zklamání:gameplay:negative
+Input: Hra mě úplně pohltila. Dokázal jsem se do ní ponořit na hodiny a stále mě baví. Rozhodně doporučuji.
+Output: noterm:overall:positive
+Input: Tahle hra má své chyby, ale stále je to dobrá hra. Pokud se dokážete přenést přes chyby, můžete si užít skvělou zábavu.
+Output: noterm:overall:positive, chyby:performance_bugs:negative
+Input: Hra je v pořádku, ale nic zvláštního. Pokud nevíte, co hrát, můžete ji zkusit.
+Output: noterm:overall:neutral
+Input: Tahle hra je skvělá pro všechny, kdo hledají něco nového a zábavného. Můžete se těšit na hodiny zábavy a nezapomenutelné zážitky.
+Output: noterm:overall:positive, zábava:gameplay:positive
+Input: Některé úrovně jsou opravdu náročné, ale zábava je zaručená. Tahle hra vám rozhodně nedovolí se nudit.
+Output: noterm:gameplay:positive, zábava:gameplay:positive
+Input: Tahle hra není pro každého, ale když se do toho pustíte, můžete se těšit na neuvěřitelnou atmosféru a napínavé momenty.
+Output: noterm:gameplay:positive, atmosféra:game environment:positive, napínavé momenty:gameplay:positive
+Input: Multiplayer v téhle hře je fakt zábavný, i když někdy se můžete potkat s nějakým smurfem.
+Output: noterm:game mode:positive, smurf:community:negative
+Input: Tahle hra má neuvěřitelnou grafiku a skvělý příběh, ale někdy to může být trochu náročné.
+Output: noterm:visuals:positive, příběh:story:positive, náročnost:gameplay:negative
+Input: Hratelnost téhle hry je fakt dobrá, ale cena je trochu vysoká.
+Output: noterm:gameplay:positive, cena:price:negative
+Input: Tahle hra má skvělý soundtrack a dobrou atmosféru, ale některé části jsou opravdu těžké.
+Output: noterm:audio:positive, atmosféra:game environment:positive, těžké části:gameplay:negative
+Input: Tahle hra je nabitá akcí a napětím, ale některé momenty mohou být opravdu frustrující.
+Output: noterm:gameplay:positive, akce:gameplay:positive, napětí:gameplay:positive, frustrace:gameplay:negative
+Input: Multiplayer v téhle hře je fakt zábavný a má spoustu možností, ale někdy můžete narazit na nějakého hackera.
+Output: noterm:game mode:positive, možnosti:gameplay:positive, hacker:community:negative
+Input: Tahle hra má nádhernou grafiku a skvělou hratelnost, ale některé momenty mohou být opravdu zmatené.
+Output: noterm:visuals:positive, hratelnost:gameplay:positive, zmatek:gameplay:negative
+Input: Ta hra má vynikající výkon a neměla jsem s ní žádné problémy. Určitě se dobře hraje na silnějším PC.
+Output: výkon:performance_bugs:positive
+Input: Hra má fantastickou atmosféru, která vás vtáhne do hry a udrží vás tam po celou dobu. Je to neuvěřitelné zážitek.
+Output: atmosféra:game environment:positive
+Input: Ta hra má skvělou grafiku a vypadá to velmi realisticky. Mám pocit, že jsem součástí herního světa.
+Output: grafika:visuals:positive, herní svět:game environment:positive
+Input: Hra je velmi zábavná a čas rychle letí. Většina úkolů je snadná, takže se nemusíte bát, že byste uvízli na jednom místě příliš dlouho.
+Output: zábava:gameplay:positive, úkoly:gameplay:positive
+Input: Ta hra má vynikající zvukové efekty a hudbu, která dodává hře na atmosféře. Je to skutečně zážitek pro sluch.
+Output: zvukové efekty:audio:positive, hudba:audio:positive, atmosféra:game environment:positive
+Input: Hra je plná zajímavých postav a příběh má několik nečekaných zvratů. Je to opravdu zajímavá a poutavá hra.
+Output: postavy:character design:positive, příběh:story:positive
+Input: Hra má velmi dobré menu a uživatelské rozhraní, což usnadňuje navigaci v hře. Nicméně, některé ovládací prvky jsou poměrně zdlouhavé.
+Output: menu:visuals:positive, uživatelské rozhraní:controls:positive, ovládací prvky:controls:negative
+Input: Zkoušel jsem ji hrát, ale pořád jsem měl problémy s výkonem. Někdy to bylo nepříjemné.
+Output: noterm:performance_bugs:negative
+Input: Ta hra měla moc velké problémy s výkonem. Bylo těžké hrát, když se to pořád sekalo a padalo.
+Output: problémy s výkonem:performance_bugs:negative
+Input: Hra měla dobrý potenciál, ale příliš mnoho bugů. Když jsem se ji snažil hrát, měl jsem pocit, že se spíše bojuje s technickými problémy, než s hratelností.
+Output: bugů:performance_bugs:negative, noterm:performance_bugs:negative, technickými problémy:performance_bugs:negative, hratelnost:gameplay:neutral

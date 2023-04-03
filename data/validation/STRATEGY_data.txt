@@ -1,0 +1,52 @@
+Input: Grafika je úžasná, zvuky jsou imerzivní, ale postavy vypadají divně a hratelnost je průměrná.
+Output: Grafika:visuals:positive:úžasná, zvuky:sound:positive:imerzivní, postavy:character design:negative:divně, hratelnost:gameplay:neutral:průměrná
+Input: Tato hra má fantastický příběh, který mě udržel přilepený k obrazovce, ale občas se mi zdá, že ovládání je trochu neohrabané.
+Output: příběh:story:positive:fantastický, ovládání:controls:negative:trochu neohrabané
+Input: Vizuální stránka je naprosto ohromující a postavy mají hluboké pozadí, ale hra má mnoho chyb, které potřebují opravit.
+Output: vizuální stránka:visuals:positive:naprosto ohromující, postavy:character design:positive:hluboké pozadí, hra:bugs:negative:mnoho chyb
+Input: Hra má skvělý zvukový doprovod a je velmi poutavá, ale některé úrovně jsou příliš složité a frustrující.
+Output: zvukový doprovod:sound:positive:skvělý, úrovně:level design:negative:příliš složité a frustrující
+Input: Celkově je tato hra stojí za svou cenu, i když se mi nelíbí design prostředí a některých herních prvků.
+Output: hra:price:positive:stojí za svou cenu, design prostředí:environment:negative:nelíbí, herních prvků:in-game items:negative:nelíbí
+Input: Hratelnost je rychlá a zábavná, zbraně mají uspokojivý pocit, ale někdy se mi zdá, že ovládání je trochu nepřesné.
+Output: Hratelnost:gameplay:positive:rychlá a zábavná, zbraně:gunplay:positive:uspokojivý pocit, ovládání:controls:negative:trochu nepřesné
+Input: Tahle strategie je fakt bomba, ale grafika by mohla bejt lepší. Ovládání je easy.
+Output: strategie:overall:positive:bomba, grafika:visuals:negative:mohla bejt lepší, ovládání:controls:positive:easy
+Input: AI v tomhle game je ultra chytrý, ale bugy mi kazí zábavu. Hudba je na jedničku.
+Output: AI:gameplay:positive:ultra chytrý, bugy:bugs:negative:kazí zábavu, Hudba:sound:positive:na jedničku
+Input: Taktika v téhle hře je na vyšší level, ale postavy vyzeraj trochu mimo. Cenovka je fajn.
+Output: Taktika:gameplay:positive:na vyšší level, postavy:character design:negative:trochu mimo, Cenovka:price:positive:fajn
+Input: Mapy v tomhle game jsou epický, ale AI je trochu hloupý. Hratelnost je super.
+Output: Mapy:level design:positive:epický, AI:gameplay:negative:trochu hloupý, Hratelnost:gameplay:positive:super
+Input: Hra je pecka, ale grafika vypadá jako z minulýho desetiletí. Zvuky jsou v pohodě.
+Output: Hra:overall:positive:pecka, grafika:visuals:negative:z minulýho desetiletí, Zvuky:sound:neutral:v pohodě
+Input: Tato strategie je super, má vynikající multiplayer a zajímavý příběh, ale někdy má špatné načítání a chyby ve hře.
+Output: strategie:overall:positive:super, multiplayer:gameplay:positive:vynikající, příběh:story:positive:zajímavý, načítání:performance:negative:špatné, chyby:bugs:negative:chyby ve hře
+Input: Grafika je dobrá, ale nepřátelé jsou velmi těžcí porazit a hra má vysokou cenu.
+Output: Grafika:visuals:positive:dobrá, nepřátelé:gameplay:negative:velmi těžcí, cenu:price:negative:vysokou
+Input: Online hraní je rychlé a plynulé, ale hlasový chat nefunguje dobře a rozhraní je matoucí.
+Output: Online hraní:gameplay:positive:rychlé a plynulé, hlasový chat:performance:negative:nefunguje dobře, rozhraní:controls:negative:matoucí
+Input: Hra má poutavý příběh, ale zvuky zbraní jsou špatné a někdy se objevují grafické chyby.
+Output: příběh:story:positive:poutavý, zvuky zbraní:gunplay:negative:špatné, grafické chyby:bugs:negative:objevují
+Input: Tato strategická hra má skvělý level design a je velmi výzvou, ale uživatelské rozhraní by mohlo být lepší.
+Output: level design:level design:positive:skvělý, výzvou:gameplay:positive:velmi, uživatelské rozhraní:controls:negative:mohlo být lepší
+Input: Tahle strategie mě opravdu vtáhla svým hlubokým příběhem a propracovanou ekonomikou, ale bohužel je hudba velmi monotónní a ovládání nepříjemné.
+Output: příběhem:story:positive:hluboký, ekonomikou:gameplay:positive:propracovanou, hudba:sound:negative:monotónní, ovládání:controls:negative:nepříjemné
+Input: Tato online strategická hra nabízí širokou škálu jednotek a budov, ale někdy trpí pomalým načítáním a komunita je toxická.
+Output: jednotek:in-game items:positive:širokou škálu, budov:environment:positive:širokou škálu, načítáním:performance:negative:pomalým, komunita:overall:negative:toxická
+Input: Grafika je působivá, mapy jsou detailní a rozmanité, ale AI protivníků je snadno předvídatelná a hra se stává repetitivní.
+Output: Grafika:visuals:positive:působivá, mapy:level design:positive:detailní a rozmanité, AI protivníků:gameplay:negative:snadno předvídatelná, hra:overall:negative:repetitivní
+Input: Hra nabízí zajímavou kombinaci PvP a PvE prvků, ale potřebuje lepší optimalizaci a návody pro nováčky jsou nedostatečné.
+Output: PvP a PvE prvků:gameplay:positive:zajímavou kombinaci, optimalizaci:performance:negative:lepší, návody:overall:negative:nedostatečné
+Input: Tato strategie má skvělou kooperativní hru a unikátní herní mechanismy, avšak grafický styl mi nepřijde přitažlivý a hra je příliš drahá.
+Output: kooperativní hru:gameplay:positive:skvělou, herní mechanismy:gameplay:positive:unikátní, grafický styl:visuals:negative:nepřijde přitažlivý, hra:price:negative:příliš drahá
+Input: Hra je naprosto úžasná!
+Output: noterm:overall:positive:naprosto úžasná
+Input: Celkově jsem zklamán tímto titulem.
+Output: noterm:overall:negative:zklamán
+Input: Tahle hra mě nenadchla.
+Output: noterm:overall:negative:nenadchla
+Input: Je to skvělá zábava!
+Output: noterm:overall:positive:skvělá zábava
+Input: Hra je průměrná, nic zvláštního.
+Output: noterm:overall:neutral:průměrná

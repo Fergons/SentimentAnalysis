@@ -2,18 +2,19 @@ import json
 import findfile
 import tqdm
 from Levenshtein import distance as levenshtein_distance
-
+from data_utils import create_task_output_string
 task = "joint-aspect-category-sentiment"
 # task = "joint-aspect-sentiment"
 # task = "joint-aspect-category"
 
 # task = "joint-acos"
-model = "joint-aspect-category-sentiment-1336.Games-acs-after-acos\checkpoint-608"
+model = "joint-aspect-category-sentiment-1335.GamesACOS-acs\checkpoint-1250"
 # model = "checkpoint-750"
 
 test_files = ["D:/PythonProjects/SentimentAnalysis/data/validation/STRATEGY_data.main_categories.jsonl",
               "D:/PythonProjects/SentimentAnalysis/data/validation/PUZZLE_generated_data.main_categories.jsonl",
               "D:/PythonProjects/SentimentAnalysis/data/validation/FPS_generated_data.main_categories.jsonl"]
+
 
 def find_most_similar_word(word, word_list, label="aspect"):
     """
@@ -51,10 +52,8 @@ def evaluate_labels(true_quadruples, pred_quadruples, labels=None):
 
     for i, trues in true_quadruples.items():
         _pred_quads = pred_quadruples[i]
-        trues_str = "|".join(
-            [f"{true['aspect']}:{true['category']}:{true['opinion']}:{true['polarity']}" for true in trues])
-        pred_quads_str = "|".join(
-            [f"{pred['aspect']}:{pred['category']}:{pred['opinion']}:{pred['polarity']}" for pred in _pred_quads])
+        trues_str = create_task_output_string(task, outputs=trues)
+        pred_quads_str = create_task_output_string(task, outputs=_pred_quads)
         print(f"True: {trues_str}")
         print(f"Pred: {pred_quads_str}")
         for true in trues:
@@ -117,9 +116,11 @@ if __name__ == "__main__":
                                               labels=["aspect", "polarity", "opinion", "category"])
                 continue
 
-        from pyabsa import ABSAInstruction, meta_load
+        from pyabsa import meta_load
+        from model import ABSAGenerator
+
         save_file = save_filename
-        generator = ABSAInstruction.ABSAGenerator(
+        generator = ABSAGenerator(
             # "flant5-base-absa",
             findfile.find_cwd_dir(model),
         )

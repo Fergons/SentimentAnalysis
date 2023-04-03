@@ -172,13 +172,16 @@ class JointACOSInstruction(Instruction):
     def __init__(self, bos_instruction=None, eos_instruction=None):
         super().__init__(bos_instruction, eos_instruction)
         if self.bos_instruction is None:
-            self.bos_instruction = f"""joint aspect category opinion sentiment quadruple extraction:
+            self.bos_instruction = f"""Definition: The input are reviews about video games and their aspects. The task is to extract the aspects and their corresponding categories, opinions and sentiments. Here are some examples:
 example 1-
-input: Příběh je velmi zajímavý, ale multiplayerová část hry je plná cheaterů.
+input: Příběh je velmi zajímavý ale multiplayerová část hry je plná cheaterů.
 output: Příběh:gameplay:velmi zajímavý:positive|multiplayerová část hry:gameplay:plná cheaterů:negative|cheaterů:community:plná:negative
 example 2-
-input: Hra nabízí skvělý balanc mezi PvP a PvE, ale některé herní prvky jsou velmi zastaralé.
+input: Hra nabízí skvělý balanc mezi PvP a PvE a některé herní prvky jsou velmi zastaralé.
 output: balanc mezi PvP a PvE:gameplay:skvělý:positive|herní prvky:gameplay:velmi zastaralé:negative
+example 3-
+input: Hra obsahuje rozne game mody, mapy a herni prvky.
+output: game mody:gameplay:rozne:neutral|mapy:gameplay:NULL:neutral|herni prvky:gameplay:NULL:neutral
 Now extract aspect:category:opinion:sentiment for the following example:
 input: """
         if self.eos_instruction is None:
@@ -200,13 +203,16 @@ class JointAspectCategorySentimentInstruction(Instruction):
     def __init__(self, bos_instruction=None, eos_instruction=None):
         super().__init__(bos_instruction, eos_instruction)
         if self.bos_instruction is None:
-            self.bos_instruction = f"""joint aspect category sentiment extraction:
+            self.bos_instruction = f"""Definition: The input are reviews about video games and their aspects. The task is to extract the aspects and their corresponding categories, and sentiments. Here are some examples:
 example 1-
 input: Příběh je velmi zajímavý, ale multiplayerová část hry je plná cheaterů.
 output: Příběh:gameplay:positive|multiplayerová část hry:gameplay:negative|cheaterů:community:negative
 example 2-
-input: Hra nabízí skvělý balanc mezi PvP a PvE, ale některé herní prvky jsou velmi zastaralé.
+input: Hra nabízí skvělý balanc mezi PvP a PvE a některé herní prvky jsou velmi zastaralé.
 output: balanc mezi PvP a PvE:gameplay:positive|herní prvky:gameplay:negative
+example 3-
+input: Hra obsahuje rozne game mody, mapy a herni prvky.
+output: game mody:gameplay:neutral|mapy:gameplay:neutral|herni prvky:gameplay:neutral
 Now extract aspect:category:sentiment triplets for the following example:
 input: """
         if self.eos_instruction is None:
@@ -228,12 +234,12 @@ class JointAspectSentimentInstruction(Instruction):
     def __init__(self, bos_instruction=None, eos_instruction=None):
         super().__init__(bos_instruction, eos_instruction)
         if self.bos_instruction is None:
-            self.bos_instruction = f"""joint aspect sentiment extraction:
+            self.bos_instruction = f"""Definition: The input are sentences about video games. The task is to extract the aspects and their corresponding sentiment. Here are some examples:
 example 1-
 input: Příběh je velmi zajímavý, ale multiplayerová část hry je plná cheaterů.
 output: Příběh:gameplay:velmi zajímavý:positive|multiplayerová část hry:gameplay:plná cheaterů:negative|cheaterů:community:plná:negative
 example 2-
-input: Hra nabízí skvělý balanc mezi PvP a PvE, ale některé herní prvky jsou velmi zastaralé.
+input: Hra nabízí skvělý balanc mezi PvP a PvE no některé herní prvky jsou velmi zastaralé.
 output: balanc mezi PvP a PvE:gameplay:skvělý:positive|herní prvky:gameplay:velmi zastaralé:negative
 Now extract aspect:category:opinion:sentiment  for the following example:
 input: """

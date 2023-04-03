@@ -1,6 +1,6 @@
 import os
 import sys
-import requests as re
+import requests
 import json
 from enum import Enum
 from lxml import etree
@@ -12,12 +12,35 @@ from bs4 import BeautifulSoup
 from pydantic import BaseModel
 import emoji
 import re
+import argparse
 
 
-def review_filter(reviews):
-    filtered_reviews = set(reviews)
-    filtered_reviews = filter(lambda x: len(x) > 1, filtered_reviews)
-    return list(filtered_reviews)
+def review_filter(reviews, *, polarity='all', language='all', min_length=20, max_length=1000, **kwargs):
+    filtered_reviews = filter(lambda x: len(x["review"]) > min_length and len(x["review"]) < max_length, reviews)
+    if polarity == "positive":
+        filtered_reviews = filter(lambda x: x["voted_up"] is True, filtered_reviews)
+    elif polarity == "negative":
+        filtered_reviews = filter(lambda x: x["voted_up"] is False, filtered_reviews)
+    if language != "all":
+        filtered_reviews = filter(lambda x: x["language"] == language, filtered_reviews)
+    return filtered_reviews
+
+
+def process_json(appid=None, language=None, **kwargs):
+    print(kwargs)
+    if appid is None or language is None:
+        raise ValueError("appid and language must be specified")
+
+    with open(f"../data/appid_{appid}_{language}.json", "r", encoding="utf8") as fopen:
+        review_list = json.load(fopen)
+
+    with open(f"../data/appid_{appid}_{language}.txt", "w", encoding="utf8") as fopen:
+        filtered_reviews = review_filter(review_list, **kwargs)
+        if type(review_list[0]) == dict:
+            review_list = [review["review"] for review in filtered_reviews]
+        for review in review_list:
+            fopen.write(" ".join(clean_text(review).strip().split()))
+            fopen.write("\n")
 
 
 def save_json(filename, data, **kwargs):
@@ -30,7 +53,7 @@ def save_text(filename, data):
         fopen.write(data)
 
 
-def download_json(appid, language="czech", day_range=10000):
+def download_json(appid, language="czech", day_range=10000, num_reviews=None, **kwargs):
     params = {"language": language,
               "filter": "recent",
               "purchase_type": "all",
@@ -49,12 +72,16 @@ def download_json(appid, language="czech", day_range=10000):
 
     with open(filename, "w", encoding="utf-8") as fopen:
         while True:
-            response = re.get(f"https://store.steampowered.com/appreviews/{appid}?json=1", params=params)
+            response = requests.get(f"https://store.steampowered.com/appreviews/{appid}?json=1", params=params)
             response_json = response.json()
             query_summary = response_json.get("query_summary")
             success = response_json.get("success", 0)
             print(f"Reponse summary: {query_summary}")
             reviews += response_json.get("reviews", {})
+            if num_reviews is not None and len(reviews) >= num_reviews:
+                reviews = reviews[:num_reviews]
+                break
+
             params["cursor"] = response_json.get("cursor")
             if success == 1:
                 if params["cursor"] in used_cursors:
@@ -98,19 +125,6 @@ def clean_text(text):
     return text
 
 
-def process_json(appid, language):
-    with open(f"../data/appid_{appid}_{language}.json", "r", encoding="utf8") as fopen:
-        review_list = json.load(fopen)
-
-    with open(f"../data/appid_{appid}_{language}.txt", "w", encoding="utf8") as fopen:
-        if type(review_list[0]) == dict:
-            review_list = [review["review"] for review in review_list if review["voted_up"] is False]
-        for review in review_list:
-            if len(review) < 10 or len(review) > 200:
-                continue
-            fopen.write(" ".join(clean_text(review).strip().split()))
-            fopen.write("\n")
-
 
 # get all app ids on steam at https://api.steampowered.com/ISteamApps/GetAppList/v2/
 async def get_steam_app_ids(session=None, *args, **kwargs):
@@ -138,7 +152,7 @@ async def get_steam_reviews_for_app_id(session=None, app_id=None, *args, **kwarg
 
 def get_meta():
     user_agent = {'User-agent': 'Mozilla/5.0'}
-    r = re.get("https://www.metacritic.com/game/pc/portal-2", headers=user_agent)
+    r = requests.get("https://www.metacritic.com/game/pc/portal-2", headers=user_agent)
     print(r.content)
 
 
@@ -149,7 +163,7 @@ def get_languages_in_dict():
         "api_code": "",
         "web_api_code": ""}
     languages = []
-    r = re.get("https://partner.steamgames.com/doc/store/localization/languages")
+    r = requests.get("https://partner.steamgames.com/doc/store/localization/languages")
     if r.status_code == 200:
         soup = BeautifulSoup(r.text, "html.parser")
         table = soup.findAll('table')[0]
@@ -204,9 +218,11 @@ def base_model_from_json_response():
         print("request failed")
 
 
-def get_reviews_for_appid(appid="730"):
-    download_json(appid=appid, language="czech", day_range=20000)
-    process_json(appid=appid, language="czech")
+def get_reviews_for_appid(appid=None, **kwargs):
+    if appid is None:
+        raise ValueError("appid must be specified")
+    download_json(appid=appid, **kwargs)
+    process_json(appid=appid, **kwargs)
     # async with aiohttp.ClientSession() as session:
 
     #     db = DatabaseHandler()
@@ -231,7 +247,18 @@ def get_reviews_for_appid(appid="730"):
 
 
 if __name__ == "__main__":
-    game_id = sys.argv[1]
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--appid", default=None, help="Steam game id")
+    parser.add_argument("--language", default=None, help="Steam language code")
+    parser.add_argument("--day_range", default=None, help="Number of days to retrieve reviews for")
+    parser.add_argument("--num_reviews", default=1000000, type=int, help="Number of reviews to retrieve")
+    parser.add_argument("--polarity",  help="Polarity of reviews to retrieve (positive, negative, all)")
+    parser.add_argument("--min_len", default=1, type=int, help="Minimum length of reviews to filter by")
+    parser.add_argument("--max_len", default=200, type=int, help="Maximum length of reviews to filter by")
+    parser.add_argument("--output", default=None, help="Output file path")
+
+    args = parser.parse_args()
+
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
     # asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
@@ -239,4 +266,4 @@ if __name__ == "__main__":
 
     # get_languages_in_dict()
     # base_model_from_json_response()
-    get_reviews_for_appid(game_id)
+    get_reviews_for_appid(**vars(args))

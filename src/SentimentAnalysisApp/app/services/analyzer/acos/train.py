@@ -1,24 +1,26 @@
 import os
 import warnings
-from pyabsa import ABSAInstruction as absa_instruction
+import data_utils
+import model
 import findfile
 warnings.filterwarnings("ignore")
 import pandas as pd
 
 
 task_name = "multitask"
-experiment_name = "acs-after-acos"
-task = "joint-aspect-category-sentiment"
-train_dataset_name = "1336.Games"
-test_dataset_name = "1336.Games"
+experiment_name = "acos-after-acs"
+task = "joint-acos"
+train_dataset_name = "1335.GamesACOS"
+test_dataset_name = "1335.GamesACOS"
 # model_checkpoint = 'allenai/tk-instruct-base-def-pos'
 # model_checkpoint = "kevinscaria/ate_tk-instruct-base-def-pos-neg-neut-combined"
 # model_checkpoint = 'allenai/tk-instruct-large-def-pos'
-# model_checkpoint = 'allenai/tk-instruct-3b-def-pos'
-from_checkpoint = True
+model_checkpoint = 'checkpoints/multitask/joint-aspect-category-sentiment-1336.Games-acs/checkpoint-760'
+from_checkpoint = False
 # model_checkpoint = 'checkpoints/multitask/joint-aspect-category-sentiment-1337.GamesCzechEng/checkpoint-last'
 # model_checkpoint = 'checkpoints/multitask/joint-aspect-category-sentiment-1336.Games/checkpoint-760'
-model_checkpoint = 'checkpoints/multitask/joint-acos-1335.GamesACOS/checkpoint-1000'
+# model_checkpoint = 'checkpoints/multitask/googlemt5-base-joint-aspect-sentiment-501.Laptop14/checkpoint-1467'
+# model = "google/mt5-base"
 print("Experiment Name: ", experiment_name)
 model_out_path = "checkpoints"
 model_out_path = os.path.join(
@@ -31,13 +33,13 @@ id_train_file_path = f"../../../../integrated_datasets/acos_datasets/{train_data
 id_test_file_path = f"../../../../integrated_datasets/acos_datasets/{test_dataset_name}"
 
 
-id_tr_df = absa_instruction.data_utils.read_json(id_train_file_path, "train.main_categories")
-id_te_df = absa_instruction.data_utils.read_json(id_test_file_path, "test.main_categories")
+id_tr_df = data_utils.read_json(id_train_file_path, "train.main_categories")
+id_te_df = data_utils.read_json(id_test_file_path, "test.main_categories")
 
 id_tr_df = pd.DataFrame(id_tr_df)
 id_te_df = pd.DataFrame(id_te_df)
 
-loader = absa_instruction.data_utils.InstructDatasetLoader(id_tr_df, id_te_df)
+loader = data_utils.InstructDatasetLoader(id_tr_df, id_te_df)
 
 if loader.train_df_id is not None:
     loader.train_df_id = loader.prepare_instruction_dataloader(loader.train_df_id, task=task)
@@ -45,7 +47,7 @@ if loader.test_df_id is not None:
     loader.test_df_id = loader.prepare_instruction_dataloader(loader.test_df_id, task=task)
 
 # Create T5 utils object
-t5_exp = absa_instruction.model.ABSAGenerator(model_checkpoint)
+t5_exp = model.ABSAGenerator(model_checkpoint)
 
 # Tokenize Dataset
 id_ds, id_tokenized_ds, ood_ds, ood_tokenzed_ds = loader.create_datasets(
@@ -76,40 +78,4 @@ training_args = {
 
 # Train model
 model_trainer = t5_exp.train(id_tokenized_ds, **training_args)
-
-
-# Get prediction labels - Training set
-id_tr_pred_labels = t5_exp.get_labels(
-    predictor=model_trainer,
-    tokenized_dataset=id_tokenized_ds,
-    sample_set="train",
-    batch_size=16,
-)
-id_tr_labels = [i.strip() for i in id_ds["train"]["labels"]]
-
-# Get prediction labels - Testing set
-id_te_pred_labels = t5_exp.get_labels(
-    predictor=model_trainer,
-    tokenized_dataset=id_tokenized_ds,
-    sample_set="test",
-    batch_size=16,
-)
-id_te_labels = [i.strip() for i in id_ds["test"]["labels"]]
-
-# # Compute Metrics
-# metrics = t5_exp.get_metrics(id_tr_labels, id_tr_pred_labels)
-# print('----------------------- Training Set Metrics -----------------------')
-# print(metrics)
-#
-# metrics = t5_exp.get_metrics(id_te_labels, id_te_pred_labels)
-# print('----------------------- Testing Set Metrics -----------------------')
-# print(metrics)
-
-# Compute Metrics
-metrics = t5_exp.get_classic_metrics(id_tr_labels, id_tr_pred_labels)
-print("----------------------- Classic Training Set Metrics -----------------------")
-print(metrics)
-
-metrics = t5_exp.get_classic_metrics(id_te_labels, id_te_pred_labels)
-print("----------------------- Classic Testing Set Metrics -----------------------")
-print(metrics)
+print("Training finished")
