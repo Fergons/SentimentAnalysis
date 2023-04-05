@@ -52,7 +52,7 @@ class T5Generator:
         model_inputs["labels"] = labels["input_ids"]
         return model_inputs
 
-    def train(self, tokenized_datasets, **kwargs):
+    def train(self, tokenized_datasets, additional_callbacks=None, **kwargs):
         """
         Train the generative model.
         """
@@ -69,6 +69,7 @@ class T5Generator:
             else None,
             tokenizer=self.tokenizer,
             data_collator=self.data_collator,
+            callbacks=additional_callbacks
         )
         print("Trainer device:", trainer.args.device)
 

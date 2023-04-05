@@ -3,12 +3,13 @@ import findfile
 import tqdm
 from Levenshtein import distance as levenshtein_distance
 from data_utils import create_task_output_string
-task = "joint-aspect-category-sentiment"
+from pathlib import Path
+task = "joint-acos"
 # task = "joint-aspect-sentiment"
 # task = "joint-aspect-category"
 
 # task = "joint-acos"
-model = "joint-aspect-category-sentiment-1335.GamesACOS-acs\checkpoint-1250"
+model = "checkpoints\multitask\joint-acos-1335.GamesACOS-finetuned_acos_on_ood_model\checkpoint-1380"
 # model = "checkpoint-750"
 
 test_files = ["D:/PythonProjects/SentimentAnalysis/data/validation/STRATEGY_data.main_categories.jsonl",
@@ -91,14 +92,18 @@ if __name__ == "__main__":
     # test_files = findfile.find_cwd_files(
     #     ["integrated_datasets", "acos_datasets", "restaurant", "test"],
     #     exclude_key=[".ignore", ".txt", ".xlsx"],
-    # )
-    save_model_name = model.replace('\\', '-')
+    # )model
+    save_model_name = model.replace('\\', '/')
+    save_dir = Path(model, 'eval')
+    save_dir.mkdir(exist_ok=True)
+
+    # save to the same dir
     for f in test_files:
-        save_filename = f"evaluation_data-{save_model_name}-{'-'.join(f.rsplit('/', 2)[-2:])}"
-        save_file = findfile.find_cwd_file(save_filename)
+        save_filename = Path(save_dir, f"{'-'.join(f.rsplit('/', 2)[-2:])}.{task}.eval.jsonl")
+        save_file = save_filename.exists()
         print("Predicting on {}".format(f))
         if save_file:
-            print(f"File {save_file} already exists, woudl you like to use it? (y/n)")
+            print(f"File {save_filename} already exists, woudl you like to use it? (y/n)")
             if input() == "y":
                 with open(save_file, "r", encoding="utf-8") as f:
                     data = json.load(f)

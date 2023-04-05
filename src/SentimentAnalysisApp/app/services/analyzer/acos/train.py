@@ -5,22 +5,43 @@ import model
 import findfile
 warnings.filterwarnings("ignore")
 import pandas as pd
+from transformers import TrainerCallback
+import json
+
+
+class LoggingCallback(TrainerCallback):
+    def __init__(self, log_file: str):
+        super().__init__()
+        self.log_file = log_file
+        self.log_data = {"train_loss": [], "eval_loss": []}
+
+    def on_log(self, args, state, control, logs=None, **kwargs):
+        if "loss" in logs:
+            self.log_data["train_loss"].append(logs["loss"])
+        if "eval_loss" in logs:
+            self.log_data["eval_loss"].append(logs["eval_loss"])
+
+        with open(self.log_file, "w") as f:
+            json.dump(self.log_data, f)
 
 
 task_name = "multitask"
-experiment_name = "acos-after-acs"
+# experiment_name = "acos_finetuning_on_acs_all_data_mt5"
+experiment_name = "finetuned_acos_on_ood_model"
 task = "joint-acos"
 train_dataset_name = "1335.GamesACOS"
 test_dataset_name = "1335.GamesACOS"
+logging_callback = LoggingCallback(f"{task}-{train_dataset_name}-{experiment_name}_logs.json")
 # model_checkpoint = 'allenai/tk-instruct-base-def-pos'
 # model_checkpoint = "kevinscaria/ate_tk-instruct-base-def-pos-neg-neut-combined"
 # model_checkpoint = 'allenai/tk-instruct-large-def-pos'
-model_checkpoint = 'checkpoints/multitask/joint-aspect-category-sentiment-1336.Games-acs/checkpoint-760'
-from_checkpoint = False
+# model_checkpoint = 'checkpoints/multitask/joint-aspect-category-sentiment-1336.Games-acs-after-acos/checkpoint-608'
 # model_checkpoint = 'checkpoints/multitask/joint-aspect-category-sentiment-1337.GamesCzechEng/checkpoint-last'
 # model_checkpoint = 'checkpoints/multitask/joint-aspect-category-sentiment-1336.Games/checkpoint-760'
 # model_checkpoint = 'checkpoints/multitask/googlemt5-base-joint-aspect-sentiment-501.Laptop14/checkpoint-1467'
-# model = "google/mt5-base"
+# model_checkpoint = "google/mt5-base"
+model_checkpoint = "checkpoints\multitask\joint-acos-506.Synthetic-ood_data\checkpoint-3537"
+from_checkpoint = False
 print("Experiment Name: ", experiment_name)
 model_out_path = "checkpoints"
 model_out_path = os.path.join(
@@ -70,12 +91,11 @@ training_args = {
     "push_to_hub": False,
     "eval_accumulation_steps": 1,
     "predict_with_generate": True,
-    "logging_steps": 1000000000,
+    "logging_steps": id_tokenized_ds.num_rows["train"]/6,
     "use_mps_device": False,
-    # 'fp16': True,
-    "fp16": False,
+    "fp16": False
 }
 
 # Train model
-model_trainer = t5_exp.train(id_tokenized_ds, **training_args)
+model_trainer = t5_exp.train(id_tokenized_ds, additional_callbacks=[logging_callback], **training_args)
 print("Training finished")
