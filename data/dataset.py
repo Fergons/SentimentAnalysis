@@ -219,16 +219,34 @@ def instruct2sentences(file_in="validation/FPS_generated_data.txt",
         print("Saved to ", file_out)
 
 
-def instruct_sample2dict(input, output):
+def instruct_sample2dict(input, output, separator=",", quad_format="acso"):
     """transforms the sample of instruct dataset into the dictionary with keys text and labels for input/output pair"""
     labels = []
-    for phrase in output.split(","):
+    for phrase in output.split(separator):
         print(phrase)
-        aspect, category, polarity, opinion, *_ = [*phrase.strip().split(":"), 'NULL', 'NULL', 'NULL', 'NULL']
-        if aspect == "noaspects":
-            aspect, category, polarity, opinion = "NULL", "NULL", "NULL", "NULL"
-        if aspect is None or aspect == "" or aspect == "noterm":
+        aspect, category, polarity, opinion = None, None, None, None
+        for i, char in enumerate(quad_format):
+            print(i,char)
+            features = phrase.strip().split(":")
+            if char == "a":
+                aspect = features[i]
+            elif char == "c":
+                category = features[i]
+            elif char == "s":
+                polarity = features[i]
+            elif char == "o":
+                opinion = features[i]
+            else:
+                raise ValueError("Invalid quad_format: " + quad_format)
+
+        if aspect in ("none", "noterm", None, "noaspects", "noaspect"):
             aspect = "NULL"
+        if category in ("none", "noterm", None, "noaspects", "noaspect"):
+            category = "NULL"
+        if polarity in ("none", "noterm", None, "noaspects", "noaspect"):
+            polarity = "NULL"
+        if opinion in ("none", "noterm", None, "noaspects", "noaspect"):
+            opinion = "NULL"
 
         labels.append({
             "aspect": aspect,
@@ -243,7 +261,7 @@ def instruct_sample2dict(input, output):
     }
 
 
-def instruct2json(file_in, file_out):
+def instruct2json(file_in, file_out, **kwargs):
     """
     Transforms the dataset from text Input:... Output:... format to json format.
     """
@@ -269,7 +287,7 @@ def instruct2json(file_in, file_out):
         except IndexError:
             print("IndexError: ", i, " ", len(lines))
         else:
-            data.append(instruct_sample2dict(input, output))
+            data.append(instruct_sample2dict(input, output, **kwargs))
 
     with open(file_out, "w", encoding="utf-8") as f:
         for sample in data:
@@ -369,7 +387,8 @@ def map_category_to_main_category(category):
                      'world', 'online', 'single player', 'singleplayer', 'multiplayer', 'multi player', 'story',
                      'game environment', 'game design', 'difficulty', 'content', 'cosmetic content', 'in-game content',
                      'options', 'user interface', 'UI', 'interface', 'gameplay', 'game modes', 'gameplay features',
-                     'monetization', 'development stage', 'gameplay features', 'gameplay mechanics', 'options', 'game length', 'gameplay length'],
+                     'monetization', 'development stage', 'gameplay features', 'gameplay mechanics', 'options',
+                     'game length', 'gameplay length'],
         'price': ['price', 'value'],
         'audio_visuals': ['audio_visuals', 'visuals', 'sounds', 'game environment', 'game design', 'visual', 'sound',
                           'audio_visuals', 'graphics', 'music', 'soundtrack', 'sound effects', 'audio'],
@@ -700,6 +719,10 @@ def main():
     parser.add_argument('--instruct2json', action="store_true", help="transform instructABSA to pyabsa acos format")
     parser.add_argument('--mydataset2acos', action="store_true", help="transform my dataset to pyabsa acos format")
     parser.add_argument('--reduce_categories', action="store_true", help="translate subcategories to main categories")
+    parser.add_argument('--separator', default=',', help="remove duplicate reviews")
+    parser.add_argument('--quad_format', default="acso", help="format of the instruction output quadruple eg. "
+                                                             "(aspect, polarity, category, opinion) or "
+                                                             "(aspect, polarity, opinion, category)")
 
     args = parser.parse_args()
 
@@ -824,7 +847,7 @@ def main():
             return
         if args.output == "":
             args.output = args.input.rsplit(".", 1)[0]
-        instruct2json(args.input, args.output)
+        instruct2json(args.input, args.output, separator=args.separator, quad_format=args.quad_format)
 
     elif args.mydataset2acos:
         if args.output == "":

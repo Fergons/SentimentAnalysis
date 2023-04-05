@@ -16,6 +16,8 @@ import argparse
 
 
 def review_filter(reviews, *, polarity='all', language='all', min_length=20, max_length=1000, **kwargs):
+    for review in reviews:
+        review["review"] = clean_text(review["review"])
     filtered_reviews = filter(lambda x: len(x["review"]) > min_length and len(x["review"]) < max_length, reviews)
     if polarity == "positive":
         filtered_reviews = filter(lambda x: x["voted_up"] is True, filtered_reviews)
@@ -39,7 +41,7 @@ def process_json(appid=None, language=None, **kwargs):
         if type(review_list[0]) == dict:
             review_list = [review["review"] for review in filtered_reviews]
         for review in review_list:
-            fopen.write(" ".join(clean_text(review).strip().split()))
+            fopen.write(review)
             fopen.write("\n")
 
 
@@ -104,10 +106,12 @@ def clean_text(text):
     :return: cleaned string
     """
     text = ' '.join(text.split())
+    # remove duplicated charaacters if more than 2 in row
+    text = re.sub(r'(.)\1{2,}', r'\1', text)
     # remove graphical emoji
     text = emoji.replace_emoji(text)
     # remove textual emoji
-    emoticon_string = r"(?:[<>]?[:;=8][\-o\*\']?[\)\]\(\[dDpP\/\:\}\{@\|\\]|[\)\]\(\[dDpP\/\:\}\{@\|\\][\-o\*\']?[:;=8][<>]?)"
+    emoticon_string = r"(?:[<>]?[:x;=8][\-o\*\']?[\)\]\(\[dDpP\/\:\}\{@\|\\]|[\)\]\(\[dDpP\/\:\}\{@\|\\][\-o\*\']?[:;=8][<>]?|<3)"
     text = re.sub(emoticon_string, '', text)
     # remove links
     text = re.sub(r'https?\S+', '', text)
@@ -115,13 +119,8 @@ def clean_text(text):
     # input: [h1] lorem ipsum [\h1]
     # output: lorem ipsum
     text = re.sub(r'\[[^]]*?]', '', text)
-
-    # remove # and @
-    for punc in '"#%&\'*<=>@[\\]^_`{|}~':
-        text = text.replace(punc, '')
-
-    # duplicit punctioation
-    text = re.sub(r'([!?.,:;-]){2,}', r'\1', text)
+    # remove non alphanumeric characters except for some punctuation
+    text = re.sub(r'[^\w\d ().,?!-;\']', '', text)
     return text
 
 
