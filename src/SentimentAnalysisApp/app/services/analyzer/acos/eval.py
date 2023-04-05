@@ -9,7 +9,7 @@ task = "joint-acos"
 # task = "joint-aspect-category"
 
 # task = "joint-acos"
-model = "checkpoints\multitask\joint-acos-1335.GamesACOS-finetuned_acos_on_ood_model\checkpoint-1380"
+model = "checkpoints\multitask\joint-acos-1335.GamesACOS-finetuned_acos_on_ood_model\checkpoint-552"
 # model = "checkpoint-750"
 
 test_files = ["D:/PythonProjects/SentimentAnalysis/data/validation/STRATEGY_data.main_categories.jsonl",
@@ -99,13 +99,13 @@ if __name__ == "__main__":
 
     # save to the same dir
     for f in test_files:
-        save_filename = Path(save_dir, f"{'-'.join(f.rsplit('/', 2)[-2:])}.{task}.eval.jsonl")
+        save_filename = Path(save_dir, f"{f.rsplit('/', 1)[-1].rsplit('.',1)[0]}.{task}.eval.jsonl")
         save_file = save_filename.exists()
         print("Predicting on {}".format(f))
         if save_file:
             print(f"File {save_filename} already exists, woudl you like to use it? (y/n)")
             if input() == "y":
-                with open(save_file, "r", encoding="utf-8") as f:
+                with open(save_filename, "r", encoding="utf-8") as f:
                     data = json.load(f)
                     true_quadruples = data["true_quadruples"]
                     pred_quadruples = data["pred_quadruples"]
@@ -124,7 +124,6 @@ if __name__ == "__main__":
         from pyabsa import meta_load
         from model import ABSAGenerator
 
-        save_file = save_filename
         generator = ABSAGenerator(
             # "flant5-base-absa",
             findfile.find_cwd_dir(model),
@@ -148,7 +147,7 @@ if __name__ == "__main__":
             pred_num_total += len(result["Quadruples"])
             line_num += 1
 
-        with open(save_file, "w", encoding="utf-8") as f:
+        with open(save_filename, "w", encoding="utf-8") as f:
             to_save = {
                 "true_quadruples": true_quadruples,
                 "pred_quadruples": pred_quadruples,
