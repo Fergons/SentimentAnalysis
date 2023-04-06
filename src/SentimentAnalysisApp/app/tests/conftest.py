@@ -39,6 +39,13 @@ async def client(session) -> AsyncGenerator[AsyncClient, None]:
         yield client
 
 
+@pytest.fixture
+async def clear_db():
+    async with async_engine.begin() as conn:
+        await conn.run_sync(Base.metadata.drop_all)
+        await conn.run_sync(Base.metadata.create_all)
+
+
 @pytest.fixture(scope="session")
 async def test_db_setup_sessionmaker():
     # assert if we use TEST_DB URL for 100%
@@ -52,6 +59,11 @@ async def test_db_setup_sessionmaker():
     return async_session
 
 
+@pytest.fixture(scope="session")
+async def get_session_maker():
+    return async_session
+
+
 @pytest.fixture
 async def session(test_db_setup_sessionmaker) -> AsyncGenerator[AsyncSession, None]:
     async with test_db_setup_sessionmaker() as session:
@@ -59,7 +71,6 @@ async def session(test_db_setup_sessionmaker) -> AsyncGenerator[AsyncSession, No
             yield session
         finally:
             await session.close()
-
 
 
 @pytest.fixture
@@ -89,6 +100,7 @@ async def access_token(client: AsyncClient):
     access_token = token.get("access_token")
     assert access_token is not None
     return access_token
+
 
 @pytest.fixture
 async def test_data(session: AsyncSession):

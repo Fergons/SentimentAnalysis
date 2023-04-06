@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List, Union, TYPE_CHECKING
 from typing import Optional
-from pydantic import BaseModel, AnyHttpUrl, Field
+from pydantic import BaseModel, AnyHttpUrl, Field, validator
 
 if TYPE_CHECKING:
     from .review import Review
@@ -73,3 +73,15 @@ class Game(GameInDBBase):
 # Additional properties stored in DB
 class GameInDB(GameInDBBase):
     pass
+
+class GameCategoryBase(BaseModel):
+    game_id: int
+    category_id: int
+
+class GameCategoryCreate(GameCategoryBase):
+    game_id: int
+    category_id: int
+
+class GameCategoryUpdate(GameCategoryBase):
+    game_id: int
+    category_id: int

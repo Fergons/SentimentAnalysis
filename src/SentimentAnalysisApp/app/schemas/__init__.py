@@ -15,6 +15,8 @@ from .aspect import Aspect, AspectBase, AspectCreate, AspectUpdate, AspectInDB, 
 from .source import Source, SourceBase, SourceCreate, SourceUpdate, SourceInDBBase
 from .source import GameSource, GameSourceUpdate, GameSourceCreate
 from .developer import Developer, DeveloperCreate, DeveloperUpdate, DeveloperInDBBase
+from .scraper import ScrapedGame, ScrapedReview, ScrapedReviewer
+
 
 Reviewer.update_forward_refs(Review=Review, Source=Source)
 Game.update_forward_refs(Review=Review, Source=Source)

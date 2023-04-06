@@ -58,7 +58,7 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
             query = query.filter(self.model.game_id == game_id)
         if source_id is not None:
             query = query.filter(self.model.source_id == source_id)
-        result = await db.execute(query.order_by(self.model.created_at.desc()))
+        result = await db.execute(query.order_by(self.model.created_at.desc()).options(selectinload(self.model.aspects)))
         return result.scalars().all()
 
     async def get_multi_by_processed(self, db: AsyncSession, *, processed: bool, limit: int = 100, offset: int = 0) -> \

@@ -61,7 +61,6 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db_obj = self.model(**obj_in.dict())  # type: ignore
         db.add(db_obj)
         await db.commit()
-        await db.refresh(db_obj)
         return db_obj
 
     async def update(
@@ -93,3 +92,19 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
     async def touch(self, db: AsyncSession, *, obj_id: int):
         await db.execute(update(self.model).where(self.model.id == obj_id))
+
+    async def get_by_name(self, db: AsyncSession, *, name: str) -> Optional[ModelType]:
+        result = await db.execute(select(self.model).where(self.model.name == name))
+        return result.scalars().first()
+
+    async def create_multi_by_names(self, db: AsyncSession, *, names: List[str]) -> List[ModelType]:
+        # check if in db already
+        db_objs = []
+        for name in names:
+            db_obj = await self.get_by_name(db, name=name)
+            if db_obj is None:
+                db_obj = self.model(name=name)
+                db.add(db_obj)
+            db_objs.append(db_obj)
+        await db.commit()
+        return db_objs

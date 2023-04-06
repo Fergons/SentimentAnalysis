@@ -27,10 +27,11 @@ class CRUDReviewer(CRUDBase[Reviewer, ReviewerCreate, ReviewerUpdate]):
         return db_obj
 
     async def create_from_source(
-            self, db: AsyncSession, *, obj_in: ReviewerCreate
+            self, db: AsyncSession, *, obj_in: ReviewerCreate, source_id: int
     ) -> Optional[Reviewer]:
         obj_in_data = obj_in.dict()
         db_obj = self.model(**obj_in_data)  # type: ignore
+        db_obj.source_id = source_id
         db.add(db_obj)
         await db.commit()
         await db.refresh(db_obj)
