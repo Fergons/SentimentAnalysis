@@ -294,6 +294,51 @@ async def test_store_review_with_additional_objects(clear_db, session: AsyncSess
     assert reviewer.name == scraped_review.reviewer.name
 
 
+async def test_store_review_with_additional_objects_for_existing_game(clear_db, session: AsyncSession, source: models.Source, game: models.Game):
+    """
+    Test crud scraper store review in db
+    """
+    scraped_review = schemas.ScrapedReview(
+        text="Test Review",
+        language="english",
+        reviewer=schemas.ScrapedReviewer(
+            name="Test Reviewer",
+            source_id=source.id,
+            source_reviewer_id="test_reviewer_id",
+            num_games_owned=100,
+            num_reviews=100
+        ),
+        game_id=game.id,
+        source_id=source.id,
+        source_review_id="test_review_id",
+        summary="Test Summary",
+        score="Test Score",
+        helpful_score="Test Helpful Score",
+        good="Test Good",
+        bad="Test Bad",
+        voted_up=True,
+        playtime_at_review=100,
+        created_at=datetime.now()
+    )
+    await crud.source.add_game(session, game_id=game.id, source_id=source.id, source_game_id=f"game_{game.id}_source_{source.id}")
+
+    review = await crud.scraper.store_review_with_additional_objects(session, scraped_obj=scraped_review)
+    review = await session.execute(
+        select(models.Review).where(models.Review.id == review.id).options(selectinload('*')))
+    review = review.scalars().first()
+
+    assert review.id is not None
+    assert review.source_id == source.id
+    assert review.source_review_id == scraped_review.source_review_id
+
+    assert review.game is not None
+    assert review.game.name == game.name
+
+    reviewer = await session.execute(select(models.Reviewer).where(models.Reviewer.id == review.reviewer_id))
+    reviewer = reviewer.scalars().first()
+    assert reviewer is not None
+    assert reviewer.name == scraped_review.reviewer.name
+
 async def test_store_review_with_additional_objects_on_many_reviews(clear_db, source: models.Source, get_session_maker: AsyncSession):
     """
     Generates many reviews and stores them in the database

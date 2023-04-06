@@ -21,7 +21,7 @@ class ScrapedGame(BaseModel):
 
 
 class ScrapedReviewer(BaseModel):
-    name: str
+    name: Optional[str] = None
     source_id: Optional[int] = None
     source_reviewer_id: Optional[str] = None
     num_games_owned: Optional[int] = None
@@ -31,11 +31,6 @@ class ScrapedReviewer(BaseModel):
 class ScrapedReview(BaseModel):
     text: str
     language: str = None
-    reviewer: ScrapedReviewer = None
-    game: ScrapedGame = None
-    game_id: int = None
-    source_id: int = None
-    source_review_id: str = None
     summary: Optional[str] = None
     score: Optional[str] = None
     helpful_score: Optional[str] = None
@@ -44,6 +39,15 @@ class ScrapedReview(BaseModel):
     voted_up: Optional[bool] = None
     playtime_at_review: Optional[int] = None
     created_at: datetime = datetime.now()
+
+    source_id: int = None
+
+    game_id: int = None
+    game: ScrapedGame = None
+
+    reviewer: ScrapedReviewer = None
+    source_review_id: str = None
+
 
     @validator("reviewer", "game", always=True)
     def set_source_id(cls, v, values):

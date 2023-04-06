@@ -239,8 +239,8 @@ class SteamScraper(Scraper):
         for future in asyncio.as_completed(tasks):
             result: Optional[SteamAppDetail] = await future
             # process(result)
-            logger.log(logging.DEBUG, result)
-            logger.log(logging.INFO, f"Progress {counter}/{len(tasks)} tasks done!")
+            logger.debug(result)
+            logger.info(f"Progress {counter}/{len(tasks)} tasks done!")
             if result is not None:
                 results.append(result)
             counter += 1
@@ -249,7 +249,7 @@ class SteamScraper(Scraper):
     async def games_page_generator(self, page_size: int = 10, **kwargs) -> AsyncGenerator[List[SteamAppDetail], None]:
         blacklist = kwargs.get("blacklist", [])
         games = await self.get_games()
-        games = list(set(games)-set(blacklist))
+        games = list(set(games) - set(blacklist))
         game_pages = [games[i:i + page_size] for i in range(0, len(games), page_size)]
 
         logger.info("-" * 50)
