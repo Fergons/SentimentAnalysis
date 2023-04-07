@@ -7,3 +7,4 @@ from app.models.aspect import Aspect  # noqa
 from app.models.review import Review  # noqa
 from app.models.reviewer import Reviewer  # noqa
 from app.models.source import Source, GameSource  # noqa
+from app.models.analyzer import AnalyzedReview, AnalyzedReviewSentence  # noqa

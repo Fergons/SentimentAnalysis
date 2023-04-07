@@ -6,3 +6,4 @@ from .source import Source, GameSource
 from .aspect import Aspect
 from .user import User
 from .developer import Developer
+from .analyzer import AnalyzedReview, AnalyzedReviewSentence

@@ -16,7 +16,9 @@ from .source import Source, SourceBase, SourceCreate, SourceUpdate, SourceInDBBa
 from .source import GameSource, GameSourceUpdate, GameSourceCreate
 from .developer import Developer, DeveloperCreate, DeveloperUpdate, DeveloperInDBBase
 from .scraper import ScrapedGame, ScrapedReview, ScrapedReviewer
-
+from .analyzer import AnalyzedReview, AnalyzedReviewCreate, AnalyzedReviewUpdate
+from .analyzer import AnalyzedReviewSentence, AnalyzedReviewSentenceCreate, AnalyzedReviewSentenceUpdate
+from .analyzer import AnalyzerSearchFilter
 
 Reviewer.update_forward_refs(Review=Review, Source=Source)
 Game.update_forward_refs(Review=Review, Source=Source)

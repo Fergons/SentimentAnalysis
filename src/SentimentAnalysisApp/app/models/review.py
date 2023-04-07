@@ -49,6 +49,8 @@ class Review(Base):
     # one(review) to many(aspects)
     aspects = relationship("Aspect", back_populates="review", cascade="all, delete")
 
+    analyzed_reviews = relationship("AnalyzedReview", back_populates="review")
+
     positive_aspects = relationship("Aspect",
                                     primaryjoin="and_(Aspect.review_id == Review.id, Aspect.polarity == 'positive')",
                                     viewonly=True)

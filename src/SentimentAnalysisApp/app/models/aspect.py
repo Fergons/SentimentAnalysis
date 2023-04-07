@@ -9,7 +9,7 @@ class Aspect(Base):
     term = Column(String)
     category = Column(String)
     polarity = Column(String)
-    confidence = Column(String)
+    opinion = Column(String)
     #ML model that was used to analyse review
     model_id = Column(String)
     updated_at = Column(DateTime(timezone=True), default=None, onupdate=func.now())

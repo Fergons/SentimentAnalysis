@@ -5,3 +5,6 @@ from .reviewer import crud_reviewer as reviewer
 from .aspect import crud_aspect as aspect
 from .developer import crud_developer as developer
 from .scraper import crud_scraper as scraper
+from .analyzer import crud_analyzer as analyzer
+from .analyzer import crud_analyzed_review as analyzed_review
+from .analyzer import crud_analyzed_review_sentence as analyzed_review_sentence
