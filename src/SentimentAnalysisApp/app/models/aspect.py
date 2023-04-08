@@ -1,6 +1,7 @@
 from app.db.base_class import Base
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, func
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, func, UniqueConstraint
 from sqlalchemy.orm import relationship
+
 
 
 class Aspect(Base):
@@ -15,3 +16,5 @@ class Aspect(Base):
     updated_at = Column(DateTime(timezone=True), default=None, onupdate=func.now())
 
     review = relationship("Review", back_populates="aspects")
+
+    UniqueConstraint(review_id, model_id)

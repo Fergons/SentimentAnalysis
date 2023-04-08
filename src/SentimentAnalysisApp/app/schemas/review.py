@@ -50,6 +50,7 @@ class ReviewUpdate(ReviewBase):
     helpful_score: Optional[str] = None
     good: Optional[str] = None
     bad: Optional[str] = None
+    processed_at: Optional[datetime] = None
 
     playtime_at_review: Optional[int] = None
 
