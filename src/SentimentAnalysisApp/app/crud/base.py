@@ -108,3 +108,21 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             db_objs.append(db_obj)
         await db.commit()
         return db_objs
+
+    async def create_multi(self, db: AsyncSession, *, objs_in: List[CreateSchemaType]) -> List[ModelType]:
+        db_objs = [self.model(**obj.dict()) for obj in objs_in]
+        db.add_all(db_objs)
+        await db.commit()
+        return db_objs
+
+    async def update_multi(self, db: AsyncSession, *, db_objs: ModelType, objs_in: List[UpdateSchemaType]
+                           ) -> List[ModelType]:
+        for db_obj, obj_in in zip(db_objs, objs_in):
+            obj_data = inspect(db_obj).attrs.keys()
+            update_data = obj_in.dict(exclude_unset=True)
+            for field in obj_data:
+                if field in update_data:
+                    setattr(db_obj, field, update_data[field])
+        db.add_all(db_objs)
+        await db.commit()
+        return db_objs

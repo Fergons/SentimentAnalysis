@@ -59,6 +59,10 @@ async def test_analyze_db_reviews(clear_db, session: AsyncSession, seed_data: di
             selectinload(models.Review.aspects)))
         review2 = result.scalars().first()
         assert len(review2.aspects) > 0
+    result = await session.execute(select(models.Review))
+    reviews = result.scalars().all()
+    # ensure all reviews have set processed_at (not None)
+    assert all([review.processed_at is not None for review in reviews])
 
 
 async def test_analyze_many_reviews_10_batch(clear_db, session: AsyncSession, seed_data: dict):
@@ -67,6 +71,10 @@ async def test_analyze_many_reviews_10_batch(clear_db, session: AsyncSession, se
     result = await session.execute(select(models.AnalyzedReview))
     a_r = result.scalars().all()
     assert len(a_r) == len(seed_data["reviews"])
+    result = await session.execute(select(models.Review))
+    reviews = result.scalars().all()
+    # ensure all reviews have set processed_at (not None)
+    assert all([review.processed_at is not None for review in reviews])
 
 
 async def test_analyze_many_reviews_100_batch(clear_db, session: AsyncSession, seed_data: dict):
@@ -75,3 +83,7 @@ async def test_analyze_many_reviews_100_batch(clear_db, session: AsyncSession, s
     result = await session.execute(select(models.AnalyzedReview))
     a_r = result.scalars().all()
     assert len(a_r) == len(seed_data["reviews"])
+    result = await session.execute(select(models.Review))
+    reviews = result.scalars().all()
+    # ensure all reviews have set processed_at (not None)
+    assert all([review.processed_at is not None for review in reviews])

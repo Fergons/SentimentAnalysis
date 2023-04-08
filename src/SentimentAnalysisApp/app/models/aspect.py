@@ -16,5 +16,3 @@ class Aspect(Base):
     updated_at = Column(DateTime(timezone=True), default=None, onupdate=func.now())
 
     review = relationship("Review", back_populates="aspects")
-
-    UniqueConstraint(review_id, model_id)

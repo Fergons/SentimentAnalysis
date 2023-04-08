@@ -443,4 +443,8 @@ class ABSAGenerator(T5Generator):
                 "Quadruples": quads
             })
 
+        del inputs
+        del outputs
+        torch.cuda.empty_cache()
+
         return results

@@ -2,7 +2,7 @@ import asyncio
 import json
 from datetime import datetime
 from typing import List
-
+import pickle
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .utils import clean
@@ -14,7 +14,6 @@ from .acos import data_utils
 import argparse
 import pathlib
 import logging
-
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -39,13 +38,20 @@ async def dump_all_analyzed_reviews_to_file(db: AsyncSession):
             f.write(f"{review.id}\t{review.text}\t{aspect_string}")
 
 
-async def analyze_db_reviews(db: AsyncSession, game_id: int = None, task="joint-acos", model_name="mt5-acos-1.0", **kwargs):
+async def analyze_db_reviews(db: AsyncSession, game_id: int = None, task="joint-acos",
+                             model_name="mt5-acos-1.0", **kwargs):
     batch_size = kwargs.get("batch_size", 100)
+    dump = kwargs.get("dump", False)
+    dump_dir = None
+    if dump:
+        dump_dir = pathlib.Path("dump")
+        dump_dir.mkdir(parents=True, exist_ok=True)
+
     if task == "joint-acos":
         from .acos import model as acos_model
         if model_name is None:
             model_dir = findfile.find_dir(f"{pathlib.Path(__file__).parent.resolve()}/acos/models", key=["mt5"])
-            model_name = model_dir.rsplit("/",1)[-1]
+            model_name = model_dir.rsplit("/", 1)[-1]
         else:
             model_dir = findfile.find_dir(f"{pathlib.Path(__file__).parent.resolve()}/acos/models", key=[model_name])
         if not model_dir:
@@ -62,7 +68,10 @@ async def analyze_db_reviews(db: AsyncSession, game_id: int = None, task="joint-
         last_id = reviews[-1].id
         cleaned_texts = [clean(review.text) for review in reviews]
         results = model.batch_predict(batch=cleaned_texts, task=task, max_length=128)
+        analyzed_reviews_in = []
+        aspects_in = []
         for review, result in zip(reviews, results):
+
             prediction = data_utils.create_task_output_string(task, outputs=result["Quadruples"])
             analyzed_review_in = schemas.AnalyzedReviewCreate(
                 cleaned_text=result["text"],
@@ -72,10 +81,11 @@ async def analyze_db_reviews(db: AsyncSession, game_id: int = None, task="joint-
                 prediction=prediction,
                 created_at=datetime.now()
             )
-            await crud.analyzed_review.create(db, obj_in=analyzed_review_in)
-            aspects_to_create = []
+            analyzed_reviews_in.append(analyzed_review_in)
             for aspect in result["Quadruples"]:
-                if aspect["category"] == "NULL" or aspect["polarity"] == "NULL":
+                if aspect["category"] not in ("gameplay", "overall", "other", "audio_visuals", "performance_bugs",
+                                              "community") \
+                        or aspect["polarity"] not in ("positive", "negative", "neutral"):
                     continue
                 aspect_in = schemas.AspectCreate(
                     review_id=review.id,
@@ -84,28 +94,59 @@ async def analyze_db_reviews(db: AsyncSession, game_id: int = None, task="joint-
                     polarity=aspect["polarity"],
                     opinion=aspect["opinion"],
                     model_id=model_name)
-                aspects_to_create.append(aspect_in)
-            await crud.aspect.create_multi(db, objs_in=aspects_to_create)
-            await crud.review.update(db, db_obj=review, obj_in=schemas.ReviewUpdate(processed_at=datetime.now()))
+                aspects_in.append(aspect_in)
+
+        await crud.review.update_multi(
+            db, db_objs=reviews, objs_in=[schemas.ReviewUpdate(processed_at=datetime.now())]*len(reviews))
+        if not dump:
+            await crud.aspect.create_multi(db, objs_in=aspects_in)
+            await crud.analyzed_review.create_multi(db, objs_in=analyzed_reviews_in)
+        else:
+            file = dump_dir / f"dumped_analysis_results_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S.%f')}.insert.pkl"
+            with file.open("wb") as f:
+                map = {
+                    "analyzed_reviews": analyzed_reviews_in,
+                    "aspects": aspects_in
+                }
+                pickle.dump(map, f)
+
+async def insert_from_dumped_file(sessionmaker: AsyncSession, file: pathlib.Path = None):
+    dump_dir = pathlib.Path("dump")
+    files = list(dump_dir.glob("*.insert.pkl"))
+
+    for file in tqdm.tqdm(files, desc="Inserting dumped analysis results"):
+        tasks = []
+        with file.open("rb") as f:
+            map = pickle.load(f)
+        async with sessionmaker() as db:
+            tasks.append(crud.aspect.create_multi(db, objs_in=map["aspects"]))
+        async with sessionmaker() as db:
+            tasks.append(crud.analyzed_review.create_multi(db, objs_in=map["analyzed_reviews"]))
+        await asyncio.gather(*tasks)
+        file.unlink()
+
 
 async def main(args):
-    async with async_session() as db:
+
         if args.analyze:
-            await analyze_db_reviews(db, game_id=args.game_id, task=args.task, model_name=args.model)
-        if args.dump:
-            await dump_all_analyzed_reviews_to_file(db)
+            async with async_session() as db:
+                await analyze_db_reviews(
+                    db, game_id=args.game_id, task=args.task, model_name=args.model, batch_size=args.batch_size, dump=args.dump)
+        elif args.insert:
+            await insert_from_dumped_file(sessionmaker=async_session)
         print("Done...")
 
 
 if __name__ == "__main__":
     argparse = argparse.ArgumentParser()
-    argparse.add_argument("--dump", action="store_true")
+    argparse.add_argument("--dump", action="store_true", help="Dump results to file instead of db which is faster")
+    argparse.add_argument("--insert", action="store_true", help="Insert dumped results from files")
     argparse.add_argument("--analyze", action="store_true")
-    argparse.add_argument("--game_id", type=int, default=None, required=True)
+    argparse.add_argument("--game_id", type=int, default=None)
     argparse.add_argument("--task", type=str, default="joint-acos")
     argparse.add_argument("--model", type=str, default="mt5-acos-1.0")
+    argparse.add_argument("--batch_size", type=int, default=32)
     args = argparse.parse_args()
 
     loop = asyncio.get_event_loop()
     loop.run_until_complete(main(args))
-
