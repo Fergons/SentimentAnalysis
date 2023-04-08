@@ -9,7 +9,7 @@ task = "joint-acos"
 # task = "joint-aspect-category"
 
 # task = "joint-acos"
-model = "checkpoints\multitask\joint-acos-1335.GamesACOS-finetuned_acos_on_ood_model\checkpoint-552"
+model = "checkpoints\multitask\joint-acos-1335.GamesACOS-finetuned_acos_on_ood_model\checkpoint-1380"
 # model = "checkpoint-750"
 
 test_files = ["D:/PythonProjects/SentimentAnalysis/data/validation/STRATEGY_data.main_categories.jsonl",

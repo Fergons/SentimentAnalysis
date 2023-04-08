@@ -18,7 +18,7 @@ from transformers import (
     Seq2SeqTrainer,
 )
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-from instruction import (
+from .instruction import (
     ATEInstruction,
     APCInstruction,
     OpinionInstruction,
@@ -339,11 +339,45 @@ class ABSAGenerator(T5Generator):
     def __init__(self, model_checkpoint):
         super().__init__(model_checkpoint)
 
-    def predict(self, text, **kwargs):
+    def decode_quadruple_from_output(self, output, task):
         """
-        Predict the output from the model.
+        Decode the output from the model to get the aspect, category, opinion and polarity.
         """
-        task = kwargs.pop("task", "ate")
+        quads = []
+        aspect, category, opinion, polarity = ["NULL", "NULL", "NULL", "NULL"]
+        aspects = output.split("|")
+        for asp in aspects:
+            n_gram = asp.split(":")
+            n = len(n_gram)
+            if task == "joint-aspect-sentiment":
+                if n >= 2:
+                    aspect, polarity, *_ = n_gram
+
+            elif task == "joint-aspect-category-sentiment":
+                if n >= 3:
+                    aspect, category, polarity, *_ = n_gram
+
+            elif task == "joint-acos":
+                if n >= 4:
+                    aspect, category, opinion, polarity, *_ = n_gram
+            else:
+                raise ValueError("Task not supported")
+
+            quads.append(
+                {
+                    "aspect": aspect.strip(),
+                    "category": category.strip(),
+                    "opinion": opinion.strip(),
+                    "polarity": polarity.strip()
+                }
+            )
+
+        return quads
+
+    def _get_instructor(self, task):
+        """
+        Get the instructor for the task.
+        """
         if task == "ate":
             instructor = ATEInstruction()
         elif task == "joint-aspect-sentiment":
@@ -354,6 +388,14 @@ class ABSAGenerator(T5Generator):
             instructor = JointACOSInstruction()
         else:
             raise ValueError("Task not supported")
+        return instructor
+
+    def predict(self, text, **kwargs):
+        """
+        Predict the output from the model.
+        """
+        task = kwargs.pop("task", "ate")
+        instructor = self._get_instructor(task)
         result = {
             "text": text,
         }
@@ -366,40 +408,8 @@ class ABSAGenerator(T5Generator):
         outputs = self.tokenizer.batch_decode(
             outputs, skip_special_tokens=True
         )[0]
-        result[task] = [asp.strip() for asp in outputs.split("|")]
-        # print(result[task])
-        quads = []
-        for asp in result[task]:
-            n_gram = asp.split(":")
-            n = len(n_gram)
-            if task == "joint-aspect-sentiment":
-                if n >= 2:
-                    aspect, polarity, *_ = n_gram
-                    category = "NULL"
-                    opinion = "NULL"
-                else:
-                    aspect, category, opinion, polarity = ["NULL", "NULL", "NULL", "NULL"]
-            elif task == "joint-aspect-category-sentiment":
-                if n >= 3:
-                    aspect, category, polarity, *_ = n_gram
-                    opinion = "NULL"
-                else:
-                    aspect, category, opinion, polarity = ["NULL", "NULL", "NULL", "NULL"]
-            elif task == "joint-acos":
-                if n >= 4:
-                    aspect, category, opinion, polarity, *_ = n_gram
-                else:
-                    aspect, category, opinion, polarity, *_ = [*n_gram, "NULL", "NULL", "NULL", "NULL", "NULL"]
-            else:
-                raise ValueError("Task not supported")
-            quads.append(
-                {
-                    "aspect": aspect,
-                    "category": category,
-                    "opinion": opinion,
-                    "polarity": polarity
-                }
-            )
+
+        quads = self.decode_quadruple_from_output(outputs, task)
 
         ensemble_result = {
             "text": text,
@@ -409,3 +419,28 @@ class ABSAGenerator(T5Generator):
         return ensemble_result
 
 
+    def batch_predict(self, *, batch, **kwargs):
+        """
+        Predict the outputs from the model for the texts in parallel.
+        """
+        task = kwargs.pop("task", "ate")
+        instructor = self._get_instructor(task)
+        # inference
+        inputs = self.tokenizer(
+            [instructor.prepare_input(i, []) for i in batch], padding=True, truncation=True, return_tensors="pt"
+        ).to(self.device)
+
+        outputs = self.model.generate(**inputs, **kwargs)
+        outputs = self.tokenizer.batch_decode(
+            outputs, skip_special_tokens=True
+        )
+        results = []
+        for text, output in zip(batch, outputs):
+            quads = self.decode_quadruple_from_output(output, task)
+
+            results.append({
+                "text": text,
+                "Quadruples": quads
+            })
+
+        return results

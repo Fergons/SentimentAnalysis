@@ -107,7 +107,7 @@ def clean_text(text):
     """
     text = ' '.join(text.split())
     # remove duplicated charaacters if more than 2 in row
-    text = re.sub(r'(.)\1{2,}', r'\1', text)
+    text = re.sub(r'([^0-9])\1{2,}', r'\1', text)
     # remove graphical emoji
     text = emoji.replace_emoji(text)
     # remove textual emoji

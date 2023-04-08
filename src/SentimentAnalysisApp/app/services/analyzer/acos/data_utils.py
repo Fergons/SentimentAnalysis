@@ -14,7 +14,7 @@ import findfile
 import pandas as pd
 from datasets import DatasetDict, Dataset
 
-from instruction import (
+from .instruction import (
     ATEInstruction,
     CategoryInstruction,
     OpinionInstruction,
@@ -213,6 +213,25 @@ def read_json(data_path, data_type="train"):
             for line in fin:
                 data.append(json.loads(line))
     return data
+
+def create_task_aspect_string(task, *, aspect):
+    """
+    Create a string representation of the task aspect
+    :param task: task name
+    :param aspect: task aspect
+    :return: string representation of the task aspect
+    """
+    if task == "joint-aspect-category-sentiment":
+        f"{aspect['aspect']}:{aspect['category']}:{aspect['polarity']}"
+    elif task == "joint-aspect-category":
+        f"{aspect['aspect']}:{aspect['category']}"
+    elif task == "joint-aspect-sentiment":
+        f"{aspect['aspect']}:{aspect['polarity']}"
+    elif task == "joint-acos":
+        f"{aspect['aspect']}:{aspect['category']}:{aspect['opinion']}:{aspect['polarity']}"
+
+
+
 
 def create_task_output_string(task, *, outputs):
     """

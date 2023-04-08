@@ -8,25 +8,31 @@ if TYPE_CHECKING:
 
 
 class AspectBase(BaseModel):
+    review_id: int
     term: str
     category: str
     polarity: str
-    confidence: str
+    opinion: str
+    model_id: str
 
 
 class AspectCreate(AspectBase):
+    review_id: int
     term: str = ""
     category: Optional[str] = None
     polarity: str
-    confidence: Optional[str] = None
+    opinion: Optional[str] = None
+    model_id: str
 
 
 # Properties to receive via API on update
 class AspectUpdate(AspectBase):
+    review_id: Optional[int] = None
     term: Optional[str] = None
     category: Optional[str] = None
     polarity: Optional[str] = None
-    confidence: Optional[str] = None
+    opinion: Optional[str] = None
+    model_id: Optional[str] = None
 
 
 class AspectInDBBase(AspectBase):

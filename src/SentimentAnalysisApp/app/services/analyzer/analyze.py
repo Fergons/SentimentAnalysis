@@ -2,17 +2,33 @@ import asyncio
 import os
 import re
 from typing import List
+
+import findfile
+
 from .utils import clean
 from nltk import sent_tokenize
 
 
-def get_extractor(checkpoint_name="fast_lcf_atepc_1113.game_aug_cdw_apcacc_98.55_apcf1_98.28_atef1_74.06"):
+def get_extractor(task="atepc", model_name="mt5-acos-1.0"):
     from pyabsa import AspectTermExtraction as ATEPC
-    if checkpoint_name is None:
-        checkpoint_name = "fast_lcf_atepc_1113.game_aug_cdw_apcacc_98.55_apcf1_98.28_atef1_74.06"
-    return ATEPC.AspectExtractor(
-        checkpoint=f"{os.path.realpath(os.path.dirname(__file__))}/checkpoints/{checkpoint_name}",
-        device="cpu")
+    from .acos import model
+    if task is None:
+        raise ValueError("checkpoint_name and task is None")
+
+    if task == "atepc":
+        return ATEPC.AspectExtractor(
+            checkpoint=f"{os.path.realpath(os.path.dirname(__file__))}/checkpoints/{checkpoint_name}",
+            device="gpu")
+    elif task == "joint-acos":
+        model_file = findfile.find_dir(f"acos/models/{model_name}")
+        if not model_file:
+            raise ValueError(f"Model {model_name} not found")
+        return model.ABSAGenerator(
+            model_file
+        )
+
+
+
 
 
 def get_apc():
@@ -58,6 +74,6 @@ if __name__ == '__main__':
                       ]
     # # atepc_examples = "Super dynamické závodění|Povedená prezentace obsahu|Ukázkové připojování do hry|Důraz na sběratele".lower().split("|")
     # analyze_text_bulk(atepc_examples, language='czech')
-    ex = get_extractor(checkpoint_name="fast_lcf_atepc_1110.game_reviews_cdw_apcacc_90.36_apcf1_86.18_atef1_84.1")
+    ex = get_extractor(model_name="fast_lcf_atepc_1110.game_reviews_cdw_apcacc_90.36_apcf1_86.18_atef1_84.1")
     # extract_aspects("the game is good but has really bad  mechanics and lots of bugs.", extractor=ex)
     ex.batch_predict("D:\PythonProjects\SentimentAnalysis\data\sentences_.txt", pred_sentiment=True, print_result=True, save_to_file=True)

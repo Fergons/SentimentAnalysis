@@ -30,9 +30,13 @@ def run_inference_on_file(model, file, save_result=True):
 
     lines = meta_load(file)
     results = []
-    for line in tqdm.tqdm(lines):
-        result = generator.predict(line, task=task)
-        results.append(result)
+    # for line in tqdm.tqdm(lines):
+    #     result = generator.predict(line, task=task)
+    #     results.append(result)
+    batches = [lines[i:i + 100] for i in range(0, len(lines), 100)]
+    for batch in tqdm.tqdm(batches):
+        result = generator.batch_predict(batch=batch, task=task)
+        results.extend(result)
 
     if save_result:
         with open(save_filename, "w", encoding="utf-8") as f:
@@ -51,6 +55,7 @@ def main():
             print(result["text"])
             quad = create_task_output_string(task, outputs=result["Quadruples"])
             print(quad)
+
 
 if __name__ == "__main__":
     main()

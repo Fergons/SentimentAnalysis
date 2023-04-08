@@ -39,15 +39,18 @@ def clean(text):
     :param text: string to clean
     :return: cleaned string
     """
-    text = remove_markup(text)
+    text = re.sub(r'(.)\1{2,}', r'\1', text)
+    # remove graphical emoji
     text = emoji.replace_emoji(text)
-    text = remove_emoticons(text)
-    text = replace_price_with_placeholder(text)
-
-    # remove non-ascii characters except czech and slovak characters
-    text = re.sub(r'[^\x00-\x7FáäčďéěíĺľňóôŕřšťúůýžÁÄČĎÉĚÍĹĽŇÓÔŔŘŠŤÚŮÝŽ:,.!?]+', ' ', text)
-
-    # remove duplicate punctuation
-    text = re.sub(r'([:,.!?]){2,}', r'\1', text)
-
+    # remove textual emoji
+    emoticon_string = r"(?:[<>]?[:x;=8][\-o\*\']?[\)\]\(\[dDpP\/\:\}\{@\|\\]|[\)\]\(\[dDpP\/\:\}\{@\|\\][\-o\*\']?[:;=8][<>]?|<3)"
+    text = re.sub(emoticon_string, '', text)
+    # remove links
+    text = re.sub(r'https?\S+', '', text)
+    # remove formatting
+    # input: [h1] lorem ipsum [\h1]
+    # output: lorem ipsum
+    text = re.sub(r'\[[^]]*?]', '', text)
+    # remove non alphanumeric characters except for some punctuation
+    text = re.sub(r'[^\w\d ().,?!-;\']', '', text)
     return text

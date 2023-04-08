@@ -132,6 +132,39 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
         result = await db.execute(select(self.model).where(self.model.processed_at == None).limit(limit).offset(offset))
         return result.scalars().all()
 
+    async def count_not_processed_reviews(self, db: AsyncSession, **kwargs) -> int:
+        """
+        Get number of not processed reviews by search filter
+        """
+        return await self.count_filtered_reviews(db, processed_at=None, **kwargs)
+
+    async def count_filtered_reviews(self, db: AsyncSession, **kwargs) -> int:
+        conditions = []
+        for key, value in kwargs.items():
+            if value is not None:
+                conditions.append(getattr(self.model, key) == value)
+        query = select(func.count(self.model.id)).where(and_(*conditions))
+        result = await db.execute(query)
+        return result.scalar()
+
+
+    async def get_not_processed_by_game(self, db: AsyncSession, game_id: int, limit: int = 100, last_id: int = None) -> \
+            List[Review]:
+        if last_id:
+            result = await db.execute(
+                select(self.model)
+                .where((self.model.id > last_id) & (self.model.processed_at == None) & (self.model.game_id == game_id))
+                .limit(limit)
+                .order_by(self.model.id.asc()))
+        else:
+            result = await db.execute(
+                select(self.model)
+                .where((self.model.processed_at == None) & (self.model.game_id == game_id))
+                .limit(limit)
+                .order_by(self.model.id.asc()))
+
+        return result.scalars().all()
+
     async def get_not_processed_by_source(self, db: AsyncSession,
                                           source_id: int,
                                           limit: int = 100,

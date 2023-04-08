@@ -7,12 +7,14 @@ class AnalyzedReviewBase(BaseModel):
     review_id: int
     cleaned_text: str
     model: str
+    task: str
     prediction: str
     gold_label: str
 
 
 class AnalyzedReviewCreate(AnalyzedReviewBase):
     created_at: datetime
+    gold_label: Optional[str] = None
 
 
 class AnalyzedReviewUpdate(AnalyzedReviewCreate):
