@@ -136,7 +136,13 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
         """
         Get number of not processed reviews by search filter
         """
-        return await self.count_filtered_reviews(db, processed_at=None, **kwargs)
+        conditions = []
+        for key, value in kwargs.items():
+            if value is not None:
+                conditions.append(getattr(self.model, key) == value)
+        query = select(func.count(self.model.id)).where(and_(self.model.processed_at == None, *conditions))
+        result = await db.execute(query)
+        return result.scalar()
 
     async def count_filtered_reviews(self, db: AsyncSession, **kwargs) -> int:
         conditions = []

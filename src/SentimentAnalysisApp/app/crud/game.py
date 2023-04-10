@@ -293,6 +293,13 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
             db.add(db_obj)
         await db.commit()
 
+    async def get_sources(self, db: AsyncSession, *, game_id: int) -> List[models.Source]:
+        result = await db.execute(select(models.GameSource)
+                                  .where(models.GameSource.game_id == game_id)
+                                  .options(selectinload(models.GameSource.source)))
+        gs = result.scalars().all()
+        return [g.source for g in gs]
+
 
 crud_game = CRUDGame(models.Game)
 crud_category = CRUDCategory(models.Category)

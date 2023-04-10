@@ -8,6 +8,7 @@
     import {redirect, error} from '@sveltejs/kit';
     import Snackbar, {Label, Actions} from "@smui/snackbar";
     import IconButton from "@smui/icon-button";
+    import {goto} from "$app/navigation";
 
     let snackbar: Snackbar;
     let snackbarText: string = '';
@@ -36,7 +37,7 @@
                 if(password) {
                     invalidPassword = true;
                 }
-                for (const [key, value] of Object.entries(rest)) {
+                for (const [key, value] of Object.entries([email, password, ...rest])) {
                     snackbarText = `${key}: ${value}`;
                     snackbar.open();
                 }
@@ -44,7 +45,9 @@
                 return;
             }
             snackbarText = 'Account created! Redirecting to sign in page...';
-            return redirect(302, '/signin');
+            snackbar.open();
+            await update();
+            await goto('/signin');
         }
 
 

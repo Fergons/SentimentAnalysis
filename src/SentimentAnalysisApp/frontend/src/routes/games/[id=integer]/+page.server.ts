@@ -9,13 +9,14 @@ export async function load({params}: { params: { id: number } }) {
         const [game, reviews_summary, sources] = await Promise.all([
             GamesService.readGameGamesIdGet(params.id),
             ReviewsService.getSummaryReviewsSummaryGet(params.id),
-            SourcesService.readSourcesSourcesGet()
+            GamesService.getSourcesGamesIdSourcesGet(params.id)
         ]);
-        const sourceMap = sources.reduce((acc, obj: Source) => {
+
+        const sourceMap = sources && sources.length ? sources.reduce((acc, obj: Source) => {
                 acc.set(obj.id, obj);
                 return acc;
             },
-            new Map<number, Source>())
+            new Map<number, Source>()) : new Map<number, Source>();
 
         return {
             title: game.name,
@@ -36,8 +37,7 @@ export async function load({params}: { params: { id: number } }) {
 
             },
             stats: {
-                total: getTotal(reviews_summary.data ?? [] as ReviewsSummaryDataPoint[], sourceMap),
-                total_flat: reviews_summary.data ?? [] as ReviewsSummaryDataPoint[],
+                summary: reviews_summary.data,
                 sources: sourceMap
             },
 
@@ -46,5 +46,5 @@ export async function load({params}: { params: { id: number } }) {
         console.log(e);
         throw error(500, 'Api didn\'t respond');
     }
-
 }
+

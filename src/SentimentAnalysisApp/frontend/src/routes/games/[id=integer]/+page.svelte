@@ -24,7 +24,7 @@
         <Label slot="label">{game.name}</Label>
     </Banner>
     <div class="stats-container">
-        <Stats data={stats.total}/>
+        <Stats data={stats}/>
     </div>
 </section>
 

@@ -53,8 +53,8 @@
         position: absolute;
         font-size: 13px;
         pointer-events: none;
-        border: 1px solid #ccc;
-        background: rgba(255, 255, 255, 0.85);
+        border: 1px solid #212125;
+        background: rgba(33, 33, 37, 0.66);
         transform: translate(-50%, -100%);
         padding: 5px;
         z-index: 15;
@@ -76,6 +76,7 @@
 
     .title {
         font-weight: bold;
+        color: #1a4a92;
     }
 
     .key {

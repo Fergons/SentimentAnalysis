@@ -122,6 +122,27 @@ TEST_GAME_SOURCE = [
         "source_game_id": "679900",
         "updated_at": None
     },
+    {
+        "id": 365,
+        "game_id": 22,
+        "source_id": 2,
+        "source_game_id": "682232140",
+        "updated_at": None
+    },
+    {
+        "id": 366,
+        "game_id": 281,
+        "source_id": 2,
+        "source_game_id": "623480420",
+        "updated_at": None
+    },
+    {
+        "id": 367,
+        "game_id": 306,
+        "source_id": 2,
+        "source_game_id": "68230420",
+        "updated_at": None
+    },
 ]
 
 TEST_CATEGORY = [
@@ -1219,7 +1240,7 @@ TEST_ASPECTS = [
         "term": "game time",
         "polarity": "neutral",
         "category": "overall",
-        "confidence": "0.9",
+        "opinion": "0.9",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00"
     },
@@ -1229,7 +1250,7 @@ TEST_ASPECTS = [
         "term": "rogue-like RPG/Settlement building game",
         "polarity": "positive",
         "category": "gameplay",
-        "confidence": "0.9",
+        "opinion": "0.9",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00"
     },
@@ -1239,7 +1260,7 @@ TEST_ASPECTS = [
         "term": "farm resources",
         "polarity": "neutral",
         "category": "gameplay",
-        "confidence": "0.9",
+        "opinion": "0.9",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00"
     },
@@ -1249,7 +1270,7 @@ TEST_ASPECTS = [
         "term": "settlement",
         "polarity": "positive",
         "category": "gameplay",
-        "confidence": "0.9",
+        "opinion": "0.9",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00"
     },
@@ -1259,7 +1280,7 @@ TEST_ASPECTS = [
         "term": "foes",
         "polarity": "positive",
         "category": "gameplay",
-        "confidence": "0.9",
+        "opinion": "0.9",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00"
     },
@@ -1269,7 +1290,7 @@ TEST_ASPECTS = [
         "term": "OP loot",
         "polarity": "positive",
         "category": "gameplay",
-        "confidence": "0.9",
+        "opinion": "0.9",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00"
     },
@@ -1279,7 +1300,7 @@ TEST_ASPECTS = [
         "term": "quest doing",
         "polarity": "positive",
         "category": "gameplay",
-        "confidence": "0.9",
+        "opinion": "0.9",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00"
     },
@@ -1289,7 +1310,7 @@ TEST_ASPECTS = [
         "term": "achievements",
         "polarity": "neutral",
         "category": "gameplay",
-        "confidence": "0.9",
+        "opinion": "0.9",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00"
     },
@@ -1299,7 +1320,7 @@ TEST_ASPECTS = [
         "term": "Strength ramping of hero",
         "polarity": "neutral",
         "category": "gameplay",
-        "confidence": "0.9",
+        "opinion": "0.9",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00"
     },
@@ -1309,7 +1330,7 @@ TEST_ASPECTS = [
         "term": "gameplay",
         "polarity": "positive",
         "category": "gameplay",
-        "confidence": "0.9",
+        "opinion": "0.9",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00"
     },
@@ -1319,7 +1340,7 @@ TEST_ASPECTS = [
         "term": "cena samotnej hry",
         "polarity": "negative",
         "category": "price",
-        "confidence": "0.88",
+        "opinion": "0.88",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00"
     },
@@ -1329,7 +1350,7 @@ TEST_ASPECTS = [
         "term": "cena DLC",
         "polarity": "negative",
         "category": "price",
-        "confidence": "0.88",
+        "opinion": "0.88",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00"
     },
@@ -1339,7 +1360,7 @@ TEST_ASPECTS = [
         "term": "hráči si musia kúpiť DLC",
         "polarity": "negative",
         "category": "price",
-        "confidence": "0.88",
+        "opinion": "0.88",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00"
     },
@@ -1349,7 +1370,7 @@ TEST_ASPECTS = [
         "term": "divne zostrihaných story videí",
         "polarity": "negative",
         "category": "audio_visuals",
-        "confidence": "0.88",
+        "opinion": "0.88",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00",
     },
@@ -1359,7 +1380,7 @@ TEST_ASPECTS = [
         "term": "game dizajn",
         "polarity": "negative",
         "category": "gameplay",
-        "confidence": "0.88",
+        "opinion": "0.88",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00",
     },
@@ -1369,7 +1390,7 @@ TEST_ASPECTS = [
         "term": "bedne s muníciou",
         "polarity": "negative",
         "category": "gameplay",
-        "confidence": "0.88",
+        "opinion": "0.88",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00",
     },
@@ -1379,7 +1400,7 @@ TEST_ASPECTS = [
         "term": "story videá",
         "polarity": "negative",
         "category": "audio_visuals",
-        "confidence": "0.88",
+        "opinion": "0.88",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00",
     },
@@ -1389,7 +1410,7 @@ TEST_ASPECTS = [
         "term": "módy na vybavení",
         "polarity": "positive",
         "category": "gameplay",
-        "confidence": "0.88",
+        "opinion": "0.88",
         "model_id": "mdebertav3_74ATEPC",
         "updated_at": "2023-02-11 00:00:00.000000 +00:00"
     }

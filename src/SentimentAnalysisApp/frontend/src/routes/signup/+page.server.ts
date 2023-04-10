@@ -1,10 +1,6 @@
 import {z} from 'zod';
 import type {PageServerLoad, Actions} from './$types';
 import {redirect, error} from '@sveltejs/kit';
-import {handleApiResponseError} from "../../lib/server/api/api";
-import {signup} from '../../lib/server/api/auth';
-import type {SigninDataType} from '../../lib/server/api/auth';
-import {SigninSchema} from '../../lib/server/api/auth';
 import {validateFormData} from "../../lib/utils/validation";
 import type {User, UserCreate} from "../../lib/client";
 import {ApiError, AuthService, UsersService} from "../../lib/client";
