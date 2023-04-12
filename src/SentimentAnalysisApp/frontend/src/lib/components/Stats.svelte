@@ -7,7 +7,10 @@
     import {timeParse, timeFormat} from 'd3-time-format';
     import {format, precisionFixed} from 'd3-format';
     import {max} from 'd3-array';
+    import IconButton from '@smui/icon-button';
 
+    import MultiArea from './MultiArea.svelte';
+    import Line from './Line.svelte';
     import Multiline from './Multiline.svelte';
     import AxisX from './AxisX.svelte';
     import AxisY from './AxisY.svelte';
@@ -17,6 +20,7 @@
     import type {Source} from '../client';
     import FormField from '@smui/form-field';
     import ChartSettingsGroup from './ChartSettingsGroup.svelte';
+    import Brush from './Brush.svelte';
     import {timeDay, timeWeek, timeMonth, timeYear} from "d3-time";
 
     export let data: {
@@ -37,7 +41,6 @@
     let selectedSources: string[] = [...defaultSourceSelection];
 
 
-
     const sentimentNames = ['positive', 'negative', 'neutral'];
     const defaultSentimentSelection = [];
     let selectedSentiments = [...defaultSentimentSelection];
@@ -55,8 +58,15 @@
     //blue and dark blue for others green for positive, red for negative, grey for neutral
     let selectedTypes: string[] = ['total'];
 
-    const colorMap = generateColorMap(sourceNames, typesNames);
-    const onLast = (last, list) => [list[(list.indexOf(last)+1)%list.length]]
+    const zColorMap = generateColorMap(sourceNames, typesNames);
+    const rColorMap = new Map<string, string>([
+            ['positive', '#00b300'],
+            ['negative', '#ff0000'],
+            ['neutral', '#007bff']
+        ]
+    );
+
+    const onLast = (last, list) => [list[(list.indexOf(last) + 1) % list.length]]
 
 
     const parseDate = timeParse("%Y-%m-%dT%H:%M:%S%Z");
@@ -71,10 +81,12 @@
 
     const countNames = sourceNames.flatMap(source => typesNames.map(type => `${source}_${type}`));
     let flatData;
+    let brushedData;
+    let brushExtents = [0, 0]
     let groupedData;
+    let groupedBrushedData;
     let selectedCounts: string[] = [];
     let yDomainMax = 10;
-
 
     $: {
         selectedTypes = [...selectedSentiments, ...selectedCategories, ...selectedReviewTypes];
@@ -87,7 +99,7 @@
             d[xKey] = typeof d[xKey] === 'string' ? parseDate(d[xKey]) : d[xKey];
             selectedCounts.forEach(name => {
                 d[name] = +d[name] || 0;
-                if(d[name]> yDomainMax) {
+                if (d[name] > yDomainMax) {
                     yDomainMax = d[name];
                 }
             });
@@ -97,8 +109,17 @@
             groupTo: zKey,
             valueTo: yKey,
         });
+    }
+    $: {
+        brushedData = flatData.slice((brushExtents[0] || 0) * flatData.length, (brushExtents[1] || 1) * flatData.length);
+        if (brushedData.length < 2) {
+            brushedData = flatData.slice(brushExtents[0] * flatData.length, brushExtents[0] * flatData.length + 2)
+        }
 
-
+        groupedBrushedData = groupLonger(brushedData, selectedCounts, {
+            groupTo: zKey,
+            valueTo: yKey,
+        });
     }
 
     const formatTickX = timeFormat('%b. %e');
@@ -109,8 +130,11 @@
     };
 
 </script>
-<div class='chart-container'>
+<div class='stats-container'>
     <div class='chart-settings'>
+        <IconButton class="material-icons" on:click={() => {}}>
+            tune
+        </IconButton>
         <ChartSettingsGroup
                 seriesNames={sourceNames}
                 bind:selectedSeries={selectedSources}
@@ -140,56 +164,89 @@
         >
         </ChartSettingsGroup>
     </div>
+    <div class="chart-container">
+        <div class='chart'>
+            {#if groupedData && groupedData.length > 0}
+                <LayerCake
+                        padding={20}
+                        ssr={true}
+                        percentRange={true}
+                        x={xKey}
+                        y={yKey}
+                        z={zKey}
+                        r={zKey}
+                        yDomain={[0, yDomainMax]}
+                        zScale={scaleOrdinal()}
+                        zDomain={selectedCounts}
+                        zRange={selectedCounts.map(name => zColorMap.get(name))}
+                        rDomain={selectedTypes}
+                        rScale={scaleOrdinal()}
+                        rRange={selectedTypes.map(type => rColorMap.get(type))}
+                        flatData={brushedData}
+                        data={groupedBrushedData}
+                >
+                    <ScaledSvg>
+                        <Multiline/>
+                        <MultiArea/>
+                    </ScaledSvg>
 
-    <div class='chart'>
-        {#if groupedData && groupedData.length > 0}
+                    <Html>
+                    <AxisX
+                            gridlines={false}
+                            ticks={brushedData.filter(d => Object.keys(d).some(key => key !== xKey && d[key] !== 0))
+                        .map(d => d[xKey])
+                        .sort((a, b) => a - b)}
+                            formatTick={formatTickX}
+                            snapTicks={true}
+                            tickMarks={true}
+                    />
+                    <AxisY
+                            ticks={4}
+                            formatTick={formatTickY}
+                    />
+                    <SharedTooltip
+
+                            formatTitle={timeFormat('%b. %e, %Y')}
+                            dataset={brushedData}
+                    />
+                    </Html>
+                </LayerCake>
+            {:else}
+                <Svg>
+                    <text x='50%' y='50%' text-anchor='middle' dominant-baseline='central' font-size='24px'>
+                        NO DATA
+                    </text>
+                </Svg>
+            {/if}
+        </div>
+        <div class="brush-container">
             <LayerCake
                     ssr={true}
-                    percentRange={true}
                     x={xKey}
                     y={yKey}
                     z={zKey}
+                    r={zKey}
                     xNice={true}
                     yNice={true}
                     yDomain={[0, yDomainMax]}
                     zScale={scaleOrdinal()}
                     zDomain={selectedCounts}
-                    zRange={selectedCounts.map(name => colorMap.get(name))}
+                    zRange={selectedCounts.map(name => zColorMap.get(name))}
+                    rDomain={selectedTypes}
+                    rScale={scaleOrdinal()}
+                    rRange={selectedTypes.map(type => rColorMap.get(type))}
                     flatData={flatData}
                     data={groupedData}
             >
-                <ScaledSvg>
+                <Svg>
                     <Multiline/>
-                </ScaledSvg>
-
+                    <MultiArea/>
+                </Svg>
                 <Html>
-                <AxisX
-                        gridlines={false}
-                        ticks={flatData.filter(d => Object.keys(d).some(key => key !== xKey && d[key] !== 0))
-                        .map(d => d[xKey])
-                        .sort((a, b) => a - b)}
-                        formatTick={formatTickX}
-                        snapTicks={true}
-                        tickMarks={true}
-                />
-                <AxisY
-                        ticks={4}
-                        formatTick={formatTickY}
-                />
-                <SharedTooltip
-
-                        formatTitle={formatTickX}
-                        dataset={flatData}
-                />
+                <Brush bind:min={brushExtents[0]} bind:max={brushExtents[1]}/>
                 </Html>
             </LayerCake>
-        {:else}
-            <Svg>
-                <text x='50%' y='50%' text-anchor='middle' dominant-baseline='central' font-size='24px'>
-                    NO DATA
-                </text>
-            </Svg>
-        {/if}
+        </div>
     </div>
 </div>
 
@@ -200,11 +257,18 @@
       The point being it needs dimensions since the <LayerCake> element will
       expand to fill it.
     */
-    .chart-container {
+    .stats-container {
         display: flex;
         width: 100%;
         height: 100%;
         flex-direction: row;
+    }
+
+    .chart-container {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        padding: 1rem;
     }
 
     .chart-settings {
@@ -212,19 +276,13 @@
         flex-direction: column;
         padding: 1rem;
     }
-
-
     .chart {
-        flex: 1;
-        width: 400px;
+        padding: 1rem;
         height: 300px;
-        position: relative;
-        padding: 2rem;
-
+    }
+    .brush-container {
+        padding: 1rem;
+        height: 50px;
     }
 
-
-    .checkbox-container label {
-        margin-left: 0.5rem;
-    }
 </style>

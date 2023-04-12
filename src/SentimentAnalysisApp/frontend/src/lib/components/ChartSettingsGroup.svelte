@@ -1,8 +1,8 @@
 <script lang="ts">
 
     import FormField from "@smui/form-field";
-    import CheckBox from "@smui/checkbox";
-    import Button from "@smui/button";
+    import Switch from "@smui/switch";
+    import IconButton from "@smui/icon-button";
 
     export let seriesNames: string[];
     export let selectedSeries: string[];
@@ -11,24 +11,34 @@
     export let onLast = () => {
     };
 
+    export let rollout = false;
+
 </script>
 
 <div class="chart-settings-group">
-    {#each seriesNames as name}
-        <div class="checkbox-container">
-            <FormField>
-                <CheckBox
-                        bind:group={selectedSeries}
-                        value={name}
-                        on:change={(last)=>{selectedSeries.length === 0? onLast(last.srcElement.value):()=>{}}}
-                />
-                <span slot="label">{name}</span>
-            </FormField>
-        </div>
-    {/each}
+    <div class="options-container">
+        {#each seriesNames as name}
+            <div class="option-container">
+                <FormField>
+                    <Switch
+                            bind:group={selectedSeries}
+                            value={name}
+                            on:change={(last)=>{selectedSeries.length === 0? onLast(last.srcElement.value):()=>{}}}
+                    />
+                    <span slot="label">{name}</span>
+                </FormField>
+            </div>
+        {/each}
+    </div>
     <div class="buttons-container">
-        <Button size="mini" on:click={onReset}>Reset</Button>
-        <Button size="mini" on:click={()=>selectedSeries = [...seriesNames]}>All</Button>
+        {#if seriesNames.length > 1}
+            <IconButton class="material-icons" on:click={()=>selectedSeries = []}>
+                delete_sweep
+            </IconButton>
+            <IconButton class="material-icons" on:click={()=>selectedSeries = [...seriesNames]}>
+                done_all
+            </IconButton>
+        {/if}
     </div>
 </div>
 
@@ -38,15 +48,15 @@
         flex-direction: column;
         padding: 1rem;
     }
-
-    .checkbox-container {
+    .option-container {
         display: flex;
-        align-items: center;
+        flex-direction: column;
         margin-bottom: 0.5rem;
     }
-
     .buttons-container {
         display: flex;
+        flex-direction: row;
+        padding-left: 0.5rem;
     }
 
 

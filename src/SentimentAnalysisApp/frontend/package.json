@@ -73,6 +73,7 @@
         "d3-format": "^3.1.0",
         "d3-time-format": "^4.1.0",
         "immer": "^9.0.19",
-        "layercake": "^7.2.2"
+        "layercake": "^7.2.2",
+        "yootils": "^0.3.1"
     }
 }

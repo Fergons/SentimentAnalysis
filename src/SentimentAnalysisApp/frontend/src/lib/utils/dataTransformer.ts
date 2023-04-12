@@ -175,6 +175,7 @@ export function transformSummary(
         selectedSources.forEach((sourceName) => {
             if (sourceName === "all") {
                 selectedTypes.forEach((type) => {
+                    // @ts-ignore
                     dataPoint[`all_${type}`] = byDate ? byDate[type] : 0;
                 });
             } else {
@@ -182,6 +183,7 @@ export function transformSummary(
                 if (sourceId !== undefined && sources && sources[sourceId]) {
                     const sourceData = sources[sourceId] as { [key: string]: number };
                     selectedTypes.forEach((type) => {
+                        // @ts-ignore
                         dataPoint[`${sourceName}_${type}`] = sourceData ? sourceData[type] : 0;
                     });
                 }
