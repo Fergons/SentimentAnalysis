@@ -1,20 +1,23 @@
 import { GamesService} from "../../lib/client";
-import type {Game} from "../../lib/client";
+import type {GameListItem} from "../../lib/client";
 import {error} from '@sveltejs/kit';
 
 export async function load() {
     try {
-        let games = new Map<number,Game>();
-        const response = await GamesService.readGamesGamesGet();
-        for (const {id, ...rest} of response) {
-            games.set(id, {
-                    id,
-                    ...rest
-                });
-         }
+        let games = new Map<number, GameListItem>();
+        const response = await GamesService.readGamesGamesGet(100,undefined, {
+            name: 'counter-strike',
+        });
+        console.log(response)
+        // @ts-ignore
+        response.games.forEach((item: GameListItem) => {
+            games.set(item.game.id, item);
+        });
+
         return {
             title: 'Games',
-            games: games
+            games: games,
+            cursor: response.cursor
         };
     } catch (err) {
         console.log(err);

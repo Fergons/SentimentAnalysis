@@ -6,6 +6,7 @@
   import { getContext } from 'svelte';
 
   const { data, xGet, yGet, zGet, xScale, yScale, extents } = getContext('LayerCake');
+  export let opacity = 0.5;
   $: areaPath = values => {
     const areaPoints = values.map(d => {
       return $xGet(d) + ',' + $yGet(d);

@@ -11,9 +11,9 @@
     import Button, {Label, Icon} from '@smui/button';
     import IconButton from '@smui/icon-button';
     import {goto} from '$app/navigation';
-    import type {Game} from '../../lib/client';
+    import type {Game, GameListItem} from '../client';
 
-    export let game: Game;
+    export let game: GameListItem;
     let options = {
         year: 'numeric',
         month: 'long',
@@ -23,27 +23,31 @@
 
 <div class="card-container">
     <Card>
-        <PrimaryAction on:click={() => goto('/games/' + game.id)}>
+        <PrimaryAction on:click={() => goto('/games/' + game.game.game.id)}>
             <Media class="card-media-219x102"
                    aspectRatio="219x102"
             >
 
-                <img src={game.image_url} loading="lazy" width="460" height="215" alt={game.name}>
+                <img src={game.game.image_url} loading="lazy" width="460" height="215" alt={game.game.name}>
 
                 <MediaContent class="mdc-typography--body2 card-media-content">
                     <h2 class="mdc-typography--headline6" style="margin: 0; text-transform: uppercase">
-                        {game.name}
+                        {game.game.name}
                     </h2>
                     <h3 class="mdc-typography--subtitle2" style="margin: 0 0 10px; color: #888;">
-                        {new Intl.DateTimeFormat("default", options).format(new Date(game.release_date))}
+                        {new Intl.DateTimeFormat("default", options).format(new Date(game.game.release_date))}
                     </h3>
                 </MediaContent>
                 <MediaContent class="card-media-content">
                     <h2 class="mdc-typography--headline6" style="margin: 0; text-transform: uppercase">
-                        10/10
+                        {game.score}/10.0
                     </h2>
                     <h2 class="mdc-typography--subtitle2" style="margin: 0 0 10px; color: #888;">
-                        1000 reviews
+                        {#if game.num_reviews === 1}
+                            1 review
+                        {:else}
+                            {game.num_reviews} reviews
+                        {/if}
                     </h2>
                 </MediaContent>
             </Media>

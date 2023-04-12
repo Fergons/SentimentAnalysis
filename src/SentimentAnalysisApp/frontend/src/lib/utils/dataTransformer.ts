@@ -88,7 +88,11 @@ export function getTotal(data: ReviewsSummaryDataPoint[], sources: Map<number, S
     return result;
 }
 
-export function generateColorMap(selectedSources: string[], selectedTypes: string[]) {
+export function generateColorMap(
+    selectedSources: string[],
+    selectedTypes: string[],
+    sourceColorMap: Map<string, string>|null,
+    typeColorMap: Map<string, string>|null): Map<string, string> {
     // 8 pastel contrasting with grey and white and being primary blue
     const baseColors = [
         "#007bff",
@@ -105,7 +109,7 @@ export function generateColorMap(selectedSources: string[], selectedTypes: strin
 
     let colorIndex = 0;
     for (const source of selectedSources) {
-        const sourceColor = baseColors[colorIndex];
+        const sourceColor = sourceColorMap ? sourceColorMap.get(source) || baseColors[colorIndex] : baseColors[colorIndex];
         colorMap.set(source, sourceColor);
 
         const sourceColorRgb = rgb(sourceColor);

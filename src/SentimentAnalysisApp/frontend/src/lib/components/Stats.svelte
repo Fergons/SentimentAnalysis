@@ -8,6 +8,8 @@
     import {format, precisionFixed} from 'd3-format';
     import {max} from 'd3-array';
     import IconButton from '@smui/icon-button';
+    import SegmentedButton, {Segment} from '@smui/segmented-button';
+    import {Label} from '@smui/common';
 
     import MultiArea from './MultiArea.svelte';
     import Line from './Line.svelte';
@@ -40,7 +42,6 @@
     const defaultSourceSelection = sources.size > 1 ? ['all'] : [sourceNames[0]];
     let selectedSources: string[] = [...defaultSourceSelection];
 
-
     const sentimentNames = ['positive', 'negative', 'neutral'];
     const defaultSentimentSelection = [];
     let selectedSentiments = [...defaultSentimentSelection];
@@ -56,18 +57,26 @@
 
     const typesNames = [...reviewTypeNames, ...sentimentNames, ...categoryTypeNames];
     //blue and dark blue for others green for positive, red for negative, grey for neutral
-    let selectedTypes: string[] = ['total'];
+    const defaultTypeSelection = [...defaultSentimentSelection, ...defaultCategorySelection, ...defaultReviewTypeSelection];
+    let selectedTypes: string[] = [...defaultTypeSelection];
 
-    const zColorMap = generateColorMap(sourceNames, typesNames);
+    const onLast = (last, list) => [list[(list.indexOf(last) + 1) % list.length]]
+    let sourceColorMap = new Map<string, string>(
+        [
+            ['steam', '#007bff'],
+            ['epic', '#8400f5'],
+            ['gog', '#00ff2a'],
+            ['metacritic', '#ffdb00'],
+            ['gamespot', '#ff0000']
+        ]
+    );
+    const zColorMap = generateColorMap(sourceNames, typesNames, sourceColorMap, null);
     const rColorMap = new Map<string, string>([
-            ['positive', '#00b300'],
+            ['positive', '#00ff00'],
             ['negative', '#ff0000'],
             ['neutral', '#007bff']
         ]
     );
-
-    const onLast = (last, list) => [list[(list.indexOf(last) + 1) % list.length]]
-
 
     const parseDate = timeParse("%Y-%m-%dT%H:%M:%S%Z");
     const timeBuckets = ['day', 'week', 'month', 'year'];
@@ -77,12 +86,12 @@
         month: timeMonth,
         year: timeYear
     };
-    let selectedTimeBucket: string = 'month';
+    let selectedTimeBucket: string = 'week';
 
     const countNames = sourceNames.flatMap(source => typesNames.map(type => `${source}_${type}`));
     let flatData;
     let brushedData;
-    let brushExtents = [0, 0]
+    let brushExtents = [null, null]
     let groupedData;
     let groupedBrushedData;
     let selectedCounts: string[] = [];
@@ -122,7 +131,7 @@
         });
     }
 
-    const formatTickX = timeFormat('%b. %e');
+    const formatTickX = timeFormat('%b. %Y');
     const formatTickY = d => {
         // format 1000 to 1K and 1000000 to 1M
         const formatter = format(`.${d}~s`);
@@ -165,6 +174,13 @@
         </ChartSettingsGroup>
     </div>
     <div class="chart-container">
+        <div class="zoom-settings">
+            <SegmentedButton segments={timeBuckets} let:segment singleSelect bind:selected={selectedTimeBucket}>
+                <Segment {segment}>
+                    <Label>{segment}</Label>
+                </Segment>
+            </SegmentedButton>
+        </div>
         <div class='chart'>
             {#if groupedData && groupedData.length > 0}
                 <LayerCake
@@ -192,10 +208,8 @@
 
                     <Html>
                     <AxisX
+                            ticks={10}
                             gridlines={false}
-                            ticks={brushedData.filter(d => Object.keys(d).some(key => key !== xKey && d[key] !== 0))
-                        .map(d => d[xKey])
-                        .sort((a, b) => a - b)}
                             formatTick={formatTickX}
                             snapTicks={true}
                             tickMarks={true}
@@ -205,7 +219,6 @@
                             formatTick={formatTickY}
                     />
                     <SharedTooltip
-
                             formatTitle={timeFormat('%b. %e, %Y')}
                             dataset={brushedData}
                     />
@@ -239,8 +252,8 @@
                     data={groupedData}
             >
                 <Svg>
-                    <Multiline/>
-                    <MultiArea/>
+                    <Multiline opacity={0.9}/>
+                    <MultiArea opacity={0.9}/>
                 </Svg>
                 <Html>
                 <Brush bind:min={brushExtents[0]} bind:max={brushExtents[1]}/>
@@ -276,10 +289,17 @@
         flex-direction: column;
         padding: 1rem;
     }
+
+    .zoom-settings {
+        display: flex;
+        flex-direction: row;
+        padding: 1rem;
+    }
     .chart {
         padding: 1rem;
         height: 300px;
     }
+
     .brush-container {
         padding: 1rem;
         height: 50px;

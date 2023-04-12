@@ -1,4 +1,4 @@
-from typing import Any, List
+from typing import Any, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -41,18 +41,17 @@ async def delete_game(
     return game
 
 
-@router.get("/", response_model=List[schemas.Game])
-async def read_games(
-        *,
-        db: AsyncSession = Depends(deps.get_session),
-        skip: int = 0,
-        limit: int = 100
-) -> Any:
+@router.get("/", response_model=schemas.GameListResponse)
+async def read_games(*,
+                     db: AsyncSession = Depends(deps.get_session),
+                     limit: int = 100,
+                     cursor: Optional[int] = None,
+                     filter: Optional[schemas.GameListFilter] = None) -> schemas.GameListResponse:
     """
-    Retrieve games.
+    Get list of games.
     """
-    games = await crud.game.get_multi(db, offset=skip, limit=limit)
-    return games
+    glist = await crud.game.get_game_list(db, limit=limit, cursor=cursor, filter=filter)
+    return glist
 
 
 # update game by id

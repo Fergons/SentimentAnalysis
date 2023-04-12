@@ -11,6 +11,8 @@
 	/** @type {Number} max – The brush's max value. Useful to bind to. */
 	export let max;
 
+	export let brushColor = '#808082';
+
 	let brush;
 
 	const p = x => {
@@ -93,7 +95,9 @@
 
 <div bind:this={brush} class="brush-outer" on:mousedown|stopPropagation={reset} on:touchstart|stopPropagation={reset}>
 	{#if min !== null}
-		<div class="brush-inner" on:mousedown|stopPropagation={move} on:touchstart|stopPropagation={move} style="left: {left}%; right: {right}%"></div>
+		<div class="brush-inner"
+			 on:mousedown|stopPropagation={move} on:touchstart|stopPropagation={move}
+			 style="left: {left}%; right: {right}%; background-color:{brushColor}"></div>
 		<div class="brush-handle" on:mousedown|stopPropagation={adjust_min} on:touchstart|stopPropagation={adjust_min} style="left: {left}%"></div>
 		<div class="brush-handle" on:mousedown|stopPropagation={adjust_max} on:touchstart|stopPropagation={adjust_max} style="right: {right}%"></div>
 	{/if}
@@ -101,6 +105,7 @@
 
 <style>
 	.brush-outer {
+		border: 1px solid rgba(128, 128, 130, 0.1);
 		position: relative;
 		width: 100%;
 		height: calc(100% + 5px);
@@ -111,9 +116,9 @@
 		position: absolute;
 		height: 100%;
 		cursor: move;
-		/* mix-blend-mode: difference; */
-		background-color: #cccccc90;
-		/* border: 1px solid #000; */
+		mix-blend-mode: difference;
+		opacity: 0.2;
+
 	}
 
 	.brush-handle {
