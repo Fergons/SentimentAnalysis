@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, TYPE_CHECKING, Optional, Union, Literal
+from typing import List, TYPE_CHECKING, Optional, Union, Literal, Dict
 from pydantic import BaseModel, EmailStr, AnyHttpUrl, validator
 
 # from . import SourceInDBBase, ReviewerInDBBase, GameInDBBase, AspectInDBBase
@@ -91,6 +91,35 @@ class ReviewsSummaryDataPoint(BaseModel):
     @validator("not_processed", always=True)
     def set_not_processed(cls, v, values):
         return v or values["total"] - values["processed"]
+
+
+class ReviewsSummaryBaseDataPoint(BaseModel):
+    total: int
+    processed: int
+    not_processed: int
+    positive: int
+    negative: int
+    neutral: int
+
+
+class ReviewsSummaryByDate(BaseModel):
+    total: int
+    processed: int
+    not_processed: int
+    positive: int
+    negative: int
+    neutral: int
+    sources: Dict[int, ReviewsSummaryBaseDataPoint] = []
+
+
+class ReviewsSummaryV2(BaseModel):
+    total: int
+    processed: int
+    not_processed: int
+    positive: int
+    negative: int
+    neutral: int
+    data: Dict[datetime, ReviewsSummaryByDate] = []
 
 
 class ReviewsSummary(BaseModel):

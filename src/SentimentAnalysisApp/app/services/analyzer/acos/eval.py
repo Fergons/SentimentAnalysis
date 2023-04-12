@@ -2,14 +2,14 @@ import json
 import findfile
 import tqdm
 from Levenshtein import distance as levenshtein_distance
-from data_utils import create_task_output_string
+from app.services.analyzer.acos.data_utils import create_task_output_string
 from pathlib import Path
 task = "joint-acos"
 # task = "joint-aspect-sentiment"
 # task = "joint-aspect-category"
 
 # task = "joint-acos"
-model = "checkpoints\multitask\joint-acos-1335.GamesACOS-finetuned_acos_on_ood_model\checkpoint-1380"
+model = "checkpoints\multitask\joint-acos-1335.GamesACOS-mt5-base-joint-acos-1335.GamesACOS\checkpoint-1863"
 # model = "checkpoint-750"
 
 test_files = ["D:/PythonProjects/SentimentAnalysis/data/validation/STRATEGY_data.main_categories.jsonl",

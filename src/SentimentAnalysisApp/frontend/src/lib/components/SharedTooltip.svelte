@@ -37,51 +37,87 @@
      */
     function sortResult(result) {
         if (Object.keys(result).length === 0) return [];
-        const rows = Object.keys(result).filter(d => d !== $config.x).map(key => {
-            return {
-                key,
-                value: result[key]
-            };
-        }).sort((a, b) => b.value - a.value);
 
-        return rows;
+        const rows = Object.keys(result)
+            .filter(d => d !== $config.x)
+            .map(key => {
+                const [source, type] = key.split('_');
+                return {
+                    source,
+                    type,
+                    value: result[key]
+                };
+            })
+            .reduce((acc, row) => {
+                if (!acc[row.source]) {
+                    acc[row.source] = {
+                        source: row.source,
+                        types: []
+                    };
+                }
+                acc[row.source].types.push({type: row.type, value: row.value});
+                return acc;
+            }, {});
+
+        const sortedRows = Object.values(rows).sort((a, b) => {
+            return b.types.reduce((total, row) => total + row.value, 0) - a.types.reduce((total, row) => total + row.value, 0);
+        });
+
+        return sortedRows;
     }
 </script>
 
-<style>
-    .tooltip {
-        position: absolute;
-        font-size: 13px;
-        pointer-events: none;
-        border: 1px solid #212125;
-        background: rgba(33, 33, 37, 0.66);
-        transform: translate(-50%, -100%);
-        padding: 5px;
-        z-index: 15;
-    }
+<style lang="scss" global>
+  .tooltip {
+    position: absolute;
+    font-size: 13px;
+    pointer-events: none;
+    border: 1px solid var(mdc-theme-on-surface);
+    background: var(background);
+    transform: translate(-50%, -100%);
+    padding: 5px;
+    z-index: 15;
+  }
 
-    .line {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 1px;
-        border-left: 1px dotted #666;
-        pointer-events: none;
-    }
+  .line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    border-left: 1px dotted #666;
+    pointer-events: none;
+  }
 
-    .tooltip,
-    .line {
-        transition: left 250ms ease-out, top 250ms ease-out;
-    }
+  .tooltip,
+  .line {
+    transition: left 250ms ease-out, top 250ms ease-out;
+  }
 
-    .title {
-        font-weight: bold;
-        color: #1a4a92;
-    }
+  .title {
+    font-weight: bold;
+    color: var(primary);
+  }
 
-    .key {
-        color: #999;
-    }
+  .key {
+    color: #999;
+  }
+
+  .column {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .info-container {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    flex-wrap: nowrap;
+  }
+
+  .row {
+    min-width: 80px;
+  }
+
 </style>
 
 <QuadTree
@@ -103,13 +139,22 @@
                 style="
         width:{w}px;
         display: { visible ? 'block' : 'none' };
-        top:calc({$yScale(foundSorted[0].value)}% + {offset}px);
+        top:calc({$yScale(Math.max(...foundSorted[0].types.map(d => +d.value)))}% + {offset}px);
         left:{Math.min(Math.max(w2, (x / 100) * $width), $width - w2)}px;"
         >
             <div class="title">{formatTitle(found[$config.x])}</div>
+            <div class="info-container">
             {#each foundSorted as row}
-                <div class="row"><span class="key">{formatKey(row.key)}:</span> {formatValue(row.value)}</div>
+                <div class="column">
+                    <div class="row"><span class="title">{formatKey(row.source)}</span></div>
+                    {#each row.types as typeRow}
+                        <div class="row">
+                            <span class="key">{formatKey(typeRow.type)}:</span> {formatValue(typeRow.value)}
+                        </div>
+                    {/each}
+                </div>
             {/each}
+            </div>
         </div>
     {/if}
 </QuadTree>

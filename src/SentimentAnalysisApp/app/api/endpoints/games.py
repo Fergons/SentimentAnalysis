@@ -100,3 +100,20 @@ async def get_sources(*,
     """
     sources = await crud.game.get_sources(db, game_id=id)
     return sources
+
+
+@router.get("/{id}/summary/v2/{time_interval}", response_model=schemas.ReviewsSummaryV2)
+async def get_summary_v2(*,
+                         db: AsyncSession = Depends(deps.get_session),
+                         id: int,
+                         time_interval: str = "day"):
+    # validate time interval
+    # allowed_time_intervals = ["30 minutes",
+    #                           "1 hour", "2 hours", "6 hours", "12 hours",
+    #                           "1 day", "1 week", "1 month", "1 year"]
+    allowed_time_intervals = ["hour", "day", "week", "month", "year"]
+    if time_interval not in allowed_time_intervals:
+        raise HTTPException(status_code=400, detail=f"Invalid time interval. Possible values: {allowed_time_intervals}")
+
+    summary = await crud.review.get_summary_v2(db, game_id=id, time_interval=time_interval)
+    return summary

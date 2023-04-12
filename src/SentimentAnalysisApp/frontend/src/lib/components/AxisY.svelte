@@ -82,10 +82,10 @@
   }
 
   .gridline {
-    border-top: 1px dashed #aaa;
+    border-top: 1px dashed rgba(87, 84, 84, 0.64);
   }
   .tick-mark {
-    border-top: 1px solid #aaa;
+    border-top: 1px solid rgba(98, 98, 98, 0.26);
   }
 
   .baseline.gridline {

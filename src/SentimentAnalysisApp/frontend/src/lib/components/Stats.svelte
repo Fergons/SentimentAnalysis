@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang='ts'>
     import {LayerCake, Svg, Html, flatten, groupLonger, ScaledSvg} from 'layercake';
     import {writable} from 'svelte/store';
     import Checkbox from '@smui/checkbox';
@@ -11,53 +11,94 @@
     import Multiline from './Multiline.svelte';
     import AxisX from './AxisX.svelte';
     import AxisY from './AxisY.svelte';
-    import GroupLabels from './GroupLabels.svelte';
     import SharedTooltip from './SharedTooltip.svelte';
-    import {getTotal} from "../utils/dataTransformer";
-    import type {ReviewsSummaryDataPoint} from '../client';
+    import {transformSummary, generateColorMap} from '../utils/dataTransformer';
+    import type {ReviewsSummaryDataPoint, ReviewsSummaryV2} from '../client';
     import type {Source} from '../client';
-    import FormField from "@smui/form-field";
+    import FormField from '@smui/form-field';
+    import ChartSettingsGroup from './ChartSettingsGroup.svelte';
+    import {timeDay, timeWeek, timeMonth, timeYear} from "d3-time";
 
     export let data: {
         sources: Map<number, Source>,
-        summary: ReviewsSummaryDataPoint[]
+        summary: ReviewsSummaryV2
     };
     const sources = data.sources;
+    const sourceNameMap = new Map<string, number>();
+    sources.forEach((s, id) => sourceNameMap.set(s.name, id));
     const summary = data.summary;
-    const total = getTotal(summary, sources, 30);
 
     const xKey = 'date';
-    const yKey = 'total';
-    const zKey = 'source';
+    const yKey = 'count';
+    const zKey = 'source_type';
 
-    // if data is not undefined, then we have data
-    const seriesNames: string[] = sources.size > 0 ? Array.from(sources.values()).map(s => s.name) : [];
-    // colors in contrasting blue shades
-    const seriesColors = ['#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78'];
+    let sourceNames: string[] = sources.size > 1 ? Array.from([...sourceNameMap.keys(), 'all']) : [sourceNameMap.keys().next().value];
+    const defaultSourceSelection = sources.size > 1 ? ['all'] : [sourceNames[0]];
+    let selectedSources: string[] = [...defaultSourceSelection];
+
+
+
+    const sentimentNames = ['positive', 'negative', 'neutral'];
+    const defaultSentimentSelection = [];
+    let selectedSentiments = [...defaultSentimentSelection];
+
+    const categoryTypeNames = ['gameplay', 'audio_visuals', 'performance_bugs', 'overall', 'price', 'community'];
+    const defaultCategorySelection = [];
+    let selectedCategories = [...defaultCategorySelection];
+
+    const reviewTypeNames = ['total', 'processed'];
+    const defaultReviewTypeSelection = ['total'];
+    let selectedReviewTypes = [...defaultReviewTypeSelection];
+
+
+    const typesNames = [...reviewTypeNames, ...sentimentNames, ...categoryTypeNames];
+    //blue and dark blue for others green for positive, red for negative, grey for neutral
+    let selectedTypes: string[] = ['total'];
+
+    const colorMap = generateColorMap(sourceNames, typesNames);
+    const onLast = (last, list) => [list[(list.indexOf(last)+1)%list.length]]
+
 
     const parseDate = timeParse("%Y-%m-%dT%H:%M:%S%Z");
+    const timeBuckets = ['day', 'week', 'month', 'year'];
+    const mapTimeBucketToTime = {
+        day: timeDay,
+        week: timeWeek,
+        month: timeMonth,
+        year: timeYear
+    };
+    let selectedTimeBucket: string = 'month';
 
-    if (total && total.length > 0) {
-        total.forEach(d => {
-            d[xKey] = typeof d[xKey] === 'string'
-                ? parseDate(d[xKey])
-                : d[xKey];
+    const countNames = sourceNames.flatMap(source => typesNames.map(type => `${source}_${type}`));
+    let flatData;
+    let groupedData;
+    let selectedCounts: string[] = [];
+    let yDomainMax = 10;
 
-            seriesNames.forEach(name => {
-                d[name] = +d[name];
+
+    $: {
+        selectedTypes = [...selectedSentiments, ...selectedCategories, ...selectedReviewTypes];
+        selectedCounts = [...selectedSources.flatMap(source => selectedTypes.map(type => `${source}_${type}`))];
+        if (selectedCounts.length === 0) {
+            selectedCounts = ["all_total"]
+        }
+        flatData = transformSummary(summary, selectedSources, selectedTypes, sourceNameMap, mapTimeBucketToTime[selectedTimeBucket]);
+        flatData.forEach(d => {
+            d[xKey] = typeof d[xKey] === 'string' ? parseDate(d[xKey]) : d[xKey];
+            selectedCounts.forEach(name => {
+                d[name] = +d[name] || 0;
+                if(d[name]> yDomainMax) {
+                    yDomainMax = d[name];
+                }
             });
         });
-    }
 
-    let selectedSeries = [...seriesNames];
-    let selectedYKey = yKey;
-
-    let groupedData = [];
-    $: if (selectedSeries.length > 0) {
-        groupedData =  groupLonger(total, selectedSeries, {
+        groupedData = groupLonger(flatData, selectedCounts, {
             groupTo: zKey,
-            valueTo: yKey
+            valueTo: yKey,
         });
+
+
     }
 
     const formatTickX = timeFormat('%b. %e');
@@ -68,22 +109,39 @@
     };
 
 </script>
-<div class="chart-container">
-    <div class="chart-settings">
-        {#each seriesNames as name}
-            <div class="checkbox-container">
-                <FormField>
-                    <Checkbox
-                            bind:group={selectedSeries}
-                            value={name}
-                            disabled={selectedSeries.length === 1 && selectedSeries.includes(name)}
-                    />
-                    <span slot="label">{name}</span>
-                </FormField>
-            </div>
-        {/each}
+<div class='chart-container'>
+    <div class='chart-settings'>
+        <ChartSettingsGroup
+                seriesNames={sourceNames}
+                bind:selectedSeries={selectedSources}
+                onReset={() => selectedSources = [...defaultSourceSelection]}
+                onLast={(last) => selectedSources = onLast(last, sourceNames)}
+        >
+        </ChartSettingsGroup>
+        <ChartSettingsGroup
+                seriesNames={reviewTypeNames}
+                bind:selectedSeries={selectedReviewTypes}
+                onReset={() => selectedReviewTypes = [...defaultReviewTypeSelection]}
+
+        >
+        </ChartSettingsGroup>
+        <ChartSettingsGroup
+                seriesNames={sentimentNames}
+                bind:selectedSeries={selectedSentiments}
+                onReset={() => selectedSentiments = [...defaultSentimentSelection]}
+                onLast={(last) => selectedSentiments = onLast(last, sentimentNames)}
+        >
+        </ChartSettingsGroup>
+        <ChartSettingsGroup
+                seriesNames={categoryTypeNames}
+                bind:selectedSeries={selectedCategories}
+                onReset={() => selectedCategories = [...defaultCategorySelection]}
+                onLast={(last) => selectedCategories = onLast(last, categoryTypeNames)}
+        >
+        </ChartSettingsGroup>
     </div>
-    <div class="chart">
+
+    <div class='chart'>
         {#if groupedData && groupedData.length > 0}
             <LayerCake
                     ssr={true}
@@ -91,13 +149,13 @@
                     x={xKey}
                     y={yKey}
                     z={zKey}
-                    zScale={scaleOrdinal()}
                     xNice={true}
                     yNice={true}
-                    yDomain={[0, 10]}
-                    zDomain={seriesNames}
-                    zRange={seriesColors}
-                    flatData={flatten(groupedData, 'values')}
+                    yDomain={[0, yDomainMax]}
+                    zScale={scaleOrdinal()}
+                    zDomain={selectedCounts}
+                    zRange={selectedCounts.map(name => colorMap.get(name))}
+                    flatData={flatData}
                     data={groupedData}
             >
                 <ScaledSvg>
@@ -107,23 +165,27 @@
                 <Html>
                 <AxisX
                         gridlines={false}
-                        ticks={total.map(d => d[xKey]).sort((a, b) => a - b)}
+                        ticks={flatData.filter(d => Object.keys(d).some(key => key !== xKey && d[key] !== 0))
+                        .map(d => d[xKey])
+                        .sort((a, b) => a - b)}
                         formatTick={formatTickX}
                         snapTicks={true}
                         tickMarks={true}
                 />
                 <AxisY
+                        ticks={4}
                         formatTick={formatTickY}
                 />
                 <SharedTooltip
+
                         formatTitle={formatTickX}
-                        dataset={total}
+                        dataset={flatData}
                 />
                 </Html>
             </LayerCake>
         {:else}
             <Svg>
-                <text x="50%" y="50%" text-anchor="middle" dominant-baseline="central" font-size="24px">
+                <text x='50%' y='50%' text-anchor='middle' dominant-baseline='central' font-size='24px'>
                     NO DATA
                 </text>
             </Svg>
@@ -151,19 +213,16 @@
         padding: 1rem;
     }
 
+
     .chart {
         flex: 1;
-        display: flex;
-        flex-direction: column;
+        width: 400px;
+        height: 300px;
         position: relative;
-         padding: 2rem;
+        padding: 2rem;
+
     }
 
-    .checkbox-container {
-        display: flex;
-        align-items: center;
-        margin-bottom: 0.5rem;
-    }
 
     .checkbox-container label {
         margin-left: 0.5rem;

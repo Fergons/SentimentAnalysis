@@ -27,7 +27,7 @@ class LoggingCallback(TrainerCallback):
 
 task_name = "multitask"
 # experiment_name = "acos_finetuning_on_acs_all_data_mt5"
-experiment_name = "finetuned_acos_on_ood_model"
+experiment_name = "mt5-base-joint-acos-1335.GamesACOS"
 task = "joint-acos"
 train_dataset_name = "1335.GamesACOS"
 test_dataset_name = "1335.GamesACOS"
@@ -40,7 +40,7 @@ logging_callback = LoggingCallback(f"{task}-{train_dataset_name}-{experiment_nam
 # model_checkpoint = 'checkpoints/multitask/joint-aspect-category-sentiment-1336.Games/checkpoint-760'
 # model_checkpoint = 'checkpoints/multitask/googlemt5-base-joint-aspect-sentiment-501.Laptop14/checkpoint-1467'
 # model_checkpoint = "google/mt5-base"
-model_checkpoint = "checkpoints\multitask\joint-acos-506.Synthetic-ood_data\checkpoint-3537"
+model_checkpoint = "google/mt5-base"
 from_checkpoint = False
 print("Experiment Name: ", experiment_name)
 model_out_path = "checkpoints"
@@ -74,6 +74,7 @@ t5_exp = model.ABSAGenerator(model_checkpoint)
 id_ds, id_tokenized_ds, ood_ds, ood_tokenzed_ds = loader.create_datasets(
     t5_exp.tokenize_function_inputs
 )
+batch_size = 4
 
 # Training arguments
 training_args = {
@@ -82,7 +83,7 @@ training_args = {
     "resume_from_checkpoint": False,
     "save_strategy": "epoch",
     "learning_rate": 5e-5,
-    "per_device_train_batch_size": 6,
+    "per_device_train_batch_size": batch_size,
     "per_device_eval_batch_size": 16,
     "num_train_epochs": 10,
     "weight_decay": 0.01,
@@ -91,7 +92,7 @@ training_args = {
     "push_to_hub": False,
     "eval_accumulation_steps": 1,
     "predict_with_generate": True,
-    "logging_steps": id_tokenized_ds.num_rows["train"]/6,
+    "logging_steps": id_tokenized_ds.num_rows["train"]/16,
     "use_mps_device": False,
     "fp16": False
 }

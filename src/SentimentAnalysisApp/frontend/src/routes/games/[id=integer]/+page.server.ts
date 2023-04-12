@@ -8,7 +8,7 @@ export async function load({params}: { params: { id: number } }) {
     try {
         const [game, reviews_summary, sources] = await Promise.all([
             GamesService.readGameGamesIdGet(params.id),
-            ReviewsService.getSummaryReviewsSummaryGet(params.id),
+            GamesService.getSummaryV2GamesIdSummaryV2TimeIntervalGet(params.id, 'day'),
             GamesService.getSourcesGamesIdSourcesGet(params.id)
         ]);
 
@@ -37,7 +37,7 @@ export async function load({params}: { params: { id: number } }) {
 
             },
             stats: {
-                summary: reviews_summary.data,
+                summary: reviews_summary,
                 sources: sourceMap
             },
 

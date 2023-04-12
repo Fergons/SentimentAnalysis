@@ -19,6 +19,7 @@ from .scraper import ScrapedGame, ScrapedReview, ScrapedReviewer
 from .analyzer import AnalyzedReview, AnalyzedReviewCreate, AnalyzedReviewUpdate
 from .analyzer import AnalyzedReviewSentence, AnalyzedReviewSentenceCreate, AnalyzedReviewSentenceUpdate
 from .analyzer import AnalyzerSearchFilter
+from .review import ReviewsSummaryV2, ReviewsSummaryBaseDataPoint, ReviewsSummaryByDate
 
 Reviewer.update_forward_refs(Review=Review, Source=Source)
 Game.update_forward_refs(Review=Review, Source=Source)

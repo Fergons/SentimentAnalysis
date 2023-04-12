@@ -14,7 +14,7 @@ import findfile
 import pandas as pd
 from datasets import DatasetDict, Dataset
 
-from .instruction import (
+from app.services.analyzer.acos.instruction import (
     ATEInstruction,
     CategoryInstruction,
     OpinionInstruction,

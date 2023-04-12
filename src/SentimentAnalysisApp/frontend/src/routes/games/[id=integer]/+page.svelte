@@ -31,7 +31,6 @@
 <style>
     .stats-container {
         width:100%;
-        height: 300px;
          display: flex;
         flex-direction: column;
         justify-content: center;
@@ -46,6 +45,6 @@
         flex-direction: column;
         justify-content: start;
         align-items: flex-start;
-        gap: 16px;
+        gap: 2rem;
     }
 </style>

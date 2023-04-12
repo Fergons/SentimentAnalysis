@@ -18,8 +18,6 @@ from app.schemas.game import GameCategoryCreate, GameCategoryUpdate
 import logging
 from app import models
 
-from .review import Review
-
 logging.basicConfig(
     level=logging.DEBUG,
     format='%(asctime)s - %(levelname)s: %(message)s',
@@ -242,7 +240,7 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
         await db.execute(
             update(self.model)
             .where(self.model.id == id)
-            .values(num_reviews=select(func.count(Review.id)).where(Review.game_id == id))
+            .values(num_reviews=select(func.count(models.Review.id)).where(models.Review.game_id == id))
         )
         await db.commit()
 

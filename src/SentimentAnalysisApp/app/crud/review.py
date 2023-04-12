@@ -4,21 +4,19 @@ from datetime import datetime, timedelta
 from typing import List, Optional, Literal, Tuple
 
 from fastapi.encoders import jsonable_encoder
-from sqlalchemy import select, and_, or_, func, case, literal_column
+from sqlalchemy import select, and_, or_, func, literal_column, case
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session, selectinload
 from sqlalchemy.sql.expression import null, text
 
 from app.crud.reviewer import crud_reviewer
 from app.crud.base import CRUDBase
-from app.models.review import Review
 from app.schemas.review import (ReviewCreate, ReviewWithAspects,
                                 ReviewsSummary, ReviewsSummaryDataPoint)
 from app.schemas.reviewer import ReviewerCreate
-from app.models.reviewer import Reviewer
+
 from app.crud.game import crud_game
-from app.models.game import Game
-from app.models.source import GameSource
+from app import models, schemas
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -27,8 +25,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
-    async def get_with_good_and_bad_by_language_multi(self, db: AsyncSession, *, language: str) -> List[Review]:
+class CRUDReview(CRUDBase[models.Review, ReviewCreate, ReviewCreate]):
+    async def get_with_good_and_bad_by_language_multi(self, db: AsyncSession, *, language: str) -> List[models.Review]:
         result = await db.execute(
             select(self.model).where(and_(self.model.language == language,
                                           or_(self.model.good != None, self.model.bad != None)
@@ -38,12 +36,12 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
 
         return result.scalars().all()
 
-    async def get_by_user(self, db: AsyncSession, *, user_id: int) -> List[Review]:
+    async def get_by_user(self, db: AsyncSession, *, user_id: int) -> List[models.Review]:
         result = await db.execute(select(self.model).where(self.model.reviewer_id == user_id))
         return result.scalars().all()
 
     async def get_multi_by_game(self, db: AsyncSession, *, game_id: int, limit: int = 100, offset: int = 0
-                                ) -> List[Review]:
+                                ) -> List[models.Review]:
         result = await db.execute(select(self.model).where(self.model.game_id == game_id))
         return result.scalars().all()
 
@@ -52,7 +50,7 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
                                            game_id: Optional[int] = None,
                                            limit: int = 100,
                                            offset: int = 0
-                                           ) -> List[Review]:
+                                           ) -> List[models.Review]:
         query = select(self.model).limit(limit).offset(offset)
         if game_id is not None:
             query = query.filter(self.model.game_id == game_id)
@@ -62,7 +60,7 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
         return result.scalars().all()
 
     async def get_multi_by_processed(self, db: AsyncSession, *, processed: bool, limit: int = 100, offset: int = 0) -> \
-            List[Review]:
+            List[models.Review]:
         if processed:
             result = await db.execute(
                 select(self.model).where(self.model.processed_at != None).limit(limit).offset(offset))
@@ -128,7 +126,97 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
         summary.num_data_points = len(data_points)
         return summary
 
-    async def get_not_processed(self, db: AsyncSession, *, limit: int = 100, offset: int = 0) -> List[Review]:
+    async def get_summary_v2(
+            self, db: AsyncSession, *, game_id: int, time_interval: str = "day"
+    ) -> schemas.ReviewsSummaryV2:
+        """
+        Count total reviews, count processed and not processed reviews per game and source by time_interval
+        """
+        query = select(
+                func.date_trunc(time_interval, self.model.created_at).label('date'),
+                models.Review.source_id,
+                func.count(func.distinct(models.Review.id)).label("total"),
+                func.count(func.distinct(case([(models.Review.processed_at == None, models.Review.id)]))).label("not_processed"),
+                func.count(func.distinct(case([(models.Review.processed_at != None, models.Review.id)]))).label("processed"),
+                func.sum(case([(models.Aspect.polarity == "positive", 1)], else_=0)).label("positive"),
+                func.sum(case([(models.Aspect.polarity == "negative", 1)], else_=0)).label("negative"),
+                func.sum(case([(models.Aspect.polarity == "neutral", 1)], else_=0)).label("neutral")
+            )
+        if game_id is not None:
+            query = query.filter(models.Review.game_id == game_id)
+
+        result = await db.execute(
+            query.outerjoin(models.Aspect, models.Review.id == models.Aspect.review_id)
+            .group_by(text("date"), models.Review.source_id)
+            .order_by(text("date"), models.Review.source_id)
+        )
+
+        summary = schemas.ReviewsSummaryV2(
+            total=0,
+            not_processed=0,
+            processed=0,
+            positive=0,
+            negative=0,
+            neutral=0,
+            data={},
+        )
+        current_date = None
+        current_date_summary = None
+
+        for row in result.all():
+            date, source_id, total, not_processed, processed, positive, negative, neutral = row
+            summary.total += total
+            summary.not_processed += not_processed
+            summary.processed += processed
+            summary.positive += positive
+            summary.negative += negative
+            summary.neutral += neutral
+
+            if date != current_date:
+                if current_date_summary:
+                    summary.data[current_date] = current_date_summary
+
+                current_date = date
+                current_date_summary = schemas.ReviewsSummaryByDate(
+                    total=0,
+                    not_processed=0,
+                    processed=0,
+                    positive=0,
+                    negative=0,
+                    neutral=0,
+                    sources={},
+                )
+
+            current_date_summary.total += total
+            current_date_summary.not_processed += not_processed
+            current_date_summary.processed += processed
+            current_date_summary.positive += positive
+            current_date_summary.negative += negative
+            current_date_summary.neutral += neutral
+
+            if source_id not in current_date_summary.sources:
+                current_date_summary.sources[source_id] = schemas.ReviewsSummaryBaseDataPoint(
+                    total=0,
+                    processed=0,
+                    not_processed=0,
+                    positive=0,
+                    negative=0,
+                    neutral=0,
+                )
+
+            current_date_summary.sources[source_id].total += total
+            current_date_summary.sources[source_id].not_processed += not_processed
+            current_date_summary.sources[source_id].processed += processed
+            current_date_summary.sources[source_id].positive += positive
+            current_date_summary.sources[source_id].negative += negative
+            current_date_summary.sources[source_id].neutral += neutral
+
+        if current_date_summary:
+            summary.data[current_date] = current_date_summary
+
+        return summary
+
+    async def get_not_processed(self, db: AsyncSession, *, limit: int = 100, offset: int = 0) -> List[models.Review]:
         result = await db.execute(select(self.model).where(self.model.processed_at == None).limit(limit).offset(offset))
         return result.scalars().all()
 
@@ -155,7 +243,7 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
 
 
     async def get_not_processed_by_game(self, db: AsyncSession, game_id: int, limit: int = 100, last_id: int = None) -> \
-            List[Review]:
+            List[models.Review]:
         if last_id:
             result = await db.execute(
                 select(self.model)
@@ -174,7 +262,7 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
     async def get_not_processed_by_source(self, db: AsyncSession,
                                           source_id: int,
                                           limit: int = 100,
-                                          offset: int = 0) -> Optional[Review]:
+                                          offset: int = 0) -> Optional[models.Review]:
 
         if offset > 2000:
             stmt = select(self.model.id) \
@@ -192,7 +280,7 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
 
     async def create_with_text(
             self, db: AsyncSession, *, obj_in: ReviewCreate, text: str
-    ) -> Review:
+    ) -> models.Review:
         obj_in_data = jsonable_encoder(obj_in)
         db_obj = self.model(**obj_in_data, text=text)  # type: ignore
         db.add(db_obj)
@@ -202,7 +290,7 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
 
     async def create_with_reviewer(
             self, db: AsyncSession, *, obj_in: ReviewCreate, text: str,
-    ) -> Review:
+    ) -> models.Review:
         obj_in_data = jsonable_encoder(obj_in)
         db_obj = self.model(**obj_in_data, text=text)  # type: ignore
         db.add(db_obj)
@@ -263,7 +351,7 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
 
         await db.commit()
 
-    async def get_with_aspects(self, db: AsyncSession, *, id: int) -> Optional[Review]:
+    async def get_with_aspects(self, db: AsyncSession, *, id: int) -> Optional[models.Review]:
         result = await db.execute(select(self.model).where(self.model.id == id).options(
             selectinload(self.model.aspects)
         ))
@@ -283,4 +371,4 @@ class CRUDReview(CRUDBase[Review, ReviewCreate, ReviewCreate]):
             .order_by(self.model.id).limit(1000))
         return result.all()
 
-crud_review = CRUDReview(Review)
+crud_review = CRUDReview(models.Review)

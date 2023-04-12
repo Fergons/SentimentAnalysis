@@ -2,7 +2,7 @@ import json
 import findfile
 import re
 from pathlib import Path
-from data_utils import create_task_output_string
+from app.services.analyzer.acos.data_utils import create_task_output_string
 task = "joint-acos"
 model = "checkpoints\multitask\joint-acos-1335.GamesACOS-finetuned_acos_on_ood_model\checkpoint-1380"
 

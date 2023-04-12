@@ -2,6 +2,7 @@ import pytest
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
+import schemas
 from app.schemas import UserDB
 from app import models
 import logging
@@ -63,3 +64,34 @@ async def test_update_game_endpoint(client: AsyncClient, access_token: str, test
     assert resp.status_code == 200
     data = resp.json()
     assert data["name"] == "test title updated"
+
+
+async def test_get_summary_v2(client: AsyncClient, access_token: str, test_data: None):
+    time_interval = "day"
+    resp = await client.get(
+        f"/games/281/summary/v2/{time_interval}",
+        headers={"Authorization": f"Bearer {access_token}"}
+    )
+
+    assert resp.status_code == 200
+    summary = schemas.ReviewsSummaryV2.parse_obj(resp.json())
+    # TEST_REVIEWS, TEST_ASPECTS
+    assert summary.total == 5
+    assert len(summary.data) == 5
+    assert len(summary.data) == 5
+    assert len(set([source for date, data in summary.data.items() for source in data.sources.keys()])) == 2
+
+
+    time_interval = "year"
+    resp = await client.get(
+        f"/games/281/summary/v2/{time_interval}",
+        headers={"Authorization": f"Bearer {access_token}"}
+    )
+
+    assert resp.status_code == 200
+    summary = schemas.ReviewsSummaryV2.parse_obj(resp.json())
+    # TEST_REVIEWS, TEST_ASPECTS
+    assert summary.total == 5
+    assert len(summary.data) == 2
+    assert len(set([source for date, data in summary.data.items() for source in data.sources.keys()])) == 2
+
