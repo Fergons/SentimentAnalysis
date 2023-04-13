@@ -311,7 +311,13 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
                     ])
                 ) / func.count(models.Aspect.id.distinct()) * 10
         ).label("score")
-        stmt = select(self.model, game_score, func.count(models.Review.id)).select_from(self.model).outerjoin(models.Review).outerjoin(models.Aspect).where(models.Aspect.category == 'overall').group_by(self.model.id)
+        stmt = select(self.model, game_score, func.count(models.Review.id)).select_from(self.model)\
+            .outerjoin(models.Review)\
+            .outerjoin(models.Aspect)\
+            .where(and_(models.Aspect.category == 'overall'))\
+            .group_by(self.model.id)\
+            .options(selectinload(self.model.categories).selectinload(models.GameCategory.category),
+                     selectinload(self.model.developers).selectinload(models.GameDeveloper.developer))\
 
         filters = []
         if filter:
@@ -357,7 +363,11 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
 
         next_cursor = games[-1][0].id if len(games) > 0 else None
         games = [schemas.GameListItem(
-            game=schemas.Game.from_orm(g),
+            id=g.id,
+            name=g.name,
+            release_date=g.release_date,
+            categories=[schemas.Category.from_orm(c.category) for c in g.categories],
+            developers=[schemas.Developer.from_orm(d.developer) for d in g.developers],
             score=round(score, 1),
             num_reviews=num_reviews
         ) for g, score, num_reviews in games]

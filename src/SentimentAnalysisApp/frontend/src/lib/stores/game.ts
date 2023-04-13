@@ -1,11 +1,11 @@
 import {browser} from '$app/environment';
 import {writable, readable} from 'svelte/store';
-import type {Game} from '../client';
+import type {GameListItem} from '../client';
 import {GamesService} from "../client";
 
 export function initialValue() {
     return {
-        games: new Map<number,Game>(),
+        games: new Map<number,GameListItem>(),
         loading: true
     }
 }
@@ -38,7 +38,7 @@ function makeSubscribe(data: any, _args: any) {
 
 async function fetchGameData(data: any, set: any) {
     try {
-        // 5. Dispatch the request for the users
+        // 5. Dispatch the request for the data
         const games = await GamesService.readGamesGamesGet()
          for (const {id, ...rest} of games) {
                 data.games.set(id, {

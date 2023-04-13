@@ -4,8 +4,7 @@ from typing import Optional
 from pydantic import BaseModel, AnyHttpUrl, Field, validator
 
 if TYPE_CHECKING:
-    from .review import Review
-    from .source import Source
+    from developer import Developer
 
 
 class CategoryBase(BaseModel):
@@ -95,17 +94,23 @@ class GameListQuerySummary(BaseModel):
     processed: Optional[int] = None
 
 
-class GameListItem(BaseModel):
-    game: Game
-    score: str = None
-    num_reviews: int
-    most_mentioned_aspects: List[
-        Literal["gameplay", "performance & bugs", "audio & visual", "price", "community", "other"]] = None
-    best_aspects: List[Literal["gameplay", "performance & bugs", "audio & visual", "price", "community", "other"]] = None
-    worst_aspects: List[Literal["gameplay", "performance & bugs", "audio & visual", "price", "community", "other"]] = None
+aspectCategories = Literal["gameplay", "performance & bugs", "audio & visual", "price", "community", "other"]
 
-    @validator('best_aspects', 'worst_aspects', 'most_mentioned_aspects', pre=True)
-    def set_defaults(cls, v):
+class GameListItem(BaseModel):
+    id: int
+    name: str
+    image_url: Optional[AnyHttpUrl] = None
+    release_date: Optional[datetime] = None
+    categories: List[Category] = None
+    developers: List["Developer"] = None
+    score: Optional[str] = None
+    num_reviews: int
+    most_mentioned_aspects: List[aspectCategories] = None
+    best_aspects: List[aspectCategories] = None
+    worst_aspects: List[aspectCategories] = None
+
+    @validator('categories', 'developers', 'best_aspects', 'worst_aspects', 'most_mentioned_aspects', pre=True)
+    def set_default_lists(cls, v):
         return v or []
 
     class Config:
