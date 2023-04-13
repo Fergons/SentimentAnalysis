@@ -12,8 +12,6 @@ from app import crud, schemas, models
 import asyncio
 import logging
 
-from core.cursor import decode_cursor
-
 pytestmark = pytest.mark.anyio
 
 logger = logging.getLogger()
@@ -221,7 +219,7 @@ async def test_crud_game_get_game_list_min_max_release_date_sort_release_date_de
                 assert game.id > last_game.id
         last_game = game
 
-async def test_crud_game_get_game_list_cursor_without_sort(session, test_data: None):
+async def test_crud_game_get_game_list_pagination_without_sort(session, test_data: None):
     limit = 1
 
     response = await crud.game.get_game_list(session, limit=limit)
@@ -231,22 +229,22 @@ async def test_crud_game_get_game_list_cursor_without_sort(session, test_data: N
     assert len(response.games) == limit
 
     its = int(response.query_summary.total / limit) - 1
-    used_cursors = []
     last_iter = 0
-    for i in range(its+20):
-        used_cursors.append(response.cursor)
-        response = await crud.game.get_game_list(session, limit=limit, cursor=response.cursor)
+    offset = 0
+    for i in range(its + 5):
+        offset += 1
+        response = await crud.game.get_game_list(session, limit=limit, offset=offset)
         logger.debug(f"Games:\n{games_compare_str(response.games)}")
         assert response.query_summary is None
         last_iter = i
-        if response.cursor in used_cursors:
+        if len(response.games) == 0:
             break
 
     assert last_iter == its
 
 
 
-async def test_crud_game_get_game_list_cursor_with_sort(session, test_data: None):
+async def test_crud_game_get_game_list_pagination_with_sort_release_date_asc(session, test_data: None):
     limit = 1
 
     sort = schemas.GameListSort(
@@ -260,14 +258,66 @@ async def test_crud_game_get_game_list_cursor_with_sort(session, test_data: None
     assert len(response.games) == limit
 
     its = int(response.query_summary.total / limit) - 1
-    used_cursors = []
     last_iter = 0
-    for i in range(its+5):
-        used_cursors.append(response.cursor)
-        response = await crud.game.get_game_list(session, limit=limit, sort=sort, cursor=response.cursor)
+    offset = 0
+    for i in range(its + 5):
+        offset += 1
+        response = await crud.game.get_game_list(session, limit=limit, offset=offset, sort=sort)
 
         logger.debug(f"Games:\n{games_compare_str(response.games)}")
-        logger.debug(f"Cursor: {response.cursor}")
+        assert response.query_summary is None
+        last_iter = i
+        if len(response.games) == 0:
+            break
+
+    assert last_iter == its
+
+
+async def test_crud_game_get_game_list_pagination_with_sort_release_date_desc(session, test_data: None):
+    limit = 1
+    sort = schemas.GameListSort(
+        release_date="desc"
+    )
+    response = await crud.game.get_game_list(session, limit=limit, sort=sort)
+    logger.debug(f"Games:\n{games_compare_str(response.games)}")
+    assert response.query_summary is not None
+    assert response.query_summary.total > limit
+    assert len(response.games) == limit
+
+    its = int(response.query_summary.total / limit) - 1
+    last_iter = 0
+    offset = 0
+    for i in range(its + 5):
+        offset += 1
+        response = await crud.game.get_game_list(session, limit=limit, offset=offset, sort=sort)
+        logger.debug(f"Games:\n{games_compare_str(response.games)}")
+        assert response.query_summary is None
+        last_iter = i
+        if len(response.games) == 0:
+            break
+
+    assert last_iter == its
+
+
+async def test_crud_game_get_game_list_pagination_with_sort_multiple_should_be_num_reviews_asc(session, test_data: None):
+    limit = 1
+
+    sort = schemas.GameListSort(
+        score="desc"
+    )
+
+    response = await crud.game.get_game_list(session, limit=limit, sort=sort)
+    logger.debug(f"Games:\n{games_compare_str(response.games)}")
+    assert response.query_summary is not None
+    assert response.query_summary.total > limit
+    assert len(response.games) == limit
+
+    its = int(response.query_summary.total / limit) - 1
+    last_iter = 0
+    offset = 0
+    for i in range(its+5):
+        offset += 1
+        response = await crud.game.get_game_list(session, limit=limit, offset=offset, sort=sort)
         assert response.query_summary is None
         last_iter = i
         if len(response.games) == 0:

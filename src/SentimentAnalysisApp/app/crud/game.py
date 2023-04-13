@@ -301,10 +301,11 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
         return [g.source for g in gs]
 
     async def get_game_list(self, db: AsyncSession, *,
-                            filter: schemas.GameListFilter = None,
-                            sort: schemas.GameListSort = None,
                             limit: int = 100,
-                            cursor: Optional[str] = None) -> schemas.GameListResponse:
+                            offset: int = 0,
+                            sort: schemas.GameListSort = None,
+                            filter: schemas.GameListFilter = None
+                            ) -> schemas.GameListResponse:
         game_score = (
             func.coalesce(
                 (func.sum(
@@ -355,75 +356,38 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
                 filters.append(self.model.id.in_(score_subquery))
 
         if sort:
-            if sort.score is not None:
-                if sort.score == "asc":
-                    stmt = stmt.order_by(nullslast(game_score.asc()))
-                else:
-                    stmt = stmt.order_by(nullslast(game_score.desc()))
             if sort.num_reviews is not None:
                 if sort.num_reviews == "asc":
                     stmt = stmt.order_by(func.count(models.Review.id.distinct()).asc())
                 else:
                     stmt = stmt.order_by(func.count(models.Review.id.distinct()).desc())
-            if sort.release_date is not None:
+            elif sort.score is not None:
+                if sort.score == "asc":
+                    stmt = stmt.order_by(nullslast(game_score.asc()))
+                else:
+                    stmt = stmt.order_by(nullslast(game_score.desc()))
+            elif sort.release_date is not None:
                 if sort.release_date == "asc":
                     stmt = stmt.order_by(nullslast(self.model.release_date.asc()))
                 else:
                     stmt = stmt.order_by(nullslast(self.model.release_date.desc()))
+            elif sort.name is not None:
+                if sort.name == "asc":
+                    stmt = stmt.order_by(nullslast(self.model.name.asc()))
+                else:
+                    stmt = stmt.order_by(nullslast(self.model.name.desc()))
 
         summary = None
-        last_row = decode_cursor(cursor=cursor)
-        if last_row:
-            bad_cursor = False
-            cursor_filters = []
-
-            for field, value in last_row.items():
-                if field == "score":
-                    if sort.score is None:
-                        bad_cursor = True
-                        break
-                    elif sort.score == "asc":
-                        cursor_filters.append((game_score, value))
-                    else:
-                        cursor_filters.append((game_score, value))
-                elif field == "num_reviews":
-                    if sort.num_reviews is None:
-                        bad_cursor = True
-                        break
-                    elif sort.num_reviews == "asc":
-                        cursor_filters.append((func.count(models.Review.id.distinct()), value))
-                    else:
-                        cursor_filters.append((func.count(models.Review.id.distinct()), value))
-                elif field == "release_date":
-                    if sort.release_date is None:
-                        bad_cursor = True
-                        break
-                    elif sort.release_date == "asc":
-                        cursor_filters.append((self.model.release_date, value))
-                    else:
-                        cursor_filters.append((self.model.release_date, value))
-
-            if not bad_cursor:
-                filter_tuple = tuple(filter_condition > value for filter_condition, value in cursor_filters)
-                filters.append(or_(*filter_tuple))
-
-                # If multiple sorting strategies are used, add a tie-breaker based on 'id'
-                if len(cursor_filters) > 1:
-                    tie_breaker = (self.model.id > last_row.get("id"))
-                    filters.append(or_(and_(*filter_tuple), tie_breaker))
-                elif len(cursor_filters) == 0:
-                    filters.append(self.model.id > last_row.get("id"))
-        else:
+        if offset == 0:
             count_stmt = select(func.count(self.model.id.distinct())).select_from(self.model).outerjoin(
                 models.Review).outerjoin(
-                models.Aspect).where(and_(True, *filters))
+                models.Aspect).filter(and_(True, *filters))
             count_result = await db.execute(count_stmt)
             total_count = count_result.scalar()
             summary = schemas.GameListQuerySummary(
                 total=total_count
             )
-
-        stmt = stmt.where(and_(True, *filters)).order_by(self.model.id).limit(limit)
+        stmt = stmt.filter(and_(True, *filters)).order_by(self.model.id).limit(limit).offset(offset)
         result = await db.execute(stmt)
         games = result.all()
         games = [schemas.GameListItem(
@@ -437,23 +401,8 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
             num_reviews=num_reviews
         ) for g, score, num_reviews in games]
 
-        sort_dict = None if sort is None else sort.dict(exclude_none=True)
-        if len(games) > 0:
-            last_row = {"id": games[-1].id}
-            if sort_dict:
-                for field in sort_dict.keys():
-                    last_row[field] = getattr(games[-1], field)
-                    if field == "release_date":
-                        last_row[field] = last_row.get(field).timestamp()
-            next_cursor = encode_cursor(
-                last_row=last_row
-            )
-        else:
-            next_cursor = cursor
-
         return schemas.GameListResponse(
             games=games,
-            cursor=next_cursor,
             query_summary=summary
         )
 

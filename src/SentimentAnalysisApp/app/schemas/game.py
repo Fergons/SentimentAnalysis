@@ -121,7 +121,6 @@ class GameListItem(BaseModel):
 class GameListResponse(BaseModel):
     query_summary: Optional[GameListQuerySummary] = None
     games: List[GameListItem]
-    cursor: Optional[str] = None
 
 
 class GameListFilter(BaseModel):
@@ -136,7 +135,6 @@ class GameListFilter(BaseModel):
     max_release_date: Optional[datetime] = None
     best_aspects: Optional[List[str]] = None
     worst_aspects: Optional[List[str]] = None
-
 
 
 class GameListSort(BaseModel):

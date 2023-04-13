@@ -45,13 +45,13 @@ async def delete_game(
 async def read_games(*,
                      db: AsyncSession = Depends(deps.get_session),
                      limit: int = 100,
-                     cursor: Optional[str] = None,
+                     offset: int = 0,
                      sort: Optional[schemas.GameListSort] = None,
                      filter: Optional[schemas.GameListFilter] = None) -> schemas.GameListResponse:
     """
     Get list of games.
     """
-    glist = await crud.game.get_game_list(db, limit=limit, cursor=cursor, filter=filter, sort=sort)
+    glist = await crud.game.get_game_list(db, limit=limit, offset=offset, filter=filter, sort=sort)
     return glist
 
 
