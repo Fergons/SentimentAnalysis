@@ -1,7 +1,7 @@
 from .user import User, UserCreate, UserDB, UserUpdate
 from .game import Game, GameBase, GameCreate, GameUpdate, GameInDB, GameInDBBase
 from .game import Category, CategoryBase, CategoryUpdate, CategoryCreate
-from .game import GameListResponse, GameListItem, GameListQuerySummary, GameListFilter
+from .game import GameListResponse, GameListItem, GameListQuerySummary, GameListFilter, GameListSort
 from .review import (Review, ReviewBase,
                      ReviewCreate,
                      ReviewUpdate, ReviewInDB, ReviewInDBBase,

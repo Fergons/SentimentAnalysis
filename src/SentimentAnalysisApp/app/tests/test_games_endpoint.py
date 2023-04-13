@@ -95,3 +95,4 @@ async def test_get_summary_v2(client: AsyncClient, access_token: str, test_data:
     assert len(summary.data) == 2
     assert len(set([source for date, data in summary.data.items() for source in data.sources.keys()])) == 2
 
+

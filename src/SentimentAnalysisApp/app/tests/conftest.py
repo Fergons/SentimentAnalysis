@@ -106,5 +106,5 @@ async def access_token(client: AsyncClient):
 async def test_data(session: AsyncSession):
     if await is_test_data_seeded(session):
         return
-    await seed_initial_test_data(session)
+    data = await seed_initial_test_data(session)
     return

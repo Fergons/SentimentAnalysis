@@ -96,6 +96,7 @@ class GameListQuerySummary(BaseModel):
 
 aspectCategories = Literal["gameplay", "performance & bugs", "audio & visual", "price", "community", "other"]
 
+
 class GameListItem(BaseModel):
     id: int
     name: str
@@ -116,6 +117,7 @@ class GameListItem(BaseModel):
     class Config:
         orm_mode = True
 
+
 class GameListResponse(BaseModel):
     query_summary: Optional[GameListQuerySummary] = None
     games: List[GameListItem]
@@ -134,3 +136,11 @@ class GameListFilter(BaseModel):
     max_release_date: Optional[datetime] = None
     best_aspects: Optional[List[str]] = None
     worst_aspects: Optional[List[str]] = None
+
+
+
+class GameListSort(BaseModel):
+    name: Optional[Literal["asc", "desc"]] = None
+    release_date: Optional[Literal["asc", "desc"]] = None
+    score: Optional[Literal["asc", "desc"]] = None
+    num_reviews: Optional[Literal["asc", "desc"]] = None
