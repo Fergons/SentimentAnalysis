@@ -51,7 +51,7 @@ export const actions: Actions = {
             return {
                 email: formData.username,
                 errors: {
-                    response: response
+                    response: {status: response.status, message: response.statusText}
                 }
             }
         }
