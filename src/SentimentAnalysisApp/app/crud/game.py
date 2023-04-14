@@ -315,7 +315,7 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
                         (models.Aspect.polarity == "neutral", 0.5),
                         else_=0.0)
                 ) / (func.count(models.Aspect.id.distinct()) + 1.0)) + 5.0,
-                5.0)).label("score")
+                -1.0)).label("score")
 
         stmt = select(self.model, game_score, func.count(models.Review.id.distinct())).select_from(self.model) \
             .outerjoin(models.Review) \

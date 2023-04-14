@@ -10,6 +10,7 @@
     import {Text} from '@smui/list';
     import type {GameListSort, GameListFilter} from "../../lib/stores/game";
     import IconButton, {Icon} from '@smui/icon-button';
+    import CircularProgress from '@smui/circular-progress';
 
     export let data: PageData;
 
@@ -22,6 +23,7 @@
     const gameSort = writable<GameListSort>({numReviews: 'desc'});
     const games = writable<GameListItem[]>();
     let prevSort: GameListSort = {};
+    let loadingContent = false;
     let moreContent = false;
     const gameDataStore = derived(
         [gamePage, gameFilter, gameSort],
@@ -30,6 +32,7 @@
                 gamePage.set(0);
                 prevSort = $gameSort;
             }
+            loadingContent = true;
             const fetchedData = await getGames($gamePage, $gameFilter, $gameSort);
             if (fetchedData) {
                 moreContent = fetchedData.total > ($gamePage + 1) * perPageLimit;
@@ -38,6 +41,7 @@
                     total: fetchedData.total,
                 });
             }
+            loadingContent = false;
         },
         {games: [], total: 0}
     );
@@ -111,18 +115,20 @@
         </Autocomplete>
         <div>
 
-            <Button on:click={()=> $gameSort = {score: cycleThrough($gameSort.score, ['asc', 'desc', undefined])}} padded>
+            <Button on:click={()=> $gameSort = {score: cycleThrough($gameSort.score, ['asc', 'desc', undefined])}}
+                    padded>
                 <Label>Sort by Score</Label>
                 {#if $gameSort.score === 'desc'}
                     <Icon class="material-icons">arrow_drop_down</Icon>
                 {:else if $gameSort.score === 'asc'}
                     <Icon class="material-icons">arrow_drop_up</Icon>
                 {:else}
-                   <Icon class="material-icons">exit</Icon>
+                    <Icon class="material-icons">exit</Icon>
                 {/if}
             </Button>
 
-            <Button on:click={()=> $gameSort = {releaseDate: cycleThrough($gameSort.releaseDate, ['asc', 'desc', null])}} padded>
+            <Button on:click={()=> $gameSort = {releaseDate: cycleThrough($gameSort.releaseDate, ['asc', 'desc', null])}}
+                    padded>
                 <Label>Sort by Release</Label>
                 {#if $gameSort.releaseDate === 'desc'}
                     <Icon class="material-icons">arrow_drop_down</Icon>
@@ -148,17 +154,28 @@
         </div>
     </div>
     <div class="game-list">
-
+        <!--{#if loadingContent}-->
+        <!--    <CircularProgress style="max-width: 940px; align-self: center" indeterminate/>-->
+        <!--{/if}-->
         {#each $gameDataStore.games as game}
             <GameCard {game}/>
         {/each}
     </div>
     <div class="page-buttons-container settings-bar">
-        <Button on:click={()=> $gamePage = $gamePage - 1} disabled={$gamePage <= 0} padded>Previous Page</Button>
-        {#each Array.from({length: Math.ceil($gameDataStore.total / perPageLimit)}, (x, i) => i) as page}
-            <Button on:click={()=> $gamePage = page} disabled={$gamePage === page} padded>{page + 1}</Button>
-        {/each}
-        <Button on:click={()=> $gamePage = $gamePage + 1} disabled={!moreContent} padded>Next Page</Button>
+        <Button on:click={()=> $gamePage = 0} disabled={$gamePage <= 0} padded>
+            <Icon class="material-icons">keyboard_double_arrow_left</Icon>
+        </Button>
+        <Button on:click={()=> $gamePage = $gamePage - 1} disabled={$gamePage <= 0} padded>
+            <Icon class="material-icons">keyboard_arrow_left</Icon>
+        </Button>
+
+        <Button on:click={()=> $gamePage = $gamePage + 1} disabled={!moreContent} padded>
+            <Icon class="material-icons">keyboard_arrow_right</Icon>
+        </Button>
+        <Button on:click={()=> $gamePage = Math.ceil($gameDataStore.total/ perPageLimit)-1}
+                disabled={$gamePage === Math.floor($gameDataStore.total / perPageLimit)-1} padded>
+            <Icon class="material-icons">keyboard_double_arrow_right</Icon>
+        </Button>
     </div>
 
 

@@ -104,6 +104,8 @@
             selectedCounts = ["all_total"]
         }
         flatData = transformSummary(summary, selectedSources, selectedTypes, sourceNameMap, mapTimeBucketToTime[selectedTimeBucket]);
+
+        yDomainMax = 10;
         flatData.forEach(d => {
             d[xKey] = typeof d[xKey] === 'string' ? parseDate(d[xKey]) : d[xKey];
             selectedCounts.forEach(name => {

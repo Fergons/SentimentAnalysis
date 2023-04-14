@@ -3,8 +3,6 @@
     import Card, {Content, Actions} from '@smui/card';
     import {page} from '$app/stores';
     import userStore from "../lib/stores/user";
-
-    // $userStore = $page.data.user ?? null;
 </script>
 
 <section class="about-section">
@@ -15,13 +13,11 @@
             game genres. Using state-of-the-art natural language processing techniques, we aim to
             accurately identify and categorize the sentiments expressed in each aspect of the reviews.
         </p>
-        <p class="mdc-typography--body1">Please login to continue using our service.</p>
     </div>
 </section>
 
 <section class="features-section">
     <div class="about-features-text">
-        <p class="mdc-typography--body1">Please login to continue using our service.</p>
     </div>
 </section>
 

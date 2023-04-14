@@ -69,16 +69,6 @@
             indent: 0
         },
         {
-            name: 'Home',
-            route: '/',
-            indent: 0
-        },
-        {
-            name: 'About',
-            route: '/about',
-            indent: 0
-        },
-        {
             name: 'Reviews',
             route: '/reviews',
             indent: 0
@@ -93,6 +83,7 @@
     $:  {
         currentPageTitle = activeSection ? activeSection.name : $page.data ? $page.data.name : '';
         $page.data.subtitle ? currentPageTitle = currentPageTitle + " | " + $page.data.subtitle : currentPageTitle = currentPageTitle;
+        currentPageTitle = currentPageTitle ? currentPageTitle : "";
     }
 
     $: if (mainContent && previousPagePath !== $page.url.pathname) {
@@ -162,8 +153,8 @@
 			? 'app-drawer-adjust'
 			: 'hide-initial-small'}"
     >
-        <Header style="padding: 8px 12px; border-bottom: #5d5d78 1px">
-            <Title style="align-self: center">SNTMNT</Title>
+        <Header style="height: 64px; padding: 8px 12px; border-bottom: #5d5d78 1px">
+            <Title style="align-self: center"><a href="/" style="color:inherit; text-decoration: inherit">SNTMNT</a></Title>
             <Separator/>
         </Header>
         <Content style="padding-bottom: 22px;">

@@ -2,7 +2,7 @@
     import {navigating} from "$app/stores";
     import type {PageData} from "./$types";
     import type {ReviewWithAspects} from "../../lib/client";
-    import ReviewCard from "$lib/components/ReviewCard.svelte";
+    import ReviewCard from "../../lib/components/ReviewCard.svelte";
     export let data: PageData;
     let reviews: Map<number, ReviewWithAspects> = data?.reviews;
     console.log(reviews);

@@ -1,5 +1,6 @@
 import type {PageServerLoad, Actions} from './$types';
 import {redirect, error} from '@sveltejs/kit';
+import {goto} from '$app/navigation';
 import {handleApiResponseError} from "../../lib/server/api/api";
 import type {SigninDataType} from '../../lib/server/api/auth';
 import {SigninSchema} from '../../lib/server/api/auth';
@@ -7,7 +8,7 @@ import {validateFormData} from "../../lib/utils/validation";
 import {AuthService, OpenAPI, UsersService} from "../../lib/client";
 import type {Body_auth_jwt_login_auth_jwt_login_post} from "../../lib/client";
 
-export const load: PageServerLoad = (event) => {
+export const load: PageServerLoad = async (event) => {
     if (event.locals.token) {
         throw redirect(301, '/');
     }
