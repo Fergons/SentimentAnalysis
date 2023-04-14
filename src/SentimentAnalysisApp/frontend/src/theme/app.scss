@@ -82,7 +82,7 @@ body,
 }
 
 .app-main-content > section {
-  padding: 48px;
+  padding: 2rem;
   width: 100%;
   box-sizing: border-box;
 }
@@ -122,4 +122,9 @@ body,
   .app-main-content > section {
     padding: 16px;
   }
+}
+
+.settings-bar{
+  background-color: theme.$surface;
+  @include elevation.elevation(1);
 }

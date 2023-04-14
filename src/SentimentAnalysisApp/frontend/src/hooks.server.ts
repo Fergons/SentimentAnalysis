@@ -4,6 +4,7 @@ import {OpenAPI, UsersService} from "./lib/client";
 export let handle: Handle = async function ({event, resolve}) {
     const token = event.cookies.get('access_token');
     if (token) {
+        console.log("Token found");
         event.locals.token = token;
     }
     if (event.url.pathname.startsWith('/users/me')) {

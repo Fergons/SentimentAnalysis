@@ -309,12 +309,12 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
         game_score = (
             func.coalesce(
                 (func.sum(
-                   case(
+                    case(
                         (models.Aspect.polarity == "positive", 2.0),
                         (models.Aspect.polarity == "negative", -2.0),
                         (models.Aspect.polarity == "neutral", 0.5),
                         else_=0.0)
-                ) / (func.count(models.Aspect.id.distinct())+1.0))+5.0,
+                ) / (func.count(models.Aspect.id.distinct()) + 1.0)) + 5.0,
                 5.0)).label("score")
 
         stmt = select(self.model, game_score, func.count(models.Review.id.distinct())).select_from(self.model) \
@@ -354,6 +354,19 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
                     )
                 )
                 filters.append(self.model.id.in_(score_subquery))
+            if filter and filter.min_num_reviews is not None or filter.max_num_reviews is not None:
+                review_subquery = select(self.model.id).select_from(self.model) \
+                    .outerjoin(models.Review) \
+                    .group_by(self.model.id) \
+                    .having(
+                    and_(
+                        func.count(models.Review.id.distinct()) >= (
+                            filter.min_num_reviews if filter.min_num_reviews is not None else -float('inf')),
+                        func.count(models.Review.id.distinct()) <= (
+                            filter.max_num_reviews if filter.max_num_reviews is not None else float('inf'))
+                    )
+                )
+                filters.append(self.model.id.in_(review_subquery))
 
         if sort:
             if sort.num_reviews is not None:
@@ -377,16 +390,13 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
                 else:
                     stmt = stmt.order_by(nullslast(self.model.name.desc()))
 
-        summary = None
-        if offset == 0:
-            count_stmt = select(func.count(self.model.id.distinct())).select_from(self.model).outerjoin(
-                models.Review).outerjoin(
-                models.Aspect).filter(and_(True, *filters))
-            count_result = await db.execute(count_stmt)
-            total_count = count_result.scalar()
-            summary = schemas.GameListQuerySummary(
-                total=total_count
-            )
+        count_stmt = select(func.count(self.model.id.distinct())).select_from(self.model).outerjoin(
+            models.Review).outerjoin(
+            models.Aspect).filter(and_(True, *filters))
+        count_result = await db.execute(count_stmt)
+        total_count = count_result.scalar()
+        summary = schemas.GameListQuerySummary(total=total_count)
+
         stmt = stmt.filter(and_(True, *filters)).order_by(self.model.id).limit(limit).offset(offset)
         result = await db.execute(stmt)
         games = result.all()
@@ -405,6 +415,14 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
             games=games,
             query_summary=summary
         )
+
+    async def get_matches(self, db: AsyncSession, *, name: str, limit: int = 10) -> List[models.Game]:
+        ts_query = func.plainto_tsquery(cast("english", RegConfig), name)
+        stmt = select(self.model.name).where(
+            self.model.name_tsv.bool_op("@@")(ts_query)
+        ).limit(limit)
+        result = await db.execute(stmt)
+        return result.scalars().all()
 
 
 crud_game = CRUDGame(models.Game)

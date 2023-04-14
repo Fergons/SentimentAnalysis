@@ -10,7 +10,6 @@ from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-
 ModelType = TypeVar("ModelType", bound=Base)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
 UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
@@ -31,6 +30,18 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         obj = result.scalars().first()
         return obj
 
+    async def get_multi(self, db: AsyncSession, *, offset: int = 0, limit: int = 100) -> List[ModelType]:
+        result = await db.execute(select(self.model).offset(offset).limit(limit))
+        return result.scalars().all()
+
+    async def get_multi_by_name(self, db: AsyncSession, *, name: str, limit: int = 10
+                                ) -> List[ModelType]:
+        # Use the ilike operator for case-insensitive search
+        name_filter = self.model.name.ilike(f"%{name}%")
+        result = await db.scalars(select(self.model).filter(name_filter).limit(limit))
+        return result.all()
+
+
     async def get_by_source_id(self, db: AsyncSession, source_id: Any, source_obj_id: Any) -> Optional[ModelType]:
         result = await db.scalars(
             select(self.model)
@@ -50,12 +61,6 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             )
         )
         return result.first()
-
-    async def get_multi(
-            self, db: AsyncSession, *, offset: int = 0, limit: int = 100
-    ) -> List[ModelType]:
-        result = await db.scalars(select(self.model).offset(offset).limit(limit))
-        return result.all()
 
     async def create(self, db: AsyncSession, *, obj_in: CreateSchemaType) -> ModelType:
         db_obj = self.model(**obj_in.dict())  # type: ignore

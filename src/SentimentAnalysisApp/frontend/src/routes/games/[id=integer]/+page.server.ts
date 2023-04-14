@@ -19,7 +19,7 @@ export async function load({params}: { params: { id: number } }) {
             new Map<number, Source>()) : new Map<number, Source>();
 
         return {
-            title: game.name,
+            name: game.name,
             subtitle: 'Overview',
             game: game,
             overview: {

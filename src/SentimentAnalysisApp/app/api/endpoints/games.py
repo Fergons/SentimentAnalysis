@@ -1,4 +1,5 @@
-from typing import Any, List, Optional
+from datetime import datetime
+from typing import Any, List, Optional, Dict, Tuple, Literal
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -46,11 +47,39 @@ async def read_games(*,
                      db: AsyncSession = Depends(deps.get_session),
                      limit: int = 100,
                      offset: int = 0,
-                     sort: Optional[schemas.GameListSort] = None,
-                     filter: Optional[schemas.GameListFilter] = None) -> schemas.GameListResponse:
+                     num_reviews: Optional[Literal['asc', 'desc']] = None,
+                     score: Optional[Literal['asc', 'desc']] = None,
+                     release_date: Optional[Literal['asc', 'desc']] = None,
+                     name: Optional[str] = None,
+                     min_num_reviews: Optional[int] = None,
+                     max_num_reviews: Optional[int] = None,
+                     min_score: Optional[float] = None,
+                     max_score: Optional[float] = None,
+                     min_release_date: Optional[datetime] = None,
+                     max_release_date: Optional[datetime] = None,
+                     categories: Optional[str] = None,
+                     developers: Optional[str] = None
+                     ) -> schemas.GameListResponse:
     """
     Get list of games.
     """
+    sort = schemas.GameListSort(
+        num_reviews=num_reviews,
+        score=score,
+        release_date=release_date
+    )
+    filter = schemas.GameListFilter(
+        name=name,
+        min_num_reviews=min_num_reviews,
+        max_num_reviews=max_num_reviews,
+        min_score=min_score,
+        max_score=max_score,
+        min_release_date=min_release_date,
+        max_release_date=max_release_date,
+        categories=categories.split(',') if categories else None,
+        developers=developers.split(',') if developers else None
+    )
+    print(f"filter: {filter}")
     glist = await crud.game.get_game_list(db, limit=limit, offset=offset, filter=filter, sort=sort)
     return glist
 
@@ -117,3 +146,29 @@ async def get_summary_v2(*,
 
     summary = await crud.review.get_summary_v2(db, game_id=id, time_interval=time_interval)
     return summary
+
+
+@router.get("/search/", response_model=List[str])
+async def get_name_matches(*,
+                            db: AsyncSession = Depends(deps.get_session),
+                            name: str,
+                            limit: int = 10
+                           ) -> List[str]:
+    matches = await crud.game.get_matches(db, name=name, limit=limit)
+    return matches
+
+
+@router.get("/search/developers", response_model=List[schemas.Developer])
+async def get_developers(*, db: AsyncSession = Depends(deps.get_session), name: str) -> List[schemas.Developer]:
+    objs = await crud.developer.get_multi_by_name(db, name=name)
+    return objs
+
+
+@router.get("/search/categories", response_model=List[schemas.Category])
+async def get_categories(*, db: AsyncSession = Depends(deps.get_session), name: str = None) -> List[schemas.Category]:
+    if name is None:
+        objs = await crud.category.get_multi(db, limit=100)
+    else:
+        objs = await crud.category.get_multi_by_name(db, name=name)
+    return objs
+

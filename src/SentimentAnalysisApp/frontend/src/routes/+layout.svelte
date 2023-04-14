@@ -20,10 +20,9 @@
     export let data: LayoutServerData;
     const defaultUser = browser ?
         window.localStorage.getItem('user') ? JSON.parse(window.localStorage.getItem('user')) : null : null;
-    console.log("default user ", data?.user)
 
     let topAppBar: TopAppBar;
-    let currentPageTitle = '...';
+    let currentPageTitle = '';
     let drawer: Drawer;
     let mainContent: HTMLElement;
     let miniWindow = false;
@@ -31,9 +30,9 @@
     let drawerGesture: TinyGesture;
     let mainContentGesture: TinyGesture;
 
-    let lightTheme: boolean;
-    let activeSection: DrawerSection | undefined;
-    let lastPagePath: string | undefined;
+    let lightTheme = false;
+    let activeSection: DrawerSection | undefined = undefined;
+    let lastPagePath: string | undefined = undefined;
 
     function switchTheme() {
         lightTheme = !lightTheme;
@@ -54,7 +53,6 @@
         name: string;
         route?: string;
         shortcut?: string;
-        title: string;
         indent: number;
     };
 
@@ -68,24 +66,20 @@
         {
             name: 'Games',
             route: '/games',
-            title: 'Games',
             indent: 0
         },
         {
             name: 'Home',
-            title: 'Home',
             route: '/',
             indent: 0
         },
         {
             name: 'About',
-            title: 'About',
             route: '/about',
             indent: 0
         },
         {
             name: 'Reviews',
-            title: 'Reviews',
             route: '/reviews',
             indent: 0
         }
@@ -95,20 +89,21 @@
         (section) => 'route' in section && routesEqual(section.route ?? '', $page.url.pathname)
     ) as DrawerSection | undefined;
     let previousPagePath: string | undefined = undefined;
-    $: if (mainContent && previousPagePath !== $page.url.pathname) {
-        drawerOpen = false;
-        const hashEl =
-            window.location.hash && document.querySelector<HTMLElement>(window.location.hash);
-        mainContent.scrollTop = (hashEl && hashEl.offsetTop) || 0;
-        lastPagePath = previousPagePath;
-        previousPagePath = $page.url.pathname;
-        currentPageTitle = $page.data.title ?? activeSection?.title ?? '';
-        $page.data.subtitle ?
-            currentPageTitle = currentPageTitle + " | " + $page.data.subtitle
-            :
-            currentPageTitle = currentPageTitle;
 
+    $:  {
+        currentPageTitle = activeSection ? activeSection.name : $page.data ? $page.data.name : '';
+        $page.data.subtitle ? currentPageTitle = currentPageTitle + " | " + $page.data.subtitle : currentPageTitle = currentPageTitle;
     }
+
+    $: if (mainContent && previousPagePath !== $page.url.pathname) {
+            drawerOpen = false;
+            const hashEl =
+                window.location.hash && document.querySelector<HTMLElement>(window.location.hash);
+            mainContent.scrollTop = (hashEl && hashEl.offsetTop) || 0;
+            lastPagePath = previousPagePath;
+            previousPagePath = $page.url.pathname;
+    }
+
 
     onMount(setMiniWindow);
     onMount(() => {
@@ -207,10 +202,9 @@
                     {/if}
                     <Title
                             class="--mdc-theme--primary"
-                            on:click={() => (activeSection = undefined)}
                             style={miniWindow ? 'padding-left: 0;' : ''}
                     >
-                        {miniWindow ? currentPageTitle : currentPageTitle}
+                        {miniWindow ? '' : currentPageTitle}
                     </Title>
                 </Section>
 
@@ -230,7 +224,7 @@
                             <Button>Sign out</Button>
                         </form>
                     {:else}
-                        <Button  href="/signin">Signin</Button>
+                        <Button href="/signin">Signin</Button>
                         <Button href="/signup">Signup</Button>
                     {/if}
                     <Wrapper>
