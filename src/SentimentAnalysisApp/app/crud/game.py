@@ -33,6 +33,11 @@ class CRUDCategory(CRUDBase[models.Category, CategoryCreate, CategoryUpdate]):
         logging.debug(f"get_by_name: got category {name} from db")
         return result.first()
 
+    async def get_multi_by_num_games(self, db: AsyncSession, *, limit: int = 100, offset: int = 0) -> List[models.Category]:
+        query = select(models.Category).select_from(models.Category).join(models.GameCategory).group_by(models.Category.id).order_by(func.count().desc()).limit(limit).offset(offset)
+        result = await db.execute(query)
+        return result.scalars().all()
+
     async def create_by_name_with_game_multi(self, db: AsyncSession, *, db_game: CategoryUpdate, names: List[str]):
         for name in names:
             db_obj = await self.get_by_name(db, name=name)
@@ -310,9 +315,9 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
             func.coalesce(
                 (func.sum(
                     case(
-                        (models.Aspect.polarity == "positive", 2.0),
-                        (models.Aspect.polarity == "negative", -2.0),
-                        (models.Aspect.polarity == "neutral", 0.5),
+                        (models.Aspect.polarity == "positive", 5.0),
+                        (models.Aspect.polarity == "negative", -3.0),
+                        (models.Aspect.polarity == "neutral", 2.0),
                         else_=0.0)
                 ) / (func.count(models.Aspect.id.distinct()) + 1.0)) + 5.0,
                 -1.0)).label("score")

@@ -14,6 +14,11 @@ from app.schemas.developer import DeveloperCreate, DeveloperUpdate
 
 
 class CRUDDeveloper(CRUDBase[Developer, DeveloperCreate, DeveloperUpdate]):
+    async def get_multi_by_num_games(self, db: AsyncSession, *, limit: int = 100, offset: int = 0) -> List[Developer]:
+        # select developer.name, count(*) from developer join game_developer on developer.id = game_developer.developer_id group by developer.name order by count(*) desc limit 100 offset 0;
+        query = select(Developer).select_from(Developer).join(GameDeveloper).group_by(Developer.id).order_by(func.count().desc()).limit(limit).offset(offset)
+        result = await db.execute(query)
+        return result.scalars().all()
 
     async def get_id_by_name(self, db: AsyncSession, *, name: str) -> Optional[int]:
         result = await db.scalars(select(self.model.id).where(self.model.name == name))

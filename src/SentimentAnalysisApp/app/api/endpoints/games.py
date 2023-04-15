@@ -159,15 +159,18 @@ async def get_name_matches(*,
 
 
 @router.get("/search/developers", response_model=List[schemas.Developer])
-async def get_developers(*, db: AsyncSession = Depends(deps.get_session), name: str) -> List[schemas.Developer]:
-    objs = await crud.developer.get_multi_by_name(db, name=name)
+async def get_developers(*, db: AsyncSession = Depends(deps.get_session), name: str = None) -> List[schemas.Developer]:
+    if name is None:
+        objs = await crud.developer.get_multi_by_num_games(db, limit=10)
+    else:
+        objs = await crud.developer.get_multi_by_name(db, name=name)
     return objs
 
 
 @router.get("/search/categories", response_model=List[schemas.Category])
 async def get_categories(*, db: AsyncSession = Depends(deps.get_session), name: str = None) -> List[schemas.Category]:
     if name is None:
-        objs = await crud.category.get_multi(db, limit=100)
+        objs = await crud.category.get_multi_by_num_games(db, limit=10)
     else:
         objs = await crud.category.get_multi_by_name(db, name=name)
     return objs
