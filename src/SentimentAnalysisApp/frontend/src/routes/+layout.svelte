@@ -29,6 +29,8 @@
     let drawerOpen = false;
     let drawerGesture: TinyGesture;
     let mainContentGesture: TinyGesture;
+    let innerWidth: number = 0;
+    let innerHeight: number = 0;
 
     let lightTheme = false;
     let activeSection: DrawerSection | undefined = undefined;
@@ -87,16 +89,18 @@
     }
 
     $: if (mainContent && previousPagePath !== $page.url.pathname) {
-            drawerOpen = false;
-            const hashEl =
-                window.location.hash && document.querySelector<HTMLElement>(window.location.hash);
-            mainContent.scrollTop = (hashEl && hashEl.offsetTop) || 0;
-            lastPagePath = previousPagePath;
-            previousPagePath = $page.url.pathname;
+        drawerOpen = false;
+        const hashEl =
+            window.location.hash && document.querySelector<HTMLElement>(window.location.hash);
+        mainContent.scrollTop = (hashEl && hashEl.offsetTop) || 0;
+        lastPagePath = previousPagePath;
+        previousPagePath = $page.url.pathname;
     }
 
+    $: if (innerWidth > 0 && innerHeight > 0) {
+        setMiniWindow();
+    }
 
-    onMount(setMiniWindow);
     onMount(() => {
         if (mainContent) {
             mainContentGesture = new TinyGesture(mainContent, {
@@ -139,11 +143,65 @@
 
     function setMiniWindow() {
         if (typeof window !== 'undefined') {
-            miniWindow = window.innerWidth < 720;
+            miniWindow = window.innerWidth < 1200;
         }
     }
 </script>
 
+<svelte:window bind:innerWidth bind:innerHeight/>
+
+
+<div class="bar-app-content">
+    <TopAppBar variant="static" class="app-top-app-bar">
+        <Row>
+            <Section>
+                {#if miniWindow}
+                    <IconButton class="material-icons" on:click={() => (drawerOpen = !drawerOpen)}
+                    >menu
+                    </IconButton>
+                {/if}
+                <Title
+                        class="--mdc-theme--primary"
+                        style={miniWindow ? 'padding-left: 0;' : ''}
+                >
+                    {miniWindow ? '' : currentPageTitle}
+                </Title>
+            </Section>
+
+            <Section align="end" toolbar style="color: #000;">
+
+                {#if $userStore}
+                    <Button tag="a" href="/users/me">{$userStore.email}</Button>
+                    <form action="/signout" method="POST" use:enhance={() => {
+                            console.log("signout");
+                            return async ({result}) => {
+                                console.log("result signout");
+                                $userStore = null;
+                                await invalidateAll();
+                                await applyAction(result);
+                            }
+                        }}>
+                        <Button>Sign out</Button>
+                    </form>
+                {:else}
+                    <Button href="/signin">Signin</Button>
+                    <Button href="/signup">Signup</Button>
+                {/if}
+                <Wrapper>
+                    <IconButton toggle pressed={lightTheme} on:SMUIIconButtonToggle:change={switchTheme}>
+                        <Icon component={Svg} viewBox="0 0 24 24" on>
+                            <path fill="currentColor" d={mdiWeatherNight}></path>
+                        </Icon>
+                        <Icon component={Svg} viewBox="0 0 24 24">
+                            <path fill="currentColor" d={mdiWeatherSunny}></path>
+                        </Icon>
+                    </IconButton>
+                    <Tooltip>{lightTheme ? 'Lights off' : 'Lights on'}</Tooltip>
+                </Wrapper>
+            </Section>
+        </Row>
+    </TopAppBar>
+</div>
 <div class="drawer-container">
     <Drawer
             bind:this={drawer}
@@ -154,7 +212,8 @@
 			: 'hide-initial-small'}"
     >
         <Header style="height: 64px; padding: 8px 12px; border-bottom: #5d5d78 1px">
-            <Title style="align-self: center"><a href="/" style="color:inherit; text-decoration: inherit">SNTMNT</a></Title>
+            <Title style="align-self: center"><a href="/" style="color:inherit; text-decoration: inherit">SNTMNT</a>
+            </Title>
             <Separator/>
         </Header>
         <Content style="padding-bottom: 22px;">
@@ -181,68 +240,14 @@
             </List>
         </Content>
     </Drawer>
-
-    <div class="bar-app-content">
-        <TopAppBar variant="static" class="app-top-app-bar">
-            <Row>
-                <Section>
-                    {#if miniWindow}
-                        <IconButton class="material-icons" on:click={() => (drawerOpen = !drawerOpen)}
-                        >menu
-                        </IconButton>
-                    {/if}
-                    <Title
-                            class="--mdc-theme--primary"
-                            style={miniWindow ? 'padding-left: 0;' : ''}
-                    >
-                        {miniWindow ? '' : currentPageTitle}
-                    </Title>
-                </Section>
-
-                <Section align="end" toolbar style="color: #000;">
-
-                    {#if $userStore}
-                        <Button tag="a" href="/users/me">{$userStore.email}</Button>
-                        <form action="/signout" method="POST" use:enhance={() => {
-                            console.log("signout");
-                            return async ({result}) => {
-                                console.log("result signout");
-                                $userStore = null;
-                                await invalidateAll();
-                                await applyAction(result);
-                            }
-                        }}>
-                            <Button>Sign out</Button>
-                        </form>
-                    {:else}
-                        <Button href="/signin">Signin</Button>
-                        <Button href="/signup">Signup</Button>
-                    {/if}
-                    <Wrapper>
-                        <IconButton toggle pressed={lightTheme} on:SMUIIconButtonToggle:change={switchTheme}>
-                            <Icon component={Svg} viewBox="0 0 24 24" on>
-                                <path fill="currentColor" d={mdiWeatherNight}></path>
-                            </Icon>
-                            <Icon component={Svg} viewBox="0 0 24 24">
-                                <path fill="currentColor" d={mdiWeatherSunny}></path>
-                            </Icon>
-                        </IconButton>
-                        <Tooltip>{lightTheme ? 'Lights off' : 'Lights on'}</Tooltip>
-                    </Wrapper>
-                </Section>
-            </Row>
-
-        </TopAppBar>
-
-        {#if miniWindow}
-            <Scrim/>
-        {/if}
-        <AppContent class="app-content">
-            <main class="app-main-content" bind:this={mainContent}>
-                <slot/>
-            </main>
-        </AppContent>
-    </div>
+    {#if miniWindow}
+        <Scrim/>
+    {/if}
+    <AppContent class="app-content">
+        <main class="app-main-content" bind:this={mainContent}>
+            <slot/>
+        </main>
+    </AppContent>
 </div>
 
 <style>

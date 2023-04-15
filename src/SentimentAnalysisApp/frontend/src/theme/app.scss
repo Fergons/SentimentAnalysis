@@ -2,7 +2,7 @@
 @use '@material/elevation/index' as elevation;
 
 // Paper mixins.
-@use '@smui/paper/index' as paper;
+//@use '@smui/paper/index' as paper;
 @use '@material/theme/index' as theme;
 
 @use '@material/typography/mdc-typography';
@@ -19,7 +19,7 @@
   // Give it a shadow.
   @include elevation.elevation(5);
   // Position it above the drawer.
-  z-index: 5;
+  z-index: 10;
   position: relative;
 }
 
@@ -46,14 +46,9 @@ body,
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
+  z-index: 5;
 }
 
-.bar-app-content {
-  display: flex;
-  flex-grow: 1;
-  flex-direction: column;
-  height: 100vh;
-}
 
 .app-drawer,
 .app-main-content {
@@ -116,7 +111,6 @@ body,
   background-color: theme.$surface;
 }
 
-@include paper.paper-color(svelte-blue, #40b3ff, #fff);
 
 @media (max-width: 460px) {
   .app-main-content > section {
@@ -126,5 +120,5 @@ body,
 
 .settings-bar{
   background-color: theme.$surface;
-  @include elevation.elevation(1);
+  @include elevation.elevation(2);
 }

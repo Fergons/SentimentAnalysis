@@ -49,6 +49,6 @@ export function applyGameFilter(game: GameListItem, filter: GameListFilter): boo
     const matchesReleaseDate = game.release_date ?
         min_release_date ? new Date(game.release_date).getTime() >= new Date(min_release_date).getTime() :
             max_release_date ? new Date(game.release_date).getTime() <= new Date(max_release_date).getTime() : true : true;
-     return matchesName && matchesCategory && matchesDeveloper && matchesScore && matchesNumReviews && matchesReleaseDate;
+    return matchesName && matchesCategory && matchesDeveloper && matchesScore && matchesNumReviews && matchesReleaseDate;
 }
 
