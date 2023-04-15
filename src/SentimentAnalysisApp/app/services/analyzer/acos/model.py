@@ -345,7 +345,7 @@ class ABSAGenerator(T5Generator):
         """
         quads = []
         aspect, category, opinion, polarity = ["NULL", "NULL", "NULL", "NULL"]
-        aspects = output.split("|")
+        aspects = set(output.split("|"))
         for asp in aspects:
             n_gram = asp.split(":")
             n = len(n_gram)
@@ -423,25 +423,14 @@ class ABSAGenerator(T5Generator):
         """
         Predict the outputs from the model for the texts in parallel.
         """
-        task = kwargs.pop("task", "ate")
+        task = kwargs.pop("task", "acos")
         instructor = self._get_instructor(task)
         # inference
         inputs = self.tokenizer(
             [instructor.prepare_input(i, []) for i in batch], padding=True, truncation=True, return_tensors="pt"
         ).to(self.device)
 
-        input_memory = inputs.numel() * inputs.element_size()
-        print(f"Memory needed for input batch: {input_memory} bytes")
-
-        # Check if there is enough memory available on the device
-        if torch.cuda.is_available():
-            free_memory = torch.cuda.get_device_properties(0).total_memory - torch.cuda.memory_allocated(0)
-            print(f"Free GPU memory: {free_memory} bytes")
-
-            if free_memory < input_memory:
-                print("Not enough memory for input batch")
-            else:
-                inputs = inputs.to(self.device)
+        inputs = inputs.to(self.device)
 
         outputs = self.model.generate(**inputs, **kwargs)
         outputs = self.tokenizer.batch_decode(
