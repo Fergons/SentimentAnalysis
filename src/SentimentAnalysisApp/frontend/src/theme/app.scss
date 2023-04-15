@@ -47,13 +47,13 @@ body,
   flex-wrap: wrap;
   flex-direction: row;
   z-index: 5;
+  height: 100%;
 }
 
 
 .app-drawer,
 .app-main-content {
   overflow: auto;
-  height: 100%;
 }
 
 .app-drawer.app-drawer-adjust {
@@ -73,12 +73,11 @@ body,
   display: flex;
   flex-direction: column;
   position: relative;
-  height: 100%;
 }
 
 .app-main-content > section {
   padding: 2rem;
-  width: 100%;
+  flex: 1;
   box-sizing: border-box;
 }
 

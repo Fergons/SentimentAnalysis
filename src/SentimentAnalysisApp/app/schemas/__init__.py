@@ -21,6 +21,7 @@ from .analyzer import AnalyzedReview, AnalyzedReviewCreate, AnalyzedReviewUpdate
 from .analyzer import AnalyzedReviewSentence, AnalyzedReviewSentenceCreate, AnalyzedReviewSentenceUpdate
 from .analyzer import AnalyzerSearchFilter
 from .review import ReviewsSummaryV2, ReviewsSummaryBaseDataPoint, ReviewsSummaryByDate
+from .review import AspectsSummary, PolarityCounts, SourcePolarityCounts
 
 Reviewer.update_forward_refs(Review=Review, Source=Source)
 Game.update_forward_refs(Review=Review, Source=Source)

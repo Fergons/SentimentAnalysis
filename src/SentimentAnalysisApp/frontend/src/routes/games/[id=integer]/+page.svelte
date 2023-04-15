@@ -18,7 +18,7 @@
 
 <section>
     <div class="overview-container">
-        <Overview data={overview.categories}/>
+        <Overview data={overview.summary}/>
     </div>
     <Banner open autoClose={false}>
         <Label slot="label">{game.name}</Label>

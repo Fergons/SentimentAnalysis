@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Any, List, Optional, Dict, Tuple, Literal
 
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app import crud, models, schemas
@@ -143,16 +144,34 @@ async def get_summary_v2(*,
     allowed_time_intervals = ["hour", "day", "week", "month", "year"]
     if time_interval not in allowed_time_intervals:
         raise HTTPException(status_code=400, detail=f"Invalid time interval. Possible values: {allowed_time_intervals}")
+    # get recent model
+    result = await db.execute(select(models.Aspect.model_id, func.count(models.Aspect.id))
+                             .group_by(models.Aspect.model_id)
+                             .order_by(func.count(models.Aspect.id).desc()).limit(1))
+    model_id = result.scalars().first()
+    # get summary
+    summary = await crud.review.get_summary_v2(db, game_id=id, time_interval=time_interval, model=model_id)
+    return summary
 
-    summary = await crud.review.get_summary_v2(db, game_id=id, time_interval=time_interval)
+
+@router.get("/{id}/summary/aspects", response_model=schemas.AspectsSummary)
+async def get_aspect_summary(*,
+                             db: AsyncSession = Depends(deps.get_session),
+                             id: int) -> schemas.AspectsSummary:
+    # get recent model
+    result = await db.execute(select(models.Aspect.model_id, func.count(models.Aspect.id))
+                              .group_by(models.Aspect.model_id)
+                              .order_by(func.count(models.Aspect.id).desc()).limit(1))
+    model_id = result.scalars().first()
+    summary = await crud.review.get_aspect_summary_by_category_and_sources(db, game_id=id, model=model_id)
     return summary
 
 
 @router.get("/search/", response_model=List[str])
 async def get_name_matches(*,
-                            db: AsyncSession = Depends(deps.get_session),
-                            name: str,
-                            limit: int = 10
+                           db: AsyncSession = Depends(deps.get_session),
+                           name: str,
+                           limit: int = 10
                            ) -> List[str]:
     matches = await crud.game.get_matches(db, name=name, limit=limit)
     return matches
@@ -174,4 +193,3 @@ async def get_categories(*, db: AsyncSession = Depends(deps.get_session), name: 
     else:
         objs = await crud.category.get_multi_by_name(db, name=name)
     return objs
-

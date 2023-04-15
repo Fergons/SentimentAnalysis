@@ -259,12 +259,14 @@
                                 label="Max Release Date"
                         />
                     </div>
+                     <div class="filter-field">
                     <Button on:click={() => filterReset()}>
                         <Label>Reset</Label>
                     </Button>
                     <Button on:click={() => gameFilter.set({...filterTemp})}>
                         <Label>Apply</Label>
                     </Button>
+                         </div>
                 </div>
             </div>
         </div>
@@ -322,7 +324,6 @@
     .filter-settings {
         display: flex;
         flex-direction: row;
-        width: 100%;
         gap: 1rem;
         align-items: center;
     }

@@ -6,10 +6,11 @@ import {getTotal} from "../../../lib/utils/dataTransformer";
 export async function load({params}: { params: { id: number } }) {
 
     try {
-        const [game, reviews_summary, sources] = await Promise.all([
+        const [game, reviewsSummary, sources, aspectsSummary] = await Promise.all([
             GamesService.readGameGamesIdGet(params.id),
             GamesService.getSummaryV2GamesIdSummaryV2TimeIntervalGet(params.id, 'day'),
-            GamesService.getSourcesGamesIdSourcesGet(params.id)
+            GamesService.getSourcesGamesIdSourcesGet(params.id),
+            GamesService.getAspectSummaryGamesIdSummaryAspectsGet(params.id)
         ]);
 
         const sourceMap = sources && sources.length ? sources.reduce((acc, obj: Source) => {
@@ -23,21 +24,10 @@ export async function load({params}: { params: { id: number } }) {
             subtitle: 'Overview',
             game: game,
             overview: {
-                categories: [
-                    {
-                        game_id: game.id,
-                        price: 5,
-                        story: 5,
-                        community: 5,
-                        gameplay: 1,
-                        audio_visuals: 3,
-                        performance_bugs: 9
-                    }
-                ]
-
+                summary: aspectsSummary
             },
             stats: {
-                summary: reviews_summary,
+                summary: reviewsSummary,
                 sources: sourceMap
             },
 
@@ -47,4 +37,3 @@ export async function load({params}: { params: { id: number } }) {
         throw error(500, 'Api didn\'t respond');
     }
 }
-

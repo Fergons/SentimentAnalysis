@@ -1,7 +1,7 @@
 import asyncio
 import logging
 from datetime import datetime, timedelta
-from typing import List, Optional, Literal, Tuple
+from typing import List, Optional, Literal, Tuple, Dict
 
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy import select, and_, or_, func, literal_column, case
@@ -56,7 +56,8 @@ class CRUDReview(CRUDBase[models.Review, ReviewCreate, ReviewCreate]):
             query = query.filter(self.model.game_id == game_id)
         if source_id is not None:
             query = query.filter(self.model.source_id == source_id)
-        result = await db.execute(query.order_by(self.model.created_at.desc()).options(selectinload(self.model.aspects)))
+        result = await db.execute(
+            query.order_by(self.model.created_at.desc()).options(selectinload(self.model.aspects)))
         return result.scalars().all()
 
     async def get_multi_by_processed(self, db: AsyncSession, *, processed: bool, limit: int = 100, offset: int = 0) -> \
@@ -127,26 +128,30 @@ class CRUDReview(CRUDBase[models.Review, ReviewCreate, ReviewCreate]):
         return summary
 
     async def get_summary_v2(
-            self, db: AsyncSession, *, game_id: int, time_interval: str = "day"
+            self, db: AsyncSession, *, game_id: int, time_interval: str = "day", model: str = "mt5-acos-1.0"
     ) -> schemas.ReviewsSummaryV2:
         """
         Count total reviews, count processed and not processed reviews per game and source by time_interval
         """
         query = select(
-                func.date_trunc(time_interval, self.model.created_at).label('date'),
-                models.Review.source_id,
-                func.count(func.distinct(models.Review.id)).label("total"),
-                func.count(func.distinct(case([(models.Review.processed_at == None, models.Review.id)]))).label("not_processed"),
-                func.count(func.distinct(case([(models.Review.processed_at != None, models.Review.id)]))).label("processed"),
-                func.sum(case([(models.Aspect.polarity == "positive", 1)], else_=0)).label("positive"),
-                func.sum(case([(models.Aspect.polarity == "negative", 1)], else_=0)).label("negative"),
-                func.sum(case([(models.Aspect.polarity == "neutral", 1)], else_=0)).label("neutral")
-            )
+            func.date_trunc(time_interval, models.Review.created_at).label('date'),
+            models.Review.source_id,
+            func.count(func.distinct(models.Review.id)).label("total"),
+            func.count(func.distinct(case([(models.Review.processed_at == None, models.Review.id)]))).label(
+                "not_processed"),
+            func.count(func.distinct(case([(models.Review.processed_at != None, models.Review.id)]))).label(
+                "processed"),
+            func.sum(case([(models.Aspect.polarity == "positive", 1)], else_=0)).label("positive"),
+            func.sum(case([(models.Aspect.polarity == "negative", 1)], else_=0)).label("negative"),
+            func.sum(case([(models.Aspect.polarity == "neutral", 1)], else_=0)).label("neutral")
+        )
         if game_id is not None:
             query = query.filter(models.Review.game_id == game_id)
 
         result = await db.execute(
             query.outerjoin(models.Aspect, models.Review.id == models.Aspect.review_id)
+            .filter((models.Aspect.model_id == model) | (models.Aspect.id == None)
+                    )
             .group_by(text("date"), models.Review.source_id)
             .order_by(text("date"), models.Review.source_id)
         )
@@ -240,7 +245,6 @@ class CRUDReview(CRUDBase[models.Review, ReviewCreate, ReviewCreate]):
         query = select(func.count(self.model.id)).where(and_(*conditions))
         result = await db.execute(query)
         return result.scalar()
-
 
     async def get_not_processed_by_game(self, db: AsyncSession, game_id: int, limit: int = 100, last_id: int = None) -> \
             List[models.Review]:
@@ -364,11 +368,63 @@ class CRUDReview(CRUDBase[models.Review, ReviewCreate, ReviewCreate]):
             .where(and_(self.model.source_id == source_id, self.model.source_review_id.in_(source_review_ids))))
         return dict(result.all())
 
-    async def get_ids_and_text(self, db: AsyncSession, *, source_id: int, offset: int = 0,  limit: int = 100) -> List[Tuple[int, str]]:
+    async def get_ids_and_text(self, db: AsyncSession, *, source_id: int, offset: int = 0, limit: int = 100) -> List[
+        Tuple[int, str]]:
         result = await db.scalars(
             select(self.model.id, self.model.text)
             .where(self.model.source_id == source_id)
             .order_by(self.model.id).limit(1000))
         return result.all()
+
+    async def get_aspect_summary_by_category_and_sources(
+            self, db: AsyncSession, *, game_id: int = None, model: str = "mt5-acos-1.0"
+    ) -> schemas.AspectsSummary:
+        query = select(
+            models.Review.source_id,
+            models.Aspect.category,
+            models.Aspect.polarity,
+            func.count(models.Aspect.id).label("count")
+        ).outerjoin(
+            models.Aspect, models.Review.id == models.Aspect.review_id
+        ).filter(
+            models.Aspect.model_id == model
+        )
+
+        if game_id is not None:
+            query = query.filter(models.Review.game_id == game_id)
+
+        query = query.group_by(
+            models.Review.source_id,
+            models.Aspect.category,
+            models.Aspect.polarity
+        )
+
+        result = await db.execute(query)
+
+        summary = schemas.AspectsSummary(
+            total=schemas.PolarityCounts(positive=0, negative=0, neutral=0),
+            sources={}
+        )
+
+        for row in result.all():
+            source_id, category, polarity, count = row
+            if source_id not in summary.sources:
+                summary.sources[source_id] = schemas.SourcePolarityCounts(
+                    total=schemas.PolarityCounts(positive=0, negative=0, neutral=0),
+                    categories={}
+                )
+
+            source_summary = summary.sources[source_id]
+            setattr(source_summary.total, polarity, getattr(source_summary.total, polarity) + count)
+
+            if category not in source_summary.categories:
+                source_summary.categories[category] = schemas.PolarityCounts(positive=0, negative=0, neutral=0)
+
+            setattr(source_summary.categories[category], polarity,
+                    getattr(source_summary.categories[category], polarity) + count)
+            setattr(summary.total, polarity, getattr(summary.total, polarity) + count)
+
+        return summary
+
 
 crud_review = CRUDReview(models.Review)

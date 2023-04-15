@@ -128,6 +128,21 @@ class ReviewsSummary(BaseModel):
     num_data_points: int = 0
 
 
+class PolarityCounts(BaseModel):
+    positive: int = 0
+    negative: int = 0
+    neutral: int = 0
+
+
+class SourcePolarityCounts(BaseModel):
+    total: PolarityCounts
+    categories: Dict[str, PolarityCounts]
+
+
+class AspectsSummary(BaseModel):
+    total: PolarityCounts
+    sources: Dict[str, SourcePolarityCounts]
+
 # Additional properties stored in DB
 class ReviewInDB(ReviewInDBBase):
     pass

@@ -27,9 +27,9 @@
 
     /** @type {String} [textFont='roboto'] - Font of the labels.*/
     export let textFont = 'roboto';
-
-    $: max = $xScale(Math.max(...$extents.x));
-
+    let max;
+    $: max = $xScale(Math.max(10));
+    let lineLength;
     $: lineLength = max * lineLengthFactor;
     $: labelPlacement = max * labelPlacementFactor;
 
