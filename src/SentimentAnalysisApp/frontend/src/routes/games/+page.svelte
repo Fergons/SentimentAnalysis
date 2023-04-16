@@ -145,7 +145,7 @@
                     <Autocomplete this={autocomplete}
                                   search={searchNames}
                                   bind:value={searchName}
-                                  on:select={e => {
+                                  on:focusout={e => {
                                       $gameFilter.name = searchName;
                                   }}
                                   showMenuWithNoInput={false}
