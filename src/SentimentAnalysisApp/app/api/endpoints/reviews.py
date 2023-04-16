@@ -31,6 +31,7 @@ async def read_reviews(
         db: AsyncSession = Depends(deps.get_session),
         game_id: Optional[int] = None,
         aspect: Optional[str] = None,
+        source: Optional[str] = None,
         polarity: Optional[str] = None,
         model: Optional[str] = None,
         skip: int = 0,

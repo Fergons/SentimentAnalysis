@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, TYPE_CHECKING
+from typing import List, TYPE_CHECKING, Dict
 from typing import Optional
 from pydantic import BaseModel, AnyHttpUrl
 
@@ -51,3 +51,13 @@ class Aspect(AspectInDBBase):
 # Additional properties stored in DB
 class AspectInDB(AspectInDBBase):
     model_id: str
+
+
+class AspectTermPolarityGroups(BaseModel):
+    positive: List[str]
+    negative: List[str]
+    neutral: List[str]
+
+
+class AspectWordcloud(BaseModel):
+    categories: Dict[str, AspectTermPolarityGroups]

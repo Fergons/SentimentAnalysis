@@ -13,6 +13,7 @@ from .reviewer import (Reviewer, ReviewerBase,
                        ReviewerInDB,
                        ReviewerInDBBase)
 from .aspect import Aspect, AspectBase, AspectCreate, AspectUpdate, AspectInDB, AspectInDBBase
+from .aspect import AspectTermPolarityGroups, AspectWordcloud
 from .source import Source, SourceBase, SourceCreate, SourceUpdate, SourceInDBBase
 from .source import GameSource, GameSourceUpdate, GameSourceCreate
 from .developer import Developer, DeveloperCreate, DeveloperUpdate, DeveloperInDBBase
@@ -21,7 +22,7 @@ from .analyzer import AnalyzedReview, AnalyzedReviewCreate, AnalyzedReviewUpdate
 from .analyzer import AnalyzedReviewSentence, AnalyzedReviewSentenceCreate, AnalyzedReviewSentenceUpdate
 from .analyzer import AnalyzerSearchFilter, AnalyzedReviewListResponse
 from .review import ReviewsSummaryV2, ReviewsSummaryBaseDataPoint, ReviewsSummaryByDate
-from .review import AspectsSummary, PolarityCounts, SourcePolarityCounts
+from .review import AspectsSummary, PolarityCounts, CategoryPolarityCounts
 from .review import ReviewListResponse
 
 Reviewer.update_forward_refs(Review=Review, Source=Source)

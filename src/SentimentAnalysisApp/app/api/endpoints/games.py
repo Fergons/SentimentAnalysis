@@ -1,8 +1,8 @@
 from datetime import datetime
-from typing import Any, List, Optional, Dict, Tuple, Literal
+from typing import Any, List, Optional, Dict, Tuple, Literal, Union
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import select, func
+from sqlalchemy import select, func, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app import crud, models, schemas
@@ -146,8 +146,8 @@ async def get_summary_v2(*,
         raise HTTPException(status_code=400, detail=f"Invalid time interval. Possible values: {allowed_time_intervals}")
     # get recent model
     result = await db.execute(select(models.Aspect.model_id, func.count(models.Aspect.id))
-                             .group_by(models.Aspect.model_id)
-                             .order_by(func.count(models.Aspect.id).desc()).limit(1))
+                              .group_by(models.Aspect.model_id)
+                              .order_by(func.count(models.Aspect.id).desc()).limit(1))
     model_id = result.scalars().first()
     # get summary
     summary = await crud.review.get_summary_v2(db, game_id=id, time_interval=time_interval, model=model_id)
@@ -157,14 +157,34 @@ async def get_summary_v2(*,
 @router.get("/{id}/summary/aspects", response_model=schemas.AspectsSummary)
 async def get_aspect_summary(*,
                              db: AsyncSession = Depends(deps.get_session),
-                             id: int) -> schemas.AspectsSummary:
+                             id: int,
+                             group_by: Optional[str] = None,
+                             time_interval: str = "day"
+                             ) -> schemas.AspectsSummary:
     # get recent model
     result = await db.execute(select(models.Aspect.model_id, func.count(models.Aspect.id))
                               .group_by(models.Aspect.model_id)
                               .order_by(func.count(models.Aspect.id).desc()).limit(1))
     model_id = result.scalars().first()
-    summary = await crud.review.get_aspect_summary_by_category_and_sources(db, game_id=id, model=model_id)
+    if group_by is None:
+        summary = await crud.review.get_aspect_summary_by_category_and_sources(
+            db, game_id=id, model=model_id)
+        summary2 = await crud.review.get_aspects_summary_by_date_and_categories(
+            db, game_id=id, model=model_id, time_interval=time_interval)
+        summary.dates = summary2.dates
+
+    elif group_by == "source":
+        summary = await crud.review.get_aspect_summary_by_category_and_sources(
+            db, game_id=id, model=model_id)
+    elif group_by == "date":
+        summary = await crud.review.get_aspects_summary_by_date_and_categories(
+            db, game_id=id, model=model_id, time_interval=time_interval)
+    else:
+        raise HTTPException(status_code=400, detail="Invalid group_by parameter")
     return summary
+
+
+
 
 
 @router.get("/search/", response_model=List[str])
@@ -193,3 +213,20 @@ async def get_categories(*, db: AsyncSession = Depends(deps.get_session), name: 
     else:
         objs = await crud.category.get_multi_by_name(db, name=name)
     return objs
+
+
+@router.get("/{id}/aspects/wordcloud", response_model=schemas.AspectWordcloud)
+async def get_wordcloud(
+        *, db: AsyncSession = Depends(deps.get_session), id: int, limit: int = 50
+) -> schemas.AspectWordcloud:
+    # most utilized model
+    result = await db.execute(select(models.Aspect.model_id, func.count(models.Aspect.id))
+                              .join(models.Review,
+                                    and_(models.Review.id == models.Aspect.review_id, models.Review.game_id == id))
+                              .group_by(models.Aspect.model_id)
+                              .order_by(func.count(models.Aspect.id).desc()).limit(1))
+    model_id = result.scalars().first()
+    # get words
+    wordcloud = await crud.aspect.get_wordcloud(db, game_id=id, model_id=model_id)
+    print(wordcloud)
+    return wordcloud

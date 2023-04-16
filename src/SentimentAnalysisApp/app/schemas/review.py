@@ -139,14 +139,15 @@ class PolarityCounts(BaseModel):
     neutral: int = 0
 
 
-class SourcePolarityCounts(BaseModel):
+class CategoryPolarityCounts(BaseModel):
     total: PolarityCounts
     categories: Dict[str, PolarityCounts]
 
 
 class AspectsSummary(BaseModel):
     total: PolarityCounts
-    sources: Dict[str, SourcePolarityCounts]
+    sources: Dict[str, CategoryPolarityCounts]
+    dates: Dict[datetime, CategoryPolarityCounts]
 
 
 # Additional properties stored in DB

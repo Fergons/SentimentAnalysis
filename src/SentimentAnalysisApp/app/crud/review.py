@@ -102,14 +102,14 @@ class CRUDReview(CRUDBase[models.Review, ReviewCreate, ReviewCreate]):
             count = count.filter(self.model.game_id == game_id)
 
         result = await db.execute(
-            query.order_by(self.model.id)
+            query.group_by(self.model.id).order_by(self.model.id)
             .options(
                 selectinload(self.model.aspects)
             ).limit(limit).offset(offset)
         )
         reviews = result.scalars().all()
-        result = await db.execute(count)
-        total = result.scalar()
+        result = await db.execute(count.group_by(self.model.id))
+        total = result.scalar() or 0
         return schemas.ReviewListResponse(reviews=reviews, total=total)
 
     async def get_summary(self, db: AsyncSession, *,
@@ -427,13 +427,14 @@ class CRUDReview(CRUDBase[models.Review, ReviewCreate, ReviewCreate]):
 
         summary = schemas.AspectsSummary(
             total=schemas.PolarityCounts(positive=0, negative=0, neutral=0),
-            sources={}
+            sources={},
+            dates={}
         )
 
         for row in result.all():
             source_id, category, polarity, count = row
             if source_id not in summary.sources:
-                summary.sources[source_id] = schemas.SourcePolarityCounts(
+                summary.sources[source_id] = schemas.CategoryPolarityCounts(
                     total=schemas.PolarityCounts(positive=0, negative=0, neutral=0),
                     categories={}
                 )
@@ -446,6 +447,55 @@ class CRUDReview(CRUDBase[models.Review, ReviewCreate, ReviewCreate]):
 
             setattr(source_summary.categories[category], polarity,
                     getattr(source_summary.categories[category], polarity) + count)
+            setattr(summary.total, polarity, getattr(summary.total, polarity) + count)
+
+        return summary
+
+    async def get_aspects_summary_by_date_and_categories(
+            self, db: AsyncSession, *, game_id: int, time_interval: str = "day", model: str = "mt5-acos-1.0"
+    ) -> schemas.AspectsSummary:
+        query = select(
+            func.date_trunc(time_interval, models.Review.created_at).label("date"),
+            models.Aspect.category,
+            models.Aspect.polarity,
+            func.count(models.Aspect.id).label("count")
+        ).outerjoin(
+            models.Aspect, models.Review.id == models.Aspect.review_id
+        ).filter(
+            models.Review.game_id == game_id,
+            models.Aspect.model_id == model
+        ).group_by(
+            "date",
+            models.Aspect.category,
+            models.Aspect.polarity
+        ).order_by(
+            "date"
+        )
+
+        result = await db.execute(query)
+
+        summary = schemas.AspectsSummary(
+            total=schemas.PolarityCounts(positive=0, negative=0, neutral=0),
+            sources={},
+            dates={}
+        )
+
+        for row in result.all():
+            date, category, polarity, count = row
+
+            if date not in summary.dates:
+                summary.dates[date] = schemas.CategoryPolarityCounts(
+                    total=schemas.PolarityCounts(positive=0, negative=0, neutral=0),
+                    categories={}
+                )
+
+            date_summary = summary.dates[date]
+            setattr(date_summary.total, polarity, getattr(date_summary.total, polarity) + count)
+
+            if category not in date_summary.categories:
+                date_summary.categories[category] = schemas.PolarityCounts(positive=0, negative=0, neutral=0)
+            setattr(date_summary.categories[category], polarity,
+                    getattr(date_summary.categories[category], polarity) + count)
             setattr(summary.total, polarity, getattr(summary.total, polarity) + count)
 
         return summary
