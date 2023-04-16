@@ -52,7 +52,6 @@ class Aspect(AspectInDBBase):
 class AspectInDB(AspectInDBBase):
     model_id: str
 
-
 class AspectTermPolarityGroups(BaseModel):
     positive: List[str]
     negative: List[str]

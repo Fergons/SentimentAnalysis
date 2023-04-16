@@ -35,7 +35,7 @@
 
     $: angleSlice = (Math.PI * 2) / $config.x.length;
 
-    let activeCategory = 0;
+    let activeCategory = 'overall';
 
     function anchor(total, i) {
         if (i === 0 || i === total / 2) {
@@ -93,16 +93,16 @@
                 font-family="{textFont}"
                 font-size="{textSize}px"
                 fill="{textColor}"
-                class:active={i === activeCategory}
+                class:active={label === activeCategory}
                 on:click={() => {
                     console.log(`clicked on ${label}`);
-                    activeCategory = i;
-                    dispatch('categorySelected', {category: i});
+                    activeCategory = label;
+                    dispatch('categorySelected', {category: label});
                 }}
                 on:focus={() => {
                     console.log(`focused on ${label}`);
-                    activeCategory = i;
-                    dispatch('categorySelected', {category: i});
+                    activeCategory = label;
+                    dispatch('categorySelected', {category: label});
                 }}
                 tabindex="0"
                 transform="translate({(labelPlacement) * Math.cos(thisAngleSlice)}, {labelPlacement * Math.sin(thisAngleSlice)})"

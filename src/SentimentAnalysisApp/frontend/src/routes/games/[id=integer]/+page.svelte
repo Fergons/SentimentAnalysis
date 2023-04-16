@@ -17,9 +17,11 @@
 </script>
 
 <section>
+
     <div class="overview-container">
         <Overview data={overview.summary}/>
     </div>
+
     <Banner open autoClose={false}>
         <Label slot="label">{game.name}</Label>
     </Banner>
@@ -30,8 +32,8 @@
 
 <style>
     .stats-container {
-        width:100%;
-         display: flex;
+        width: 100%;
+        display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
@@ -42,7 +44,7 @@
         width: 100%;
         height: 420px;
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         justify-content: start;
         align-items: flex-start;
         gap: 2rem;

@@ -4,6 +4,14 @@
     import {scaleLinear} from 'd3-scale';
     import RadarChart from "./RadarChart.svelte";
     import AxisRadial from './AxisRadial.svelte';
+    import {onMount} from 'svelte';
+
+    let Wordcloud;
+
+    onMount(async () => {
+        const module = await import('./Wordcloud.svelte');
+        Wordcloud = module.default;
+    });
 
     export let data;
 
@@ -19,10 +27,10 @@
         });
     });
 
-    let activeCategory = 0;
+    let activeCategory = 'overall';
 
     function setActiveCategory(event) {
-        activeCategory = event.detail.category
+        activeCategory = event.detail.category;
         console.log("activeCategory: ", activeCategory)
     }
 
@@ -105,8 +113,8 @@
                 const negativePercentage = polarityCounts.negative / totalPolarityCount;
 
                 // Calculate weighted score based on the difference between positive and negative percentages
-                const weightedScore = 10 * (0.4*positivePercentage - 0.2*negativePercentage);
-                  console.log("weightedScore: ", weightedScore)
+                const weightedScore = 10 * (0.4 * positivePercentage - 0.2 * negativePercentage);
+                console.log("weightedScore: ", weightedScore)
                 // Scaling factor based on the total number of counts, using a square root function
                 const scalingFactor = Math.sqrt(totalPolarityCount);
                 console.log("scalingFactor: ", scalingFactor)
@@ -123,7 +131,6 @@
     }
 
 </script>
-
 
 <div class="chart-container">
     <LayerCake
@@ -151,6 +158,12 @@
     </LayerCake>
 </div>
 
+<div class="wordcloud">
+    {#if Wordcloud}
+        <Wordcloud bind:selectedCategory={activeCategory} categories={xKey}/>
+    {/if}
+</div>
+
 
 <style>
     .chart-container {
@@ -158,6 +171,14 @@
         margin-left: 50px;
         max-width: 400px;
         height: 400px;
+        padding: 1rem;
+    }
+
+    .wordcloud {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        margin-left: 100px;
         padding: 1rem;
     }
 </style>
