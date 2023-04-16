@@ -78,6 +78,11 @@ class ReviewWithAspects(ReviewInDBBase):
     aspects: List["Aspect"] = []
 
 
+class ReviewListResponse(BaseModel):
+    reviews: List[ReviewWithAspects]
+    total: int
+
+
 class ReviewsSummaryDataPoint(BaseModel):
     total: int
     processed: int
@@ -142,6 +147,7 @@ class SourcePolarityCounts(BaseModel):
 class AspectsSummary(BaseModel):
     total: PolarityCounts
     sources: Dict[str, SourcePolarityCounts]
+
 
 # Additional properties stored in DB
 class ReviewInDB(ReviewInDBBase):

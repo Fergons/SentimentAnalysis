@@ -121,3 +121,9 @@ body,
   background-color: theme.$surface;
   @include elevation.elevation(2);
 }
+
+
+.filters-bar{
+  background-color: theme.$surface;
+  @include elevation.elevation(2);
+}

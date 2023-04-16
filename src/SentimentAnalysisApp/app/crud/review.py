@@ -71,22 +71,46 @@ class CRUDReview(CRUDBase[models.Review, ReviewCreate, ReviewCreate]):
         return result.scalars().all()
 
     async def get_multi_with_aspects(self, db: AsyncSession, *,
+                                     aspects: List[str] = None,
+                                     model_ids: List[str] = None,
                                      game_id: int = None,
-                                     source_id: int = None,
+                                     polarities: List[str] = None,
                                      limit: int = 100,
-                                     offset: int = 0) -> List[ReviewWithAspects]:
-        query = select(self.model).filter(self.model.processed_at != None).limit(limit).offset(offset)
+                                     offset: int = 0) -> schemas.ReviewListResponse:
+        count = select(func.count(self.model.id)).filter(self.model.processed_at != None)
+        query = select(self.model).filter(self.model.processed_at != None)
+
+        # Join the models.Aspect table and filter by aspects
+        query = query.join(models.Aspect, models.Aspect.review_id == self.model.id)
+        count = count.join(models.Aspect, models.Aspect.review_id == self.model.id)
+
+        if model_ids is not None:
+            query = query.filter(models.Aspect.model_id.in_(model_ids))
+            count = count.filter(models.Aspect.model_id.in_(model_ids))
+
+        if aspects is not None:
+            query = query.filter(models.Aspect.category.in_(aspects))
+            count = count.filter(models.Aspect.category.in_(aspects))
+
+        # Filter by polarities if provided
+        if polarities is not None:
+            query = query.filter(models.Aspect.polarity.in_(polarities))
+            count = count.filter(models.Aspect.polarity.in_(polarities))
+
         if game_id is not None:
             query = query.filter(self.model.game_id == game_id)
-        if source_id is not None:
-            query = query.filter(self.model.source_id == source_id)
+            count = count.filter(self.model.game_id == game_id)
+
         result = await db.execute(
             query.order_by(self.model.id)
             .options(
                 selectinload(self.model.aspects)
-            )
+            ).limit(limit).offset(offset)
         )
-        return result.scalars().all()
+        reviews = result.scalars().all()
+        result = await db.execute(count)
+        total = result.scalar()
+        return schemas.ReviewListResponse(reviews=reviews, total=total)
 
     async def get_summary(self, db: AsyncSession, *,
                           game_id: Optional[int] = None,

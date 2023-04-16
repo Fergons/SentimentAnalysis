@@ -82,3 +82,8 @@ class AnalyzerSearchFilter(BaseModel):
     analyzed_review_id: Optional[int] = None
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
+
+
+class AnalyzedReviewListResponse(BaseModel):
+    reviews: List[AnalyzedReview]
+    total: int
