@@ -1,52 +1,54 @@
 <script lang="ts">
-    import Button from '@smui/button';
-    import {Row, Section, Title, AutoAdjust} from '@smui/top-app-bar';
-    import IconButton from '@smui/icon-button';
-    import {Label, Icon, Svg} from '@smui/common';
-    import {mdiGithub, mdiWeb} from '@mdi/js';
-
-    import LayoutGrid, {Cell} from '@smui/layout-grid';
+    import {Label} from '@smui/common';
     import Banner from '@smui/banner';
-    import {page} from '$app/stores';
     import Overview from "../../../lib/components/Overview.svelte";
     import Stats from "../../../lib/components/Stats.svelte";
 
     export let data;
-    const {title, subtitle, game, overview, stats} = data;
+    //data keys and values
+    //  name: game.name,
+    //  subtitle: 'Overview',
+    //  game: game,
+    //    reviewSummary: reviewsSummary,
+    //         aspectsSummary: aspectsSummary,
+    //         sources: sourceMap
+    const {name, subtitle, game, reviewSummary, aspectSummary, sources} = data;
 
 </script>
 
 <section>
-
     <div class="overview-container">
-        <Overview data={overview.summary}/>
+        <Overview data={aspectSummary}/>
     </div>
 
     <Banner open autoClose={false}>
         <Label slot="label">{game.name}</Label>
     </Banner>
     <div class="stats-container">
-        <Stats data={stats}/>
+        <Stats data={{
+            reviewSummary: reviewSummary,
+            aspectSummary: aspectSummary,
+            sources: sources}}/>
     </div>
 </section>
 
 <style>
     .stats-container {
-        width: 100%;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        width: 100%;
         gap: 16px;
     }
 
     .overview-container {
-        width: 100%;
-        height: 420px;
         display: flex;
         flex-direction: row;
-        justify-content: start;
-        align-items: flex-start;
+        flex-wrap: wrap;
         gap: 2rem;
+        margin: 0 auto;
+        width: 100%;
+        min-width: auto;
     }
 </style>

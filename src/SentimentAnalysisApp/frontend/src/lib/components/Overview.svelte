@@ -18,7 +18,7 @@
     const enoughData = data && Object.keys(data.sources).length > 0;
     const categoryScores = [calculateCategoryScores(data)];
     const seriesKey = '';
-    const xKey = ['overall', 'gameplay', 'performance_bugs', 'price', 'audio_visuals', 'community'];
+    const xKey = ['overall', 'gameplay', 'audio_visuals', 'performance_bugs', 'community', 'price'];
 
     const seriesNames = Object.keys(categoryScores[0]).filter(d => d !== seriesKey);
     categoryScores.forEach(d => {
@@ -31,7 +31,6 @@
 
     function setActiveCategory(event) {
         activeCategory = event.detail.category;
-        console.log("activeCategory: ", activeCategory)
     }
 
     function calculateCategoryScoresPerSource(summary: AspectsSummary): { [key: string]: { [key: string]: number } } {
@@ -150,7 +149,7 @@
             {#if enoughData}
                 <RadarChart/>
             {:else}
-                <text x="47%" y="48%" text-anchor="middle" fill="#fff" font-family="roboto-mono">
+                <text x="49%" y="48%" text-anchor="middle" fill="#fff" font-family="roboto-mono">
                     NO DATA
                 </text>
             {/if}
@@ -160,25 +159,24 @@
 
 <div class="wordcloud">
     {#if Wordcloud}
-        <Wordcloud bind:selectedCategory={activeCategory} categories={xKey}/>
+        <Wordcloud bind:selectedCategory={activeCategory}/>
     {/if}
 </div>
 
 
 <style>
     .chart-container {
-        width: 100%;
-        margin-left: 50px;
-        max-width: 400px;
+        margin: 0 auto;
+        width: 500px;
         height: 400px;
         padding: 1rem;
+        justify-content: center;
     }
 
     .wordcloud {
         display: flex;
         flex-direction: column;
         flex: 1;
-        margin-left: 100px;
         padding: 1rem;
     }
 </style>

@@ -23,13 +23,9 @@ export async function load({params}: { params: { id: number } }) {
             name: game.name,
             subtitle: 'Overview',
             game: game,
-            overview: {
-                summary: aspectsSummary
-            },
-            stats: {
-                summary: reviewsSummary,
-                sources: sourceMap
-            },
+            reviewSummary: reviewsSummary,
+            aspectSummary: aspectsSummary,
+            sources: sourceMap
 
         }
     } catch (e) {

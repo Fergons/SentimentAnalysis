@@ -18,21 +18,24 @@
     import AxisY from './AxisY.svelte';
     import SharedTooltip from './SharedTooltip.svelte';
     import {transformSummary, generateColorMap} from '../utils/dataTransformer';
-    import type {ReviewsSummaryDataPoint, ReviewsSummaryV2} from '../client';
+    import type {ReviewsSummaryDataPoint, ReviewsSummaryV2, AspectsSummary} from '../client';
     import type {Source} from '../client';
     import FormField from '@smui/form-field';
     import ChartSettingsGroup from './ChartSettingsGroup.svelte';
     import Brush from './Brush.svelte';
     import {timeDay, timeWeek, timeMonth, timeYear} from "d3-time";
+    import SyncedBrush from "./SyncedBrush.svelte";
 
     export let data: {
         sources: Map<number, Source>,
-        summary: ReviewsSummaryV2
+        reviewSummary: ReviewsSummaryV2,
+        aspectSummary: AspectsSummary
     };
+    const categoryDatasets = [];
     const sources = data.sources;
     const sourceNameMap = new Map<string, number>();
     sources.forEach((s, id) => sourceNameMap.set(s.name, id));
-    const summary = data.summary;
+    const summary = data.reviewSummary;
 
     const xKey = 'date';
     const yKey = 'count';
@@ -75,6 +78,17 @@
             ['positive', '#00ff00'],
             ['negative', '#ff0000'],
             ['neutral', '#007bff']
+        ]
+    );
+
+    //don't include rColorMap colors here
+    const categoryColorMap = new Map<string, string>([
+            ['gameplay', '#00ff00'],
+            ['audio_visuals', '#ff0000'],
+            ['performance_bugs', '#007bff'],
+            ['overall', '#8400f5'],
+            ['price', '#00ff2a'],
+            ['community', '#ffdb00']
         ]
     );
 
@@ -262,6 +276,19 @@
                 </Html>
             </LayerCake>
         </div>
+        <div class="brush-container">
+            {#each categoryDatasets as dataset}
+                <SyncedBrush
+                        data={dataset}
+                        xKey="date"
+                        yKey="count"
+                        zKey="polarity"
+                        bind:min={brushExtents[0]}
+                        bind:max={brushExtents[1]}>
+                    stroke={zColorMap.get(dataset[0].polarity)}
+                </SyncedBrush>
+            {/each}
+        </div>
     </div>
 </div>
 
@@ -297,6 +324,7 @@
         flex-direction: row;
         padding: 1rem;
     }
+
     .chart {
         padding: 1rem;
         height: 300px;

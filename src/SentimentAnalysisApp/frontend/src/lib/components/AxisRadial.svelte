@@ -95,19 +95,17 @@
                 fill="{textColor}"
                 class:active={label === activeCategory}
                 on:click={() => {
-                    console.log(`clicked on ${label}`);
                     activeCategory = label;
                     dispatch('categorySelected', {category: label});
                 }}
                 on:focus={() => {
-                    console.log(`focused on ${label}`);
                     activeCategory = label;
                     dispatch('categorySelected', {category: label});
                 }}
                 tabindex="0"
                 transform="translate({(labelPlacement) * Math.cos(thisAngleSlice)}, {labelPlacement * Math.sin(thisAngleSlice)})"
         >
-            {label}
+            {label.split("_").join("&")}
         </text>
     {/each}
 </g>
