@@ -3,21 +3,36 @@ import type {
     Source,
     ReviewsSummaryV2,
     ReviewsSummaryByDate,
-    ReviewsSummaryBaseDataPoint
+    ReviewsSummaryBaseDataPoint, AspectsSummary
 } from "../client";
-import {timeFormat, timeParse} from "d3-time-format";
+import {timeParse} from "d3-time-format";
 import {
     timeDays, timeWeeks, timeMonths, timeYears,
     timeDay, timeWeek, timeMonth, timeYear
 } from "d3-time";
 import type {CountableTimeInterval} from "d3-time";
 import {rgb} from "d3-color";
+import type {CategoryPolarityCounts} from "../client";
+
+
+function generateDates(actualDates: string[], parseDate: (s: string) => Date | null, timeInterval: CountableTimeInterval | null) {
+    let dates: Date[];
+
+    if (timeInterval) {
+        const startDate = timeInterval.floor(parseDate(actualDates[0]) as Date);
+        const endDate = timeInterval.ceil(parseDate(actualDates[actualDates.length - 1]) as Date);
+        dates = timeInterval.range(startDate, endDate);
+    } else {
+        dates = actualDates.map((date) => parseDate(date) as Date);
+    }
+    return dates;
+}
 
 export function generateColorMap(
     selectedSources: string[],
     selectedTypes: string[],
-    sourceColorMap: Map<string, string>|null,
-    typeColorMap: Map<string, string>|null): Map<string, string> {
+    sourceColorMap: Map<string, string> | null,
+    typeColorMap: Map<string, string> | null): Map<string, string> {
     // 8 pastel contrasting with grey and white and being primary blue
     const baseColors = [
         "#007bff",
@@ -73,14 +88,7 @@ export function transformSummary(
     // create full result from sparse dates array
     const parseDate = timeParse("%Y-%m-%dT%H:%M:%S%Z");
     const actualDates = Object.keys(summary?.data || {});
-    let dates: Date[];
-    if (timeInterval) {
-        const startDate = timeInterval.floor(parseDate(actualDates[0]) as Date);
-        const endDate = timeInterval.ceil(parseDate(actualDates[actualDates.length - 1]) as Date);
-        dates = timeInterval.range(startDate, endDate);
-    } else {
-        dates = actualDates.map((date) => parseDate(date) as Date);
-    }
+    const dates = generateDates(actualDates, parseDate, timeInterval);
 
     //full result
     const result = dates.map(date => ({
@@ -120,5 +128,41 @@ export function transformSummary(
         });
     }
     return result;
+}
+
+
+export function transformAspectSummary(data: Record<string, CategoryPolarityCounts>, timeInterval: CountableTimeInterval | null) {
+
+    const parseDate = timeParse("%Y-%m-%dT%H:%M:%S%Z");
+    const actualDates = Object.keys(data);
+    const dates = generateDates(actualDates, parseDate, timeInterval);
+    const polarities = ['positive', 'negative', 'neutral'];
+    // find unique categories
+    const categories = new Set<string>();
+    for (const strDate of actualDates) {
+        const categoriesForDate = data[strDate].categories;
+        for (const category in categoriesForDate) {
+            categories.add(category);
+        }
+    }
+    const categoryDatasets = {};
+    for (const category of categories) {
+        categoryDatasets[category] = dates.map(date => ({date, positive: 0, negative: 0, neutral: 0}));
+        for (const strDate of actualDates) {
+            const date = timeInterval ? timeInterval.floor(parseDate(strDate) as Date) : parseDate(strDate) as Date;
+            const byDate = data[strDate];
+            const byCategory = byDate.categories;
+            const dataPoint = categoryDatasets[category].find((point) => {
+                    return point.date.getTime() === date.getTime();
+                }
+            );
+            if (dataPoint === undefined) continue;
+            for (const polarity of polarities) {
+                dataPoint[polarity] += byCategory[category] ? byCategory[category][polarity] : 0;
+            }
+        }
+    }
+    return categoryDatasets;
+
 }
 

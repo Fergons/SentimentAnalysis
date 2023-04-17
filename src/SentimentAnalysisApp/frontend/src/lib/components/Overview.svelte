@@ -166,6 +166,8 @@
 
 <style>
     .chart-container {
+        display: flex;
+        flex: 1;
         margin: 0 auto;
         width: 500px;
         height: 400px;

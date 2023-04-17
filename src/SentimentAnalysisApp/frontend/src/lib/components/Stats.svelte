@@ -17,7 +17,7 @@
     import AxisX from './AxisX.svelte';
     import AxisY from './AxisY.svelte';
     import SharedTooltip from './SharedTooltip.svelte';
-    import {transformSummary, generateColorMap} from '../utils/dataTransformer';
+    import {transformSummary, generateColorMap, transformAspectSummary} from '../utils/dataTransformer';
     import type {ReviewsSummaryDataPoint, ReviewsSummaryV2, AspectsSummary} from '../client';
     import type {Source} from '../client';
     import FormField from '@smui/form-field';
@@ -31,7 +31,7 @@
         reviewSummary: ReviewsSummaryV2,
         aspectSummary: AspectsSummary
     };
-    const categoryDatasets = [];
+    let categoryDatasets = [];
     const sources = data.sources;
     const sourceNameMap = new Map<string, number>();
     sources.forEach((s, id) => sourceNameMap.set(s.name, id));
@@ -106,10 +106,15 @@
     let flatData;
     let brushedData;
     let brushExtents = [null, null]
+    let brushedExtentsCategory = [null, null]
     let groupedData;
     let groupedBrushedData;
     let selectedCounts: string[] = [];
     let yDomainMax = 10;
+
+    $: {
+        categoryDatasets = transformAspectSummary(data.aspectSummary.dates, mapTimeBucketToTime[selectedTimeBucket]);
+    }
 
     $: {
         selectedTypes = [...selectedSentiments, ...selectedCategories, ...selectedReviewTypes];
@@ -118,7 +123,6 @@
             selectedCounts = ["all_total"]
         }
         flatData = transformSummary(summary, selectedSources, selectedTypes, sourceNameMap, mapTimeBucketToTime[selectedTimeBucket]);
-
         yDomainMax = 10;
         flatData.forEach(d => {
             d[xKey] = typeof d[xKey] === 'string' ? parseDate(d[xKey]) : d[xKey];
@@ -147,14 +151,46 @@
         });
     }
 
-    const formatTickX = timeFormat('%b. %Y');
+    const formatTickX = timeFormat('%b. %e, %Y');
     const formatTickY = d => {
         // format 1000 to 1K and 1000000 to 1M
         const formatter = format(`.${d}~s`);
         return formatter(d);
     };
 
+     function sortResult(result) {
+        if (Object.keys(result).length === 0) return [];
+
+        const rows = Object.keys(result)
+            .filter(d => d !== xKey)
+            .map(key => {
+                const [source, type] = key.split('_');
+                return {
+                    source,
+                    type,
+                    value: result[key]
+                };
+            })
+            .reduce((acc, row) => {
+                if (!acc[row.source]) {
+                    acc[row.source] = {
+                        source: row.source,
+                        types: []
+                    };
+                }
+                acc[row.source].types.push({type: row.type, value: row.value});
+                return acc;
+            }, {});
+
+        const sortedRows = Object.values(rows).sort((a, b) => {
+            return b.types.reduce((total, row) => total + row.value, 0) - a.types.reduce((total, row) => total + row.value, 0);
+        });
+
+        return sortedRows;
+    }
+
 </script>
+
 <div class='stats-container'>
     <div class='chart-settings'>
         <IconButton class="material-icons" on:click={() => {}}>
@@ -235,6 +271,7 @@
                             formatTick={formatTickY}
                     />
                     <SharedTooltip
+                            sortResult={sortResult}
                             formatTitle={timeFormat('%b. %e, %Y')}
                             dataset={brushedData}
                     />
@@ -251,6 +288,7 @@
         <div class="brush-container">
             <LayerCake
                     ssr={true}
+                    percentRange={true}
                     x={xKey}
                     y={yKey}
                     z={zKey}
@@ -267,30 +305,37 @@
                     flatData={flatData}
                     data={groupedData}
             >
-                <Svg>
+                <ScaledSvg>
                     <Multiline opacity={0.9}/>
                     <MultiArea opacity={0.9}/>
-                </Svg>
+                </ScaledSvg>
                 <Html>
                 <Brush bind:min={brushExtents[0]} bind:max={brushExtents[1]}/>
                 </Html>
             </LayerCake>
         </div>
-        <div class="brush-container">
-            {#each categoryDatasets as dataset}
+        <div class="synced-brush-container">
+            {#each Object.entries(categoryDatasets) as [category, dataset]}
                 <SyncedBrush
                         data={dataset}
                         xKey="date"
                         yKey="count"
                         zKey="polarity"
-                        bind:min={brushExtents[0]}
-                        bind:max={brushExtents[1]}>
-                    stroke={zColorMap.get(dataset[0].polarity)}
+                        rKey="polarity"
+                        zColorMap={rColorMap}
+                        formatTickX={formatTickX}
+                        formatTickY={formatTickY}
+                        chartTitle={category}
+                        bind:min={brushedExtentsCategory[0]}
+                        bind:max={brushedExtentsCategory[1]}
+                        stroke={categoryColorMap.get(category)}>
                 </SyncedBrush>
             {/each}
         </div>
     </div>
+
 </div>
+
 
 <style>
     /*
@@ -333,6 +378,16 @@
     .brush-container {
         padding: 1rem;
         height: 50px;
+    }
+
+    .synced-brush-container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding: 1rem;
+        width: 100%;
+        height: 100%;
     }
 
 </style>

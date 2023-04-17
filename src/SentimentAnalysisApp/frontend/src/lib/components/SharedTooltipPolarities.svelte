@@ -28,12 +28,56 @@
     /** @type {Array} [dataset] - The dataset to work off of—defaults to $data if left unset. You can pass something custom in here in case you don't want to use the main data or it's in a strange format. */
     export let dataset = undefined;
 
-    export let sortResult = () => {};
+    function sortResult(result) {
+        if (Object.keys(result).length === 0) return [];
+        const rows = Object.keys(result).filter(d => d !== $config.x).map(key => {
+            return {
+                key,
+                value: result[key]
+            };
+        }).sort((a, b) => b.value - a.value);
+        return rows;
+    }
 
     const w = 150;
     const w2 = w / 2;
     let top = 0;
 </script>
+
+
+<QuadTree
+        dataset={dataset || $data}
+        y='x'
+        let:x
+        let:y
+        let:visible
+        let:found
+        let:e
+>
+    {@const foundSorted = sortResult(found)}
+    {#if visible === true}
+        <div
+                style="left:{(x / 100) * $width }px;"
+                class="line"></div>
+        <div
+                class="tooltip"
+                style="
+        width:{w}px;
+        display: { visible ? 'block' : 'none' };
+        top:calc({$yScale(Math.max(...foundSorted.map(d => +d.value)))}% + {offset}px);
+        left:{Math.min(Math.max(w2, (x / 100) * $width), $width - w2)}px;"
+        >
+            <div class="title">{formatTitle(found[$config.x])}</div>
+            <div class="info-container">
+                {#each foundSorted as row}
+                    <div class="row">
+                        <span class="key">{formatKey(row.key)}:</span> {formatValue(row.value)}
+                    </div>
+                {/each}
+            </div>
+        </div>
+    {/if}
+</QuadTree>
 
 <style lang="scss" global>
   .tooltip {
@@ -77,8 +121,7 @@
 
   .info-container {
     display: flex;
-    flex-direction: row;
-    gap: 1rem;
+    flex-direction: column;
     flex-wrap: nowrap;
   }
 
@@ -86,43 +129,5 @@
     min-width: 80px;
   }
 
-</style>
 
-<QuadTree
-        dataset={dataset || $data}
-        y='x'
-        let:x
-        let:y
-        let:visible
-        let:found
-        let:e
->
-    {@const foundSorted = sortResult(found)}
-    {#if visible === true}
-        <div
-                style="left:{(x / 100) * $width }px;"
-                class="line"></div>
-        <div
-                class="tooltip"
-                style="
-        width:{w}px;
-        display: { visible ? 'block' : 'none' };
-        top:calc({$yScale(Math.max(...foundSorted[0].types.map(d => +d.value)))}% + {offset}px);
-        left:{Math.min(Math.max(w2, (x / 100) * $width), $width - w2)}px;"
-        >
-            <div class="title">{formatTitle(found[$config.x])}</div>
-            <div class="info-container">
-            {#each foundSorted as row}
-                <div class="column">
-                    <div class="row"><span class="title">{formatKey(row.source)}</span></div>
-                    {#each row.types as typeRow}
-                        <div class="row">
-                            <span class="key">{formatKey(typeRow.type)}:</span> {formatValue(typeRow.value)}
-                        </div>
-                    {/each}
-                </div>
-            {/each}
-            </div>
-        </div>
-    {/if}
-</QuadTree>
+</style>

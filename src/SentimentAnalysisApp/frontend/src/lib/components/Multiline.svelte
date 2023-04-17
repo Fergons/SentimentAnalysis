@@ -11,8 +11,7 @@
 		.map(d => $xGet(d) + ',' + $yGet(d))
 		.join('L');
     }
-
-
+    console.log($data)
 </script>
 
 <g class="line-group">

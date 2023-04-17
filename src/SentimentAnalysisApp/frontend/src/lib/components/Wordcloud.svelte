@@ -39,7 +39,7 @@
             inputData = data.categories[category] ? data.categories[category][polarity] ? data.categories[category][polarity] : [] : [];
         }
 
-        const fill = scaleLinear(["white", polarityColorMap.get(polarity)]).domain([1, inputData.length]);
+        const fill = scaleLinear([`dark${polarityColorMap.get(polarity)}`, polarityColorMap.get(polarity)]).domain([1, inputData.length]);
         layout()
             .size([width, height])
             .words(inputData.map((d, i) => ({text: d, size: 10 + Math.random() * 50, index: i})))
