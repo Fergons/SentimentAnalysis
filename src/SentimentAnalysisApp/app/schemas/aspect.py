@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, TYPE_CHECKING, Dict
+from typing import List, TYPE_CHECKING, Dict, Tuple
 from typing import Optional
 from pydantic import BaseModel, AnyHttpUrl
 
@@ -53,9 +53,9 @@ class AspectInDB(AspectInDBBase):
     model_id: str
 
 class AspectTermPolarityGroups(BaseModel):
-    positive: List[str]
-    negative: List[str]
-    neutral: List[str]
+    positive: List[Tuple[str, int]]
+    negative: List[Tuple[str, int]]
+    neutral: List[Tuple[str, int]]
 
 
 class AspectWordcloud(BaseModel):

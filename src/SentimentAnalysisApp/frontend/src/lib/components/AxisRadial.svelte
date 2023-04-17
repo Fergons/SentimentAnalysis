@@ -88,11 +88,11 @@
         >
         </line>
         <text
+                class="radial-labels"
                 text-anchor="{anchor($config.x.length, i)}"
                 dy="0.35em"
                 font-family="{textFont}"
                 font-size="{textSize}px"
-                fill="{textColor}"
                 class:active={label === activeCategory}
                 on:click={() => {
                     activeCategory = label;
@@ -117,5 +117,9 @@
 
     text.active {
         font-weight: bold;
+    }
+
+    .radial-labels {
+        text-transform: capitalize;
     }
 </style>

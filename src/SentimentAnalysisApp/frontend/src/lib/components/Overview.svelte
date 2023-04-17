@@ -14,9 +14,8 @@
     });
 
     export let data;
-
-    const enoughData = data && Object.keys(data.sources).length > 0;
-    const categoryScores = [calculateCategoryScores(data)];
+    const enoughData = data.aspectSummary && Object.keys(data.aspectSummary.sources).length > 0;
+    const categoryScores = [calculateCategoryScores(data.aspectSummary)];
     const seriesKey = '';
     const xKey = ['overall', 'gameplay', 'audio_visuals', 'performance_bugs', 'community', 'price'];
 
@@ -83,7 +82,6 @@
             overall: 5
         };
         const aggregatedPolarityCounts = {};
-        console.log("summary: ", summary)
 
         for (const sourceId in summary.sources) {
             const sourcePolarityCounts = summary.sources[sourceId];
@@ -159,7 +157,7 @@
 
 <div class="wordcloud">
     {#if Wordcloud}
-        <Wordcloud bind:selectedCategory={activeCategory}/>
+        <Wordcloud data={data.aspectWordcloud} bind:selectedCategory={activeCategory}/>
     {/if}
 </div>
 
@@ -167,7 +165,6 @@
 <style>
     .chart-container {
         display: flex;
-        flex: 1;
         margin: 0 auto;
         width: 500px;
         height: 400px;

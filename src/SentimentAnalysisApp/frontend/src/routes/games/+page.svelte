@@ -11,12 +11,12 @@
     import IconButton, {Icon} from '@smui/icon-button';
     import CircularProgress from '@smui/circular-progress';
     import Fab from "@smui/fab";
-    import Dialog, {Title, Content, Actions, InitialFocus} from '@smui/dialog';
     import List, {Item, Graphic, Text} from '@smui/list';
     import Radio from '@smui/radio';
     import chips, {Set} from '@smui/chips';
     import Textfield from "@smui/textfield";
     import Banner, {CloseReason} from '@smui/banner';
+    import Accordion, {Panel, Header, Content} from "@smui-extra/accordion";
 
     export let data: PageData;
 
@@ -138,138 +138,134 @@
 
 
 <section class="game-page">
-    <div class="main-list">
+    <div class="grid-container">
+        <div id="filler"></div>
+        <div class="filter-settings">
+            <Accordion style="position: sticky; top: 0;">
+                <Panel open nonInteractive>
+                    <Header ripple={false}>Filter</Header>
+                    <Content>
+                        <div class="filter-field">
+                            <Textfield
+                                    type="number"
+                                    bind:value={filterTemp.minScore}
+                                    label="Min Score"
+                                    suffix="/10.0"
+                                    input$pattern="\d+"
+                                    input$min="0.0"
+                                    input$max="10.0"
+                                    input$step="0.1"
+                            />
+                            <Textfield
+                                    type="number"
+                                    max="10.0"
+                                    bind:value={filterTemp.maxScore}
+                                    label="Max Score"
+                                    suffix="/10.0"
+                                    input$pattern="\d+"
+                                    input$min="0.0"
+                                    input$max="10.0"
+                                    input$step="0.1"
+                            />
+                            <Textfield
+                                    type="number"
+                                    bind:value={filterTemp.minNumReviews}
+                                    label="Min Reviews"
+                            />
+                            <Textfield
+                                    type="number"
+                                    bind:value={filterTemp.maxNumReviews}
+                                    label="Max Reviews"
+                            />
+                            <Textfield
+                                    type="datetime-local"
+                                    bind:value={filterTemp.minReleaseDate}
+                                    label="Min Release Date"
+
+                            />
+                            <Textfield
+                                    type="datetime-local"
+                                    bind:value={filterTemp.maxReleaseDate}
+                                    label="Max Release Date"
+                            />
+                        </div>
+                    </Content>
+                </Panel>
+            </Accordion>
+        </div>
         <div class="settings-bar">
             <div class="settings-bar-row">
-                <div class="search-fab">
-                    <Autocomplete this={autocomplete}
-                                  search={searchNames}
-                                  bind:value={searchName}
-                                  on:focusout={e => {
-                                      $gameFilter.name = searchName;
-                                  }}
-                                  showMenuWithNoInput={false}
-                                  label="Search"
-                    >
-                        <Textfield label="Search" bind:value={searchName} variant="outlined"/>
-                        <Text
-                                slot="loading"
-                                style="display: flex; width: 100%; justify-content: center; align-items: center;"
+                <div class="settings-bar-item">
+                    <div class="search-fab">
+                        <Autocomplete this={autocomplete}
+                                      search={searchNames}
+                                      bind:value={searchName}
+                                      on:focusout={e => {
+                                          $gameFilter.name = searchName;
+                                      }}
+                                      showMenuWithNoInput={false}
+                                      label="Search"
                         >
-                            Searching...
-                        </Text>
+                            <Textfield label="Search" bind:value={searchName} variant="outlined"/>
+                            <Text
+                                    slot="loading"
+                                    style="display: flex; width: 100%; justify-content: center; align-items: center;"
+                            >
+                                Searching...
+                            </Text>
 
-                    </Autocomplete>
-                    <Fab
-                            on:click={() => {$gameFilter.name = searchName}}
-                            disabled={searchName === ''}
-                            color="primary"
-                            mini
-                            style="margin-top: auto; margin-bottom: auto;"
-                    >
-                        <Icon class="material-icons">arrow_forward</Icon>
-                    </Fab>
+                        </Autocomplete>
+                        <Fab
+                                on:click={() => {$gameFilter.name = searchName}}
+                                disabled={searchName === ''}
+                                color="primary"
+                                mini
+                                style="margin-top: auto; margin-bottom: auto;"
+                        >
+                            <Icon class="material-icons">arrow_forward</Icon>
+                        </Fab>
+                    </div>
                 </div>
-                <div class="sorting-settings">
-                    <Button on:click={()=> $gameSort = {score: cycleThrough($gameSort.score, ['asc', 'desc', undefined])}}
-                            padded>
-                        <Label>Sort by Score</Label>
-                        {#if $gameSort.score === 'desc'}
-                            <Icon class="material-icons">arrow_drop_down</Icon>
-                        {:else if $gameSort.score === 'asc'}
-                            <Icon class="material-icons">arrow_drop_up</Icon>
-                        {:else}
-                            <Icon class="material-icons">exit</Icon>
-                        {/if}
-                    </Button>
 
-                    <Button on:click={()=> $gameSort = {releaseDate: cycleThrough($gameSort.releaseDate, ['asc', 'desc', null])}}
-                            padded>
-                        <Label>Sort by Release</Label>
-                        {#if $gameSort.releaseDate === 'desc'}
-                            <Icon class="material-icons">arrow_drop_down</Icon>
-                        {:else if $gameSort.releaseDate === 'asc'}
-                            <Icon class="material-icons">arrow_drop_up</Icon>
-                        {:else}
-                            <Icon class="material-icons">exit</Icon>
-                        {/if}
-                    </Button>
-                    <Button
-                            on:click={()=> $gameSort = {numReviews: cycleThrough($gameSort.numReviews, ['asc', 'desc', undefined])}}
-                            padded
-                    >
-                        <Label>Sort by Reviews</Label>
-                        {#if $gameSort.numReviews === 'desc'}
-                            <Icon class="material-icons">arrow_drop_down</Icon>
-                        {:else if $gameSort.numReviews === 'asc'}
-                            <Icon class="material-icons">arrow_drop_up</Icon>
-                        {:else}
-                            <Icon class="material-icons">exit</Icon>
-                        {/if}
-                    </Button>
-                </div>
-            </div>
-            <div class="settings-bar-row">
-                <div class="filter-settings">
-                    <div class="filter-field">
-                        <Textfield
-                                type="number"
-                                bind:value={filterTemp.minScore}
-                                label="Min Score"
-                                suffix="/10.0"
-                                input$pattern="\d+"
-                                input$min="0.0"
-                                input$max="10.0"
-                                input$step="0.1"
-                        />
-                        <Textfield
-                                type="number"
-                                max="10.0"
-                                bind:value={filterTemp.maxScore}
-                                label="Max Score"
-                                suffix="/10.0"
-                                input$pattern="\d+"
-                                input$min="0.0"
-                                input$max="10.0"
-                                input$step="0.1"
-                        />
-                    </div>
-                    <div class="filter-field">
-                        <Textfield
-                                type="number"
-                                bind:value={filterTemp.minNumReviews}
-                                label="Min Reviews"
-                        />
-                        <Textfield
-                                type="number"
-                                bind:value={filterTemp.maxNumReviews}
-                                label="Max Reviews"
-                        />
-                    </div>
-                    <div class="filter-field">
-                        <Textfield
-                                type="datetime-local"
-                                bind:value={filterTemp.minReleaseDate}
-                                label="Min Release Date"
+                <Fab on:click={()=> $gameSort = {score: cycleThrough($gameSort.score, ['asc', 'desc', undefined])}}
+                     extended>
+                    <Label>Sort by Score</Label>
+                    {#if $gameSort.score === 'desc'}
+                        <Icon class="material-icons">arrow_drop_down</Icon>
+                    {:else if $gameSort.score === 'asc'}
+                        <Icon class="material-icons">arrow_drop_up</Icon>
+                    {:else}
+                        <Icon class="material-icons">remove</Icon>
+                    {/if}
+                </Fab>
 
-                        />
-                        <Textfield
-                                type="datetime-local"
-                                bind:value={filterTemp.maxReleaseDate}
-                                label="Max Release Date"
-                        />
-                    </div>
-                     <div class="filter-field">
-                    <Button on:click={() => filterReset()}>
-                        <Label>Reset</Label>
-                    </Button>
-                    <Button on:click={() => gameFilter.set({...filterTemp})}>
-                        <Label>Apply</Label>
-                    </Button>
-                         </div>
-                </div>
+                <Fab on:click={()=> $gameSort = {releaseDate: cycleThrough($gameSort.releaseDate, ['asc', 'desc', null])}}
+                     extended>
+                    <Label>Sort by Release</Label>
+                    {#if $gameSort.releaseDate === 'desc'}
+                        <Icon class="material-icons">arrow_drop_down</Icon>
+                    {:else if $gameSort.releaseDate === 'asc'}
+                        <Icon class="material-icons">arrow_drop_up</Icon>
+                    {:else}
+                        <Icon class="material-icons">remove</Icon>
+                    {/if}
+                </Fab>
+                <Fab
+                        on:click={()=> $gameSort = {numReviews: cycleThrough($gameSort.numReviews, ['asc', 'desc', undefined])}}
+                        extended
+                >
+                    <Label>Sort by Reviews</Label>
+                    {#if $gameSort.numReviews === 'desc'}
+                        <Icon class="material-icons">arrow_drop_down</Icon>
+                    {:else if $gameSort.numReviews === 'asc'}
+                        <Icon class="material-icons">arrow_drop_up</Icon>
+                    {:else}
+                        <Icon class="material-icons">remove</Icon>
+                    {/if}
+                </Fab>
             </div>
         </div>
+
         <div class="game-list">
             {#if $gameDataStore.games.length === 0 && loadingContent}
                 <div class="loading-container">
@@ -302,11 +298,14 @@
 </section>
 
 <style>
+
     .settings-bar {
+        grid-column: 2;
+        grid-row: 1;
         display: flex;
         flex-direction: column;
         gap: 1rem;
-        margin-bottom: 1rem;
+        margin-bottom: 0.6rem;
         padding: 12px 1rem 12px 1rem;
         box-sizing: border-box;
         position: sticky;
@@ -317,54 +316,65 @@
     .settings-bar-row {
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
-
+        flex-wrap: wrap;
+        gap: 1rem;
     }
 
     .filter-settings {
+        grid-column: 1;
+        grid-row: 2;
+        padding-right: 1rem;
+        position: sticky;
+        top: 0;
+        height: calc(100% - 40px);
+        z-index: 2;
+    }
+
+    .game-list {
+        grid-row: 2;
+        grid-column: 2;
         display: flex;
-        flex-direction: row;
-        gap: 1rem;
-        align-items: center;
+        flex-direction: column;
+        box-sizing: border-box;
     }
 
     .page-buttons-container {
+        grid-row: 3;
+        grid-column: 2;
         display: flex;
         flex-direction: row;
         justify-content: center;
+        margin-bottom: 1rem;
     }
 
     .game-page {
         display: flex;
         flex-direction: row;
+        width: 100%;
     }
 
-    .main-list {
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-        margin-left: 1rem;
-    }
-
-    .game-list {
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 1rem;
+    .grid-container {
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+        grid-template-rows: auto auto auto;
     }
 
     .game-list, .settings-bar, .page-buttons-container {
         max-width: 960px;
     }
 
-
     * :global(.game-list>*) {
         margin-bottom: 8px;
     }
 
-
     @media (max-width: 1200px) {
-        * :global(.game-list) {
-            width: 100%;
+        * :global(.grid-container) {
+            grid-template-columns: 1fr;
+            grid-template-areas:
+              "settings-bar"
+              "filter-settings"
+              "game-list-content"
+              "page-buttons-container";
         }
     }
 
@@ -374,6 +384,14 @@
         flex-direction: row;
         justify-content: center;
     }
+
+    .filter-field {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        justify-content: center;
+    }
+
 
 
 </style>

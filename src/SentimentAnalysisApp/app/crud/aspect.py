@@ -41,13 +41,20 @@ class CRUDAspect(CRUDBase[Aspect, AspectCreate, AspectUpdate]):
         query = select(
             models.Aspect.category,
             models.Aspect.polarity,
-            models.Aspect.term
+            func.lower(models.Aspect.term),
+            func.count(models.Aspect.id.distinct()).label('count')
         ).outerjoin(
             models.Review, models.Review.id == models.Aspect.review_id
         ).filter(
             models.Review.game_id == game_id,
-            models.Aspect.model_id == model_id
+            models.Aspect.model_id == model_id,
+            models.Aspect.term != 'NULL'
+        ).group_by(
+            func.lower(models.Aspect.term),
+            models.Aspect.category,
+            models.Aspect.polarity
         ).order_by(
+            func.count(models.Aspect.id.distinct()).desc(),
             models.Aspect.category,
             models.Aspect.polarity
         )
@@ -58,15 +65,14 @@ class CRUDAspect(CRUDBase[Aspect, AspectCreate, AspectUpdate]):
         )
 
         for row in result.all():
-            category, polarity, term = row
-
+            category, polarity, term, count = row
             if category not in wordcloud.categories:
                 wordcloud.categories[category] = schemas.AspectTermPolarityGroups(
                     positive=[],
                     negative=[],
                     neutral=[]
                 )
-            getattr(wordcloud.categories[category], polarity).append(term)
+            getattr(wordcloud.categories[category], polarity).append((term, count))
 
         return wordcloud
 

@@ -315,9 +315,10 @@
             </LayerCake>
         </div>
         <div class="synced-brush-container">
-            {#each Object.entries(categoryDatasets) as [category, dataset]}
+            {#each Object.entries(categoryDatasets).filter(d => selectedCategories.includes(d[0])) as [category, dataset]}
                 <SyncedBrush
                         data={dataset}
+                        bind:selectedPolarities={selectedSentiments}
                         xKey="date"
                         yKey="count"
                         zKey="polarity"

@@ -1,7 +1,7 @@
 <script>
     import {onMount, onDestroy} from 'svelte';
     import {writable} from 'svelte/store';
-    import {scaleLinear} from 'd3-scale';
+    import {scaleLinear, scaleLog} from 'd3-scale';
     import layout from 'd3-cloud';
     import {schemeCategory10} from 'd3-scale-chromatic';
     import {LayerCake, Svg} from 'layercake';
@@ -9,23 +9,15 @@
     import IconButton from '@smui/icon-button';
     import Fab, {Icon} from '@smui/fab';
 
-    let data = {
-        "categories": {
-            "gameplay": {
-                "positive": ["foes", "OP loot", "quest doing", "gameplay", "OP loot", "loot", "loot", "loot", "rogue-like RPG/Settlement building game", "settlement"],
-                "negative": ["gameplay", "controls", "wait time", "queues", "online wait"],
-                "neutral": ["farm resources", "achievements", "Strength ramping of hero"]
-            }, "overall": {"neutral": ["game time"]}
-        }
-    }
+    export let data;
     const categories = Object.keys(data.categories);
     export let selectedCategory = Object.keys(data.categories)[0];
     let polarities = selectedCategory ? Object.keys(data.categories[selectedCategory]) : [];
     let selectedPolarity = polarities?.length > 0 ? polarities[0] : undefined;
     const polarityColorMap = new Map([
-        ["positive", "green"],
-        ["negative", "red"],
-        ["neutral", "blue"]
+        ["positive", "#28a745"],
+        ["negative", "#dc3545"],
+        ["neutral", "#007bff"]
     ]);
     const words = writable([]);
     let width = 500;
@@ -40,9 +32,18 @@
         }
 
         const fill = scaleLinear([`dark${polarityColorMap.get(polarity)}`, polarityColorMap.get(polarity)]).domain([1, inputData.length]);
+        const minCount = Math.min(...inputData.map(d => d[1]));
+        const maxCount = Math.max(...inputData.map(d => d[1]));
+
+        // Create a logarithmic scale for word sizes
+        const sizeScale = scaleLog()
+            .domain([minCount, maxCount])
+            .range([14, 100]);
+
         layout()
             .size([width, height])
-            .words(inputData.map((d, i) => ({text: d, size: 10 + Math.random() * 50, index: i})))
+            .words(inputData.map((d, i) => ({text: d[0], size: sizeScale(d[1]), index: i})))
+            .padding(5)
             .padding(5)
             .rotate(() => 0)
             .font('Impact')
@@ -105,34 +106,34 @@
     <div class="bar">
         <div class="flexy">
 
-                <Fab on:click={previousCategory} disabled={categories.length < 2} mini>
-                    <IconButton class="material-icons">arrow_left</IconButton>
-                </Fab>
+            <Fab on:click={previousCategory} disabled={categories.length < 2} mini>
+                <IconButton class="material-icons">arrow_left</IconButton>
+            </Fab>
 
         </div>
         <span class="selection mdc-typography--headline4">{selectedCategory.split('_').join(" & ")}</span>
         <div class="flexy">
 
-                <Fab on:click={nextCategory} disabled={categories.length < 2} mini>
-                    <IconButton class="material-icons">arrow_right</IconButton>
-                </Fab>
+            <Fab on:click={nextCategory} disabled={categories.length < 2} mini>
+                <IconButton class="material-icons">arrow_right</IconButton>
+            </Fab>
 
         </div>
     </div>
     <div class="bar">
         <div class="flexy">
 
-                <Fab on:click={previousPolarity} mini>
-                    <IconButton class="material-icons">arrow_left</IconButton>
-                </Fab>
+            <Fab on:click={previousPolarity} mini>
+                <IconButton class="material-icons">arrow_left</IconButton>
+            </Fab>
 
         </div>
         <span class="selection mdc-typography--headline5">{selectedPolarity}</span>
         <div class="flexy">
 
-                <Fab on:click={nextPolarity} disabled={polarities.length < 2} mini>
-                    <IconButton class="material-icons">arrow_right</IconButton>
-                </Fab>
+            <Fab on:click={nextPolarity} disabled={polarities.length < 2} mini>
+                <IconButton class="material-icons">arrow_right</IconButton>
+            </Fab>
         </div>
     </div>
 </div>

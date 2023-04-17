@@ -25,13 +25,17 @@
     export let stroke = '#00e047';
 
     export let chartTitle = '';
+
+    export let selectedPolarities = ['positive', 'negative', 'neutral'];
     export let formatTickX = (d) => d;
     export let formatTickY = (d) => d;
+
 
     let brushedData;
     let groupedData;
     let yDomainMax = 5;
     $: {
+        yDomainMax=5;
         data.forEach(
             d => {
                 d[xKey] = new Date(d[xKey]);
@@ -39,14 +43,13 @@
                 d['negative'] = +d['negative'];
                 d['neutral'] = +d['neutral'];
                 yDomainMax = Math.max(yDomainMax, d['positive'], d['negative'], d['neutral']);
-
             }
         )
         brushedData = data.slice((min || 0) * data.length, (max || 1) * data.length);
         if (brushedData.length < 2) {
             brushedData = data.slice(min * data.length, min * data.length + 2)
         }
-        groupedData = groupLonger(brushedData, ['positive', 'negative', 'neutral'], {
+        groupedData = groupLonger(brushedData, selectedPolarities, {
             groupTo: zKey,
             valueTo: yKey,
         });
@@ -54,7 +57,7 @@
 </script>
 
 <div class="chart-wrapper">
-    <span style="padding-bottom: 1rem" class="mdc-typography--headline4">{chartTitle}</span>
+    <span style="padding-bottom: 1rem; text-transform: capitalize" class="mdc-typography--headline4">{chartTitle.split("_").join(" & ")}</span>
     <div class="chart-container">
         <LayerCake
                 ssr={true}
@@ -65,11 +68,11 @@
                 z={zKey}
                 yDomain={[0, yDomainMax]}
                 rScale={scaleOrdinal()}
-                rDomain={['positive', 'negative', 'neutral']}
-                rRange={['positive', 'negative', 'neutral'].map(name => zColorMap.get(name))}
+                rDomain={selectedPolarities}
+                rRange={selectedPolarities.map(name => zColorMap.get(name))}
                 zScale={scaleOrdinal()}
-                zDomain={['positive', 'negative', 'neutral']}
-                zRange={['positive', 'negative', 'neutral'].map(name => zColorMap.get(name))}
+                zDomain={selectedPolarities}
+                zRange={selectedPolarities.map(name => zColorMap.get(name))}
                 flatData={brushedData}
                 data={groupedData}
         >
@@ -107,11 +110,11 @@
                 r={rKey}
                 z={zKey}
                 rScale={scaleOrdinal()}
-                rDomain={['positive', 'negative', 'neutral']}
-                rRange={['positive', 'negative', 'neutral'].map(name => zColorMap.get(name))}
+                rDomain={selectedPolarities}
+                rRange={selectedPolarities.map(name => zColorMap.get(name))}
                 zScale={scaleOrdinal()}
-                zDomain={['positive', 'negative', 'neutral']}
-                zRange={['positive', 'negative', 'neutral'].map(name => zColorMap.get(name))}
+                zDomain={selectedPolarities}
+                zRange={selectedPolarities.map(name => zColorMap.get(name))}
                 yDomain={[0, yDomainMax]}
                 flatData={brushedData}
                 data={groupedData}

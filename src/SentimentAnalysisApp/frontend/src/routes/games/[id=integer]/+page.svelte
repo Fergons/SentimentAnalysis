@@ -5,24 +5,17 @@
     import Stats from "../../../lib/components/Stats.svelte";
 
     export let data;
-    //data keys and values
-    //  name: game.name,
-    //  subtitle: 'Overview',
-    //  game: game,
-    //    reviewSummary: reviewsSummary,
-    //         aspectsSummary: aspectsSummary,
-    //         sources: sourceMap
-    const {name, subtitle, game, reviewSummary, aspectSummary, sources} = data;
+    const {name, subtitle, game, reviewSummary, aspectSummary, sources, aspectWordcloud} = data;
 
 </script>
 
 <section>
     <div class="overview-container">
-        <Overview data={aspectSummary}/>
+        <Overview data={{aspectSummary, aspectWordcloud}}/>
     </div>
 
     <Banner open autoClose={false}>
-        <Label slot="label">{game.name}</Label>
+        <Label slot="label">Stats</Label>
     </Banner>
     <div class="stats-container">
         <Stats data={{
@@ -44,9 +37,9 @@
 
     .overview-container {
         display: flex;
-        flex-direction: row;
+        flex-direction: row-reverse;
         flex-wrap: wrap;
-        gap: 2rem;
+        gap: 1rem;
         margin: 0 auto;
         width: 100%;
         min-width: auto;

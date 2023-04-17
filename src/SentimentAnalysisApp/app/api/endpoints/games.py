@@ -1,3 +1,4 @@
+from collections import Counter
 from datetime import datetime
 from typing import Any, List, Optional, Dict, Tuple, Literal, Union
 
@@ -217,7 +218,7 @@ async def get_categories(*, db: AsyncSession = Depends(deps.get_session), name: 
 
 @router.get("/{id}/aspects/wordcloud", response_model=schemas.AspectWordcloud)
 async def get_wordcloud(
-        *, db: AsyncSession = Depends(deps.get_session), id: int, limit: int = 50
+        *, db: AsyncSession = Depends(deps.get_session), id: int, limit: int = 100
 ) -> schemas.AspectWordcloud:
     # most utilized model
     result = await db.execute(select(models.Aspect.model_id, func.count(models.Aspect.id))
@@ -228,5 +229,9 @@ async def get_wordcloud(
     model_id = result.scalars().first()
     # get words
     wordcloud = await crud.aspect.get_wordcloud(db, game_id=id, model_id=model_id)
-    print(wordcloud)
+    for c in wordcloud.categories.values():
+        c.positive = c.positive[:limit]
+        c.negative = c.negative[:limit]
+        c.neutral = c.neutral[:limit]
+
     return wordcloud
