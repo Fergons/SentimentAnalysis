@@ -13,7 +13,7 @@ from .reviewer import (Reviewer, ReviewerBase,
                        ReviewerInDB,
                        ReviewerInDBBase)
 from .aspect import Aspect, AspectBase, AspectCreate, AspectUpdate, AspectInDB, AspectInDBBase
-from .aspect import AspectTermPolarityGroups, AspectWordcloud
+from .aspect import AspectTermPolarityGroups, AspectWordcloud, AspectTermCount
 from .source import Source, SourceBase, SourceCreate, SourceUpdate, SourceInDBBase
 from .source import GameSource, GameSourceUpdate, GameSourceCreate
 from .developer import Developer, DeveloperCreate, DeveloperUpdate, DeveloperInDBBase

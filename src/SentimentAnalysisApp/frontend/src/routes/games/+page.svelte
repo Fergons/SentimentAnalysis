@@ -131,20 +131,46 @@
     let filterTemp = {...initialGameFilterValue};
 
     function filterReset() {
+        searchName = '';
         gameFilter.set({...initialGameFilterValue})
         filterTemp = {...initialGameFilterValue};
     }
+
+    function applyFilter() {
+        gameFilter.set({...filterTemp});
+    }
+
+    let filterSettingsOpen = true;
+
+    function toggleFilterSettings() {
+        filterSettingsOpen = !filterSettingsOpen;
+    }
+
 </script>
 
 
 <section class="game-page">
     <div class="grid-container">
-        <div id="filler"></div>
+        <div class="filter-toggle-container">
+            <Button style="flex-grow:1"on:click={toggleFilterSettings} color="secondary">
+                <Icon class="material-icons">filter_list</Icon>
+            </Button>
+        </div>
         <div class="filter-settings">
-            <Accordion style="position: sticky; top: 0;">
-                <Panel open nonInteractive>
+            <Accordion>
+                <Panel bind:open={filterSettingsOpen} nonInteractive>
                     <Header ripple={false}>Filter</Header>
                     <Content>
+                        <Button on:click={filterReset}
+                                color="secondary">
+                            <Label>Reset</Label>
+                            <Icon class="material-icons">reset</Icon>
+                        </Button>
+                        <Button on:click={applyFilter}
+                                color="secondary">
+                            <Label>Apply</Label>
+                            <Icon class="material-icons">apply</Icon>
+                        </Button>
                         <div class="filter-field">
                             <Textfield
                                     type="number"
@@ -226,43 +252,43 @@
                         </Fab>
                     </div>
                 </div>
+                <div>
+                    <Button on:click={()=> $gameSort = {score: cycleThrough($gameSort.score, ['asc', 'desc', undefined])}}
+                            color="secondary">
+                        <Label>Score</Label>
+                        {#if $gameSort.score === 'desc'}
+                            <Icon class="material-icons">arrow_drop_down</Icon>
+                        {:else if $gameSort.score === 'asc'}
+                            <Icon class="material-icons">arrow_drop_up</Icon>
+                        {:else}
+                            <Icon class="material-icons">remove</Icon>
+                        {/if}
+                    </Button>
 
-                <Fab on:click={()=> $gameSort = {score: cycleThrough($gameSort.score, ['asc', 'desc', undefined])}}
-                     extended>
-                    <Label>Sort by Score</Label>
-                    {#if $gameSort.score === 'desc'}
-                        <Icon class="material-icons">arrow_drop_down</Icon>
-                    {:else if $gameSort.score === 'asc'}
-                        <Icon class="material-icons">arrow_drop_up</Icon>
-                    {:else}
-                        <Icon class="material-icons">remove</Icon>
-                    {/if}
-                </Fab>
-
-                <Fab on:click={()=> $gameSort = {releaseDate: cycleThrough($gameSort.releaseDate, ['asc', 'desc', null])}}
-                     extended>
-                    <Label>Sort by Release</Label>
-                    {#if $gameSort.releaseDate === 'desc'}
-                        <Icon class="material-icons">arrow_drop_down</Icon>
-                    {:else if $gameSort.releaseDate === 'asc'}
-                        <Icon class="material-icons">arrow_drop_up</Icon>
-                    {:else}
-                        <Icon class="material-icons">remove</Icon>
-                    {/if}
-                </Fab>
-                <Fab
-                        on:click={()=> $gameSort = {numReviews: cycleThrough($gameSort.numReviews, ['asc', 'desc', undefined])}}
-                        extended
-                >
-                    <Label>Sort by Reviews</Label>
-                    {#if $gameSort.numReviews === 'desc'}
-                        <Icon class="material-icons">arrow_drop_down</Icon>
-                    {:else if $gameSort.numReviews === 'asc'}
-                        <Icon class="material-icons">arrow_drop_up</Icon>
-                    {:else}
-                        <Icon class="material-icons">remove</Icon>
-                    {/if}
-                </Fab>
+                    <Button on:click={()=> $gameSort = {releaseDate: cycleThrough($gameSort.releaseDate, ['asc', 'desc', null])}}
+                            color="secondary">
+                        <Label>Release</Label>
+                        {#if $gameSort.releaseDate === 'desc'}
+                            <Icon class="material-icons">arrow_drop_down</Icon>
+                        {:else if $gameSort.releaseDate === 'asc'}
+                            <Icon class="material-icons">arrow_drop_up</Icon>
+                        {:else}
+                            <Icon class="material-icons">remove</Icon>
+                        {/if}
+                    </Button>
+                    <Button
+                            on:click={()=> $gameSort = {numReviews: cycleThrough($gameSort.numReviews, ['asc', 'desc', undefined])}}
+                            color="secondary">
+                        <Label>Reviews</Label>
+                        {#if $gameSort.numReviews === 'desc'}
+                            <Icon class="material-icons">arrow_drop_down</Icon>
+                        {:else if $gameSort.numReviews === 'asc'}
+                            <Icon class="material-icons">arrow_drop_up</Icon>
+                        {:else}
+                            <Icon class="material-icons">remove</Icon>
+                        {/if}
+                    </Button>
+                </div>
             </div>
         </div>
 
@@ -298,10 +324,13 @@
 </section>
 
 <style>
+    .filter-toggle-container {
+        grid-area: toggle-filter;
+        display: none;
+    }
 
     .settings-bar {
-        grid-column: 2;
-        grid-row: 1;
+        grid-area: settings-bar;
         display: flex;
         flex-direction: column;
         gap: 1rem;
@@ -316,31 +345,30 @@
     .settings-bar-row {
         display: flex;
         flex-direction: row;
+        align-items: center;
         flex-wrap: wrap;
         gap: 1rem;
     }
 
     .filter-settings {
-        grid-column: 1;
-        grid-row: 2;
+        grid-area: filter-settings;
         padding-right: 1rem;
         position: sticky;
-        top: 0;
-        height: calc(100% - 40px);
-        z-index: 2;
+        align-self: start;
+        top: 80px;
+        z-index: 4;
     }
 
+
     .game-list {
-        grid-row: 2;
-        grid-column: 2;
+        grid-area: game-list;
         display: flex;
         flex-direction: column;
         box-sizing: border-box;
     }
 
     .page-buttons-container {
-        grid-row: 3;
-        grid-column: 2;
+        grid-area: page-buttons-container;
         display: flex;
         flex-direction: row;
         justify-content: center;
@@ -357,6 +385,10 @@
         display: grid;
         grid-template-columns: 1fr 3fr;
         grid-template-rows: auto auto auto;
+        grid-template-areas:
+              ". settings-bar"
+              "filter-settings game-list"
+              ". page-buttons-container";
     }
 
     .game-list, .settings-bar, .page-buttons-container {
@@ -367,14 +399,36 @@
         margin-bottom: 8px;
     }
 
-    @media (max-width: 1200px) {
+    @media (max-width: 960px) {
+        .filter-settings {
+            top: 132px;
+        }
+    }
+
+    @media (max-width: 900px) {
+        .filter-toggle-container {
+            display: flex;
+        }
+
         * :global(.grid-container) {
             grid-template-columns: 1fr;
             grid-template-areas:
               "settings-bar"
+              "toggle-filter"
               "filter-settings"
-              "game-list-content"
+              "game-list"
               "page-buttons-container";
+        }
+
+        * :global(.filter-settings) {
+            position: sticky;
+            padding-right: 0;
+            padding-bottom: 1rem;
+            top: 132px;
+        }
+
+        * :global(.smui-accordion__header__title) {
+            display: none;
         }
     }
 
@@ -391,7 +445,6 @@
         gap: 1rem;
         justify-content: center;
     }
-
 
 
 </style>

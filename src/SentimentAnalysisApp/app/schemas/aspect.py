@@ -52,11 +52,15 @@ class Aspect(AspectInDBBase):
 class AspectInDB(AspectInDBBase):
     model_id: str
 
+class AspectTermCount(BaseModel):
+    term: str
+    count: int
+
 class AspectTermPolarityGroups(BaseModel):
-    positive: List[Tuple[str, int]]
-    negative: List[Tuple[str, int]]
-    neutral: List[Tuple[str, int]]
+    positive: List[AspectTermCount] = []
+    negative: List[AspectTermCount] = []
+    neutral: List[AspectTermCount] = []
 
 
 class AspectWordcloud(BaseModel):
-    categories: Dict[str, AspectTermPolarityGroups]
+    categories: Dict[str, AspectTermPolarityGroups] = {}

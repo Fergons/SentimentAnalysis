@@ -37,8 +37,8 @@
 
     .overview-container {
         display: flex;
-        flex-direction: row-reverse;
         flex-wrap: wrap;
+        justify-content: space-evenly;
         gap: 1rem;
         margin: 0 auto;
         width: 100%;

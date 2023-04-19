@@ -72,7 +72,9 @@ class CRUDAspect(CRUDBase[Aspect, AspectCreate, AspectUpdate]):
                     negative=[],
                     neutral=[]
                 )
-            getattr(wordcloud.categories[category], polarity).append((term, count))
+            getattr(wordcloud.categories[category], polarity).append(
+                schemas.AspectTermCount(term=term, count=count)
+            )
 
         return wordcloud
 

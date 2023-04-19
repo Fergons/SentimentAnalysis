@@ -11,8 +11,9 @@
 
     export let data;
     const categories = Object.keys(data.categories);
-    export let selectedCategory = Object.keys(data.categories)[0];
-    let polarities = selectedCategory ? Object.keys(data.categories[selectedCategory]) : [];
+    console.log(data)
+    export let selectedCategory = data.categories && Object.keys(data.categories).length > 0 ?  Object.keys(data.categories)[0] : 'overall';
+    let polarities = selectedCategory && data.categories[selectedCategory] ? Object.keys(data.categories[selectedCategory]) : [];
     let selectedPolarity = polarities?.length > 0 ? polarities[0] : undefined;
     const polarityColorMap = new Map([
         ["positive", "#28a745"],
@@ -26,14 +27,14 @@
     function updateWordcloud(category, polarity) {
         let inputData = [];
         if (!category || !polarity) {
-            inputData = [];
+            return;
         } else {
             inputData = data.categories[category] ? data.categories[category][polarity] ? data.categories[category][polarity] : [] : [];
         }
 
         const fill = scaleLinear([`dark${polarityColorMap.get(polarity)}`, polarityColorMap.get(polarity)]).domain([1, inputData.length]);
-        const minCount = Math.min(...inputData.map(d => d[1]));
-        const maxCount = Math.max(...inputData.map(d => d[1]));
+        const minCount = Math.min(...inputData.map(d => d.count));
+        const maxCount = Math.max(...inputData.map(d => d.count));
 
         // Create a logarithmic scale for word sizes
         const sizeScale = scaleLog()
@@ -42,7 +43,7 @@
 
         layout()
             .size([width, height])
-            .words(inputData.map((d, i) => ({text: d[0], size: sizeScale(d[1]), index: i})))
+            .words(inputData.map((d, i) => ({text: d.term, size: sizeScale(d.count), index: i})))
             .padding(5)
             .padding(5)
             .rotate(() => 0)

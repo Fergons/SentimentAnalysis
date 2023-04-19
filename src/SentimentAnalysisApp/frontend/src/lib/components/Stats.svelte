@@ -117,13 +117,13 @@
     }
 
     $: {
-        selectedTypes = [...selectedSentiments, ...selectedCategories, ...selectedReviewTypes];
+        selectedTypes = [...selectedSentiments, ...selectedReviewTypes];
         selectedCounts = [...selectedSources.flatMap(source => selectedTypes.map(type => `${source}_${type}`))];
         if (selectedCounts.length === 0) {
             selectedCounts = ["all_total"]
         }
         flatData = transformSummary(summary, selectedSources, selectedTypes, sourceNameMap, mapTimeBucketToTime[selectedTimeBucket]);
-        yDomainMax = 10;
+        yDomainMax = 5;
         flatData.forEach(d => {
             d[xKey] = typeof d[xKey] === 'string' ? parseDate(d[xKey]) : d[xKey];
             selectedCounts.forEach(name => {

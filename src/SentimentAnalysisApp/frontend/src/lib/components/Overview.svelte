@@ -165,7 +165,6 @@
 <style>
     .chart-container {
         display: flex;
-        margin: 0 auto;
         width: 500px;
         height: 400px;
         padding: 1rem;
@@ -175,7 +174,6 @@
     .wordcloud {
         display: flex;
         flex-direction: column;
-        flex: 1;
         padding: 1rem;
     }
 </style>
