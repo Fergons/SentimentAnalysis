@@ -151,14 +151,9 @@
 
 <section class="game-page">
     <div class="grid-container">
-        <div class="filter-toggle-container">
-            <Button style="flex-grow:1"on:click={toggleFilterSettings} color="secondary">
-                <Icon class="material-icons">filter_list</Icon>
-            </Button>
-        </div>
         <div class="filter-settings">
             <Accordion>
-                <Panel bind:open={filterSettingsOpen} nonInteractive>
+                <Panel bind:open={filterSettingsOpen}>
                     <Header ripple={false}>Filter</Header>
                     <Content>
                         <Button on:click={filterReset}
@@ -290,6 +285,13 @@
                     </Button>
                 </div>
             </div>
+            <div class="settings-bar-row">
+                <div class="filter-toggle-container">
+                    <Button style="flex-grow:1" on:click={toggleFilterSettings} color="secondary" variant="unelevated">
+                        <Icon class="material-icons">filter_list</Icon>
+                    </Button>
+                </div>
+            </div>
         </div>
 
         <div class="game-list">
@@ -327,6 +329,7 @@
     .filter-toggle-container {
         grid-area: toggle-filter;
         display: none;
+        width: 100%;
     }
 
     .settings-bar {
@@ -406,6 +409,10 @@
     }
 
     @media (max-width: 900px) {
+        .settings-bar {
+            margin-bottom: 0;
+        }
+
         .filter-toggle-container {
             display: flex;
         }
@@ -414,7 +421,6 @@
             grid-template-columns: 1fr;
             grid-template-areas:
               "settings-bar"
-              "toggle-filter"
               "filter-settings"
               "game-list"
               "page-buttons-container";
