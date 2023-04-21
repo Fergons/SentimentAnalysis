@@ -17,7 +17,6 @@ from app.schemas.game import CategoryCreate, CategoryUpdate
 from app.schemas.game import GameCategoryCreate, GameCategoryUpdate
 import logging
 from app import models, schemas
-from app.core.cursor import encode_cursor, decode_cursor
 
 logging.basicConfig(
     level=logging.DEBUG,
