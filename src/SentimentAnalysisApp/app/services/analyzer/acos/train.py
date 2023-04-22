@@ -27,10 +27,18 @@ class LoggingCallback(TrainerCallback):
 
 task_name = "multitask"
 # experiment_name = "acos_finetuning_on_acs_all_data_mt5"
-experiment_name = "mt5-base-joint-acos-1335.GamesACOS"
+experiment_name = "byt5-base-i4eg-2b"
 task = "joint-acos"
+# task = "joint-aspect-category-sentiment"
+# train_dataset_name = "1333.Games_ACS"
+# test_dataset_name = "1333.Games_ACS"
+
 train_dataset_name = "1335.GamesACOS"
 test_dataset_name = "1335.GamesACOS"
+
+# train_dataset_name = "506.Synthetic"
+# # test_dataset_name = "506.Synthetic"
+
 logging_callback = LoggingCallback(f"{task}-{train_dataset_name}-{experiment_name}_logs.json")
 # model_checkpoint = 'allenai/tk-instruct-base-def-pos'
 # model_checkpoint = "kevinscaria/ate_tk-instruct-base-def-pos-neg-neut-combined"
@@ -39,8 +47,10 @@ logging_callback = LoggingCallback(f"{task}-{train_dataset_name}-{experiment_nam
 # model_checkpoint = 'checkpoints/multitask/joint-aspect-category-sentiment-1337.GamesCzechEng/checkpoint-last'
 # model_checkpoint = 'checkpoints/multitask/joint-aspect-category-sentiment-1336.Games/checkpoint-760'
 # model_checkpoint = 'checkpoints/multitask/googlemt5-base-joint-aspect-sentiment-501.Laptop14/checkpoint-1467'
+# model_checkpoint = 'checkpoints/multitask/joint-acos-506.Synthetic-byt5-base/checkpoint-3930'
+model_checkpoint = "google/byt5-base"
 # model_checkpoint = "google/mt5-base"
-model_checkpoint = "google/mt5-base"
+# model_checkpoint = "checkpoints/multitask/joint-acs-1333.Games_ACS-mt5-base-i2eg/checkpoint-2030"
 from_checkpoint = False
 print("Experiment Name: ", experiment_name)
 model_out_path = "checkpoints"
@@ -56,6 +66,9 @@ id_test_file_path = f"../../../../integrated_datasets/acos_datasets/{test_datase
 
 id_tr_df = data_utils.read_json(id_train_file_path, "train.main_categories")
 id_te_df = data_utils.read_json(id_test_file_path, "test.main_categories")
+
+# id_tr_df = data_utils.read_json(id_train_file_path, "train")
+# id_te_df = data_utils.read_json(id_test_file_path, "test.main_categories")
 
 id_tr_df = pd.DataFrame(id_tr_df)
 id_te_df = pd.DataFrame(id_te_df)
@@ -74,7 +87,7 @@ t5_exp = model.ABSAGenerator(model_checkpoint)
 id_ds, id_tokenized_ds, ood_ds, ood_tokenzed_ds = loader.create_datasets(
     t5_exp.tokenize_function_inputs
 )
-batch_size = 4
+batch_size = 2
 
 # Training arguments
 training_args = {
@@ -92,7 +105,7 @@ training_args = {
     "push_to_hub": False,
     "eval_accumulation_steps": 1,
     "predict_with_generate": True,
-    "logging_steps": id_tokenized_ds.num_rows["train"]/16,
+    "logging_steps": int(id_tokenized_ds.num_rows["train"]/batch_size),
     "use_mps_device": False,
     "fp16": False
 }

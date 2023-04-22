@@ -165,6 +165,8 @@ class Scraper:
 
         return response
 
+    async def review_page_generator(self, page_size: int = 100, params: dict = None):
+        raise NotImplementedError
     async def get_all_reviews(self):
         raise NotImplementedError
 

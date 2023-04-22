@@ -214,12 +214,6 @@ output: Příběh:gameplay:positive|multiplayerová část hry:gameplay:negative
 example 2-
 input: Hra nabízí skvělý balanc mezi PvP a PvE a některé herní prvky jsou velmi zastaralé.
 output: balanc mezi PvP a PvE:gameplay:positive|herní prvky:gameplay:negative
-example 3-
-input: Hra obsahuje rozne game mody, mapy a herni prvky.
-output: game mody:gameplay:neutral|mapy:gameplay:neutral|herni prvky:gameplay:neutral
-example 4-
-input: Ziadne bugy hned od vydania, vynikajuce.
-output: bugy:preformance_bugs:positive
 Now extract aspect:category:sentiment for the following example:
 input: """
         if self.eos_instruction is None:
@@ -293,3 +287,38 @@ input: """
 # input: Ziadne bugy hned od vydania, vynikajuce.
 # output: bugy:preformance_bugs:positive
 # Now extract aspect:category:sentiment for the following example:
+
+
+# self.bos_instruction = f"""extract all aspect, category, opinion, sentiment quadruples from input video game review:
+# example 1-
+# input: Příběh je velmi zajímavý ale multiplayerová část hry je plná cheaterů.
+# output: Příběh:gameplay:velmi zajímavý:positive|multiplayerová část hry:gameplay:plná cheaterů:negative|cheaterů:community:plná:negative
+# example 2-
+# input: Hra nabízí skvělý balanc mezi PvP a PvE a některé herní prvky jsou velmi zastaralé.
+# output: balanc mezi PvP a PvE:gameplay:skvělý:positive|herní prvky:gameplay:velmi zastaralé:negative
+# example 3-
+# input: Hra obsahuje rozne game mody, mapy a herni prvky.
+# output: game mody:gameplay:rozne:neutral|mapy:gameplay:NULL:neutral|herni prvky:gameplay:NULL:neutral
+# Now extract aspect:category:opinion:sentiment for the following example:
+# example 4-
+# input: Ziadne bugy hned od vydania, vynikajuce.
+# output: bugy:preformance_bugs:Ziadne hned od vydania:positive
+# Now extract aspect:category:opinion:sentiment quadruples for the following example:
+# input:
+
+
+#             self.bos_instruction = f"""extract all aspect, category, sentiment triplets from input video game review:
+# example 1-
+# input: Příběh je velmi zajímavý, ale multiplayerová část hry je plná cheaterů.
+# output: Příběh:gameplay:positive|multiplayerová část hry:gameplay:negative|cheaterů:community:negative
+# example 2-
+# input: Hra nabízí skvělý balanc mezi PvP a PvE a některé herní prvky jsou velmi zastaralé.
+# output: balanc mezi PvP a PvE:gameplay:positive|herní prvky:gameplay:negative
+# example 3-
+# input: Hra obsahuje rozne game mody, mapy a herni prvky.
+# output: game mody:gameplay:neutral|mapy:gameplay:neutral|herni prvky:gameplay:neutral
+# example 4-
+# input: Ziadne bugy hned od vydania, vynikajuce.
+# output: bugy:preformance_bugs:positive
+# Now extract aspect:category:sentiment for the following example:
+# input: """

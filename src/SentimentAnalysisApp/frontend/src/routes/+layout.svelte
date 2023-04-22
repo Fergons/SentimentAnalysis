@@ -69,11 +69,6 @@
             name: 'Games',
             route: '/games',
             indent: 0
-        },
-        {
-            name: 'Reviews',
-            route: '/reviews',
-            indent: 0
         }
     ];
 

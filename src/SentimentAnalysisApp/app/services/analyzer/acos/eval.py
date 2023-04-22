@@ -1,15 +1,19 @@
 import json
+import os
+
 import findfile
 import tqdm
 from Levenshtein import distance as levenshtein_distance
 from app.services.analyzer.acos.data_utils import create_task_output_string
 from pathlib import Path
 task = "joint-acos"
-# task = "joint-aspect-sentiment"
+# task = "joint-aspect-category-sentiment"
 # task = "joint-aspect-category"
 
 # task = "joint-acos"
-model = "checkpoints\multitask\joint-acos-1335.GamesACOS-mt5-base-joint-acos-1335.GamesACOS\checkpoint-1863"
+# model = "checkpoints\multitask\joint-acos-1335.GamesACOS-mt5-base-joint-acos-1335.GamesACOS\checkpoint-1863"
+# model = "checkpoints\multitask\joint-acos-1335.GamesACOS-finetuned_acos_on_ood_model\checkpoint-1380"
+models = "joint-acos-1335.GamesACOS-byt5-base-i2eg-2b"
 # model = "checkpoint-750"
 
 test_files = ["D:/PythonProjects/SentimentAnalysis/data/validation/STRATEGY_data.main_categories.jsonl",
@@ -88,23 +92,21 @@ def evaluate_labels(true_quadruples, pred_quadruples, labels=None):
     return eval_result
 
 
-if __name__ == "__main__":
-    # test_files = findfile.find_cwd_files(
-    #     ["integrated_datasets", "acos_datasets", "restaurant", "test"],
-    #     exclude_key=[".ignore", ".txt", ".xlsx"],
-    # )model
+def run_eval_on_model(model):
     save_model_name = model.replace('\\', '/')
     save_dir = Path(model, 'eval')
     save_dir.mkdir(exist_ok=True)
 
     # save to the same dir
+    results = {}
     for f in test_files:
-        save_filename = Path(save_dir, f"{f.rsplit('/', 1)[-1].rsplit('.',1)[0]}.{task}.eval.jsonl")
+        save_filename = Path(save_dir, f"{f.rsplit('/', 1)[-1].rsplit('.', 1)[0]}.{task}.eval.jsonl")
         save_file = save_filename.exists()
         print("Predicting on {}".format(f))
         if save_file:
             print(f"File {save_filename} already exists, woudl you like to use it? (y/n)")
-            if input() == "y":
+            # if input() == "y":
+            if True:
                 with open(save_filename, "r", encoding="utf-8") as f:
                     data = json.load(f)
                     true_quadruples = data["true_quadruples"]
@@ -119,6 +121,7 @@ if __name__ == "__main__":
 
                 eval_result = evaluate_labels(true_quadruples, pred_quadruples,
                                               labels=["aspect", "polarity", "opinion", "category"])
+                results[f] = eval_result
                 continue
 
         from pyabsa import meta_load
@@ -163,3 +166,33 @@ if __name__ == "__main__":
 
         eval_result = evaluate_labels(true_quadruples, pred_quadruples,
                                       labels=["aspect", "polarity", "opinion", "category"])
+        results[f] = eval_result
+    return results
+
+
+if __name__ == "__main__":
+    # test_files = findfile.find_cwd_files(
+    #     ["integrated_datasets", "acos_datasets", "restaurant", "test"],
+    #     exclude_key=[".ignore", ".txt", ".xlsx"],
+    # )model
+    model_checkpoint_dir = findfile.find_cwd_dir(models)
+    # get list of dirs of dir
+    models = os.listdir(model_checkpoint_dir)
+    results = {}
+    for model in models:
+        save_model_name = model.replace('\\', '/')
+        if "checkpoint" in save_model_name.rsplit('/', 1)[-1]:
+            result = run_eval_on_model(f"{model_checkpoint_dir}\\{model}")
+            results[f"{model_checkpoint_dir}\\{model}"] = result
+    with open(f"{model_checkpoint_dir}\\results.txt", "w", encoding="utf-8") as f:
+        for model in results:
+            for file in results[model]:
+                f.write(f"Results for {model}\n")
+                f.write(f"Results for {file}\n")
+                eval_result = results[model][file]
+                for report in eval_result:
+                    if eval_result[report]["total"] == 0:
+                        f.write(f"No gold examples for {report}\n")
+                    else:
+                        f.write(f"Accuracy for {report}: {eval_result[report]['count'] / eval_result[report]['total']}\n")
+                f.write("-----------------------\n")
