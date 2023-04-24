@@ -137,7 +137,7 @@
         display: flex;
         flex-direction: column;
         width: 45%;
-        height: 45%;
+        height: 300px;
         gap: 1rem;
     }
 

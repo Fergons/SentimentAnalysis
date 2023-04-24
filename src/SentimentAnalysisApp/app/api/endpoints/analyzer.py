@@ -21,7 +21,7 @@ async def analyze_text(
     """
     Uses service app.services.analyzer to extract aspects from text
     """
-    extractor = get_extractor(checkpoint_name=model)
+    extractor = get_extractor(model_name=model)
     results = extract_aspects(text=clean(review.text), language=review.language, extractor=extractor)
     # return original text and result aspect and sentiment for result in results
     review = await crud.review.create(db=db, obj_in=review)

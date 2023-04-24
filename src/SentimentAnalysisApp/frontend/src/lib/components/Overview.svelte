@@ -110,15 +110,14 @@
                 const negativePercentage = polarityCounts.negative / totalPolarityCount;
 
                 // Calculate weighted score based on the difference between positive and negative percentages
-                const weightedScore = 10 * (0.4 * positivePercentage - 0.2 * negativePercentage);
+                const weightedScore = (4 * positivePercentage - 2 * negativePercentage)/3;
                 console.log("weightedScore: ", weightedScore)
                 // Scaling factor based on the total number of counts, using a square root function
-                const scalingFactor = Math.sqrt(totalPolarityCount);
-                console.log("scalingFactor: ", scalingFactor)
+                const scalingFactor = 5; //(-5 to 5 range and then add -5)
 
 
                 // Calculate the final score with the scaling factor, ensuring it stays within the range 0-10
-                const finalScore = Math.max(0, Math.min(10, 5 + (weightedScore * scalingFactor) / 10));
+                const finalScore = Math.max(0, Math.min(10, 5 + weightedScore * scalingFactor));
 
                 categoryScores[category] = Math.round(finalScore * 100) / 100;
             }
