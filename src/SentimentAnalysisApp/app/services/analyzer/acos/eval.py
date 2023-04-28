@@ -13,6 +13,8 @@ task = "joint-acos"
 # task = "joint-acos"
 # model = "checkpoints\multitask\joint-acos-1335.GamesACOS-mt5-base-joint-acos-1335.GamesACOS\checkpoint-1863"
 # model = "checkpoints\multitask\joint-acos-1335.GamesACOS-finetuned_acos_on_ood_model\checkpoint-1380"
+# models = "joint-acos-1335.GamesACOS-byt5-base-i2eg-2b"
+# models = "joint-acos-1335.GamesACOS-byt5-base-i2eg-2b"
 models = "joint-acos-1335.GamesACOS-byt5-base-i2eg-2b"
 # model = "checkpoint-750"
 
@@ -62,25 +64,23 @@ def evaluate_labels(true_quadruples, pred_quadruples, labels=None):
         print(f"True: {trues_str}")
         print(f"Pred: {pred_quads_str}")
         for true in trues:
+            eval_result["joint"]["total"] += 1
             if true["aspect"] != "NULL":
                 pred = find_most_similar_word(true, _pred_quads, label="aspect")
             else:
                 pred = find_most_similar_word(true, _pred_quads, label="category")
             if pred == "":
                 continue
-            eval_result["joint"]["total"] += 1
-            # print(
-            #     f"Matched aspects: {':'.join([true['aspect'], true['category'], true['opinion'], true['polarity']])}, {':'.join([pred['aspect'], pred['category'], pred['opinion'], pred['polarity']])}")
             num_correct_labels = 0
             for label in labels:
-                if label == "opinion" and true[label] == "NULL":
+                if label in ("opinion", "category") and true[label] == "NULL":
                     continue
                 eval_result[label]["total"] += 1
-                if true[label] == pred[label]:
+                if true[label].lower() == pred[label].lower():
                     eval_result[label]["count"] += 1
                     num_correct_labels += 1
 
-            if num_correct_labels == len(set(labels) - {"aspect"}):
+            if num_correct_labels == 3:
                 eval_result["joint"]["count"] += 1
 
     for report in eval_result:
@@ -159,11 +159,7 @@ def run_eval_on_model(model):
             }
             json.dump(to_save, f, ensure_ascii=False)
 
-        if pred_num_total > num_total:
-            print(f"Accuracy for number of aspects found: {num_total / pred_num_total}")
-        else:
-            print(f"Accuracy for number of aspects found: {pred_num_total / num_total}")
-
+        print(f"Accuracy for number of aspects found: {min(num_total, pred_num_total) / max(num_total, pred_num_total)}")
         eval_result = evaluate_labels(true_quadruples, pred_quadruples,
                                       labels=["aspect", "polarity", "opinion", "category"])
         results[f] = eval_result

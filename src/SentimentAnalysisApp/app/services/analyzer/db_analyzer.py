@@ -32,7 +32,8 @@ async def dump_all_analyzed_reviews_to_file(db: AsyncSession):
                     "term": aspect.term,
                     "polarity": aspect.polarity,
                     "category": aspect.category,
-                    "opinion": aspect.opinion
+                    "opinion": aspect.opinion,
+                    "model_id": aspect.model_id
                 } for aspect in review.aspects
             ]
             aspect_string = json.dumps(aspect_list, ensure_ascii=False)
@@ -48,7 +49,7 @@ async def analyze_db_reviews(db: AsyncSession, game_id: int = None, task="joint-
         dump_dir = pathlib.Path("dump")
         dump_dir.mkdir(parents=True, exist_ok=True)
 
-    if task == "joint-acos":
+    if task in ("joint-acos", "joint-aspect-category-sentiment"):
         from .acos import model as acos_model
         if model_name is None:
             model_dir = findfile.find_dir(f"{pathlib.Path(__file__).parent.resolve()}/acos/models", key=["mt5"])

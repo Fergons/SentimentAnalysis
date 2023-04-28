@@ -293,8 +293,6 @@
                     y={yKey}
                     z={zKey}
                     r={zKey}
-                    xNice={true}
-                    yNice={true}
                     yDomain={[0, yDomainMax]}
                     zScale={scaleOrdinal()}
                     zDomain={selectedCounts}
