@@ -147,17 +147,20 @@ export function transformAspectSummary(data: Record<string, CategoryPolarityCoun
     }
     const categoryDatasets = {};
     for (const category of categories) {
+        // @ts-ignore
         categoryDatasets[category] = dates.map(date => ({date, positive: 0, negative: 0, neutral: 0}));
         for (const strDate of actualDates) {
             const date = timeInterval ? timeInterval.floor(parseDate(strDate) as Date) : parseDate(strDate) as Date;
             const byDate = data[strDate];
             const byCategory = byDate.categories;
+            // @ts-ignore
             const dataPoint = categoryDatasets[category].find((point) => {
                     return point.date.getTime() === date.getTime();
                 }
             );
             if (dataPoint === undefined) continue;
             for (const polarity of polarities) {
+                // @ts-ignore
                 dataPoint[polarity] += byCategory[category] ? byCategory[category][polarity] : 0;
             }
         }
