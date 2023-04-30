@@ -1,10 +1,7 @@
 <script lang="ts">
-    import {Label} from '@smui/common';
-    import Banner from '@smui/banner';
     import Overview from "../../../lib/components/Overview.svelte";
     import Stats from "../../../lib/components/Stats.svelte";
     import GameCard from "../../../lib/components/GameCard.svelte";
-    import {selectedGame} from "../../../lib/stores/game";
 
     export let data;
     const {name, subtitle, game, reviewSummary, aspectSummary, sources, aspectWordcloud} = data;
@@ -12,7 +9,7 @@
 
 <section>
     <div class="game-banner">
-            <GameCard {game}></GameCard>
+        <GameCard {game} nonInteractive={true}></GameCard>
     </div>
     <div class="overview-section">
          <h5 class="mdc-typography--headline5" style="padding: 1.5rem 0 1rem 2rem; margin: 0;">

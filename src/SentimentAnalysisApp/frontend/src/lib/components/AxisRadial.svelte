@@ -8,7 +8,7 @@
 
     const dispatch = createEventDispatcher();
 
-    const {width, height, xScale, extents, config} = getContext('LayerCake');
+    const {data ,width, height, xScale, extents, config} = getContext('LayerCake');
 
     /** @type {Number} [lineLengthFactor=1.1] - How far to extend the lines from the circle's center. A value of `1` puts them at the circle's circumference. */
     export let lineLengthFactor = 1.1;
@@ -45,8 +45,6 @@
         }
         return 'end';
     }
-
-    console.log($config);
 </script>
 <defs>
     <filter id="rounded-corners" x="-5%" width="110%" y="0%" height="100%">
@@ -87,10 +85,10 @@
                 fill="none"
         >
         </line>
-        <text
+        <text   x="{lineLength * Math.cos(thisAngleSlice)}"
                 class="radial-labels"
                 text-anchor="{anchor($config.x.length, i)}"
-                dy="0.35em"
+                dy="2em"
                 font-family="{textFont}"
                 font-size="{textSize}px"
                 class:active={label === activeCategory}
@@ -105,7 +103,8 @@
                 tabindex="0"
                 transform="translate({(labelPlacement) * Math.cos(thisAngleSlice)}, {labelPlacement * Math.sin(thisAngleSlice)})"
         >
-            {label.split("_").join("&")}
+            <tspan x="0" dy="0rem" text-anchor="middle">{label.split("_").join(" & ")}</tspan>
+            <tspan x="0" dy="1rem" text-anchor="middle">{$data[0][label].toFixed(1)}/10.0</tspan>
         </text>
     {/each}
 </g>

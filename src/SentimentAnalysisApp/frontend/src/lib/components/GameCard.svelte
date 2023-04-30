@@ -31,7 +31,7 @@
 
 <div class="card-container">
     <Card>
-        <PrimaryAction active={true} on:click={() => selectGame()}>
+        <PrimaryAction on:click={() => selectGame()}>
             <Media class="card-media-219x102"
                    aspectRatio="219x102"
             >
