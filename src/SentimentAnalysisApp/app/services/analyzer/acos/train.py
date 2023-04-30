@@ -27,9 +27,9 @@ class LoggingCallback(TrainerCallback):
 
 task_name = "multitask"
 # experiment_name = "acos_finetuning_on_acs_all_data_mt5"
-experiment_name = "byt5-base-i4eg-2b"
-task = "joint-acos"
+experiment_name = "mt5-base-i3eg-5e-ood"
 # task = "joint-aspect-category-sentiment"
+task = "joint-acos"
 # train_dataset_name = "1333.Games_ACS"
 # test_dataset_name = "1333.Games_ACS"
 
@@ -37,7 +37,7 @@ train_dataset_name = "1335.GamesACOS"
 test_dataset_name = "1335.GamesACOS"
 
 # train_dataset_name = "506.Synthetic"
-# # test_dataset_name = "506.Synthetic"
+# test_dataset_name = "506.Synthetic"
 
 logging_callback = LoggingCallback(f"{task}-{train_dataset_name}-{experiment_name}_logs.json")
 # model_checkpoint = 'allenai/tk-instruct-base-def-pos'
@@ -48,7 +48,8 @@ logging_callback = LoggingCallback(f"{task}-{train_dataset_name}-{experiment_nam
 # model_checkpoint = 'checkpoints/multitask/joint-aspect-category-sentiment-1336.Games/checkpoint-760'
 # model_checkpoint = 'checkpoints/multitask/googlemt5-base-joint-aspect-sentiment-501.Laptop14/checkpoint-1467'
 # model_checkpoint = 'checkpoints/multitask/joint-acos-506.Synthetic-byt5-base/checkpoint-3930'
-model_checkpoint = "google/byt5-base"
+model_checkpoint = 'checkpoints/multitask/joint-acos-506.Synthetic-mt5-base-i3eg/checkpoint-5890'
+# model_checkpoint = "google/byt5-base"
 # model_checkpoint = "google/mt5-base"
 # model_checkpoint = "checkpoints/multitask/joint-acs-1333.Games_ACS-mt5-base-i2eg/checkpoint-2030"
 from_checkpoint = False
@@ -64,8 +65,8 @@ id_train_file_path = f"../../../../integrated_datasets/acos_datasets/{train_data
 id_test_file_path = f"../../../../integrated_datasets/acos_datasets/{test_dataset_name}"
 
 
-id_tr_df = data_utils.read_json(id_train_file_path, "train.main_categories")
-id_te_df = data_utils.read_json(id_test_file_path, "test.main_categories")
+id_tr_df = data_utils.read_json(id_train_file_path, "train")
+id_te_df = data_utils.read_json(id_test_file_path, "test")
 
 # id_tr_df = data_utils.read_json(id_train_file_path, "train")
 # id_te_df = data_utils.read_json(id_test_file_path, "test.main_categories")
@@ -87,7 +88,7 @@ t5_exp = model.ABSAGenerator(model_checkpoint)
 id_ds, id_tokenized_ds, ood_ds, ood_tokenzed_ds = loader.create_datasets(
     t5_exp.tokenize_function_inputs
 )
-batch_size = 2
+batch_size = 12
 
 # Training arguments
 training_args = {

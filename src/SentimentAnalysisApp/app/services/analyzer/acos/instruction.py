@@ -177,13 +177,9 @@ example 1-
 input: Příběh je velmi zajímavý ale multiplayerová část hry je plná cheaterů.
 output: Příběh:gameplay:velmi zajímavý:positive|multiplayerová část hry:gameplay:plná cheaterů:negative|cheaterů:community:plná:negative
 example 2-
-input: Hra nabízí skvělý balanc mezi PvP a PvE a některé herní prvky jsou velmi zastaralé.
-output: balanc mezi PvP a PvE:gameplay:skvělý:positive|herní prvky:gameplay:velmi zastaralé:negative
-example 3-
 input: Hra obsahuje rozne game mody, mapy a herni prvky.
 output: game mody:gameplay:rozne:neutral|mapy:gameplay:NULL:neutral|herni prvky:gameplay:NULL:neutral
-Now extract aspect:category:opinion:sentiment for the following example:
-example 4-
+example 3-
 input: Ziadne bugy hned od vydania, vynikajuce.
 output: bugy:preformance_bugs:Ziadne hned od vydania:positive
 Now extract aspect:category:opinion:sentiment quadruples for the following example:

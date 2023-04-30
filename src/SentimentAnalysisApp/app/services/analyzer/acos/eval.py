@@ -6,21 +6,32 @@ import tqdm
 from Levenshtein import distance as levenshtein_distance
 from app.services.analyzer.acos.data_utils import create_task_output_string
 from pathlib import Path
-task = "joint-acos"
-# task = "joint-aspect-category-sentiment"
+
+
 # task = "joint-aspect-category"
 
-# task = "joint-acos"
+
 # model = "checkpoints\multitask\joint-acos-1335.GamesACOS-mt5-base-joint-acos-1335.GamesACOS\checkpoint-1863"
 # model = "checkpoints\multitask\joint-acos-1335.GamesACOS-finetuned_acos_on_ood_model\checkpoint-1380"
 # models = "joint-acos-1335.GamesACOS-byt5-base-i2eg-2b"
-# models = "joint-acos-1335.GamesACOS-byt5-base-i2eg-2b"
-models = "joint-acos-1335.GamesACOS-byt5-base-i2eg-2b"
+models = "joint-acos-1335.GamesACOS-mt5-base-i3eg-5e-ood"
+# models = "joint-acos-1335.GamesACOS-finetuned_acos_on_ood_model"
+# models = "joint-acs-1333.Games_ACS-mt5-base-i2eg"
 # model = "checkpoint-750"
 
-test_files = ["D:/PythonProjects/SentimentAnalysis/data/validation/STRATEGY_data.main_categories.jsonl",
-              "D:/PythonProjects/SentimentAnalysis/data/validation/PUZZLE_generated_data.main_categories.jsonl",
-              "D:/PythonProjects/SentimentAnalysis/data/validation/FPS_generated_data.main_categories.jsonl"]
+# test_files = ["D:/PythonProjects/SentimentAnalysis/data/validation/STRATEGY_data.main_categories.jsonl",
+#               "D:/PythonProjects/SentimentAnalysis/data/validation/PUZZLE_generated_data.main_categories.jsonl",
+#               "D:/PythonProjects/SentimentAnalysis/data/validation/FPS_generated_data.main_categories.jsonl"]
+
+task = "joint-acos"
+test_files = [
+    "D:/PythonProjects/SentimentAnalysis/data/validation/ACOS_val.jsonl"
+]
+
+# task = "joint-aspect-category-sentiment"
+# test_files = [
+#     "D:/PythonProjects/SentimentAnalysis/data/validation/ACS_val.jsonl"
+# ]
 
 
 def find_most_similar_word(word, word_list, label="aspect"):
@@ -107,8 +118,8 @@ def run_eval_on_model(model):
             print(f"File {save_filename} already exists, woudl you like to use it? (y/n)")
             # if input() == "y":
             if True:
-                with open(save_filename, "r", encoding="utf-8") as f:
-                    data = json.load(f)
+                with open(save_filename, "r", encoding="utf-8") as fopen:
+                    data = json.load(fopen)
                     true_quadruples = data["true_quadruples"]
                     pred_quadruples = data["pred_quadruples"]
                     num_total = data["num_total"]
@@ -139,25 +150,27 @@ def run_eval_on_model(model):
         pred_num_total = 0
         acc_count = 0
         line_num = 0
+        # create batches
+        batches = [lines[i:i + 32] for i in range(0, len(lines), 32)]
+        for batch in tqdm.tqdm(batches):
 
-        for line in tqdm.tqdm(lines):
-            result = generator.predict(line["text"], task=task)
-            print(result["Quadruples"])
-            true_quadruples[line_num] = line["labels"]
-            pred_quadruples[line_num] = result["Quadruples"]
+            predictions = generator.batch_predict(batch=[line["text"] for line in batch], task=task)
+            for line, result in zip(batch, predictions):
+                true_quadruples[line_num] = line["labels"] if len(line["labels"]) > 0 else [{"aspect": "NULL", "polarity": "NULL", "opinion": "NULL", "category": "NULL"}]
+                pred_quadruples[line_num] = result["Quadruples"]
 
-            num_total += len(line["labels"])
-            pred_num_total += len(result["Quadruples"])
-            line_num += 1
+                num_total += len(line["labels"]) if len(line["labels"]) > 1 else 1
+                pred_num_total += len(result["Quadruples"])
+                line_num += 1
 
-        with open(save_filename, "w", encoding="utf-8") as f:
+        with open(save_filename, "w", encoding="utf-8") as fopen:
             to_save = {
                 "true_quadruples": true_quadruples,
                 "pred_quadruples": pred_quadruples,
                 "num_total": num_total,
                 "pred_num_total": pred_num_total
             }
-            json.dump(to_save, f, ensure_ascii=False)
+            json.dump(to_save, fopen, ensure_ascii=False)
 
         print(f"Accuracy for number of aspects found: {min(num_total, pred_num_total) / max(num_total, pred_num_total)}")
         eval_result = evaluate_labels(true_quadruples, pred_quadruples,
@@ -192,3 +205,36 @@ if __name__ == "__main__":
                     else:
                         f.write(f"Accuracy for {report}: {eval_result[report]['count'] / eval_result[report]['total']}\n")
                 f.write("-----------------------\n")
+
+
+    with open(f"{model_checkpoint_dir}\\results.tsv", "w", encoding="utf-8") as f:
+        f.write("Model\tFile\tJoint\tAspect\tPolarity\tOpinion\tCategory\n")
+        # sort results by keys model.rsplit('-',1)[-1]
+        results = {k: v for k, v in sorted(results.items(), key=lambda item: int(item[0].rsplit('-', 1)[-1]))}
+        avg_results = []
+        for model in results:
+            combined = {}
+            for file in results[model]:
+                f.write(f"{model.rsplit('-',1)[-1]}\t{file.rsplit('/',1)[-1]}\t")
+                eval_result = results[model][file]
+                for report in eval_result:
+                    if report not in combined:
+                        combined[report] = {"total": 0, "count": 0}
+                    if eval_result[report]["total"] == 0:
+                        f.write(f"0.0\t")
+                    else:
+                        f.write(f"{eval_result[report]['count'] / eval_result[report]['total']}\t")
+                    combined[report]["total"] += eval_result[report]["total"]
+                    combined[report]["count"] += eval_result[report]["count"]
+                f.write("\n")
+            # add combined results averaged over all files
+            avg_results.append(combined)
+        for model, combined in zip(results.keys(), avg_results):
+            f.write(f"{model.rsplit('-', 1)[-1]}\tcombined\t")
+            for report in combined:
+                if combined[report]["total"] == 0:
+                    f.write(f"0.0\t")
+                else:
+                    f.write(f"{combined[report]['count'] / combined[report]['total']:.2f}\t")
+            f.write("\n")
+
