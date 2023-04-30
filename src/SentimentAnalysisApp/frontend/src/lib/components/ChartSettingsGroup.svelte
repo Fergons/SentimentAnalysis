@@ -19,7 +19,7 @@
 </script>
 
 <List>
-    <Subheader style="color: #5f768c">{subHeader}</Subheader>
+    <Subheader style="color: #5d5d78">{subHeader}</Subheader>
     <div class="chart-settings-group">
         <div class="options-container">
             {#each seriesNames as name}

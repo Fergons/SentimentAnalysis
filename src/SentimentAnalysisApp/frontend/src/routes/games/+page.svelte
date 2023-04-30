@@ -300,7 +300,7 @@
         position: sticky;
         align-self: start;
         top: 80px;
-        z-index: 4;
+        z-index: 3;
     }
 
 
@@ -321,6 +321,7 @@
 
     .game-page {
         display: flex;
+        height: 100vh;
         flex-direction: row;
         width: 100%;
     }
