@@ -6,8 +6,8 @@
 @use '@material/theme/index' as theme with (
 	$primary: #0363f0,
 	$secondary: #ffa100,
-	$surface: #fff,
-	$background: #fffbf3,
+	$surface: #f8f8fa,
+	$background: #e3e2d9,
 	$error: color-palette.$red-500
 );
 
@@ -15,7 +15,7 @@
 
 html,
 body {
-	background-color: theme.$surface;
+	background-color: theme.$background;
 	color: theme.$on-surface;
 }
 
