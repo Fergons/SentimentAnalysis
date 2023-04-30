@@ -3,18 +3,25 @@
     import Banner from '@smui/banner';
     import Overview from "../../../lib/components/Overview.svelte";
     import Stats from "../../../lib/components/Stats.svelte";
+    import GameCard from "../../../lib/components/GameCard.svelte";
+    import {selectedGame} from "../../../lib/stores/game";
 
     export let data;
     const {name, subtitle, game, reviewSummary, aspectSummary, sources, aspectWordcloud} = data;
-
 </script>
 
 <section>
-    <div class="overview-container">
+    <div class="game-banner">
+            <GameCard {game}></GameCard>
+    </div>
+    <div class="overview-section">
+         <h5 class="mdc-typography--headline5" style="padding: 1.5rem 0 1rem 2rem; margin: 0;">
+            Score of aspect categories
+        </h5>
         <Overview data={{aspectSummary, aspectWordcloud}}/>
     </div>
 
-    <div class="stats-container">
+    <div class="stats-section">
         <h5 class="mdc-typography--headline5" style="margin: 1.5rem 0 0 2rem;">
             Visualization of sentiment and reviews in time
         </h5>
@@ -26,20 +33,13 @@
 </section>
 
 <style>
-    .stats-container {
+    .stats-section {
         display: flex;
         flex-direction: column;
         justify-content: center;
         width: 100%;
     }
-
-    .overview-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-evenly;
-        gap: 1rem;
-        margin: auto auto 1rem auto;
-        width: 100%;
-        min-width: auto;
+    .game-banner {
+        margin-bottom: 1rem;
     }
 </style>

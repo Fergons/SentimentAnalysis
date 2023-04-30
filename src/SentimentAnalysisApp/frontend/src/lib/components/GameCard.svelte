@@ -12,6 +12,7 @@
     import IconButton from '@smui/icon-button';
     import {goto} from '$app/navigation';
     import type {Game, GameListItem} from '../client';
+    import {selectedGame} from "../stores/game";
 
     export let game: GameListItem;
     let options = {
@@ -19,11 +20,18 @@
         month: 'long',
         day: 'numeric'
     };
+
+    function selectGame() {
+        goto('/games/' + game.id)
+        $selectedGame = game;
+    }
+
 </script>
+
 
 <div class="card-container">
     <Card>
-        <PrimaryAction on:click={() => goto('/games/' + game.id)}>
+        <PrimaryAction active={true} on:click={() => selectGame()}>
             <Media class="card-media-219x102"
                    aspectRatio="219x102"
             >
@@ -84,6 +92,7 @@
     * :global(.card-media-219x102 :last-child) {
         margin-left: auto;
     }
+
     * :global(.card-media-219x102 :first-child) {
         margin-left: 0;
     }

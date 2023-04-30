@@ -56,6 +56,7 @@
         route?: string;
         shortcut?: string;
         comingSoon?: boolean;
+        mdcIcon?: string;
         indent?: number;
     };
 
@@ -82,6 +83,11 @@
         },
         {
             name: 'Laptops',
+            comingSoon: true,
+        },
+        {
+            name: '+ Create own',
+            mdcIcon: 'plus',
             comingSoon: true,
         }
     ];
@@ -198,6 +204,7 @@
                                      margin-left: 8px;"
                                >coming soon!</span>
                             {/if}
+
                         </Item>
                     {/if}
                 {/each}
@@ -208,7 +215,7 @@
         <Scrim/>
     {/if}
     <AppContent class="app-content">
-         <TopAppBar variant="static" class="app-top-app-bar">
+        <TopAppBar variant="static" class="app-top-app-bar">
             <Row>
                 <Section>
                     {#if miniWindow}

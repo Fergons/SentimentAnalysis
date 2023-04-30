@@ -107,16 +107,16 @@
     <div class="bar">
         <div class="flexy">
 
-            <Fab on:click={previousCategory} disabled={categories.length < 2} mini>
-                <IconButton class="material-icons">arrow_left</IconButton>
+            <Fab on:click={previousCategory} disabled={categories.length < 2} mini color="primary">
+               <Icon class="material-icons">arrow_back</Icon>
             </Fab>
 
         </div>
         <span class="selection mdc-typography--headline4">{selectedCategory.split('_').join(" & ")}</span>
         <div class="flexy">
 
-            <Fab on:click={nextCategory} disabled={categories.length < 2} mini>
-                <IconButton class="material-icons">arrow_right</IconButton>
+            <Fab on:click={nextCategory} disabled={categories.length < 2} mini color="primary">
+                  <Icon class="material-icons">arrow_forward</Icon>
             </Fab>
 
         </div>
@@ -124,16 +124,16 @@
     <div class="bar">
         <div class="flexy">
 
-            <Fab on:click={previousPolarity} mini>
-                <IconButton class="material-icons">arrow_left</IconButton>
+            <Fab on:click={previousPolarity} mini color="primary">
+              <Icon class="material-icons">arrow_back</Icon>
             </Fab>
 
         </div>
         <span class="selection mdc-typography--headline5">{selectedPolarity}</span>
         <div class="flexy">
 
-            <Fab on:click={nextPolarity} disabled={polarities.length < 2} mini>
-                <IconButton class="material-icons">arrow_right</IconButton>
+            <Fab on:click={nextPolarity} disabled={polarities.length < 2} mini color="primary">
+                <Icon class="material-icons">arrow_forward</Icon>
             </Fab>
         </div>
     </div>
@@ -163,6 +163,7 @@
     .wordcloud-container {
         display: flex;
         margin: 0 auto;
+        padding: 2rem 1rem 1rem;
     }
 
     .wordcloud-settings {

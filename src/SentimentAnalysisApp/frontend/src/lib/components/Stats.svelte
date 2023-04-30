@@ -52,7 +52,7 @@
     let selectedSentiments = [...defaultSentimentSelection];
 
     let categoryTypeNames = ['gameplay', 'audio_visuals', 'performance_bugs', 'overall', 'price', 'community'];
-    const defaultCategorySelection = [];
+    const defaultCategorySelection = [...categoryTypeNames];
     let selectedCategories = [...defaultCategorySelection];
 
     const reviewTypeNames = ['total', 'processed'];

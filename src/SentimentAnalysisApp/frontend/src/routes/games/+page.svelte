@@ -16,6 +16,7 @@
     import chips, {Set} from '@smui/chips';
     import Textfield from "@smui/textfield";
     import Banner, {CloseReason} from '@smui/banner';
+    import {gameFilter, gameSort, gameDataStore, gamePage, perPageLimit, loadingContent, initialGameFilterValue, moreContent} from "../../lib/stores/game";
     import Accordion, {Panel, Header, Content} from "@smui-extra/accordion";
 
     export let data: PageData;
@@ -24,26 +25,6 @@
     let autocomplete: any;
     let dialog: any;
 
-    const initialGameFilterValue = {
-        name: null,
-        minNumReviews: null,
-        maxNumReviews: null,
-        minScore: null,
-        maxScore: null,
-        minReleaseDate: null,
-        maxReleaseDate: null,
-        categories: null,
-        developers: null,
-    };
-
-    const perPageLimit = 20;
-    const gamePage = writable(0);
-    const gameFilter = writable<GameListFilter>({...initialGameFilterValue})
-    const gameSort = writable<GameListSort>({numReviews: 'desc'});
-    const games = writable<GameListItem[]>();
-    let prevSort: GameListSort = {};
-    let loadingContent = false;
-    let moreContent = false;
     let filterOpen = false;
     let open = false;
     let selection = 'Radishes';
@@ -56,49 +37,9 @@
         selection = 'Radishes';
     }
 
-    const gameDataStore = derived(
-        [gamePage, gameFilter, gameSort],
-        async ([$gamePage, $gameFilter, $gameSort], set) => {
-            if ($gameSort !== prevSort) {
-                gamePage.set(0);
-                prevSort = $gameSort;
-            }
-            loadingContent = true;
-            const fetchedData = await getGames($gamePage, $gameFilter, $gameSort);
-            if (fetchedData) {
-                moreContent = fetchedData.total > ($gamePage + 1) * perPageLimit;
-                set({
-                    games: fetchedData.games,
-                    total: fetchedData.total,
-                });
-            }
-            loadingContent = false;
-        },
-        {games: [], total: 0}
-    );
-
 
     const categories = data.categories;
 
-    async function getGames(page: number, filter: GameListFilter, sort: GameListSort) {
-        try {
-            const offset = page * perPageLimit;
-            if (filter.name === '') {
-                filter.name = undefined;
-            }
-            const response = await GamesService.readGamesGamesGet(perPageLimit, offset,
-                sort.numReviews, sort.score, sort.releaseDate,
-                filter.name,
-                filter.minNumReviews, filter.maxNumReviews, filter.minScore, filter.maxScore,
-                filter.minReleaseDate, filter.maxReleaseDate,
-                filter.categories ? filter.categories.join() : undefined,
-                filter.developers ? filter.developers.join() : undefined);
-            return {games: response.games, total: response.query_summary?.total || 0};
-        } catch (e) {
-            console.log(e);
-            return {games: [], total: 0};
-        }
-    }
 
     let searchRequestCounter = 0;
 
@@ -389,12 +330,12 @@
         grid-template-columns: 1fr 3fr;
         grid-template-rows: auto auto auto;
         grid-template-areas:
-              ". settings-bar"
+              "settings-bar settings-bar"
               "filter-settings game-list"
               ". page-buttons-container";
     }
 
-    .game-list, .settings-bar, .page-buttons-container {
+    .game-list, .page-buttons-container {
         max-width: 960px;
     }
 

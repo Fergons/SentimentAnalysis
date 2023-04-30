@@ -6,7 +6,7 @@ export async function load({params}: { params: { id: number } }) {
 
     try {
         const [game, reviewsSummary, sources, aspectsSummary, aspectWordcloud] = await Promise.all([
-            GamesService.readGameGamesIdGet(params.id),
+            GamesService.readGameGamesIdScoreGet(params.id),
             GamesService.getSummaryV2GamesIdSummaryV2TimeIntervalGet(params.id, 'day'),
             GamesService.getSourcesGamesIdSourcesGet(params.id),
             GamesService.getAspectSummaryGamesIdSummaryAspectsGet(params.id),
@@ -20,8 +20,8 @@ export async function load({params}: { params: { id: number } }) {
             new Map<number, Source>()) : new Map<number, Source>();
 
         return {
-            name: game.name,
-            subtitle: 'Overview',
+            name: "Game Overview",
+            subtitle: '',
             game: game,
             reviewSummary: reviewsSummary,
             aspectSummary: aspectsSummary,

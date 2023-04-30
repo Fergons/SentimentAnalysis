@@ -110,7 +110,7 @@
                 const negativePercentage = polarityCounts.negative / totalPolarityCount;
 
                 // Calculate weighted score based on the difference between positive and negative percentages
-                const weightedScore = (4 * positivePercentage - 2 * negativePercentage)/3;
+                const weightedScore = (4 * positivePercentage - 2 * negativePercentage) / 3;
                 console.log("weightedScore: ", weightedScore)
                 // Scaling factor based on the total number of counts, using a square root function
                 const scalingFactor = 5; //(-5 to 5 range and then add -5)
@@ -127,41 +127,52 @@
     }
 
 </script>
+<div class="overview-container">
+    <div class="chart-container">
+        <LayerCake
+                ssr={true}
+                percentageRange={true}
+                width={100}
+                height={100}
+                padding={{ top: 16, right: 16, bottom: 16, left: 16 }}
+                x={xKey}
+                xDomain={[0, 10]}
+                xScale={scaleLinear}
+                xRange={[0, 150]}
+                data={categoryScores}
+        >
+            <Svg>
+                <AxisRadial textColor="#fff" textFont="roboto-mono" on:categorySelected={setActiveCategory}/>
+                {#if enoughData}
+                    <RadarChart/>
+                {:else}
+                    <text x="49%" y="48%" text-anchor="middle" fill="#fff" font-family="roboto-mono">
+                        NO DATA
+                    </text>
+                {/if}
+            </Svg>
+        </LayerCake>
+    </div>
 
-<div class="chart-container">
-    <LayerCake
-            ssr={true}
-            percentageRange={true}
-            width={100}
-            height={100}
-            padding={{ top: 16, right: 16, bottom: 16, left: 16 }}
-            x={xKey}
-            xDomain={[0, 10]}
-            xScale={scaleLinear}
-            xRange={[0, 150]}
-            data={categoryScores}
-    >
-        <Svg>
-            <AxisRadial textColor="#fff" textFont="roboto-mono" on:categorySelected={setActiveCategory}/>
-            {#if enoughData}
-                <RadarChart/>
-            {:else}
-                <text x="49%" y="48%" text-anchor="middle" fill="#fff" font-family="roboto-mono">
-                    NO DATA
-                </text>
-            {/if}
-        </Svg>
-    </LayerCake>
-</div>
-
-<div class="wordcloud">
-    {#if Wordcloud}
-        <Wordcloud data={data.aspectWordcloud} bind:selectedCategory={activeCategory}/>
-    {/if}
+    <div class="wordcloud">
+        {#if Wordcloud}
+            <Wordcloud data={data.aspectWordcloud} bind:selectedCategory={activeCategory}/>
+        {/if}
+    </div>
 </div>
 
 
 <style>
+    .overview-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+        gap: 1rem;
+        margin: auto auto 1rem auto;
+        width: 100%;
+        min-width: auto;
+    }
+
     .chart-container {
         display: flex;
         width: 500px;

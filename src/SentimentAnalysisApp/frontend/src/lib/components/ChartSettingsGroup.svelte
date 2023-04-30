@@ -34,6 +34,13 @@
                         </FormField>
                 </Item>
             {/each}
+            {#if seriesNames.length === 0}
+                <Item>
+                    <div style="padding-left: 0.5rem; padding-top: 0.5rem; padding-bottom: 0.5rem; color: #5f768c">
+                        No data available
+                    </div>
+                </Item>
+            {/if}
         </div>
         <div class="buttons-container">
             {#if seriesNames.length > 1}
