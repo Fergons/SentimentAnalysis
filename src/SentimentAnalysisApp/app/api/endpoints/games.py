@@ -26,6 +26,26 @@ async def read_game(
         raise HTTPException(status_code=404, detail="Game not found")
     return game
 
+@router.get("/{id}/score", response_model=schemas.GameListItem)
+async def read_game(
+        *,
+        db: AsyncSession = Depends(deps.get_session),
+        id: int
+) -> Any:
+    """
+    Get game by ID.
+    """
+    result = await db.execute(select(models.Aspect.model_id, func.count(models.Aspect.id))
+                              .join(models.Review,
+                                    and_(models.Review.id == models.Aspect.review_id, models.Review.game_id == id))
+                              .group_by(models.Aspect.model_id)
+                              .order_by(func.count(models.Aspect.id).desc()).limit(1))
+    model_id = result.scalars().first()
+    game = await crud.game.get_game_list_item(db=db, id=id, model_id=model_id)
+    if not game:
+        raise HTTPException(status_code=404, detail="Game not found")
+    return game
+
 
 @router.delete("/{id}", response_model=schemas.Game)
 async def delete_game(
@@ -81,8 +101,15 @@ async def read_games(*,
         categories=categories.split(',') if categories else None,
         developers=developers.split(',') if developers else None
     )
-    print(f"filter: {filter}")
-    glist = await crud.game.get_game_list(db, limit=limit, offset=offset, filter=filter, sort=sort)
+    # most utilized model
+    result = await db.execute(select(models.Aspect.model_id, func.count(models.Aspect.id))
+                              .join(models.Review,
+                                    and_(models.Review.id == models.Aspect.review_id))
+                              .group_by(models.Aspect.model_id)
+                              .order_by(func.count(models.Aspect.id).desc()).limit(1))
+    model_id = result.scalars().first()
+
+    glist = await crud.game.get_game_list(db, limit=limit, offset=offset, filter=filter, sort=sort, model_id=model_id)
     return glist
 
 

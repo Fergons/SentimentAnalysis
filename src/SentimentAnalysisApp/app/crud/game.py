@@ -308,22 +308,23 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
                             limit: int = 100,
                             offset: int = 0,
                             sort: schemas.GameListSort = None,
-                            filter: schemas.GameListFilter = None
+                            filter: schemas.GameListFilter = None,
+                            model_id: str = "mt5-acos-1.0"
                             ) -> schemas.GameListResponse:
         game_score = (
             func.coalesce(
                 (func.sum(
                     case(
-                        (models.Aspect.polarity == "positive", 5.0),
+                        (models.Aspect.polarity == "positive", 6.0),
                         (models.Aspect.polarity == "negative", -3.0),
                         (models.Aspect.polarity == "neutral", 2.0),
                         else_=0.0)
-                ) / (func.count(models.Aspect.id.distinct()) + 1.0)) + 5.0,
+                ) / (func.count(models.Aspect.id.distinct()) + 0.1)) + 5.0,
                 -1.0)).label("score")
 
         stmt = select(self.model, game_score, func.count(models.Review.id.distinct())).select_from(self.model) \
             .outerjoin(models.Review) \
-            .outerjoin(models.Aspect) \
+            .outerjoin(models.Aspect).where(models.Aspect.model_id == model_id) \
             .group_by(self.model.id) \
             .options(selectinload(self.model.categories).selectinload(models.GameCategory.category),
                      selectinload(self.model.developers).selectinload(models.GameDeveloper.developer))
@@ -427,6 +428,37 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
         ).limit(limit)
         result = await db.execute(stmt)
         return result.scalars().all()
+
+    async def get_game_list_item(self, db: AsyncSession, *, id: str, model_id: str = "mt5-acos-1.0") -> schemas.GameListItem:
+        game_score = (
+            func.coalesce(
+                (func.sum(
+                    case(
+                        (models.Aspect.polarity == "positive", 6.0),
+                        (models.Aspect.polarity == "negative", -3.0),
+                        (models.Aspect.polarity == "neutral", 2.0),
+                        else_=0.0)
+                ) / (func.count(models.Aspect.id.distinct()) + 0.1)) + 5.0,
+                -1.0)).label("score")
+
+        stmt = select(self.model, game_score, func.count(models.Review.id.distinct())).select_from(self.model) \
+            .outerjoin(models.Review).where(models.Review.game_id == id) \
+            .outerjoin(models.Aspect).where(models.Aspect.model_id == model_id) \
+            .group_by(self.model.id) \
+            .options(selectinload(self.model.categories).selectinload(models.GameCategory.category),
+                     selectinload(self.model.developers).selectinload(models.GameDeveloper.developer))
+        result = await db.execute(stmt)
+        game, score, num_reviews = result.first()
+        return schemas.GameListItem(
+            id=game.id,
+            name=game.name,
+            image_url=game.image_url,
+            release_date=game.release_date,
+            categories=[schemas.Category.from_orm(c.category) for c in game.categories],
+            developers=[schemas.Developer.from_orm(d.developer) for d in game.developers],
+            score=round(score, 1),
+            num_reviews=num_reviews)
+
 
 
 crud_game = CRUDGame(models.Game)

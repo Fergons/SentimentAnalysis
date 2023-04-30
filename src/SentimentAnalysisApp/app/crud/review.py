@@ -161,13 +161,13 @@ class CRUDReview(CRUDBase[models.Review, ReviewCreate, ReviewCreate]):
             func.date_trunc(time_interval, models.Review.created_at).label('date'),
             models.Review.source_id,
             func.count(func.distinct(models.Review.id)).label("total"),
-            func.count(func.distinct(case([(models.Review.processed_at == None, models.Review.id)]))).label(
+            func.count(func.distinct(case((models.Review.processed_at == None, models.Review.id)))).label(
                 "not_processed"),
-            func.count(func.distinct(case([(models.Review.processed_at != None, models.Review.id)]))).label(
+            func.count(func.distinct(case((models.Review.processed_at != None, models.Review.id)))).label(
                 "processed"),
-            func.sum(case([(models.Aspect.polarity == "positive", 1)], else_=0)).label("positive"),
-            func.sum(case([(models.Aspect.polarity == "negative", 1)], else_=0)).label("negative"),
-            func.sum(case([(models.Aspect.polarity == "neutral", 1)], else_=0)).label("neutral")
+            func.sum(case((models.Aspect.polarity == "positive", 1), else_=0)).label("positive"),
+            func.sum(case((models.Aspect.polarity == "negative", 1), else_=0)).label("negative"),
+            func.sum(case((models.Aspect.polarity == "neutral", 1), else_=0)).label("neutral")
         )
         if game_id is not None:
             query = query.filter(models.Review.game_id == game_id)
