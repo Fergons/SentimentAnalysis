@@ -19,7 +19,7 @@
   // Give it a shadow.
   @include elevation.elevation(5);
   // Position it above the drawer.
-  z-index: 10;
+  z-index: 5;
   position: relative;
 }
 

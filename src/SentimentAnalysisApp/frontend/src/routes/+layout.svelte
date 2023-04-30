@@ -6,7 +6,7 @@
     import TopAppBar, {Row, Section, Title} from '@smui/top-app-bar';
     import Drawer, {AppContent, Content, Header, Scrim} from '@smui/drawer';
     import IconButton from '@smui/icon-button';
-    import Button from '@smui/button';
+    import Button, {Label} from '@smui/button';
     import List, {Item, Separator, Text} from '@smui/list';
     import Tooltip, {Wrapper} from '@smui/tooltip';
     import {Icon, Svg} from '@smui/common';
@@ -55,7 +55,8 @@
         name: string;
         route?: string;
         shortcut?: string;
-        indent: number;
+        comingSoon?: boolean;
+        indent?: number;
     };
 
     const sections: (
@@ -68,7 +69,20 @@
         {
             name: 'Games',
             route: '/games',
+            comingSoon: false,
             indent: 0
+        },
+        {
+            name: 'Movies',
+            comingSoon: true,
+        },
+        {
+            name: 'Books',
+            comingSoon: true,
+        },
+        {
+            name: 'Laptops',
+            comingSoon: true,
         }
     ];
 
@@ -145,58 +159,6 @@
 
 <svelte:window bind:innerWidth bind:innerHeight/>
 
-
-<div class="bar-app-content">
-    <TopAppBar variant="static" class="app-top-app-bar">
-        <Row>
-            <Section>
-                {#if miniWindow}
-                    <IconButton class="material-icons" on:click={() => (drawerOpen = !drawerOpen)}
-                    >menu
-                    </IconButton>
-                {/if}
-                <Title
-                        class="--mdc-theme--primary"
-                        style={miniWindow ? 'padding-left: 0;' : ''}
-                >
-                    {miniWindow ? '' : currentPageTitle}
-                </Title>
-            </Section>
-
-            <Section align="end" toolbar style="color: #000;">
-
-                {#if $userStore}
-                    <Button tag="a" href="/users/me">{$userStore.email}</Button>
-                    <form action="/signout" method="POST" use:enhance={() => {
-                            console.log("signout");
-                            return async ({result}) => {
-                                console.log("result signout");
-                                $userStore = null;
-                                await invalidateAll();
-                                await applyAction(result);
-                            }
-                        }}>
-                        <Button>Sign out</Button>
-                    </form>
-                {:else}
-                    <Button href="/signin">Signin</Button>
-                    <Button href="/signup">Signup</Button>
-                {/if}
-                <Wrapper>
-                    <IconButton toggle pressed={lightTheme} on:SMUIIconButtonToggle:change={switchTheme}>
-                        <Icon component={Svg} viewBox="0 0 24 24" on>
-                            <path fill="currentColor" d={mdiWeatherNight}></path>
-                        </Icon>
-                        <Icon component={Svg} viewBox="0 0 24 24">
-                            <path fill="currentColor" d={mdiWeatherSunny}></path>
-                        </Icon>
-                    </IconButton>
-                    <Tooltip>{lightTheme ? 'Lights off' : 'Lights on'}</Tooltip>
-                </Wrapper>
-            </Section>
-        </Row>
-    </TopAppBar>
-</div>
 <div class="drawer-container">
     <Drawer
             bind:this={drawer}
@@ -228,7 +190,14 @@
                                 activated={section === activeSection}
                                 style={section.indent ? 'margin-left: ' + section.indent * 25 + 'px;' : ''}
                         >
-                            <Text class="mdc-theme--on-secondary">{section.name}</Text>
+                            <Text>{section.name}</Text>
+                            {#if section.comingSoon}
+                               <span class="mdc-typography--caption"
+                                     style="color: #5d5d78;
+                                     font-size: 12px;
+                                     margin-left: 8px;"
+                               >coming soon!</span>
+                            {/if}
                         </Item>
                     {/if}
                 {/each}
@@ -239,6 +208,55 @@
         <Scrim/>
     {/if}
     <AppContent class="app-content">
+         <TopAppBar variant="static" class="app-top-app-bar">
+            <Row>
+                <Section>
+                    {#if miniWindow}
+                        <IconButton class="material-icons" on:click={() => (drawerOpen = !drawerOpen)}
+                        >menu
+                        </IconButton>
+                    {/if}
+                    <Title
+                            class="--mdc-theme--primary"
+                            style={miniWindow ? 'padding-left: 0;' : ''}
+                    >
+                        {miniWindow ? '' : currentPageTitle}
+                    </Title>
+                </Section>
+
+                <Section align="end" toolbar style="color: #000;">
+
+                    {#if $userStore}
+                        <Button tag="a" href="/users/me">{$userStore.email}</Button>
+                        <form action="/signout" method="POST" use:enhance={() => {
+                            console.log("signout");
+                            return async ({result}) => {
+                                console.log("result signout");
+                                $userStore = null;
+                                await invalidateAll();
+                                await applyAction(result);
+                            }
+                        }}>
+                            <Button>Sign out</Button>
+                        </form>
+                    {:else}
+                        <Button href="/signin">Signin</Button>
+                        <Button href="/signup">Signup</Button>
+                    {/if}
+                    <Wrapper>
+                        <IconButton toggle pressed={lightTheme} on:SMUIIconButtonToggle:change={switchTheme}>
+                            <Icon component={Svg} viewBox="0 0 24 24" on>
+                                <path fill="currentColor" d={mdiWeatherNight}></path>
+                            </Icon>
+                            <Icon component={Svg} viewBox="0 0 24 24">
+                                <path fill="currentColor" d={mdiWeatherSunny}></path>
+                            </Icon>
+                        </IconButton>
+                        <Tooltip>{lightTheme ? 'Lights off' : 'Lights on'}</Tooltip>
+                    </Wrapper>
+                </Section>
+            </Row>
+        </TopAppBar>
         <main class="app-main-content" bind:this={mainContent}>
             <slot/>
         </main>
