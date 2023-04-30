@@ -14,10 +14,10 @@
         <Overview data={{aspectSummary, aspectWordcloud}}/>
     </div>
 
-    <Banner open autoClose={false}>
-        <Label slot="label">Stats</Label>
-    </Banner>
     <div class="stats-container">
+        <h5 class="mdc-typography--headline5" style="margin: 1.5rem 0 0 2rem;">
+            Visualization of sentiment and reviews in time
+        </h5>
         <Stats data={{
             reviewSummary: reviewSummary,
             aspectSummary: aspectSummary,
@@ -30,9 +30,7 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: center;
         width: 100%;
-        gap: 16px;
     }
 
     .overview-container {
@@ -40,7 +38,7 @@
         flex-wrap: wrap;
         justify-content: space-evenly;
         gap: 1rem;
-        margin: 0 auto;
+        margin: auto auto 1rem auto;
         width: 100%;
         min-width: auto;
     }

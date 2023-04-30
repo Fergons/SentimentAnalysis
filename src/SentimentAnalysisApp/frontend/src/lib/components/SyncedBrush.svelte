@@ -33,6 +33,7 @@
 
     let brushedData;
     let groupedData;
+    let brushGroupedData;
     let yDomainMax = 5;
     $: {
         yDomainMax=5;
@@ -49,7 +50,13 @@
         if (brushedData.length < 2) {
             brushedData = data.slice(min * data.length, min * data.length + 2)
         }
+
         groupedData = groupLonger(brushedData, selectedPolarities, {
+            groupTo: zKey,
+            valueTo: yKey,
+        });
+
+        brushGroupedData = groupLonger(data, selectedPolarities, {
             groupTo: zKey,
             valueTo: yKey,
         });
@@ -57,7 +64,7 @@
 </script>
 
 <div class="chart-wrapper">
-    <span style="padding-bottom: 1rem; text-transform: capitalize" class="mdc-typography--headline4">{chartTitle.split("_").join(" & ")}</span>
+    <span style="padding-bottom: 1rem; text-transform: capitalize" class="mdc-typography--headline5">{chartTitle.split("_").join(" & ")}</span>
     <div class="chart-container">
         <LayerCake
                 ssr={true}
@@ -116,8 +123,8 @@
                 zDomain={selectedPolarities}
                 zRange={selectedPolarities.map(name => zColorMap.get(name))}
                 yDomain={[0, yDomainMax]}
-                flatData={brushedData}
-                data={groupedData}
+                flatData={data}
+                data={brushGroupedData}
         >
             <ScaledSvg>
                 <Multiline/>
@@ -139,6 +146,7 @@
         width: 45%;
         height: 300px;
         gap: 1rem;
+        margin-bottom: 4rem;
     }
 
     .chart-container {

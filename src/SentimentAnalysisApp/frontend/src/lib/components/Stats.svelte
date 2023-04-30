@@ -10,6 +10,7 @@
     import IconButton from '@smui/icon-button';
     import SegmentedButton, {Segment} from '@smui/segmented-button';
     import {Label} from '@smui/common';
+    import List, {Group, Subheader} from '@smui/list';
 
     import MultiArea from './MultiArea.svelte';
     import Line from './Line.svelte';
@@ -25,6 +26,7 @@
     import Brush from './Brush.svelte';
     import {timeDay, timeWeek, timeMonth, timeYear} from "d3-time";
     import SyncedBrush from "./SyncedBrush.svelte";
+    import Accordion, {Content, Header, Panel} from "@smui-extra/accordion";
 
     export let data: {
         sources: Map<number, Source>,
@@ -46,10 +48,10 @@
     let selectedSources: string[] = [...defaultSourceSelection];
 
     const sentimentNames = ['positive', 'negative', 'neutral'];
-    const defaultSentimentSelection = [];
+    const defaultSentimentSelection = ['positive', 'negative'];
     let selectedSentiments = [...defaultSentimentSelection];
 
-    const categoryTypeNames = ['gameplay', 'audio_visuals', 'performance_bugs', 'overall', 'price', 'community'];
+    let categoryTypeNames = ['gameplay', 'audio_visuals', 'performance_bugs', 'overall', 'price', 'community'];
     const defaultCategorySelection = [];
     let selectedCategories = [...defaultCategorySelection];
 
@@ -114,6 +116,7 @@
 
     $: {
         categoryDatasets = transformAspectSummary(data.aspectSummary.dates, mapTimeBucketToTime[selectedTimeBucket]);
+        categoryTypeNames = Object.keys(categoryDatasets);
     }
 
     $: {
@@ -158,7 +161,7 @@
         return formatter(d);
     };
 
-     function sortResult(result) {
+    function sortResult(result) {
         if (Object.keys(result).length === 0) return [];
 
         const rows = Object.keys(result)
@@ -193,37 +196,42 @@
 
 <div class='stats-container'>
     <div class='chart-settings'>
-        <IconButton class="material-icons" on:click={() => {}}>
-            tune
-        </IconButton>
-        <ChartSettingsGroup
-                seriesNames={sourceNames}
-                bind:selectedSeries={selectedSources}
-                onReset={() => selectedSources = [...defaultSourceSelection]}
-                onLast={(last) => selectedSources = onLast(last, sourceNames)}
-        >
-        </ChartSettingsGroup>
-        <ChartSettingsGroup
-                seriesNames={reviewTypeNames}
-                bind:selectedSeries={selectedReviewTypes}
-                onReset={() => selectedReviewTypes = [...defaultReviewTypeSelection]}
+        <Group>
+            <ChartSettingsGroup
+                    subHeader="Sources"
+                    seriesNames={sourceNames}
+                    bind:selectedSeries={selectedSources}
+                    onReset={() => selectedSources = [...defaultSourceSelection]}
+                    onLast={(last) => selectedSources = onLast(last, sourceNames)}
+            >
+            </ChartSettingsGroup>
 
-        >
-        </ChartSettingsGroup>
-        <ChartSettingsGroup
-                seriesNames={sentimentNames}
-                bind:selectedSeries={selectedSentiments}
-                onReset={() => selectedSentiments = [...defaultSentimentSelection]}
-                onLast={(last) => selectedSentiments = onLast(last, sentimentNames)}
-        >
-        </ChartSettingsGroup>
-        <ChartSettingsGroup
-                seriesNames={categoryTypeNames}
-                bind:selectedSeries={selectedCategories}
-                onReset={() => selectedCategories = [...defaultCategorySelection]}
-                onLast={(last) => selectedCategories = onLast(last, categoryTypeNames)}
-        >
-        </ChartSettingsGroup>
+            <ChartSettingsGroup
+                    subHeader="Status of reviews"
+                    seriesNames={reviewTypeNames}
+                    bind:selectedSeries={selectedReviewTypes}
+                    onReset={() => selectedReviewTypes = [...defaultReviewTypeSelection]}
+            >
+            </ChartSettingsGroup>
+
+            <ChartSettingsGroup
+                    subHeader="Polarity of aspects"
+                    seriesNames={sentimentNames}
+                    bind:selectedSeries={selectedSentiments}
+                    onReset={() => selectedSentiments = [...defaultSentimentSelection]}
+                    onLast={(last) => selectedSentiments = onLast(last, sentimentNames)}
+            >
+            </ChartSettingsGroup>
+
+            <ChartSettingsGroup
+                    subHeader="Category of aspects"
+                    seriesNames={categoryTypeNames}
+                    bind:selectedSeries={selectedCategories}
+                    onReset={() => selectedCategories = [...defaultCategorySelection]}
+                    onLast={(last) => selectedCategories = onLast(last, categoryTypeNames)}
+            >
+            </ChartSettingsGroup>
+        </Group>
     </div>
     <div class="chart-container">
         <div class="zoom-settings">
@@ -386,6 +394,7 @@
         gap: 1rem;
         padding: 1rem;
         width: 100%;
+        margin-top: 1rem;
     }
 
 </style>
