@@ -97,4 +97,27 @@
         margin-left: 0;
     }
 
+    @media (max-width: 680px) {
+        * :global(.card-media-219x102>img) {
+            width: 110px;
+            height: 51px;
+        }
+        .mdc-typography--headline6{
+            font-size: 1rem;
+            line-height: 1rem;
+        }
+        .mdc-typography--subtitle2{
+            font-size: 0.8rem;
+            line-height: 0.8rem;
+        }
+
+    }
+
+
+    @media (max-width: 420px) {
+        .mdc-typography--headline6{
+            font-size: 0.8rem;
+        }
+    }
+
 </style>

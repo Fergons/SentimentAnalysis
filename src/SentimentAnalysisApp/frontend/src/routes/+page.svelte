@@ -25,12 +25,12 @@
     .about-section {
         display: flex;
         flex-direction: column;
-        width: 33vw;
+        max-width: 720px;
     }
 
     .features-section {
         display: flex;
         flex-direction: column;
-        width: 33vw;
+        width: 720px;
     }
 </style>

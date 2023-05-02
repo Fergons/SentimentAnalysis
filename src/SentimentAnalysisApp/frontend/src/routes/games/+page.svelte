@@ -16,7 +16,14 @@
     import chips, {Set} from '@smui/chips';
     import Textfield from "@smui/textfield";
     import Banner, {CloseReason} from '@smui/banner';
-    import {gameFilter, gameSort, gameDataStore, gamePage, perPageLimit, loadingContent, initialGameFilterValue, moreContent} from "../../lib/stores/game";
+    import {
+        gameFilter,
+        gameSort,
+        gameDataStore,
+        gamePage,
+        perPageLimit,
+        initialGameFilterValue
+    } from "../../lib/stores/game";
     import Accordion, {Panel, Header, Content} from "@smui-extra/accordion";
 
     export let data: PageData;
@@ -39,7 +46,8 @@
 
 
     const categories = data.categories;
-
+    let loading = true;
+    $: loading = $gameDataStore.loading;
 
     let searchRequestCounter = 0;
 
@@ -236,7 +244,7 @@
         </div>
 
         <div class="game-list">
-            {#if $gameDataStore.games.length === 0 && loadingContent}
+            {#if $gameDataStore.games.length === 0}
                 <div class="loading-container">
                     <CircularProgress indeterminate/>
                 </div>
@@ -245,24 +253,26 @@
                 <GameCard {game}/>
             {/each}
         </div>
-        <div class="page-buttons-container">
-            <Button on:click={()=> $gamePage = 0} disabled={$gamePage <= 0} padded>
-                <Icon class="material-icons">keyboard_double_arrow_left</Icon>
-            </Button>
-            <Button on:click={()=> $gamePage = $gamePage - 1} disabled={$gamePage <= 0} padded>
-                <Icon class="material-icons">keyboard_arrow_left</Icon>
-            </Button>
-            <div class="mdc-typography--button">
-                Page {$gamePage ? $gamePage + 1 : 1}/{Math.ceil($gameDataStore.total / perPageLimit)}
+        {#if $gameDataStore.moreContent}
+            <div class="page-buttons-container" style="display:none">
+                <Button on:click={()=> $gamePage = 0} disabled={$gamePage <= 0} padded>
+                    <Icon class="material-icons">keyboard_double_arrow_left</Icon>
+                </Button>
+                <Button on:click={()=> $gamePage = $gamePage - 1} disabled={$gamePage <= 0} padded>
+                    <Icon class="material-icons">keyboard_arrow_left</Icon>
+                </Button>
+                <div class="mdc-typography--button">
+                    Page {$gamePage ? $gamePage + 1 : 1}/{Math.ceil($gameDataStore.total / perPageLimit)}
+                </div>
+                <Button on:click={()=> $gamePage = $gamePage + 1} disabled={!$gameDataStore.moreContent} padded>
+                    <Icon class="material-icons">keyboard_arrow_right</Icon>
+                </Button>
+                <Button on:click={()=> $gamePage = Math.ceil($gameDataStore.total/ perPageLimit)-1}
+                        disabled={$gamePage === Math.floor($gameDataStore.total / perPageLimit)} padded>
+                    <Icon class="material-icons">keyboard_double_arrow_right</Icon>
+                </Button>
             </div>
-            <Button on:click={()=> $gamePage = $gamePage + 1} disabled={!moreContent} padded>
-                <Icon class="material-icons">keyboard_arrow_right</Icon>
-            </Button>
-            <Button on:click={()=> $gamePage = Math.ceil($gameDataStore.total/ perPageLimit)-1}
-                    disabled={$gamePage === Math.floor($gameDataStore.total / perPageLimit)} padded>
-                <Icon class="material-icons">keyboard_double_arrow_right</Icon>
-            </Button>
-        </div>
+        {/if}
     </div>
 </section>
 
@@ -296,10 +306,10 @@
 
     .filter-settings {
         grid-area: filter-settings;
-        padding-right: 1rem;
+        padding-right: 0.8rem;
         position: sticky;
         align-self: start;
-        top: 80px;
+        top: 104px;
         z-index: 3;
     }
 
@@ -307,6 +317,7 @@
     .game-list {
         grid-area: game-list;
         display: flex;
+        min-height: 800px;
         flex-direction: column;
         box-sizing: border-box;
     }
@@ -321,7 +332,6 @@
 
     .game-page {
         display: flex;
-        height: 100vh;
         flex-direction: row;
         width: 100%;
     }
@@ -377,6 +387,9 @@
 
         * :global(.smui-accordion__header__title) {
             display: none;
+        }
+        .game-page{
+            margin: 0;
         }
     }
 

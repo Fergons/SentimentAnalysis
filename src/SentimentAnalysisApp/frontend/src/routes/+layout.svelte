@@ -174,9 +174,11 @@
 			? 'app-drawer-adjust'
 			: 'hide-initial-small'}"
     >
-        <Header style="height: 64px; padding: 8px 12px; border-bottom: #5d5d78 1px">
-            <Title style="align-self: center"><a href="/" style="color:inherit; text-decoration: inherit">SNTMNT</a>
-            </Title>
+        <Header style="display:flex; justify-content: space-between; height: 66px;  flex-direction: column; padding-bottom: 0">
+            <div style="display:flex; flex-direction: column; height: 100%; justify-content: center">
+                <Title style="padding-left:0"><a href="/" style="color:inherit; text-decoration: inherit">SNTMNT</a>
+                </Title>
+            </div>
             <Separator/>
         </Header>
         <Content style="padding-bottom: 22px;">
