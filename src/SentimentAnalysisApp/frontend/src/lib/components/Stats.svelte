@@ -1,32 +1,24 @@
 <script lang='ts'>
-    import {LayerCake, Svg, Html, flatten, groupLonger, ScaledSvg} from 'layercake';
-    import {writable} from 'svelte/store';
-    import Checkbox from '@smui/checkbox';
+    import {LayerCake, Svg, Html, groupLonger, ScaledSvg} from 'layercake';
     import {scaleOrdinal} from 'd3-scale';
-    import {stack} from 'd3-shape';
     import {timeParse, timeFormat} from 'd3-time-format';
-    import {format, precisionFixed} from 'd3-format';
-    import {max} from 'd3-array';
-    import IconButton from '@smui/icon-button';
+    import {format} from 'd3-format';
     import SegmentedButton, {Segment} from '@smui/segmented-button';
     import {Label} from '@smui/common';
-    import List, {Group, Subheader} from '@smui/list';
+    import {Group} from '@smui/list';
 
     import MultiArea from './MultiArea.svelte';
-    import Line from './Line.svelte';
     import Multiline from './Multiline.svelte';
     import AxisX from './AxisX.svelte';
     import AxisY from './AxisY.svelte';
     import SharedTooltip from './SharedTooltip.svelte';
     import {transformSummary, generateColorMap, transformAspectSummary} from '../utils/dataTransformer';
-    import type {ReviewsSummaryDataPoint, ReviewsSummaryV2, AspectsSummary} from '../client';
+    import type {ReviewsSummaryV2, AspectsSummary} from '../client';
     import type {Source} from '../client';
-    import FormField from '@smui/form-field';
     import ChartSettingsGroup from './ChartSettingsGroup.svelte';
     import Brush from './Brush.svelte';
     import {timeDay, timeWeek, timeMonth, timeYear} from "d3-time";
     import SyncedBrush from "./SyncedBrush.svelte";
-    import Accordion, {Content, Header, Panel} from "@smui-extra/accordion";
 
     export let data: {
         sources: Map<number, Source>,
