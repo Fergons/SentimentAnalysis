@@ -1,28 +1,22 @@
 <script lang="ts">
     import GameCard from '../../lib/components/GameCard.svelte';
     import Button, {Label} from '@smui/button';
-    import {navigating} from "$app/stores";
     import type {PageServerData, PageData} from "./$types";
-    import {derived, writable} from "svelte/store";
-    import type {GameListItem} from "../../lib/client";
     import {GamesService} from "../../lib/client";
     import Autocomplete from '@smui-extra/autocomplete';
-    import type {GameListSort, GameListFilter} from "../../lib/stores/game";
-    import IconButton, {Icon} from '@smui/icon-button';
-    import CircularProgress from '@smui/circular-progress';
+    import {Icon} from '@smui/icon-button';
     import Fab from "@smui/fab";
-    import List, {Item, Graphic, Text} from '@smui/list';
-    import Radio from '@smui/radio';
-    import chips, {Set} from '@smui/chips';
+    import {Text} from '@smui/list';
     import Textfield from "@smui/textfield";
-    import Banner, {CloseReason} from '@smui/banner';
     import {
         gameFilter,
         gameSort,
         gameDataStore,
         gamePage,
         perPageLimit,
-        initialGameFilterValue
+        initialGameFilterValue,
+        moreContent,
+        loadingContent
     } from "../../lib/stores/game";
     import Accordion, {Panel, Header, Content} from "@smui-extra/accordion";
 
@@ -32,7 +26,6 @@
     let autocomplete: any;
     let dialog: any;
 
-    let filterOpen = false;
     let open = false;
     let selection = 'Radishes';
     let selected = 'Nothing yet.';
@@ -46,8 +39,6 @@
 
 
     const categories = data.categories;
-    let loading = true;
-    $: loading = $gameDataStore.loading;
 
     let searchRequestCounter = 0;
 
@@ -86,6 +77,7 @@
     }
 
     function applyFilter() {
+        gamePage.set(0);
         gameFilter.set({...filterTemp});
     }
 
@@ -170,13 +162,12 @@
                         <Autocomplete this={autocomplete}
                                       search={searchNames}
                                       bind:value={searchName}
-                                      on:focusout={e => {
-                                          $gameFilter.name = searchName;
-                                      }}
                                       showMenuWithNoInput={false}
                                       label="Search"
                         >
-                            <Textfield label="Search" bind:value={searchName} variant="outlined"/>
+                            <Textfield label="Search"
+                                       bind:value={searchName}
+                                       variant="outlined"/>
                             <Text
                                     slot="loading"
                                     style="display: flex; width: 100%; justify-content: center; align-items: center;"
@@ -186,7 +177,7 @@
 
                         </Autocomplete>
                         <Fab
-                                on:click={() => {$gameFilter.name = searchName}}
+                                on:click={() => {filterTemp.name = searchName; applyFilter()}}
                                 disabled={searchName === ''}
                                 color="primary"
                                 mini
@@ -244,35 +235,35 @@
         </div>
 
         <div class="game-list">
-            {#if $gameDataStore.games.length === 0}
+            {#if $loadingContent}
                 <div class="loading-container">
-                    <CircularProgress indeterminate/>
+                    Loading...
                 </div>
             {/if}
             {#each $gameDataStore.games as game}
                 <GameCard {game}/>
             {/each}
         </div>
-        {#if $gameDataStore.moreContent}
-            <div class="page-buttons-container" style="display:none">
-                <Button on:click={()=> $gamePage = 0} disabled={$gamePage <= 0} padded>
-                    <Icon class="material-icons">keyboard_double_arrow_left</Icon>
-                </Button>
-                <Button on:click={()=> $gamePage = $gamePage - 1} disabled={$gamePage <= 0} padded>
-                    <Icon class="material-icons">keyboard_arrow_left</Icon>
-                </Button>
-                <div class="mdc-typography--button">
-                    Page {$gamePage ? $gamePage + 1 : 1}/{Math.ceil($gameDataStore.total / perPageLimit)}
-                </div>
-                <Button on:click={()=> $gamePage = $gamePage + 1} disabled={!$gameDataStore.moreContent} padded>
-                    <Icon class="material-icons">keyboard_arrow_right</Icon>
-                </Button>
-                <Button on:click={()=> $gamePage = Math.ceil($gameDataStore.total/ perPageLimit)-1}
-                        disabled={$gamePage === Math.floor($gameDataStore.total / perPageLimit)} padded>
-                    <Icon class="material-icons">keyboard_double_arrow_right</Icon>
-                </Button>
+
+        <div class="page-buttons-container">
+            <Button on:click={()=> $gamePage = 0} disabled={$gamePage <= 0} padded>
+                <Icon class="material-icons">keyboard_double_arrow_left</Icon>
+            </Button>
+            <Button on:click={()=> $gamePage = $gamePage - 1} disabled={$gamePage <= 0} padded>
+                <Icon class="material-icons">keyboard_arrow_left</Icon>
+            </Button>
+            <div class="mdc-typography--button">
+                Page {$gamePage ? $gamePage + 1 : 1}/{Math.ceil($gameDataStore.total / perPageLimit)}
             </div>
-        {/if}
+            <Button on:click={()=> $gamePage = $gamePage + 1} disabled={!$moreContent} padded>
+                <Icon class="material-icons">keyboard_arrow_right</Icon>
+            </Button>
+            <Button on:click={()=> $gamePage = Math.ceil($gameDataStore.total/ perPageLimit)-1}
+                    disabled={!$moreContent} padded>
+                <Icon class="material-icons">keyboard_double_arrow_right</Icon>
+            </Button>
+        </div>
+
     </div>
 </section>
 
@@ -388,7 +379,8 @@
         * :global(.smui-accordion__header__title) {
             display: none;
         }
-        .game-page{
+
+        .game-page {
             margin: 0;
         }
     }

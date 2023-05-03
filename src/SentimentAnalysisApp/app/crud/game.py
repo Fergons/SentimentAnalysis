@@ -1,17 +1,11 @@
-import logging
 from datetime import timedelta, datetime
 from typing import List, Optional, Any, Tuple, Dict
-
-from fastapi.encoders import jsonable_encoder
 from sqlalchemy import column, update, func, cast, and_, text, or_, case, nullslast, nullsfirst
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
-from sqlalchemy.sql.functions import count
-
 from app.crud.base import CRUDBase
 from app.db.session import RegConfig
-from app.crud.source import crud_source
 from app.schemas.game import GameCreate, GameUpdate
 from app.schemas.game import CategoryCreate, CategoryUpdate
 from app.schemas.game import GameCategoryCreate, GameCategoryUpdate
@@ -27,17 +21,36 @@ logger = logging.getLogger(__name__)
 
 class CRUDCategory(CRUDBase[models.Category, CategoryCreate, CategoryUpdate]):
     async def get_id_by_name(self, db: AsyncSession, *, name: str) -> Optional[int]:
+        """
+        Get category id by name
+        param: db: db session
+        param: name: category name
+        """
         logging.debug(f"get_id_by_name: getting category {name} from db")
         result = await db.scalars(select(self.model.id).where(self.model.name == name))
         logging.debug(f"get_by_name: got category {name} from db")
         return result.first()
 
-    async def get_multi_by_num_games(self, db: AsyncSession, *, limit: int = 100, offset: int = 0) -> List[models.Category]:
-        query = select(models.Category).select_from(models.Category).join(models.GameCategory).group_by(models.Category.id).order_by(func.count().desc()).limit(limit).offset(offset)
+    async def get_multi_by_num_games(self, db: AsyncSession, *, limit: int = 100, offset: int = 0) -> List[
+        models.Category]:
+        """
+        Get categories with the most games
+        param: db: db session
+        param: limit: max number of categories to return
+        param: offset: offset for categories to return
+        """
+        query = select(models.Category).select_from(models.Category).join(models.GameCategory).group_by(
+            models.Category.id).order_by(func.count().desc()).limit(limit).offset(offset)
         result = await db.execute(query)
         return result.scalars().all()
 
     async def create_by_name_with_game_multi(self, db: AsyncSession, *, db_game: CategoryUpdate, names: List[str]):
+        """
+        Create categories by name and add them to a game
+        param: db: db session
+        param: db_game: game to add categories to
+        param: names: list of category names
+        """
         for name in names:
             db_obj = await self.get_by_name(db, name=name)
             if db_obj is None:
@@ -49,6 +62,12 @@ class CRUDCategory(CRUDBase[models.Category, CategoryCreate, CategoryUpdate]):
         await db.commit()
 
     async def _add_categories_by_name_for_game(self, db: AsyncSession, *, db_game: CategoryUpdate, names: List[str]):
+        """
+        Add categories by name to a game
+        param: db: db session
+        param: db_game: game to add categories to
+        param: names: list of category names
+        """
         result = await db.execute(select(self.model.name, self.model.id).where(self.model.name.in_(names)))
         category_ids = result.all()
         category_ids = {name: id for name, id in category_ids}
@@ -73,6 +92,12 @@ class CRUDGameCategory(CRUDBase[models.GameCategory, GameCategoryCreate, GameCat
 
 class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
     async def get_by_source_id(self, db: AsyncSession, source_id: int, source_game_id: Any) -> Optional[models.Game]:
+        """
+        Get game by source id and source game id
+        param: db: db session
+        param: source_id: source id
+        param: source_game_id: source game id
+        """
         result = await db.execute(select(models.GameSource)
                                   .where(and_(models.GameSource.source_id == source_id,
                                               models.GameSource.source_game_id == str(source_game_id)))
@@ -82,6 +107,12 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
     async def get_ids_by_source_game_ids(
             self, db: AsyncSession, source_id: int, source_game_ids: List[str]
     ) -> Dict[str, int]:
+        """
+        Get game ids by source id and source game ids
+        param: db: db session
+        param: source_id: source id
+        param: source_game_ids: source game ids
+        """
         result = await db.execute(select(models.GameSource.source_game_id, models.GameSource.game_id)
                                   .where(and_(models.GameSource.source_id == source_id,
                                               models.GameSource.source_game_id.in_(source_game_ids))))
@@ -90,13 +121,24 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
     async def get_by_source_game_ids(
             self, db: AsyncSession, source_id: int, source_game_ids: List[str]
     ) -> Dict[str, models.Game]:
+        """
+        Get games by source id and source game ids
+        param: db: db session
+        param: source_id: source id
+        param: source_game_ids: source game ids
+        """
         result = await db.scalars(select(models.GameSource)
                                   .where(and_(models.GameSource.source_id == source_id,
                                               models.GameSource.source_game_id.in_(source_game_ids)))
                                   .options(selectinload(models.GameSource.game)))
         return {gs.source_game_id: gs.game for gs in result.all()}
 
-    async def get_by_name(self, db: AsyncSession, *, name: str) -> Optional[models.Category]:
+    async def get_by_name(self, db: AsyncSession, *, name: str) -> Optional[models.Game]:
+        """
+        Get game by name
+        param: db: db session
+        param: name: game name
+        """
         ts_query = func.plainto_tsquery(cast("english", RegConfig), name)
         stmt = select(self.model).where(
             self.model.name_tsv.bool_op("@@")(ts_query)
@@ -106,6 +148,11 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
         return result.scalars().first()
 
     async def get_source_game_id(self, db: AsyncSession, *, id: int) -> str:
+        """
+        Get source identifier for a specified game
+        param: db: db session
+        param: id: game id
+        """
         result = await db.scalars(select(models.GameSource.source_game_id).where(models.GameSource.game_id == id))
         return result.first()
 
@@ -126,6 +173,12 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
     async def create_with_categories_by_names(
             self, db: AsyncSession, *, obj_in: GameCreate, names: List[str]
     ) -> models.Game:
+        """
+        Create game with categories by names. Used when storing scraped games from source.
+        param: db: db session
+        param: obj_in: game create object
+        param: names: category names
+        """
         db_obj = self.model(**obj_in.dict(exclude={"source_id", "source_game_id"}))  # type: ignore
         logger.debug(f"creating categories for {obj_in.name}")
         await crud_category._add_categories_by_name_for_game(db, db_game=db_obj, names=names)
@@ -138,6 +191,14 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
     async def create_with_categories_by_names_and_source(
             self, db: AsyncSession, *, obj_in: GameCreate, source_id: int, source_game_id: Any, names: List[str]
     ) -> Optional[models.Game]:
+        """
+        Create game with categories by names and source. Used when storing scraped games from source.
+        param: db: db session
+        param: obj_in: game create object
+        param: source_id: source id
+        param: source_game_id: source game id
+        param: names: category names
+        """
         obj_in_data = obj_in.dict()
         game_db_obj = self.model(**obj_in_data)  # type: ignore
         logger.debug(f"creating categories for {obj_in.name}")
@@ -255,6 +316,11 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
             game_id: Optional[int] = None,
             source_game_id: Optional[str] = None
     ):
+        """
+        Update the following columns of table models.GameSource:
+        - reviews_scraped_at
+        - num_reviews
+        """
         if game_id is None and source_game_id is None:
             raise ValueError("game_id or source_game_id must be provided")
         if game_id is not None:
@@ -311,12 +377,18 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
                             filter: schemas.GameListFilter = None,
                             model_id: str = "mt5-acos-1.0"
                             ) -> schemas.GameListResponse:
+        """
+        Get a list of games with optional sorting and filtering. The list is paginated and the total number of games is returned.
+        The game score is computed based on the extracted aspects by a chosen model.
+        :param db:
+        """
+        # compute game score based on extracted aspects by a chosen model
         game_score = (
             func.coalesce(
                 (func.sum(
                     case(
                         (models.Aspect.polarity == "positive", 6.0),
-                        (models.Aspect.polarity == "negative", -3.0),
+                        (models.Aspect.polarity == "negative", -4.0),
                         (models.Aspect.polarity == "neutral", 2.0),
                         else_=0.0)
                 ) / (func.count(models.Aspect.id.distinct()) + 0.1)) + 5.0,
@@ -395,8 +467,8 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
                 else:
                     stmt = stmt.order_by(nullslast(self.model.name.desc()))
 
-        count_stmt = select(func.count(self.model.id.distinct())).select_from(self.model).outerjoin(
-            models.Review).outerjoin(
+        count_stmt = select(func.count(self.model.id.distinct())).select_from(self.model).join(
+            models.Review).join(
             models.Aspect).filter(and_(True, *filters))
         count_result = await db.execute(count_stmt)
         total_count = count_result.scalar()
@@ -422,6 +494,13 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
         )
 
     async def get_matches(self, db: AsyncSession, *, name: str, limit: int = 10) -> List[models.Game]:
+        """
+        Get a list of games that match a given name
+         :param db: Database session
+        :param name: Game name
+        :param limit: Maximum number of games to return
+        :return: List of games
+        """
         ts_query = func.plainto_tsquery(cast("english", RegConfig), name)
         stmt = select(self.model.name).where(
             self.model.name_tsv.bool_op("@@")(ts_query)
@@ -429,7 +508,15 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
         result = await db.execute(stmt)
         return result.scalars().all()
 
-    async def get_game_list_item(self, db: AsyncSession, *, id: str, model_id: str = "mt5-acos-1.0") -> schemas.GameListItem:
+    async def get_game_list_item(self, db: AsyncSession, *, id: str,
+                                 model_id: str = "mt5-acos-1.0") -> schemas.GameListItem:
+        """
+        Get a single game by id and analyzed by a chosen model
+        :param db: Database session
+        :param id: Game id
+        :param model_id: Model id
+        :return: GameListItem
+        """
         game_score = (
             func.coalesce(
                 (func.sum(
@@ -458,7 +545,6 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
             developers=[schemas.Developer.from_orm(d.developer) for d in game.developers],
             score=round(score, 1),
             num_reviews=num_reviews)
-
 
 
 crud_game = CRUDGame(models.Game)

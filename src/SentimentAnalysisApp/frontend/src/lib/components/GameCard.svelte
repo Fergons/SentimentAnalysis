@@ -63,6 +63,10 @@
 </div>
 
 <style>
+    .mdc-typography--headline6{
+            line-height: 1.3rem;
+    }
+
     * :global(.card-media-219x102) {
         display: flex;
         flex-direction: row;

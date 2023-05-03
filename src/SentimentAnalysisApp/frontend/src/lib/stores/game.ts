@@ -37,9 +37,8 @@ export const initialGameFilterValue = {
     developers: null
 } as unknown as GameListFilter;
 
-export let prevSort: GameListSort = {};
-export let loadingContent = false;
-export let moreContent = false;
+export let loadingContent = writable(true)
+export let moreContent = writable(false);
 export const perPageLimit = 20;
 export const gamePage = writable(0);
 export const gameFilter = writable<GameListFilter>({...initialGameFilterValue})
@@ -53,21 +52,17 @@ export const gameDataStore = derived(
     [gamePage, gameFilter, gameSort],
     // @ts-ignore
     async ([$gamePage, $gameFilter, $gameSort], set) => {
-        if ($gameSort !== prevSort) {
-            gamePage.set(0);
-            prevSort = $gameSort;
-        }
-        loadingContent = true;
+        loadingContent.set(true);
         const fetchedData = await getGames($gamePage, $gameFilter, $gameSort);
         if (fetchedData) {
-            moreContent = fetchedData.total > ($gamePage + 1) * perPageLimit;
+            moreContent.set(fetchedData.total >= ($gamePage+1) * perPageLimit);
             set({
                 // @ts-ignore
                 games: fetchedData.games,
                 total: fetchedData.total,
             });
         }
-        loadingContent = false;
+        loadingContent.set(false);
     },
     {games: [], total: 0}
 );
