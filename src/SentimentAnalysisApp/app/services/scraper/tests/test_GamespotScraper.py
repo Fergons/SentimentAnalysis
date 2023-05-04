@@ -22,7 +22,7 @@ def scraper():
 @pytest.mark.anyio
 async def test_get_games_reviews_gamespot(scraper):
     assert os.environ.get("GAMESPOT_API_KEY") is not None
-    assert scraper._api_key is not None
+    assert scraper.api_key is not None
 
     reviews = []
     async with scraper as scraper:
