@@ -3,7 +3,6 @@
     import FormField from "@smui/form-field";
     import Switch from "@smui/switch";
     import IconButton from "@smui/icon-button";
-    import {LayerCake} from "layercake";
     import List, {Subheader, Item} from "@smui/list";
 
     export let subHeader = "Series";

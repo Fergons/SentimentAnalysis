@@ -2,16 +2,10 @@
     import Card, {
         Media,
         MediaContent,
-        Content,
         PrimaryAction,
-        Actions,
-        ActionButtons,
-        ActionIcons
     } from '@smui/card';
-    import Button, {Label, Icon} from '@smui/button';
-    import IconButton from '@smui/icon-button';
     import {goto} from '$app/navigation';
-    import type {Game, GameListItem} from '../client';
+    import type {GameListItem} from '../client';
     import {selectedGame} from "../stores/game";
 
     export let game: GameListItem;

@@ -1,5 +1,5 @@
 <script>
-    import {LayerCake, Svg, Html, groupLonger, ScaledSvg} from 'layercake';
+    import {LayerCake, Html, groupLonger, ScaledSvg} from 'layercake';
 
     import Multiline from './Multiline.svelte';
     import AxisX from './AxisX.svelte';
@@ -33,6 +33,7 @@
 
     let brushedData;
     let groupedData;
+    // not altered range for brush view
     let brushGroupedData;
     let yDomainMax = 5;
     $: {
@@ -55,7 +56,7 @@
             groupTo: zKey,
             valueTo: yKey,
         });
-
+        // brush not altered range
         brushGroupedData = groupLonger(data, selectedPolarities, {
             groupTo: zKey,
             valueTo: yKey,

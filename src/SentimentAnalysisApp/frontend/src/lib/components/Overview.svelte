@@ -31,8 +31,9 @@
     function setActiveCategory(event) {
         activeCategory = event.detail.category;
     }
-
+    // Calculate the score for each category based on the polarity counts and source
     function calculateCategoryScoresPerSource(summary: AspectsSummary): { [key: string]: { [key: string]: number } } {
+        // If there's no data for the category, set the score to 5.0
         const initialValues = {
             gameplay: 5,
             performance_bugs: 5,
@@ -73,6 +74,7 @@
     }
 
     function calculateCategoryScores(summary) {
+        // If there's no data for the category, set the score to 5.0
         const categoryScores = {
             gameplay: 5,
             performance_bugs: 5,
@@ -82,23 +84,22 @@
             overall: 5
         };
         const aggregatedPolarityCounts = {};
-
+        // Aggregate the polarity counts for each category across all sources
         for (const sourceId in summary.sources) {
             const sourcePolarityCounts = summary.sources[sourceId];
 
             for (const category in sourcePolarityCounts.categories) {
                 const polarityCounts = sourcePolarityCounts.categories[category];
-
+                // If first time seeing this category, initialize the counts
                 if (!aggregatedPolarityCounts[category]) {
                     aggregatedPolarityCounts[category] = {positive: 0, negative: 0, neutral: 0};
                 }
-
                 aggregatedPolarityCounts[category].positive += polarityCounts.positive;
                 aggregatedPolarityCounts[category].negative += polarityCounts.negative;
                 aggregatedPolarityCounts[category].neutral += polarityCounts.neutral;
             }
         }
-
+        // Calculate the final score for each category
         for (const category in aggregatedPolarityCounts) {
             const polarityCounts = aggregatedPolarityCounts[category];
             const totalPolarityCount = polarityCounts.positive + polarityCounts.negative + polarityCounts.neutral;
@@ -110,9 +111,9 @@
                 const negativePercentage = polarityCounts.negative / totalPolarityCount;
 
                 // Calculate weighted score based on the difference between positive and negative percentages
-                const weightedScore = (4 * positivePercentage - 2 * negativePercentage) / 3;
-                console.log("weightedScore: ", weightedScore)
-                // Scaling factor based on the total number of counts, using a square root function
+                const weightedScore = (4 * positivePercentage - 2.1 * negativePercentage) / 3.2;
+
+                // Scaling factor
                 const scalingFactor = 5; //(-5 to 5 range and then add -5)
 
 

@@ -1,16 +1,11 @@
 <script lang="ts">
     import Card, {
-        Media,
-        MediaContent,
         Content,
-        PrimaryAction,
         Actions,
         ActionButtons,
-        ActionIcons
     } from '@smui/card';
     import Button, {Label, Icon} from '@smui/button';
     import IconButton from '@smui/icon-button';
-    import {goto} from '$app/navigation';
     import type {ReviewWithAspects} from "../client";
 
     let annotate = false;

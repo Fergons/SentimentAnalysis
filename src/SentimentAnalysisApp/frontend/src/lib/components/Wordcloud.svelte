@@ -3,15 +3,12 @@
     import {writable} from 'svelte/store';
     import {scaleLinear, scaleLog} from 'd3-scale';
     import layout from 'd3-cloud';
-    import {schemeCategory10} from 'd3-scale-chromatic';
     import {LayerCake, Svg} from 'layercake';
-    import Button from '@smui/button';
-    import IconButton from '@smui/icon-button';
     import Fab, {Icon} from '@smui/fab';
 
     export let data;
     const categories = Object.keys(data.categories);
-    console.log(data)
+
     export let selectedCategory = data.categories && Object.keys(data.categories).length > 0 ?  Object.keys(data.categories)[0] : 'overall';
     let polarities = selectedCategory && data.categories[selectedCategory] ? Object.keys(data.categories[selectedCategory]) : [];
     let selectedPolarity = polarities?.length > 0 ? polarities[0] : undefined;
@@ -147,7 +144,6 @@
                 {/if}
                 {#each $words as {text, size, fill, transform}}
                     <text
-                            on:click="{() => console.log(text)}"
                             style="font-size: {size}px; font-family: Impact; fill: {fill}"
                             text-anchor="middle"
                             transform="{transform}">
