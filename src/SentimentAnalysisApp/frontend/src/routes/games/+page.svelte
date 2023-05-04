@@ -19,27 +19,12 @@
         loadingContent
     } from "../../lib/stores/game";
     import Accordion, {Panel, Header, Content} from "@smui-extra/accordion";
+    import {filter} from "d3-array";
 
     export let data: PageData;
 
-
-    let autocomplete: any;
-    let dialog: any;
-
-    let open = false;
-    let selection = 'Radishes';
-    let selected = 'Nothing yet.';
-
-    function closeHandler(e: CustomEvent<{ action: string }>) {
-        if (e.detail.action === 'accept') {
-            selected = selection;
-        }
-        selection = 'Radishes';
-    }
-
-
-    const categories = data.categories;
-
+    let searchName = $gameFilter.name ?? '';
+    let filterTemp = {...$gameFilter};
     let searchRequestCounter = 0;
 
     async function searchNames(input: string) {
@@ -47,8 +32,9 @@
             return [];
         }
         const counter = ++searchRequestCounter;
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise(resolve => setTimeout(resolve, 300));
         // This means the function was called again, so we should cancel.
+        console.log(counter, searchRequestCounter)
         if (counter !== searchRequestCounter) {
             // `return false` (or, more accurately, resolving the Promise object to
             // `false`) is how you tell Autocomplete to cancel this search. It won't
@@ -56,7 +42,7 @@
             return false;
         }
         // Return a list of matsches.
-        return GamesService.getNameMatchesGamesSearchGet(input);
+        return await GamesService.getNameMatchesGamesSearchGet(input);
     }
 
     function cycleThrough(value: string, options: string[]) {
@@ -67,12 +53,8 @@
         return options[(index + 1) % options.length];
     }
 
-    let searchName = '';
-    let filterTemp = {...$gameFilter};
-
     function filterReset() {
-        searchName = '';
-        gameFilter.set({...initialGameFilterValue})
+        $gameFilter = {...initialGameFilterValue};
         filterTemp = {...initialGameFilterValue};
     }
 
@@ -89,7 +71,11 @@
 
     function searchGame() {
         gamePage.set(0);
-        gameFilter.set({name: searchName});
+        gameFilter.update(filter => ({
+            ...initialGameFilterValue,
+            name: searchName
+        }));
+        filterTemp = {...initialGameFilterValue};
     }
 
 </script>
@@ -167,9 +153,9 @@
             <div class="settings-bar-row">
                 <div class="settings-bar-item">
                     <div class="search-fab">
-                        <Autocomplete this={autocomplete}
-                                      search={searchNames}
+                        <Autocomplete search={searchNames}
                                       bind:value={searchName}
+                                      on:focusout={() => searchGame()}
                                       showMenuWithNoInput={false}
                                       label="Search"
                         >
@@ -186,7 +172,6 @@
                         </Autocomplete>
                         <Fab
                                 on:click={() => searchGame()}
-                                disabled={searchName === ''}
                                 color="primary"
                                 mini
                                 style="margin-top: auto; margin-bottom: auto;"

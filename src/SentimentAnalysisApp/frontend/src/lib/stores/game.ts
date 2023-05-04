@@ -26,7 +26,7 @@ export type GameListSort = {
 }
 
 export const initialGameFilterValue = {
-    name: null,
+    name: '',
     minNumReviews: null,
     maxNumReviews: null,
     minScore: null,
@@ -55,7 +55,7 @@ export const gameDataStore = derived(
         loadingContent.set(true);
         const fetchedData = await getGames($gamePage, $gameFilter, $gameSort);
         if (fetchedData) {
-            moreContent.set(fetchedData.total >= ($gamePage+1) * perPageLimit);
+            moreContent.set(fetchedData.total >= ($gamePage + 1) * perPageLimit);
             set({
                 // @ts-ignore
                 games: fetchedData.games,
@@ -71,15 +71,16 @@ export const gameDataStore = derived(
 export async function getGames(page: number, filter: GameListFilter, sort: GameListSort) {
     try {
         const offset = page * perPageLimit;
-        if (filter.name === '') {
-            filter.name = undefined;
+        let name = filter.name;
+        if (name === '') {
+            name = undefined;
         }
         const response = await GamesService.readGamesGamesGet(perPageLimit, offset,
             sort.numReviews, sort.score, sort.releaseDate,
-            filter.name,
+            name,
             filter.minNumReviews, filter.maxNumReviews, filter.minScore, filter.maxScore,
-            filter.minReleaseDate?`${filter.minReleaseDate}T23:59:59`:undefined,
-            filter.maxReleaseDate?`${filter.maxReleaseDate}T23:59:59`:undefined,
+            filter.minReleaseDate ? `${filter.minReleaseDate}T23:59:59` : undefined,
+            filter.maxReleaseDate ? `${filter.maxReleaseDate}T23:59:59` : undefined,
             filter.categories ? filter.categories.join() : undefined,
             filter.developers ? filter.developers.join() : undefined);
         return {games: response.games, total: response.query_summary?.total || 0};

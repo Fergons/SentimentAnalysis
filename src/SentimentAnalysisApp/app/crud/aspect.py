@@ -38,6 +38,14 @@ class CRUDAspect(CRUDBase[Aspect, AspectCreate, AspectUpdate]):
 
     async def get_wordcloud(self, db: AsyncSession, *, game_id: int, model_id: str,
                             limit: int = 1000) -> schemas.AspectWordcloud:
+        """
+        Returns a wordcloud of the most mentioned terms for each category and polarity
+        :param db: AsyncSession
+        :param game_id: int
+        :param model_id: str
+        :param limit: int
+        :return: schemas.AspectWordcloud
+        """
         query = select(
             models.Aspect.category,
             models.Aspect.polarity,
@@ -48,7 +56,8 @@ class CRUDAspect(CRUDBase[Aspect, AspectCreate, AspectUpdate]):
         ).filter(
             models.Review.game_id == game_id,
             models.Aspect.model_id == model_id,
-            models.Aspect.term != 'NULL'
+            models.Aspect.term != "NULL",
+            models.Aspect.term != "noterm",
         ).group_by(
             func.lower(models.Aspect.term),
             models.Aspect.category,
@@ -66,6 +75,10 @@ class CRUDAspect(CRUDBase[Aspect, AspectCreate, AspectUpdate]):
 
         for row in result.all():
             category, polarity, term, count = row
+            if len(term) < 3:
+                continue
+            if term in ('null', 'noterm', 'hra', 'hras', 'hru', 'hry', 'hre', 'game'):
+                continue
             if category not in wordcloud.categories:
                 wordcloud.categories[category] = schemas.AspectTermPolarityGroups(
                     positive=[],
@@ -73,7 +86,8 @@ class CRUDAspect(CRUDBase[Aspect, AspectCreate, AspectUpdate]):
                     neutral=[]
                 )
             getattr(wordcloud.categories[category], polarity).append(
-                schemas.AspectTermCount(term=term, count=count)
+                schemas.AspectTermCount(term=term,
+                                        count=count)
             )
 
         return wordcloud
