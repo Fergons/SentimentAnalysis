@@ -87,6 +87,11 @@
         filterSettingsOpen = !filterSettingsOpen;
     }
 
+    function searchGame() {
+        gamePage.set(0);
+        gameFilter.set({name: searchName});
+    }
+
 </script>
 
 
@@ -97,17 +102,17 @@
                 <Panel bind:open={filterSettingsOpen}>
                     <Header ripple={false}>Filter</Header>
                     <Content>
-                        <Button on:click={filterReset}
+                        <Button on:click={filterReset} outlined
                                 color="secondary">
-                            <Label>Reset</Label>
-                            <Icon class="material-icons">reset</Icon>
+                            <Label align="start">Reset</Label>
                         </Button>
                         <Button on:click={applyFilter}
                                 color="secondary">
                             <Label>Apply</Label>
-                            <Icon class="material-icons">apply</Icon>
                         </Button>
+
                         <div class="filter-field">
+
                             <Textfield
                                     type="number"
                                     bind:value={filterTemp.minScore}
@@ -140,15 +145,18 @@
                                     label="Max Reviews"
                             />
                             <Textfield
-                                    type="datetime-local"
+                                    type="date"
                                     bind:value={filterTemp.minReleaseDate}
                                     label="Min Release Date"
-
+                                    input$onfocus="this.showPicker()"
+                                    input$onclick="this.showPicker()"
                             />
                             <Textfield
-                                    type="datetime-local"
+                                    type="date"
                                     bind:value={filterTemp.maxReleaseDate}
                                     label="Max Release Date"
+                                    input$onfocus="this.showPicker()"
+                                    input$onclick="this.showPicker()"
                             />
                         </div>
                     </Content>
@@ -177,7 +185,7 @@
 
                         </Autocomplete>
                         <Fab
-                                on:click={() => {filterTemp.name = searchName; applyFilter()}}
+                                on:click={() => searchGame()}
                                 disabled={searchName === ''}
                                 color="primary"
                                 mini
@@ -236,7 +244,7 @@
 
         <div class="game-list">
             {#if $loadingContent}
-                <div class="loading-container">
+                <div class="loading-container" style="position: absolute">
                     Loading...
                 </div>
             {/if}
@@ -398,6 +406,4 @@
         gap: 1rem;
         justify-content: center;
     }
-
-
 </style>

@@ -63,6 +63,10 @@
 </div>
 
 <style>
+    .card-container{
+        width: 800px
+    }
+
     .mdc-typography--headline6{
             line-height: 1.3rem;
     }
@@ -102,6 +106,10 @@
     }
 
     @media (max-width: 680px) {
+        .card-container{
+            width: 100%
+        }
+
         * :global(.card-media-219x102>img) {
             width: 110px;
             height: 51px;

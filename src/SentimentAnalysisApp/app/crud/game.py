@@ -493,18 +493,25 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
             query_summary=summary
         )
 
-    async def get_matches(self, db: AsyncSession, *, name: str, limit: int = 10) -> List[models.Game]:
+    async def get_matches(self, db: AsyncSession, *, name: str, limit: int = 10, model_id=None) -> List[str]:
         """
         Get a list of games that match a given name
          :param db: Database session
         :param name: Game name
         :param limit: Maximum number of games to return
-        :return: List of games
+        :param model_id: Model id to specify which analysis model to fetch results for
+        :return: List of game names
         """
         ts_query = func.plainto_tsquery(cast("english", RegConfig), name)
-        stmt = select(self.model.name).where(
-            self.model.name_tsv.bool_op("@@")(ts_query)
-        ).limit(limit)
+        # find game that match the name and are analyzed by specific or any model
+        # stmt = select(self.model.name).where(
+        #     and_(self.model.name_tsv.bool_op("@@")(ts_query))
+        # ).limit(limit)\
+        #     .order_by(func.similarity(self.model.name_tsv, ts_query).desc())
+        model_filter = [models.Aspect.model_id == model_id] if model_id else []
+        stmt = select(self.model.name).select_from(self.model).join(models.Review).join(models.Aspect).where(
+            and_(self.model.name_tsv.bool_op("@@")(ts_query), *model_filter)
+        ).limit(limit).group_by(self.model.name)
         result = await db.execute(stmt)
         return result.scalars().all()
 

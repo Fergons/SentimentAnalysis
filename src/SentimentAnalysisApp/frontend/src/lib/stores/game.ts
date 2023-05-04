@@ -78,7 +78,8 @@ export async function getGames(page: number, filter: GameListFilter, sort: GameL
             sort.numReviews, sort.score, sort.releaseDate,
             filter.name,
             filter.minNumReviews, filter.maxNumReviews, filter.minScore, filter.maxScore,
-            filter.minReleaseDate, filter.maxReleaseDate,
+            filter.minReleaseDate?`${filter.minReleaseDate}T23:59:59`:undefined,
+            filter.maxReleaseDate?`${filter.maxReleaseDate}T23:59:59`:undefined,
             filter.categories ? filter.categories.join() : undefined,
             filter.developers ? filter.developers.join() : undefined);
         return {games: response.games, total: response.query_summary?.total || 0};
