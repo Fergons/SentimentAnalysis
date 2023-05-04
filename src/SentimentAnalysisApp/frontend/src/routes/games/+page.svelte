@@ -68,7 +68,7 @@
     }
 
     let searchName = '';
-    let filterTemp = {...initialGameFilterValue};
+    let filterTemp = {...$gameFilter};
 
     function filterReset() {
         searchName = '';

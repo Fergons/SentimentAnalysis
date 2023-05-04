@@ -9,7 +9,7 @@
 
 <section>
     <div class="game-banner">
-        <GameCard {game} nonInteractive={true}></GameCard>
+        <GameCard {game}></GameCard>
     </div>
     <div class="overview-section">
          <h5 class="mdc-typography--headline5" style="padding: 1.5rem 0 1rem 2rem; margin: 0;">
@@ -38,5 +38,9 @@
     }
     .game-banner {
         margin-bottom: 1rem;
+    }
+
+    :global(.game-banner > .card-container){
+        width: 100%;
     }
 </style>

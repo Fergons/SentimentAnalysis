@@ -86,7 +86,7 @@
             comingSoon: true,
         },
         {
-            name: '+ Create own',
+            name: '+ Create Your Own',
             mdcIcon: 'plus',
             comingSoon: true,
         }

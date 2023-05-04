@@ -157,7 +157,7 @@
 
     <div class="wordcloud">
         {#if Wordcloud}
-            <Wordcloud data={data.aspectWordcloud} bind:selectedCategory={activeCategory}/>
+            <svelte:component this={Wordcloud} data={data.aspectWordcloud} bind:selectedCategory={activeCategory}/>
         {/if}
     </div>
 </div>

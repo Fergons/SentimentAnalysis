@@ -370,6 +370,19 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
         gs = result.scalars().all()
         return [g.source for g in gs]
 
+    @staticmethod
+    def _create_game_score_subquery():
+        """ used to compute the game score in for game list and game list item"""
+        return (func.coalesce(
+            (func.sum(
+                case(
+                    (models.Aspect.polarity == "positive", 8),
+                    (models.Aspect.polarity == "negative", -6),
+                    (models.Aspect.polarity == "neutral", 0.0),
+                    else_=0.0)
+            ) / (func.count(models.Aspect.id.distinct()) + 0.1)) + 5.0,
+            -1.0)).label("score")
+
     async def get_game_list(self, db: AsyncSession, *,
                             limit: int = 100,
                             offset: int = 0,
@@ -383,16 +396,7 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
         :param db:
         """
         # compute game score based on extracted aspects by a chosen model
-        game_score = (
-            func.coalesce(
-                (func.sum(
-                    case(
-                        (models.Aspect.polarity == "positive", 6.0),
-                        (models.Aspect.polarity == "negative", -4.0),
-                        (models.Aspect.polarity == "neutral", 2.0),
-                        else_=0.0)
-                ) / (func.count(models.Aspect.id.distinct()) + 0.1)) + 5.0,
-                -1.0)).label("score")
+        game_score = self._create_game_score_subquery()
 
         stmt = select(self.model, game_score, func.count(models.Review.id.distinct())).select_from(self.model) \
             .outerjoin(models.Review) \
@@ -484,7 +488,7 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
             release_date=g.release_date,
             categories=[schemas.Category.from_orm(c.category) for c in g.categories],
             developers=[schemas.Developer.from_orm(d.developer) for d in g.developers],
-            score=round(score, 1),
+            score=round(min(max(score, 0), 10), 1),
             num_reviews=num_reviews
         ) for g, score, num_reviews in games]
 
@@ -524,16 +528,7 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
         :param model_id: Model id
         :return: GameListItem
         """
-        game_score = (
-            func.coalesce(
-                (func.sum(
-                    case(
-                        (models.Aspect.polarity == "positive", 6.0),
-                        (models.Aspect.polarity == "negative", -3.0),
-                        (models.Aspect.polarity == "neutral", 2.0),
-                        else_=0.0)
-                ) / (func.count(models.Aspect.id.distinct()) + 0.1)) + 5.0,
-                -1.0)).label("score")
+        game_score = self._create_game_score_subquery()
 
         stmt = select(self.model, game_score, func.count(models.Review.id.distinct())).select_from(self.model) \
             .outerjoin(models.Review).where(models.Review.game_id == id) \
@@ -550,7 +545,7 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
             release_date=game.release_date,
             categories=[schemas.Category.from_orm(c.category) for c in game.categories],
             developers=[schemas.Developer.from_orm(d.developer) for d in game.developers],
-            score=round(score, 1),
+            score=round(min(max(score, 0), 10), 1),
             num_reviews=num_reviews)
 
 
