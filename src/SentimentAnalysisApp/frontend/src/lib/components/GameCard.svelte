@@ -57,10 +57,6 @@
 </div>
 
 <style>
-    .card-container{
-        width: 800px
-    }
-
     .mdc-typography--headline6{
             line-height: 1.3rem;
     }

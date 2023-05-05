@@ -437,7 +437,8 @@ class CRUDGame(CRUDBase[models.Game, GameCreate, GameUpdate]):
                 filters.append(self.model.id.in_(score_subquery))
             if filter and filter.min_num_reviews is not None or filter.max_num_reviews is not None:
                 review_subquery = select(self.model.id).select_from(self.model) \
-                    .outerjoin(models.Review) \
+                    .join(models.Review) \
+                    .join(models.Aspect) \
                     .group_by(self.model.id) \
                     .having(
                     and_(

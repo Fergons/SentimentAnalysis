@@ -54,6 +54,7 @@
     }
 
     function filterReset() {
+        searchName = '';
         $gameFilter = {...initialGameFilterValue};
         filterTemp = {...initialGameFilterValue};
     }
@@ -124,11 +125,17 @@
                                     type="number"
                                     bind:value={filterTemp.minNumReviews}
                                     label="Min Reviews"
+                                    input$pattern="\d+"
+                                    input$min="0.0"
+                                    input$step="10.0"
                             />
                             <Textfield
                                     type="number"
                                     bind:value={filterTemp.maxNumReviews}
                                     label="Max Reviews"
+                                    input$pattern="\d+"
+                                    input$min="0.0"
+                                    input$step="10.0"
                             />
                             <Textfield
                                     type="date"
@@ -331,7 +338,7 @@
     }
 
     .game-list, .page-buttons-container {
-        max-width: 960px;
+        width: 800px;
     }
 
     * :global(.game-list>*) {
