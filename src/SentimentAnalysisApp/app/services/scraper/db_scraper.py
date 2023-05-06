@@ -86,12 +86,17 @@ class DBScraper:
                         models.Review.source_review_id.in_(review_ids)))
         db_review_ids = await self.session.execute(query_reviews)
         db_review_ids = {source_id: db_id for db_id, source_id in db_review_ids.all()}
+        tasks = []
         for review in scraped_reviews:
-            source_review_id = review.source_review_id
-            if source_review_id in db_review_ids.keys():
-                continue
-            review = await crud.scraper.store_review_with_additional_objects(self.session, scraped_obj=review)
-            db_review_ids[source_review_id] = review.id
+            async with async_session() as session:
+                source_review_id = review.source_review_id
+                if source_review_id in db_review_ids.keys():
+                    continue
+                tasks.append(crud.scraper.store_review_with_additional_objects(session, scraped_obj=review))
+        results = await asyncio.gather(*tasks)
+        # match from async.gather results based on review.source_review_id
+        for result in results:
+            db_review_ids[result.source_review_id] = result.id
         return db_review_ids
 
     async def add_reviewers_to_db(self, scraped_reviewers: List[BaseModel]) -> Dict[str, models.Reviewer]:
@@ -129,14 +134,15 @@ class DBScraper:
                                                              source_id=self.db_source.id,
                                                              source_game_ids=[source_game_id])
             game_id = ids.get(source_game_id)
-            logger.debug(f"The game is not in the db yet: {ids}")
-            logger.debug(f"Scraping game with source_game_id {source_game_id}...")
-            scraped_game = await self.scraper.get_game_info(source_game_id)
-            if not scraped_game:
-                raise ValueError(f"Game with source_game_id {source_game_id} not found!")
-            scraped_game = schemas.ScrapedGame(source_id=self.db_source.id, **scraped_game.dict(by_alias=True))
-            db_game = await self.add_games_to_db([scraped_game])
-            game_id = db_game[source_game_id].id
+            if game_id is None:
+                logger.debug(f"The game is not in the db yet: {ids}")
+                logger.debug(f"Scraping game with source_game_id {source_game_id}...")
+                scraped_game = await self.scraper.get_game_info(source_game_id)
+                if not scraped_game:
+                    raise ValueError(f"Game with source_game_id {source_game_id} not found!")
+                scraped_game = schemas.ScrapedGame(source_id=self.db_source.id, **scraped_game.dict(by_alias=True))
+                db_game = await self.add_games_to_db([scraped_game])
+                game_id = db_game[source_game_id].id
         if source_game_id is None:
             source_game_id = await crud.game.get_source_game_id(self.session, id=game_id)
 

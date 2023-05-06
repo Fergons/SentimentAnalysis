@@ -13,7 +13,7 @@ elif config.settings.ENVIRONMENT == "PRODUCTION":
 else:
     sqlalchemy_database_uri = config.settings.DEFAULT_SQLALCHEMY_DATABASE_URI
 
-async_engine = create_async_engine(sqlalchemy_database_uri, pool_pre_ping=True)
+async_engine = create_async_engine(sqlalchemy_database_uri, pool_size=20, pool_pre_ping=True)
 async_session = sessionmaker(async_engine, expire_on_commit=False, class_=AsyncSession)
 
 
