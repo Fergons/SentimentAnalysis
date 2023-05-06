@@ -53,7 +53,7 @@ class DBScraper:
         async for page in self.scraper.games_page_generator(page_size=kwargs.get("page_size", 100),
                                                             blacklist=blacklist):
             scraped_games = [schemas.ScrapedGame(source_id=self.db_source.id, **game.dict(by_alias=True)) for game in
-                             page]
+                             page if game is not None]
             db_games = await self.add_games_to_db(scraped_games)
             await self.session.commit()
             logger.info(f"Added {list(db_games.keys())} games to db!")
