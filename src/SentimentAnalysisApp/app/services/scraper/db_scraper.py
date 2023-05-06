@@ -5,7 +5,7 @@ import random
 from datetime import timedelta
 from typing import List, Optional, Union, TypeVar, Tuple, Literal, Any, Dict
 
-from pydantic import BaseModel, validator
+from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
@@ -13,10 +13,6 @@ from app.db.session import async_session
 
 import app.models as models
 from .scraper import SteamScraper, Scraper, DoupeScraper, GamespotScraper
-from .gamespot_resources import GamespotRequestParams, GamespotReview, GamespotGame, GamespotReviewer
-from .doupe_resources import DoupeReview, DoupeGame, DoupeReviewer
-from .steam_resources import SteamAppListResponse, SteamApp, SteamReview, SteamAppDetail, SteamReviewer, \
-    SteamApiLanguageCodes
 from .constants import STEAM_REVIEWS_API_RATE_LIMIT, STEAM_API_RATE_LIMIT, DEFAULT_RATE_LIMIT
 from app.core.config import settings
 from sqlalchemy import exc, and_
@@ -28,8 +24,6 @@ logging.basicConfig(
 )
 logger = logging.getLogger("scraper_to_db.py")
 
-
-# logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
 class DBScraper:
     @classmethod
@@ -135,7 +129,14 @@ class DBScraper:
                                                              source_id=self.db_source.id,
                                                              source_game_ids=[source_game_id])
             game_id = ids.get(source_game_id)
-            logger.debug(f"game_id: {ids}")
+            logger.debug(f"The game is not in the db yet: {ids}")
+            logger.debug(f"Scraping game with source_game_id {source_game_id}...")
+            scraped_game = await self.scraper.get_game_info(source_game_id)
+            if not scraped_game:
+                raise ValueError(f"Game with source_game_id {source_game_id} not found!")
+            scraped_game = schemas.ScrapedGame(source_id=self.db_source.id, **scraped_game.dict(by_alias=True))
+            db_game = await self.add_games_to_db([scraped_game])
+            game_id = db_game[source_game_id].id
         if source_game_id is None:
             source_game_id = await crud.game.get_source_game_id(self.session, id=game_id)
 
@@ -290,7 +291,7 @@ async def main():
             logger.info("Started scraping steam games")
             await scrape_steam_games(rate_limit=rate_limit, num_games=args.max_games, page_size=args.page_size)
         elif args.steam_reviews:
-            if args.game_id is not None:
+            if args.game_id is not None or args.source_game_id is not None:
                 logger.info(f"Started scraping steam reviews for game {args.game_id}")
                 await scrape_steam_reviews_for_game(
                     game_id=args.game_id,

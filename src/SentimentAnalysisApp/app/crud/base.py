@@ -62,10 +62,11 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         )
         return result.first()
 
-    async def create(self, db: AsyncSession, *, obj_in: CreateSchemaType) -> ModelType:
+    async def create(self, db: AsyncSession, *, obj_in: CreateSchemaType, commit: bool = True) -> ModelType:
         db_obj = self.model(**obj_in.dict())  # type: ignore
         db.add(db_obj)
-        await db.commit()
+        if commit:
+            await db.commit()
         return db_obj
 
     async def update(

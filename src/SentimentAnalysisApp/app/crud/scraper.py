@@ -18,7 +18,11 @@ from .review import crud_review
 from .reviewer import crud_reviewer
 from .source import crud_source
 
-
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(levelname)s: %(message)s',
+)
+logger = logging.getLogger("scraper_db_IO")
 class CRUDScraper:
     async def store_game(self, db: AsyncSession, *, scraped_obj: schemas.ScrapedGame) -> models.Game:
         """
@@ -90,15 +94,16 @@ class CRUDScraper:
 
         # validate scraped_review and transform to schemas
         review_in = schemas.ReviewCreate(**scraped_obj.dict())
-        review = await crud_review.create(db, obj_in=review_in)
+        review = await crud_review.create(db, obj_in=review_in, commit=False)
         if scraped_obj.reviewer:
             # check if in db
             reviewer = await crud_reviewer.get_by_source_id(db, source_id=scraped_obj.source_id, source_obj_id=scraped_obj.reviewer.source_reviewer_id)
             if not reviewer:
                 reviewer_in = schemas.ReviewerCreate(**scraped_obj.reviewer.dict())
                 reviewer = await crud_reviewer.create_from_source(db, obj_in=reviewer_in,
-                                                                  source_id=scraped_obj.source_id)
-            review.reviewer_id = reviewer.id
+                                                                  source_id=scraped_obj.source_id,
+                                                                  commit=False)
+            review.reviewer = reviewer
             review.source_reviewer_id = scraped_obj.reviewer.source_reviewer_id
         if scraped_obj.game:
             game = await self.store_game_with_additional_objects(db, scraped_obj=scraped_obj.game)
