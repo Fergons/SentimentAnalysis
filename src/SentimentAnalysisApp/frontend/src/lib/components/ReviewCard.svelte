@@ -1,3 +1,8 @@
+<!--
+  Modified component from Layer Cake (https://layercake.graphics/example)
+  @component
+  Generates a review card with the review text and the score
+ -->
 <script lang="ts">
     import Card, {
         Content,

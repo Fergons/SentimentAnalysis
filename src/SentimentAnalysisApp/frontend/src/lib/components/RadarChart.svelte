@@ -1,3 +1,8 @@
+<!--
+  Modified component from Layer Cake (https://layercake.graphics/example)
+  @component
+  Generates a radar chart used for category comparison.
+-->
 <script lang="ts">
     import {getContext} from 'svelte';
     import {line, curveCardinalClosed} from 'd3-shape';

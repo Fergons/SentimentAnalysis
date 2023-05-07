@@ -1,3 +1,4 @@
+<!-- Created by Frantisek Sabol -->
 <script lang="ts">
     import {onDestroy, onMount} from 'svelte';
     import {mdiWeatherNight, mdiWeatherSunny} from '@mdi/js';

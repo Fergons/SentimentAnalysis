@@ -1,3 +1,5 @@
+// Created by Frantisek Sabol
+// implementation data transformation functions used to transform charts based on user input
 import type {
     ReviewsSummaryDataPoint,
     Source,

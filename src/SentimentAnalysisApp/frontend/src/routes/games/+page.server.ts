@@ -1,3 +1,4 @@
+// Created by Frantisek Sabol
 import {error} from '@sveltejs/kit';
 import {GamesService} from "../../lib/client";
 

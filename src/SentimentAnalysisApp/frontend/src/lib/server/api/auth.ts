@@ -1,4 +1,4 @@
-import {handleApiResponseError} from './api';
+// Created by Frantisek Sabol
 import {z} from 'zod';
 
 export const SigninSchema = z.object({

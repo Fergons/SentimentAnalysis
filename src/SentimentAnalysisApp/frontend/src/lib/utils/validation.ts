@@ -1,3 +1,6 @@
+// Created by Frantisek Sabol
+// used for form validation
+
 import {z} from "zod";
 export type validationResultType = {success: boolean, errors: Record<string, any>}
 export function validateFormData<T>(data: T, schema: z.ZodSchema<T>): validationResultType{

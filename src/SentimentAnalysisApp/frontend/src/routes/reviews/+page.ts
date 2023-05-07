@@ -1,3 +1,4 @@
+// Created by Frantisek Sabol
 import type {PageLoad} from './$types'
 import type {Review, ReviewWithAspects} from "../../lib/client";
 import {ReviewsService} from "../../lib/client";

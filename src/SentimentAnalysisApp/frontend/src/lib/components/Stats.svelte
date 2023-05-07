@@ -1,3 +1,10 @@
+<!--
+  Modified component from Layer Cake (https://layercake.graphics/example)
+  @component
+  Generates time series visualization of analysed data. The data is grouped by source and sentiment. The user can select
+    which sources and sentiments to display. The user can also select the time bucket to group the data by. The user can
+ -->
+
 <script lang='ts'>
     import {LayerCake, Svg, Html, groupLonger, ScaledSvg} from 'layercake';
     import {scaleOrdinal} from 'd3-scale';

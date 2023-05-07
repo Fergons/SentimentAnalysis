@@ -1,3 +1,4 @@
+<!-- created by Frantisek Sabol-->
 <script lang="ts">
     import {navigating} from "$app/stores";
     import type {PageData} from "./$types";

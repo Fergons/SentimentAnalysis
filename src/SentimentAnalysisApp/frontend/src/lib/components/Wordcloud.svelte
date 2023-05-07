@@ -1,3 +1,8 @@
+<!--
+  Modified component from Layer Cake (https://layercake.graphics/example)
+  @component
+  Generates a wordcloud from the given data. Uses d3-cloud layout and Layer Cake.
+ -->
 <script>
     import {onMount, onDestroy} from 'svelte';
     import {writable} from 'svelte/store';

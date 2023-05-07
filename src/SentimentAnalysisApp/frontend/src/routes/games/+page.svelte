@@ -1,3 +1,4 @@
+<!-- created by Frantisek Sabol-->
 <script lang="ts">
     import GameCard from '../../lib/components/GameCard.svelte';
     import Button, {Label} from '@smui/button';

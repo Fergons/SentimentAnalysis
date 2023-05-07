@@ -1,3 +1,4 @@
+<!-- Created by Frantisek Sabol -->
 <script lang="ts">
     import Button, {Label, Icon} from '@smui/button';
     import Card, {Content, Actions} from '@smui/card';

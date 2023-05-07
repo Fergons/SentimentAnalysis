@@ -1,3 +1,4 @@
+<!-- created by Frantisek Sabol-->
 <script lang="ts">
     import Overview from "../../../lib/components/Overview.svelte";
     import Stats from "../../../lib/components/Stats.svelte";

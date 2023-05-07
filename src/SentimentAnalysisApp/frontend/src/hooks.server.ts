@@ -1,3 +1,4 @@
+// <!-- Created by Frantisek Sabol -->
 import type {Handle} from '@sveltejs/kit';
 import {OpenAPI, UsersService} from "./lib/client";
 import {redirect} from "@sveltejs/kit";

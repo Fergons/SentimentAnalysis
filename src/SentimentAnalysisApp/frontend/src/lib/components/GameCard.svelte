@@ -1,3 +1,6 @@
+<!-- Created by Frantisek Sabol
+    @component GameCard
+-->
 <script lang="ts">
     import Card, {
         Media,

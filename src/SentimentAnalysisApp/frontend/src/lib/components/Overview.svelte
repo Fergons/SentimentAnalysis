@@ -1,3 +1,7 @@
+<!-- Created by Frantisek Sabol
+    @ component AspectsOverview
+    Creates a radar chart and a wordcloud for the aspects of the game.
+-->
 <script lang="ts">
     import type {AspectsSummary} from '../client';
     import {LayerCake, Svg} from 'layercake';

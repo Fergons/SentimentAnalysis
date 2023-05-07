@@ -1,3 +1,4 @@
+// Created by Frantisek Sabol
 import {z} from 'zod';
 import type {PageServerLoad, Actions} from './$types';
 import {redirect, error} from '@sveltejs/kit';

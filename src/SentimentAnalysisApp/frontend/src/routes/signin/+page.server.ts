@@ -1,3 +1,4 @@
+// Created by Frantisek Sabol
 import type {PageServerLoad, Actions} from './$types';
 import {redirect, error} from '@sveltejs/kit';
 import {goto} from '$app/navigation';

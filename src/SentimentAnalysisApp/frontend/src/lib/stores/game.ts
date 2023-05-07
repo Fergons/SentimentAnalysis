@@ -1,3 +1,6 @@
+// Created by Frantisek Sabol
+// implementation of game list filters and data stores used on game list page
+
 import {browser} from '$app/environment';
 import {writable, readable} from 'svelte/store';
 import type {GameListItem} from '../client';

@@ -1,3 +1,4 @@
+// created by Frantisek Sabol
 import {error} from '@sveltejs/kit';
 import {GamesService, ReviewsService, SourcesService} from "../../../lib/client";
 import type {Game, ReviewsSummary, ReviewsSummaryDataPoint, Source} from "../../../lib/client";

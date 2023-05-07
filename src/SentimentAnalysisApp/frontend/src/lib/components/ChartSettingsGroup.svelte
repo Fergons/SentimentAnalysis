@@ -1,3 +1,4 @@
+<!-- Created by Frantisek Sabol -->
 <script lang="ts">
 
     import FormField from "@smui/form-field";

@@ -1,3 +1,6 @@
+// Created by Frantisek Sabol
+// convenience file for textfield inputs
+
 export type TextfieldInputState = {
     value: string | null,
     dirty: boolean,

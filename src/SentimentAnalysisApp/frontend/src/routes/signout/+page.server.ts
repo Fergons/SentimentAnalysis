@@ -1,3 +1,4 @@
+// Created by Frantisek Sabol
 import {redirect} from "@sveltejs/kit";
 import type { Actions } from "./$types";
 import {OpenAPI} from "../../lib/client";

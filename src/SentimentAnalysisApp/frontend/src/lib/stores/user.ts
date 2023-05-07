@@ -1,3 +1,6 @@
+// Created by Frantisek Sabol
+// implementation of user store that uses local storage to persist user data
+
 import {browser} from '$app/environment';
 import {writable} from 'svelte/store';
 import type {User} from "../client";
