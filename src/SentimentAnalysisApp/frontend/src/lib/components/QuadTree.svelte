@@ -1,4 +1,5 @@
 <!--
+  Modified component from Layer Cake (https://layercake.graphics/example)
   @component
   Creates an interaction layer (in HTML) using [d3-quadtree](https://github.com/d3/d3-quadtree) to find the nearest datapoint to the mouse. This component creates a slot that exposes variables `x`, `y`, `found` (the found datapoint), `visible` (a Boolean whether any data was found) and `e` (the event object). This component works with a percent range so the `x` and `y` values coming back will be percentages.
 

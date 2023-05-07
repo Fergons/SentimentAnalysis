@@ -1,4 +1,5 @@
 import asyncio
+import time
 import json
 from datetime import datetime
 from typing import List
@@ -42,6 +43,15 @@ async def dump_all_analyzed_reviews_to_file(db: AsyncSession):
 
 async def analyze_db_reviews(db: AsyncSession, game_id: int = None, task="joint-acos",
                              model_name="mt5-acos-1.0", **kwargs):
+    """
+    Analyzes all reviews of a specified game that are in the database and stores the results in the database or
+    if the parameter dump is set to True in a file.
+    Use the parameter batch_size to set the number of reviews to process in one batch.
+    :param db: Database session
+    :param game_id: If set, only reviews for this game are analyzed
+    :param task: Task to perform. Currently only "joint-acos" is supported
+    :param model_name: Name of the model to use. If None, the default model is used
+    """
     batch_size = kwargs.get("batch_size", 100)
     dump = kwargs.get("dump", False)
     dump_dir = None
@@ -65,8 +75,11 @@ async def analyze_db_reviews(db: AsyncSession, game_id: int = None, task="joint-
     num_reviews_to_process = await crud.review.count_not_processed_reviews(db, game_id=game_id)
     logger.info(f"Found {num_reviews_to_process} reviews to process")
     last_id = None
+    # processing in batches
     for _ in tqdm.tqdm(range(num_reviews_to_process // batch_size + 1), desc="Analyzing reviews"):
         reviews = await crud.review.get_not_processed_by_game(db, limit=batch_size, game_id=game_id, last_id=last_id)
+        if len(reviews) == 0:
+            continue
         last_id = reviews[-1].id
         cleaned_texts = [clean(review.text) for review in reviews]
         # check if long reviews are present and join with respective review id zipped
@@ -76,6 +89,7 @@ async def analyze_db_reviews(db: AsyncSession, game_id: int = None, task="joint-
 
         for review, text in zip(reviews, cleaned_texts):
             if len(text) > 200:
+                # create a new AnalyzedReview for the long review
                 long_reviews_output[review.id] = schemas.AnalyzedReviewCreate(
                     cleaned_text=text,
                     review_id=review.id,
@@ -85,6 +99,7 @@ async def analyze_db_reviews(db: AsyncSession, game_id: int = None, task="joint-
                     created_at=datetime.now()
                 )
                 sentences = sent_tokenize(text, language=review.language)
+                # create an object to store review sentences and their respective review id so they can be joined later
                 for sentence in sentences:
                     short_reviews.append(review)
                     short_cleaned_texts.append(sentence)
@@ -98,6 +113,7 @@ async def analyze_db_reviews(db: AsyncSession, game_id: int = None, task="joint-
             logger.error(f"Error while processing batch: {e}")
             continue
 
+        # strore results in database
         analyzed_reviews_in = []
         aspects_in = []
         for review, result in zip(short_reviews, results):
@@ -117,7 +133,8 @@ async def analyze_db_reviews(db: AsyncSession, game_id: int = None, task="joint-
 
             prediction = data_utils.create_task_output_string(task, outputs=result["Quadruples"])
             if review.id in long_reviews_output:
-                long_reviews_output[review.id].prediction = "|".join([long_reviews_output[review.id].prediction, prediction])
+                long_reviews_output[review.id].prediction = "|".join(
+                    [long_reviews_output[review.id].prediction, prediction])
                 continue
 
             analyzed_review_in = schemas.AnalyzedReviewCreate(
@@ -130,6 +147,7 @@ async def analyze_db_reviews(db: AsyncSession, game_id: int = None, task="joint-
             )
             analyzed_reviews_in.append(analyzed_review_in)
 
+        # add long reviews to database
         for analyzed_review_in in long_reviews_output.values():
             analyzed_reviews_in.append(analyzed_review_in)
 
@@ -150,18 +168,22 @@ async def analyze_db_reviews(db: AsyncSession, game_id: int = None, task="joint-
 
 async def insert_from_dumped_file(sessionmaker: AsyncSession, file: pathlib.Path = None):
     dump_dir = pathlib.Path("dump")
-    files = list(dump_dir.glob("*.insert.pkl"))
+    while True:
+        files = list(dump_dir.glob("*.insert.pkl"))
+        if files == []:
+            break
 
-    for file in tqdm.tqdm(files, desc="Inserting dumped analysis results"):
-        tasks = []
-        with file.open("rb") as f:
-            map = pickle.load(f)
-        async with sessionmaker() as db:
-            tasks.append(crud.aspect.create_multi(db, objs_in=map["aspects"]))
-        async with sessionmaker() as db:
-            tasks.append(crud.analyzed_review.create_multi(db, objs_in=map["analyzed_reviews"]))
-        await asyncio.gather(*tasks)
-        file.unlink()
+        for file in tqdm.tqdm(files, desc="Inserting dumped analysis results"):
+            tasks = []
+            with file.open("rb") as f:
+                map = pickle.load(f)
+            async with sessionmaker() as db:
+                tasks.append(crud.aspect.create_multi(db, objs_in=map["aspects"]))
+            async with sessionmaker() as db:
+                tasks.append(crud.analyzed_review.create_multi(db, objs_in=map["analyzed_reviews"]))
+            await asyncio.gather(*tasks)
+            file.unlink()
+        time.sleep(10)
 
 
 async def main(args):
@@ -170,9 +192,12 @@ async def main(args):
             if args.all:
                 games = await crud.analyzer.get_games_with_unprocessed_reviews(db, limit=100)
                 for game in games:
-                    await analyze_db_reviews(db, game_id=game.id, task=args.task, model_name=args.model, batch_size=args.batch_size,
+                    await analyze_db_reviews(db, game_id=game.id, task=args.task, model_name=args.model,
+                                             batch_size=args.batch_size,
                                              dump=args.dump)
             else:
+                if args.game_id is None:
+                    raise ValueError("game_id must be specified or use all to analyze all reviews")
                 await analyze_db_reviews(
                     db, game_id=args.game_id, task=args.task, model_name=args.model, batch_size=args.batch_size,
                     dump=args.dump)

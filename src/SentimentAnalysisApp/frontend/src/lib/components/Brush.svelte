@@ -1,6 +1,7 @@
 <!--
+	Modified brush component from Layer Cake's [brush example](https://layercake.graphics/example/Brush).
 	@component
-	Adds a brush component to create a range between 0 and 1. Bind to the `min` and `max` props to use them in other components. See the [brushable example](https://layercake.graphcics/example/Brush) for use.
+	Adds a brush component to create a range between 0 and 1. Bind to the `min` and `max` props to use them in other components.
  -->
 <script>
 	import { clamp } from 'yootils';

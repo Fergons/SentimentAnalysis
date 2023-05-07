@@ -1,4 +1,5 @@
 <!--
+  Modified component from Layer Cake (https://layercake.graphics/example)
   @component
   Generates an SVG radial scale, useful for radar charts.
  -->

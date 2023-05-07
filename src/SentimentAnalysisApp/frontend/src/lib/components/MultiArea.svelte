@@ -1,4 +1,5 @@
 <!--
+  Modified component from Layer Cake (https://layercake.graphics/example)
   @component
   Generates an SVG multi-series area chart. It expects your data to be an array of objects, each with a `values` key that is an array of data objects.
  -->

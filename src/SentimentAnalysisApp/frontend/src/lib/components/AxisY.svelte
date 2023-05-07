@@ -1,4 +1,5 @@
 <!--
+  Modified Y-Axis component from Layer Cake (https://layercake.graphics/example)
   @component
   Generates an HTML y-axis.
  -->

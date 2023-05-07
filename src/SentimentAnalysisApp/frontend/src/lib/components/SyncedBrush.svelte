@@ -1,3 +1,8 @@
+<!--
+  Inspired by components from Layer Cake (https://layercake.graphics/example)
+  @component
+  Generates synchronized line and area charts with a brushable timeline for time series.
+ -->
 <script>
     import {LayerCake, Html, groupLonger, ScaledSvg} from 'layercake';
 

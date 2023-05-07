@@ -1,4 +1,5 @@
 <!--
+    Modified component from Layer Cake (https://layercake.graphics/example)
 	@component
 	Generates an SVG area shape using the `area` function from [d3-shape](https://github.com/d3/d3-shape).
  -->

@@ -1,4 +1,5 @@
 <!--
+  Modified component from Layer Cake (https://layercake.graphics/example)
   @component
   Generates a tooltip that works on multiseries datasets, like multiline charts. It creates a tooltip showing the name of the series and the current value. This version uses percentages so you can use it to render server-side. It finds the nearest data point using the [QuadTree.percent-range.html.svelte](https://layercake.graphics/components/QuadTree.percent-range.html.svelte) component.
  -->
