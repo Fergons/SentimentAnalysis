@@ -1,3 +1,7 @@
+"""
+Created by Frantisek Sabol
+Tests for the SteamScraper class.
+"""
 import hashlib
 import json
 from ..scraper import SteamScraper

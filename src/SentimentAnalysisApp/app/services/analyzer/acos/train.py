@@ -27,7 +27,7 @@ class LoggingCallback(TrainerCallback):
 
 task_name = "multitask"
 # experiment_name = "acos_finetuning_on_acs_all_data_mt5"
-experiment_name = "mt5-base-i3eg-5e-ood"
+experiment_name = "mt5-base-i3eg-2e-ood"
 # task = "joint-aspect-category-sentiment"
 task = "joint-acos"
 # train_dataset_name = "1333.Games_ACS"
@@ -36,19 +36,10 @@ task = "joint-acos"
 train_dataset_name = "1335.GamesACOS"
 test_dataset_name = "1335.GamesACOS"
 
-# train_dataset_name = "506.Synthetic"
-# test_dataset_name = "506.Synthetic"
-
 logging_callback = LoggingCallback(f"{task}-{train_dataset_name}-{experiment_name}_logs.json")
-# model_checkpoint = 'allenai/tk-instruct-base-def-pos'
-# model_checkpoint = "kevinscaria/ate_tk-instruct-base-def-pos-neg-neut-combined"
-# model_checkpoint = 'allenai/tk-instruct-large-def-pos'
-# model_checkpoint = 'checkpoints/multitask/joint-aspect-category-sentiment-1336.Games-acs-after-acos/checkpoint-608'
-# model_checkpoint = 'checkpoints/multitask/joint-aspect-category-sentiment-1337.GamesCzechEng/checkpoint-last'
-# model_checkpoint = 'checkpoints/multitask/joint-aspect-category-sentiment-1336.Games/checkpoint-760'
 # model_checkpoint = 'checkpoints/multitask/googlemt5-base-joint-aspect-sentiment-501.Laptop14/checkpoint-1467'
 # model_checkpoint = 'checkpoints/multitask/joint-acos-506.Synthetic-byt5-base/checkpoint-3930'
-model_checkpoint = 'checkpoints/multitask/joint-acos-506.Synthetic-mt5-base-i3eg/checkpoint-5890'
+model_checkpoint = 'checkpoints/multitask/joint-acos-506.Synthetic-mt5-base-i3eg/checkpoint-9424'
 # model_checkpoint = "google/byt5-base"
 # model_checkpoint = "google/mt5-base"
 # model_checkpoint = "checkpoints/multitask/joint-acs-1333.Games_ACS-mt5-base-i2eg/checkpoint-2030"

@@ -1,3 +1,7 @@
+"""
+Created by Frantisek Sabol
+This module contains the schemas for the aspect model and api objects.
+"""
 from datetime import datetime
 from typing import List, TYPE_CHECKING, Dict, Tuple
 from typing import Optional

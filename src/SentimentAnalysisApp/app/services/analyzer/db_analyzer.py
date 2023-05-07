@@ -1,3 +1,7 @@
+"""
+Created by Frantisek Sabol
+DB connector for analyzer module.
+"""
 import asyncio
 import time
 import json

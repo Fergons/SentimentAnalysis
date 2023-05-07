@@ -14,10 +14,10 @@ from app.tests import utils
 from app.api.deps import get_session
 from .utils import seed_initial_test_data, is_test_data_seeded
 
-default_user_email = "geralt@wiedzmin.pl"
-default_user_hash = get_password_hash("geralt")
-superuser_user_email = "yennefer@wiedzmin.pl"
-superuser_user_hash = get_password_hash("yennefer")
+default_user_email = "default@test.com"
+default_user_hash = get_password_hash("default")
+superuser_user_email = "super@test.com"
+superuser_user_hash = get_password_hash("super")
 
 
 @pytest.fixture(scope="session")
@@ -90,8 +90,8 @@ async def access_token(client: AsyncClient):
     access_token_res = await client.post(
         "/auth/jwt/login",
         data={
-            "username": "geralt@wiedzmin.pl",
-            "password": "geralt",
+            "username": default_user_email,
+            "password": "default",
         },
         headers={"Content-Type": "application/x-www-form-urlencoded"},
     )

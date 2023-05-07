@@ -1,22 +1,13 @@
-import logging
-from datetime import timedelta, datetime
-from typing import List, Optional, Any, Tuple, Dict
-
-from fastapi.encoders import jsonable_encoder
-from sqlalchemy import column, update, func, cast, and_, text, or_
+"""
+Created by Frantisek Sabol
+"""
+from typing import List
+from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
-from sqlalchemy.sql.functions import count
-
 from app import models, schemas
 from .base import CRUDBase
-from .game import crud_game
-from .game import crud_category
-from .developer import crud_developer
-from .review import crud_review
-from .reviewer import crud_reviewer
-from .source import crud_source
 
 
 class CRUDAnalyzer(CRUDBase[models.AnalyzedReview, schemas.AnalyzedReviewCreate, schemas.AnalyzedReviewUpdate]):

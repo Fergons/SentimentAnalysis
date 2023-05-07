@@ -1,3 +1,7 @@
+"""
+Created by Frantisek Sabol
+Doupe.cz scraper resources used for data validation and transformation
+"""
 from typing import Optional, List
 
 from pydantic import BaseModel, Field

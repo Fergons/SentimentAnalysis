@@ -1,3 +1,6 @@
+"""
+Created by Frantisek Sabol
+"""
 from typing import Optional, List, Union, TYPE_CHECKING
 from pydantic import BaseModel, AnyHttpUrl, Field, validator
 from datetime import datetime

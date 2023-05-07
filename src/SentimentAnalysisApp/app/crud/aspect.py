@@ -1,12 +1,12 @@
+"""
+Created by Frantisek Sabol
+"""
 from sqlalchemy import select, and_, func
 from sqlalchemy.ext.asyncio import AsyncSession
-
-
 from app import models, schemas
 from app.crud.base import CRUDBase
 from app.models.aspect import Aspect
 from app.schemas.aspect import AspectCreate, AspectUpdate
-
 from typing import List
 
 

@@ -1,3 +1,7 @@
+"""
+Created by Frantisek Sabol
+This module contains the schemas for the analyzer module.
+"""
 from typing import Optional, List, Union, TYPE_CHECKING
 from pydantic import BaseModel, AnyHttpUrl, Field, validator
 from datetime import datetime

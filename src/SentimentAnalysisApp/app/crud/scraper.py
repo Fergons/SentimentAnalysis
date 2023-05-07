@@ -1,15 +1,8 @@
+"""
+Created by Frantisek Sabol
+"""
 import logging
-from datetime import timedelta, datetime
-from typing import List, Optional, Any, Tuple, Dict
-
-from fastapi.encoders import jsonable_encoder
-from sqlalchemy import column, update, func, cast, and_, text, or_
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
-from sqlalchemy.orm import selectinload
-from sqlalchemy.sql.functions import count
-
-
 from app import models, schemas
 from .game import crud_game
 from .game import crud_category

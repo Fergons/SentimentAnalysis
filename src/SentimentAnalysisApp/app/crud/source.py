@@ -1,3 +1,6 @@
+"""
+Created by Frantisek Sabol
+"""
 import datetime
 from typing import List, Optional
 

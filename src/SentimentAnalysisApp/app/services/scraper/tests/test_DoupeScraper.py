@@ -1,3 +1,7 @@
+"""
+Created by Frantisek Sabol
+Tests for DoupeScraper
+"""
 import pytest
 from ..scraper import DoupeScraper
 

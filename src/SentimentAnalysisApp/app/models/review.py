@@ -1,3 +1,6 @@
+"""
+Created by Frantisek Sabol
+"""
 from sqlalchemy_utils import TSVectorType
 
 from app.db.base_class import Base

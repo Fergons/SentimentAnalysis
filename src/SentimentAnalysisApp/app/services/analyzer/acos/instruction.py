@@ -6,7 +6,7 @@
 # huggingface: https://huggingface.co/yangheng
 # google scholar: https://scholar.google.com/citations?user=NPq5a_0AAAAJ&hl=en
 # Copyright (C) 2021. All Rights Reserved.
-# modified by Fergons for joint task training
+# modified by Frantisek Sabol for joint task training
 
 class Instruction:
     def __init__(self, bos_instruction=None, eos_instruction=None):

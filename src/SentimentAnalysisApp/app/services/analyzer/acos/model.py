@@ -1,4 +1,4 @@
-# modified by Fergons for joint task training
+# modified by Frantisek Sabol for joint task training
 # pyabsa 2.2.0 file
 import autocuda
 import sklearn
@@ -334,7 +334,7 @@ class T5Classifier:
                 cnt += 1
         return cnt / len(y_true)
 
-
+# modified code
 class ABSAGenerator(T5Generator):
     def __init__(self, model_checkpoint):
         super().__init__(model_checkpoint)

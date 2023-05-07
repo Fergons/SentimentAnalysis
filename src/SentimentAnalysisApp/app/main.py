@@ -1,4 +1,5 @@
 """
+Created by Frantisek Sabol
 Main FastAPI app instance declaration
 """
 

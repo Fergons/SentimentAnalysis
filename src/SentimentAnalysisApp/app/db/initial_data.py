@@ -1,3 +1,6 @@
+"""
+Created by Frantisek Sabol
+"""
 import asyncio
 from typing import Optional
 

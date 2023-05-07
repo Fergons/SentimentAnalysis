@@ -1,3 +1,6 @@
+"""
+Created by Frantisek Sabol
+"""
 from pydantic import BaseModel
 
 

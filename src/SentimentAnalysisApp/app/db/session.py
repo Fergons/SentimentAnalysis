@@ -1,3 +1,6 @@
+"""
+Created by Frantisek Sabol
+"""
 from typing import Any
 
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine

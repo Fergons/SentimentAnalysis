@@ -1,7 +1,10 @@
+"""
+Created by Frantisek Sabol
+Utility for text cleaning.
+"""
 import re
 import emoji
 import locale
-
 
 def remove_markup(text):
     """ Remove hyperlinks and markup """

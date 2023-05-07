@@ -1,11 +1,10 @@
+"""
+Created by Frantisek Sabol
+"""
 from datetime import datetime
 from typing import List, Union, TYPE_CHECKING
 from typing import Optional
-from pydantic import BaseModel, EmailStr, AnyHttpUrl
-
-if TYPE_CHECKING:
-    from .review import Review
-    from .source import Source
+from pydantic import BaseModel
 
 
 class ReviewerBase(BaseModel):

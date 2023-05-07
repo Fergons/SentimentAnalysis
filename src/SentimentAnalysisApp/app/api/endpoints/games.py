@@ -1,3 +1,6 @@
+"""
+Created by Frantisek Sabol
+"""
 from collections import Counter
 from datetime import datetime
 from typing import Any, List, Optional, Dict, Tuple, Literal, Union

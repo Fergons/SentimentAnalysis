@@ -1,3 +1,6 @@
+"""
+Created by Frantisek Sabol
+"""
 from app.db.base_class import Base
 from sqlalchemy import Boolean, Column, Integer, String, DateTime, func, ForeignKey
 from sqlalchemy.orm import relationship

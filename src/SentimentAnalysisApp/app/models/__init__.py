@@ -1,3 +1,7 @@
+"""
+Created by Frantisek Sabol
+Alembic uses this file to check if database schema changed
+"""
 from app.db.base_class import Base
 from .review import Review
 from .game import Game, Category, GameCategory, GameDeveloper

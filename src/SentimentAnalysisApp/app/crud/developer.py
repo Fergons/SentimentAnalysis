@@ -1,13 +1,11 @@
-from typing import List, Optional, Any, Tuple
-
-from fastapi.encoders import jsonable_encoder
-from sqlalchemy import column, update, func, cast, and_, text, or_
+"""
+Created by Frantisek Sabol
+"""
+from typing import List, Optional
+from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy.orm import selectinload
-
 from app.crud.base import CRUDBase
-from app.db.session import RegConfig
 from app.models.game import GameDeveloper, Game
 from app.models.developer import Developer
 from app.schemas.developer import DeveloperCreate, DeveloperUpdate

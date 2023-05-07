@@ -1,3 +1,6 @@
+"""
+Created by Frantisek Sabol
+"""
 from datetime import timedelta, datetime
 from typing import List, Optional, Any, Tuple, Dict
 from sqlalchemy import column, update, func, cast, and_, text, or_, case, nullslast, nullsfirst

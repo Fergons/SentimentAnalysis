@@ -1,3 +1,6 @@
+"""
+Created by Frantisek Sabol
+"""
 from datetime import datetime
 from typing import List, Union, TYPE_CHECKING, Literal
 from typing import Optional

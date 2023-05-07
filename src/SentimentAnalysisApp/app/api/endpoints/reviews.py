@@ -1,3 +1,6 @@
+"""
+Created by Frantisek Sabol
+"""
 from typing import Any, List, Optional, Union
 
 from fastapi import APIRouter, Depends, HTTPException

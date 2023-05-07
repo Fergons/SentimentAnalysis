@@ -1,3 +1,6 @@
+"""
+Created by Frantisek Sabol
+"""
 from app.db.base_class import Base
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, func, UniqueConstraint
 from sqlalchemy.orm import relationship

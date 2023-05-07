@@ -1,9 +1,10 @@
+"""
+Created by Frantisek Sabol
+"""
 from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, Union
-
 from sqlalchemy import update
 from sqlalchemy.inspection import inspect
 from sqlalchemy.orm import load_only
-
 from app.db.base import Base
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel

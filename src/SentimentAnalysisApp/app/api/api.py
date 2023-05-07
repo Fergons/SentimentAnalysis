@@ -1,10 +1,6 @@
 """
-Users and auth routers 'for free' from FastAPI Users.
 https://fastapi-users.github.io/fastapi-users/configuration/routers/
-
-You can include more of them + oauth login endpoints.
-
-fastapi_users in defined in deps, because it also
+fastapi_users is defined in deps, because it also
 includes useful dependencies.
 """
 

@@ -1,3 +1,7 @@
+"""
+Created by Frantisek Sabol
+Gamespot scraper resources used for data validation and transformation
+"""
 import os
 from datetime import datetime
 from enum import Enum

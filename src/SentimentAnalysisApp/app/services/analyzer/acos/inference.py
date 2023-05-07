@@ -1,3 +1,7 @@
+"""
+Created by Frantisek Sabol
+Script for running inference on a file with a trained model. [dev]
+"""
 import json
 import findfile
 import re

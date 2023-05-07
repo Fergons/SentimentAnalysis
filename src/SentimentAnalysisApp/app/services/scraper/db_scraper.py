@@ -1,3 +1,7 @@
+"""
+Created by Frantisek Sabol
+Script for scraping games from various sources and adding them to the database. DB connector for module scraper.
+"""
 import argparse
 import asyncio
 import logging

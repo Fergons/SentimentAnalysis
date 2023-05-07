@@ -1,3 +1,8 @@
+"""
+Created by Frantisek Sabol
+Steam scraper resources used for data validation and transformation
+"""
+
 from datetime import datetime
 from enum import Enum
 from typing import Optional, Union, List

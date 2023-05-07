@@ -1,13 +1,9 @@
+"""
+Created by Frantisek Sabol
+"""
 from datetime import datetime
-from typing import List, TYPE_CHECKING, Union
 from typing import Optional
 from pydantic import BaseModel, AnyHttpUrl
-from . import Review, Reviewer, Game
-
-if TYPE_CHECKING:
-    from .reviewer import Reviewer
-    from .review import Review
-    from .game import Game
 
 
 class SourceBase(BaseModel):
@@ -19,6 +15,7 @@ class SourceBase(BaseModel):
     list_of_games_url: Optional[AnyHttpUrl] = None
     reviewer_detail_url: Optional[AnyHttpUrl] = None
     list_of_reviewers_url: Optional[AnyHttpUrl] = None
+
 
 class SourceCreate(SourceBase):
     name: str
@@ -33,7 +30,7 @@ class SourceCreate(SourceBase):
 
 class SourceUpdate(SourceBase):
     name: Optional[str] = None
-    url:  Optional[AnyHttpUrl] = None
+    url: Optional[AnyHttpUrl] = None
     user_reviews_url: Optional[AnyHttpUrl] = None
     critic_reviews_url: Optional[AnyHttpUrl] = None
     game_detail_url: Optional[AnyHttpUrl] = None

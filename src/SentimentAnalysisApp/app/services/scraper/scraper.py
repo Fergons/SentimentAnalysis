@@ -1,3 +1,8 @@
+"""
+Created by Frantisek Sabol
+Base class for all scrapers. Contains common methods and attributes.
+Also includes implementations of individual scrapers for specific sources.
+"""
 import os
 import json
 import logging

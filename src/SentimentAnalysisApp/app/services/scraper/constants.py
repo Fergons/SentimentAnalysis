@@ -1,3 +1,7 @@
+"""
+Created by Frantisek Sabol
+This file contains constants used by the scrapers.
+"""
 from enum import Enum
 from typing import Optional, List, Literal, Union
 

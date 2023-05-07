@@ -1,3 +1,7 @@
+"""
+Created by Frantisek Sabol
+Tests for the GamespotScraper class.
+"""
 import os
 import pytest
 import logging

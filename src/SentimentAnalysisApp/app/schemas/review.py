@@ -1,14 +1,14 @@
+"""
+Created by Frantisek Sabol
+"""
 from datetime import datetime
 from typing import List, TYPE_CHECKING, Optional, Union, Literal, Dict
-from pydantic import BaseModel, EmailStr, AnyHttpUrl, validator
+from pydantic import BaseModel, validator
 
 # from . import SourceInDBBase, ReviewerInDBBase, GameInDBBase, AspectInDBBase
 # from . import SourceCreate, ReviewerCreate, GameCreate, AspectCreate
 
 if TYPE_CHECKING:
-    from .reviewer import ReviewerCreate
-    from .source import Source
-    from .game import Game, GameCreate
     from .aspect import Aspect
 
 TimeInterval = Literal["day", "week", "month", "year"]
