@@ -6,7 +6,7 @@ ENV PYTHONUNBUFFERED 1
 
 RUN apt update && apt install -y python3-pip
 
-# Build folder for our app, only stuff that matters copied.
+# Build folder for SentimentApp Backend, only stuff that matters copied.
 RUN mkdir build
 WORKDIR /build
 
