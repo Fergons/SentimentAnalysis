@@ -40,6 +40,7 @@ py==1.11.0; python_version >= "3.6" and python_full_version < "3.0.0" or python_
 pycodestyle==2.8.0; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.6"
 pycparser==2.21; python_version >= "3.7" and python_full_version < "3.0.0" or python_version >= "3.7" and python_full_version >= "3.4.0"
 pydantic==1.9.0; python_full_version >= "3.6.1"
+pydantic[email,dotenv]==1.9.0; python_full_version >= "3.6.1"
 pyflakes==2.4.0; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.4.0" and python_version >= "3.6"
 pyjwt==2.3.0; python_version >= "3.7"
 pyparsing==3.0.6; python_version >= "3.6"
@@ -59,3 +60,6 @@ tomli==1.2.3; python_version >= "3.6" and python_full_version >= "3.6.2"
 typing-extensions==4.0.1
 urllib3==1.26.8; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.6.0" and python_version < "4"
 uvicorn==0.16.0
+transformers=4.28.0
+pyabsa=2.2.0
+beautifulsoup4=4.11.2
